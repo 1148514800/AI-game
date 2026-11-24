@@ -1,0 +1,51 @@
+
+> mistsea-phase0@0.0.1 test:e2e
+> playwright test
+
+
+Running 2 tests using 1 worker
+
+(node:147489) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/scene.e2e.ts:2:1 › real scene assets, animation, four-way movement, pause, bounds and local networking (8.1s)
+(node:147652) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/scene.e2e.ts:13:1 › narrow window fits without overflow (1.3s)
+
+
+  1) tests/scene.e2e.ts:2:1 › real scene assets, animation, four-way movement, pause, bounds and local networking 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 13
+
+    - Array []
+    + Array [
+    +   "blob:http://127.0.0.1:5173/32ac2b72-85ac-4dbc-b276-242682d96e11",
+    +   "blob:http://127.0.0.1:5173/05cbb483-b51c-420e-a231-256cb45e2dbd",
+    +   "blob:http://127.0.0.1:5173/a8a155e5-0edd-4c02-97aa-92b231ba8741",
+    +   "blob:http://127.0.0.1:5173/736c4128-fd01-4606-9d2f-6ede5b236039",
+    +   "blob:http://127.0.0.1:5173/60bb6fe0-0459-4ac2-8a54-eab64c62e7b9",
+    +   "blob:http://127.0.0.1:5173/6056f2f0-91e2-4e05-8571-142f79b1f4ac",
+    +   "blob:http://127.0.0.1:5173/ed3a18ee-36d0-4b4d-af06-7eaa31821cc1",
+    +   "blob:http://127.0.0.1:5173/5132296c-37ec-47ca-9509-357bee5bd588",
+    +   "blob:http://127.0.0.1:5173/cc1038e4-509d-4fda-9c9a-942110ca2923",
+    +   "blob:http://127.0.0.1:5173/1dcae809-d22a-48d1-81fa-276424390987",
+    +   "blob:http://127.0.0.1:5173/feab83d0-c9e8-41c2-b427-8100c624827c",
+    + ]
+
+       9 |  await page.keyboard.down('d');await page.waitForTimeout(3500);await page.keyboard.up('d');expect(await page.evaluate(()=>window.__PHASE0__.x)).toBeLessThanOrEqual(312);
+      10 |  await page.locator('#music').click();await expect(page.locator('#music')).toHaveAttribute('aria-pressed','true');await page.locator('#music').click();await expect(page.locator('#music')).toHaveAttribute('aria-pressed','false');
+    > 11 |  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(errors).toEqual([]);expect(missing).toEqual([]);expect(external).toEqual([]);
+         |                                                                                                                                                                       ^
+      12 | });
+      13 | test('narrow window fits without overflow',async({page})=>{await page.setViewportSize({width:390,height:844});await page.goto('/');await page.waitForFunction(()=>window.__PHASE0__?.ready);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await expect(page.locator('canvas')).toBeVisible();await page.screenshot({path:'evidence/scene-mobile.png',fullPage:true});});
+      14 |
+        at /workspace/mistsea-phase0/tests/scene.e2e.ts:11:167
+
+    Error Context: test-results/scene.e2e.ts-real-scene-as-b8839-bounds-and-local-networking/error-context.md
+
+  1 failed
+    tests/scene.e2e.ts:2:1 › real scene assets, animation, four-way movement, pause, bounds and local networking 
+  1 passed (10.8s)

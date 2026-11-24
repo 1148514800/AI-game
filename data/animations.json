@@ -1,0 +1,55 @@
+{
+  "frameWidth": 16,
+  "frameHeight": 16,
+  "directionColumns": {
+    "down": 0,
+    "up": 1,
+    "left": 2,
+    "right": 3
+  },
+  "walk": {
+    "frameRate": 8,
+    "framesByDirection": {
+      "down": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "up": [
+        1,
+        5,
+        9,
+        13
+      ],
+      "left": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "right": [
+        3,
+        7,
+        11,
+        15
+      ]
+    }
+  },
+  "idle": {
+    "framesByDirection": {
+      "down": [
+        0
+      ],
+      "up": [
+        1
+      ],
+      "left": [
+        2
+      ],
+      "right": [
+        3
+      ]
+    }
+  }
+}

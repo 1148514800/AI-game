@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-11-24T19:01:53.666909+08:00",
+  "timezone": "Asia/Shanghai",
+  "scope": "Packaging and documentation only; no new development or repeated game tests",
+  "attachmentLimitBytes": 25000000,
+  "runtimeAssetCount": 13,
+  "runtimeAssetHashes": "PASS",
+  "pdfSha256": "8623390d64c8f0684e89749247cbf2d3206f3c859bd0c7e34f8567a5d252efc7",
+  "oldFullArchivePreservedSha256": "a89de2d8949527667319caaf02055eb634caf2077d5bea4e4fa1e2d9aeac327d",
+  "gameCodeAndLockfileUnchanged": "PASS",
+  "unchangedSourceFileCount": 36,
+  "absentSourceArchiveFetch": {
+    "exitCode": 0,
+    "log": "evidence/packaging-fetch-check.log",
+    "downloadedSha256": "95a06f4fdcfd1882f061a45ff313b7c905dbe2de1e8512b281d7937df62a7b15",
+    "expectedSha256": "95a06f4fdcfd1882f061a45ff313b7c905dbe2de1e8512b281d7937df62a7b15",
+    "status": "PASS"
+  },
+  "originalSourceZipIncluded": false,
+  "allRuntimeAssetsIncluded": true,
+  "releaseBuildIncluded": true,
+  "requiredContentAndCrc": "PASS",
+  "attachmentSizeLimit": "PASS"
+}

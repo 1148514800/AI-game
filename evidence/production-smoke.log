@@ -1,0 +1,1 @@
+PASS: compiled client + Fastify static server + SQLite health + 13 assets, no browser errors.

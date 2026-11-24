@@ -1,0 +1,48 @@
+Captured 2026-11-24T18:57:00.086822+08:00 Asia/Shanghai
+
+$ uname -a
+Linux grok-bot-vm-209454531 6.12.113+ #1 SMP PREEMPT_DYNAMIC Thu Nov 19 19:32:43 UTC 2026 x86_64 GNU/Linux
+exit=0
+
+$ node --version
+v24.22.1
+exit=0
+
+$ npm --version
+11.21.1
+exit=0
+
+$ codex --version
+codex-cli 0.166.0
+exit=0
+
+$ codex login status
+Logged in using ChatGPT
+exit=0
+
+$ npm ls --depth=0
+mistsea-phase0@0.0.1 /workspace/mistsea-phase0
+├── @fastify/static@10.1.12
+├── @playwright/test@1.65.1
+├── @types/node@24.10.1
+├── @types/ws@8.18.1
+├── fastify@5.12.8
+├── phaser@4.2.1
+├── prettier@3.10.1
+├── tsx@4.20.6
+├── typescript@7.0.2
+├── vite@8.3.8
+├── ws@8.23.0
+└── zod@4.6.7
+
+exit=0
+
+$ npm view phaser@4.2.1 version
+4.2.1
+exit=0
+
+$ npm view vite@8.3.8 engines --json
+{
+  "node": "^20.19.0 || >=22.12.0"
+}
+exit=0

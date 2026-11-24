@@ -1,0 +1,17 @@
+
+> mistsea-phase0@0.0.1 test
+> tsx --test tests/unit.test.ts
+
+✔ protocol rejects extra fields and invalid sequence (1.900299ms)
+✔ world bounds clamp positions (0.585683ms)
+✔ all local runtime assets have matching checksums and CC0 license (5.238724ms)
+✔ animation directions are columns, temporal frames are rows (0.224732ms)
+✔ Fastify SQLite and validated WebSocket infrastructure (75.301077ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 385.970323

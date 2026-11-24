@@ -1,0 +1,36 @@
+
+> mistsea-phase0@0.0.1 test:e2e
+> playwright test
+
+
+Running 2 tests using 1 worker
+
+(node:146717) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/scene.e2e.ts:2:1 › real scene assets, animation, four-way movement, pause, bounds and local networking (3.9s)
+(node:146873) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/scene.e2e.ts:12:1 › narrow window fits without overflow (1.3s)
+
+
+  1) tests/scene.e2e.ts:2:1 › real scene assets, animation, four-way movement, pause, bounds and local networking 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 160.3839600000004
+    Received: 175.84792000000053
+
+       5 |  expect(await page.locator('canvas').evaluate(e=>getComputedStyle(e).imageRendering)).toMatch(/pixelated|crisp-edges/);await page.screenshot({path:'evidence/scene-desktop.png',fullPage:true});
+       6 |  for(const [key,axis,sign,direction] of [['d','x',1,'right'],['s','y',1,'down'],['a','x',-1,'left'],['w','y',-1,'up']] as const){const before=await page.evaluate(()=>({...window.__PHASE0__}));await page.keyboard.down(key);await page.waitForTimeout(350);const during=await page.evaluate(()=>({...window.__PHASE0__}));expect((during[axis]-before[axis])*sign).toBeGreaterThan(5);expect(during.direction).toBe(direction);expect(during.moving).toBe(true);await page.screenshot({path:`evidence/animation-${direction}.png`});await page.keyboard.up(key);}
+    >  7 |  await page.keyboard.press('Escape');const before=await page.evaluate(()=>window.__PHASE0__.x);await page.keyboard.down('d');await page.waitForTimeout(250);expect(await page.evaluate(()=>window.__PHASE0__.x)).toBe(before);await page.keyboard.up('d');await expect(page.locator('#pause')).toContainText('继续');await page.keyboard.press('Escape');
+         |                                                                                                                                                                                                                  ^
+       8 |  await page.keyboard.down('d');await page.waitForTimeout(3500);await page.keyboard.up('d');expect(await page.evaluate(()=>window.__PHASE0__.x)).toBeLessThanOrEqual(312);
+       9 |  await page.locator('#music').click();await expect(page.locator('#music')).toHaveAttribute('aria-pressed','true');await page.locator('#music').click();await expect(page.locator('#music')).toHaveAttribute('aria-pressed','false');
+      10 |  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(errors).toEqual([]);expect(missing).toEqual([]);expect(external).toEqual([]);
+        at /workspace/mistsea-phase0/tests/scene.e2e.ts:7:210
+
+    Error Context: test-results/scene.e2e.ts-real-scene-as-b8839-bounds-and-local-networking/error-context.md
+
+  1 failed
+    tests/scene.e2e.ts:2:1 › real scene assets, animation, four-way movement, pause, bounds and local networking 
+  1 passed (6.6s)

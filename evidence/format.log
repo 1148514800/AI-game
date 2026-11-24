@@ -1,0 +1,16 @@
+src/client/env.d.ts 44ms (unchanged)
+src/client/main.ts 81ms
+src/client/style.css 73ms
+src/server/app.ts 9ms
+src/server/index.ts 3ms
+src/shared/protocol.ts 3ms
+tests/scene.e2e.ts 16ms
+tests/unit.test.ts 9ms
+playwright.config.ts 2ms
+vite.config.ts 2ms
+scripts/dev.mjs 18ms
+scripts/production-smoke.mjs 9ms
+index.html 28ms
+package.json 2ms
+tsconfig.json 1ms
+tsconfig.server.json 1ms

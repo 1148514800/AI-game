@@ -1,0 +1,8 @@
+{'command': 'npm ci', 'exitCode': 0, 'status': 'PASS', 'startedAt': '2026-11-24T18:56:40.877335+08:00', 'timezone': 'Asia/Shanghai', 'log': 'evidence/npm-ci.log'}
+{'command': 'npm run typecheck', 'exitCode': 0, 'status': 'PASS', 'startedAt': '2026-11-24T18:56:43.386948+08:00', 'timezone': 'Asia/Shanghai', 'log': 'evidence/typecheck.log'}
+{'command': 'npm test', 'exitCode': 0, 'status': 'PASS', 'startedAt': '2026-11-24T18:56:43.746072+08:00', 'timezone': 'Asia/Shanghai', 'log': 'evidence/unit-test.log'}
+{'command': 'npm run test:e2e', 'exitCode': 0, 'status': 'PASS', 'startedAt': '2026-11-24T18:56:44.327428+08:00', 'timezone': 'Asia/Shanghai', 'log': 'evidence/e2e.log'}
+{'command': 'npm run build', 'exitCode': 0, 'status': 'PASS', 'startedAt': '2026-11-24T18:56:59.255009+08:00', 'timezone': 'Asia/Shanghai', 'log': 'evidence/build.log'}
+{'command': 'node scripts/production-smoke.mjs', 'exitCode': 0, 'status': 'PASS', 'startedAt': '2026-11-24T18:57:00.393380+08:00', 'timezone': 'Asia/Shanghai', 'log': 'evidence/production-smoke.log'}
+{'command': 'npm run assets:fetch', 'exitCode': 0, 'status': 'PASS', 'startedAt': '2026-11-24T18:57:01.988518+08:00', 'timezone': 'Asia/Shanghai', 'log': 'evidence/assets-fetch.log'}
+{'command': 'npm run assets:prepare', 'exitCode': 0, 'status': 'PASS', 'startedAt': '2026-11-24T18:57:02.325432+08:00', 'timezone': 'Asia/Shanghai', 'log': 'evidence/assets-prepare.log'}

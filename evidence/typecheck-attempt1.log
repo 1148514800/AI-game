@@ -1,0 +1,5 @@
+
+> mistsea-phase0@0.0.1 typecheck
+> tsc --noEmit
+
+src/client/main.ts(2,8): error TS2882: Cannot find module or type declarations for side-effect import of './style.css'.

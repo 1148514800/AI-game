@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "archive": "assets/source/ninja-adventure-2026-03-29.zip",
+  "archiveSha256": "95a06f4fdcfd1882f061a45ff313b7c905dbe2de1e8512b281d7937df62a7b15",
+  "licenseFile": "assets/licenses/NinjaAdventure-CC0.txt",
+  "assets": [
+    {
+      "assetId": "player-walk.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Actor/Character/NinjaBlue/SeparateAnim/Walk.png",
+      "outputPath": "public/assets/player-walk.png",
+      "originalSha256": "2b888eb00722a4049bb9d489463d50a3d90b004147152508b60f7b062358bbae",
+      "sha256": "2b888eb00722a4049bb9d489463d50a3d90b004147152508b60f7b062358bbae",
+      "modifications": "None; exact bytes",
+      "category": "characters/animation"
+    },
+    {
+      "assetId": "player-idle.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Actor/Character/NinjaBlue/SeparateAnim/Idle.png",
+      "outputPath": "public/assets/player-idle.png",
+      "originalSha256": "631553826b80df332dc69853e454a5756dfc91f06fb4412fdda126dcd3039cc8",
+      "sha256": "631553826b80df332dc69853e454a5756dfc91f06fb4412fdda126dcd3039cc8",
+      "modifications": "None; exact bytes",
+      "category": "characters/animation"
+    },
+    {
+      "assetId": "npc-walk.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Actor/Character/OldMan/SeparateAnim/Walk.png",
+      "outputPath": "public/assets/npc-walk.png",
+      "originalSha256": "548e3e38992d8efd49b2902ed3091a35b2a88ad9e491d9300fd235ce91846d00",
+      "sha256": "548e3e38992d8efd49b2902ed3091a35b2a88ad9e491d9300fd235ce91846d00",
+      "modifications": "None; exact bytes",
+      "category": "characters/animation"
+    },
+    {
+      "assetId": "npc-idle.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Actor/Character/OldMan/SeparateAnim/Idle.png",
+      "outputPath": "public/assets/npc-idle.png",
+      "originalSha256": "cdfc13059800c9645b73da0aaf459939a3064504befdfdff91abcbff1ac1c4d6",
+      "sha256": "cdfc13059800c9645b73da0aaf459939a3064504befdfdff91abcbff1ac1c4d6",
+      "modifications": "None; exact bytes",
+      "category": "characters/animation"
+    },
+    {
+      "assetId": "grass.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetFloor.png",
+      "outputPath": "public/assets/grass.png",
+      "originalSha256": "e111065065edf806e7e893330086e68efc8755175d92f14d087b42d40a331e16",
+      "sha256": "e81711cb655ba7e699a3c15ba9fce40b03f0d1f93fae628a02e37f03465b717d",
+      "modifications": "Lossless crop (0, 192, 16, 208)",
+      "category": "terrain"
+    },
+    {
+      "assetId": "path.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetFloor.png",
+      "outputPath": "public/assets/path.png",
+      "originalSha256": "e111065065edf806e7e893330086e68efc8755175d92f14d087b42d40a331e16",
+      "sha256": "de3b4012049e1ccc7fc896f1451d5387f39e929885960e134174bd7d6b5043e0",
+      "modifications": "Lossless crop (16, 128, 32, 144)",
+      "category": "terrain"
+    },
+    {
+      "assetId": "tree.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png",
+      "outputPath": "public/assets/tree.png",
+      "originalSha256": "51eedd957ad4ac88988d170aa83a42404ef8fdebff9e6753b6fe80841ab3d5bb",
+      "sha256": "aaf0485f2eee71e4e325b225d44dd0597ea901d4e2bcb2ba6d093ef13df3e13b",
+      "modifications": "Lossless crop (0, 0, 32, 32)",
+      "category": "plants"
+    },
+    {
+      "assetId": "house.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetHouse.png",
+      "outputPath": "public/assets/house.png",
+      "originalSha256": "acdec09ff389883a48af18ebd344cac4081db0388154d4d13be0089cd376d508",
+      "sha256": "2b11bcb58d500e80a0ce1b81884147793bba920f1f78caae19927f1971739238",
+      "modifications": "Lossless crop (0, 0, 64, 48)",
+      "category": "buildings"
+    },
+    {
+      "assetId": "flowers.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png",
+      "outputPath": "public/assets/flowers.png",
+      "originalSha256": "51eedd957ad4ac88988d170aa83a42404ef8fdebff9e6753b6fe80841ab3d5bb",
+      "sha256": "90474e3c0550b560040eb2388677296c394ff1ec6979bd2966c82cb44cf56f8b",
+      "modifications": "Lossless crop (0, 160, 16, 176)",
+      "category": "plants"
+    },
+    {
+      "assetId": "letter.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Items/Other/Letter.png",
+      "outputPath": "public/assets/letter.png",
+      "originalSha256": "c3e66567d0309d3c25b696354c9bf895d93e972e930cdb68f5d3dc5fc68e9ba3",
+      "sha256": "c3e66567d0309d3c25b696354c9bf895d93e972e930cdb68f5d3dc5fc68e9ba3",
+      "modifications": "None; exact bytes",
+      "category": "items"
+    },
+    {
+      "assetId": "arrow.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Ui/Arrow.png",
+      "outputPath": "public/assets/arrow.png",
+      "originalSha256": "7e18bb1f611b4875b851b4fbb76d8512f5a8d4d47e9863adbc54759ee2532ddb",
+      "sha256": "7e18bb1f611b4875b851b4fbb76d8512f5a8d4d47e9863adbc54759ee2532ddb",
+      "modifications": "None; exact bytes",
+      "category": "ui"
+    },
+    {
+      "assetId": "village.ogg",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Audio/Musics/36 - Village.ogg",
+      "outputPath": "public/assets/village.ogg",
+      "originalSha256": "686b6963fb15ed8e45da4cb7a72b696e65d3b9b86c7bcd6fc615dd444d5bddfe",
+      "sha256": "686b6963fb15ed8e45da4cb7a72b696e65d3b9b86c7bcd6fc615dd444d5bddfe",
+      "modifications": "None; exact bytes",
+      "category": "music"
+    },
+    {
+      "assetId": "alert.wav",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Audio/Sounds/Alert/Alert.wav",
+      "outputPath": "public/assets/alert.wav",
+      "originalSha256": "abdccbc57827194b9bc643560692d4b2b3caddf6b128aafc2ddf80ffdbe6c104",
+      "sha256": "abdccbc57827194b9bc643560692d4b2b3caddf6b128aafc2ddf80ffdbe6c104",
+      "modifications": "None; exact bytes",
+      "category": "sound-effects"
+    }
+  ]
+}

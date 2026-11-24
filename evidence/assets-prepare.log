@@ -1,0 +1,5 @@
+
+> mistsea-phase0@0.0.1 assets:prepare
+> python3 scripts/assets/prepare.py
+
+Prepared 13 runtime assets; original ZIP unchanged: 95a06f4fdcfd1882f061a45ff313b7c905dbe2de1e8512b281d7937df62a7b15

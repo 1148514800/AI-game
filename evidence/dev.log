@@ -1,0 +1,32 @@
+
+> mistsea-phase0@0.0.1 dev
+> node scripts/dev.mjs
+
+
+> mistsea-phase0@0.0.1 dev:server
+> tsx src/server/index.ts
+
+
+> mistsea-phase0@0.0.1 dev:client
+> vite --host 127.0.0.1
+
+
+  VITE v8.3.8  ready in 162 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+Phase 0 infrastructure http://127.0.0.1:3001
+6:51:09 PM [vite] (client) page reload release/client/index.html
+6:52:13 PM [vite] (client) page reload src/client/main.ts
+6:52:46 PM [vite] (client) page reload src/client/main.ts
+6:52:49 PM [vite] (client) page reload data/animations.json
+6:52:49 PM [vite] (client) page reload data/preview-map.json
+6:52:52 PM [vite] (client) page reload release/client/index.html
+6:52:52 PM [vite] (client) page reload release/client/index.html
+6:54:26 PM [vite] (client) page reload src/client/main.ts
+6:54:26 PM [vite] (client) hmr update /src/client/style.css
+6:54:26 PM [vite] (client) page reload src/shared/protocol.ts
+6:54:26 PM [vite] vite.config.ts changed, restarting server...
+6:54:26 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+6:54:26 PM [vite] (client) page reload index.html
+6:54:26 PM [vite] server restarted.
+6:54:26 PM [vite] changed tsconfig file detected: /workspace/mistsea-phase0/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.

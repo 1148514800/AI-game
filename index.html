@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#121f25" />
+    <title>雾海行纪 · 素材试验场</title>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <a class="brand" href="/" aria-label="雾海行纪首页"
+          ><span class="brand-icon">山</span
+          ><span>雾海行纪<small>MISTSEA CHRONICLES</small></span></a
+        ><span class="phase-tag">PHASE 00 <i></i> 本地验证版本</span>
+      </header>
+      <main>
+        <div class="intro">
+          <div>
+            <p class="eyebrow">FIELD NOTES / 001</p>
+            <h1>从一方草地开始。</h1>
+            <p class="subtitle">走进像素之间，检验一个世界的最初轮廓。</p>
+          </div>
+          <div class="edition">
+            工程与素材验证<small>不是雾灯谷正式地图</small>
+          </div>
+        </div>
+        <section class="workspace" aria-label="场景与验证信息">
+          <div class="scene-card">
+            <div class="scene-bar">
+              <span><i class="live-dot"></i> 林间试验场</span
+              ><span class="mono">20 × 14 TILES / 16 PX</span>
+            </div>
+            <div
+              id="game"
+              role="application"
+              aria-label="像素游戏场景，WASD或方向键移动；Esc暂停"
+              tabindex="0"
+            ></div>
+            <div class="scene-footer">
+              <span
+                ><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> /
+                方向键移动</span
+              ><button id="pause" type="button">暂停 · Esc</button>
+            </div>
+          </div>
+          <aside>
+            <div class="note-heading">
+              <span class="eyebrow">EXPLORER'S LOG</span
+              ><span class="number">00</span>
+            </div>
+            <h2>初抵林间</h2>
+            <p class="note-copy">
+              一间小屋，一位居民。<br />此刻只验证画面、动画与移动，<br />故事将在之后展开。
+            </p>
+            <div class="divider"></div>
+            <div class="actor-row">
+              <img src="/assets/letter.png" alt="" width="32" height="32" />
+              <div>
+                <strong>旅人 · 自由行走</strong
+                ><small id="position">正在准备场景…</small>
+              </div>
+            </div>
+            <div class="status-block">
+              <span>素材状态</span
+              ><strong id="asset-status" role="status">载入中</strong
+              ><span>本地服务</span><strong id="service-status">检查中</strong
+              ><span>游戏内 AI</span
+              ><strong class="muted">未接入 · 本阶段不启用</strong>
+            </div>
+            <button
+              id="music"
+              class="wide-button"
+              type="button"
+              aria-pressed="false"
+            >
+              开启环境音乐 <span>♪</span>
+            </button>
+            <p class="fine-print">
+              音乐默认关闭，仅在点击后播放。<br />居民为动画样例，没有自主决策或对话。
+            </p>
+            <div class="seal">
+              CC0 <span>真实像素素材<br />Ninja Adventure</span>
+            </div>
+          </aside>
+        </section>
+        <section class="verification">
+          <span class="eyebrow">THIS BUILD</span>
+          <p>
+            <span>01</span> 本地素材 <span>02</span> 四向动画
+            <span>03</span> 键盘输入
+          </p>
+          <span class="no-api">不调用模型 API</span>
+        </section>
+      </main>
+      <footer>
+        <span>雾海行纪 / 工程起点</span><span>Pixel-Boy & AAA · CC0 1.0</span>
+      </footer>
+    </div>
+    <script type="module" src="/src/client/main.ts"></script>
+  </body>
+</html>
