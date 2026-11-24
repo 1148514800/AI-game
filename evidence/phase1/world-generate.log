@@ -1,0 +1,5 @@
+
+> mistsea-phase1@0.1.0-phase1 world:generate
+> python3 scripts/world/generate.py
+
+48x48 Foglamp Valley; 320 props; 9 resource nodes

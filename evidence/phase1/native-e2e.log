@@ -1,0 +1,76 @@
+
+> mistsea-phase1@0.1.0-phase1 test:e2e
+> playwright test
+
+
+Running 7 tests using 1 worker
+
+(node:190461) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 10:37:14 PM [vite] ws proxy error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1031:24)
+[WebServer]     at Socket.emit (node:events:514:28)
+[WebServer]     at addChunk (node:internal/streams/readable:569:12)
+[WebServer] 10:37:14 PM [vite] ws proxy socket error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1031:24)
+[WebServer]     at Socket.emit (node:events:514:28)
+[WebServer]     at addChunk (node:internal/streams/readable:569:12)
+  ✘  1 tests/scene.e2e.ts:91:1 › fresh journey collects all materials, repairs, crosses, explores and restores (1.0m)
+(node:191359) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/scene.e2e.ts:227:1 › four-way walk frames, pause, a following camera and opt-in music (7.5s)
+  ✓  3 tests/scene.e2e.ts:267:1 › 390px narrow window renders the scene, residents and touch controls (2.8s)
+  ✓  4 tests/scene.e2e.ts:281:1 › missing bridge art blocks readiness with a clear error (3.1s)
+  ✓  5 tests/scene.e2e.ts:291:1 › HTTP failure stays unavailable and automatically recovers (3.0s)
+  ✓  6 tests/scene.e2e.ts:300:1 › WebSocket handshake failure remains visible and prevents input (2.2s)
+  ✓  7 tests/scene.e2e.ts:308:1 › the real server rejects augmented movement and out-of-range actions (1.2s)
+
+
+  1) tests/scene.e2e.ts:91:1 › fresh journey collects all materials, repairs, crosses, explores and restores 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('#objective')
+    Expected: "查看航标遗迹"
+    Received: "修复雾灯旧桥"
+    Timeout:  20000ms
+
+    Call log:
+      - Expect "toHaveText" locator('#objective') with timeout 20000ms
+      - waiting for locator('#objective')
+        42 × locator resolved to <h2 id="objective">修复雾灯旧桥</h2>
+           - unexpected value "修复雾灯旧桥"
+
+
+      189 |   await expect(page.locator("#game")).toHaveAttribute("data-working", "false");
+      190 |   await page.getByRole("button", { name: "开始施工" }).click();
+    > 191 |   await expect(page.locator("#objective")).toHaveText("查看航标遗迹", { timeout: 20000 });
+          |                                            ^
+      192 |   expect(await progress(page)).toBe(100);
+      193 |   await screenshot(page, "bridge-after");
+      194 |
+        at /workspace/mistsea-phase1/tests/scene.e2e.ts:191:44
+
+    Error: ENOENT: no such file or directory, unlink '/workspace/mistsea-phase1/evidence/phase1/playwright-artifacts/.playwright-artifacts-0/369dd65be054ba7e81f543b995b6ea50.zip'
+
+    Error Context: evidence/phase1/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/error-context.md
+
+  1 failed
+    tests/scene.e2e.ts:91:1 › fresh journey collects all materials, repairs, crosses, explores and restores 
+  6 passed (1.5m)

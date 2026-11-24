@@ -237,6 +237,582 @@
       "sha256": "abdccbc57827194b9bc643560692d4b2b3caddf6b128aafc2ddf80ffdbe6c104",
       "modifications": "None; exact bytes",
       "category": "sound-effects"
+    },
+    {
+      "assetId": "player-face.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Actor/Character/NinjaBlue/Faceset.png",
+      "outputPath": "public/assets/player-face.png",
+      "originalSha256": "9d661484288e234490191931e5f98a9cebdb0cbec2dbd72cc3e572797f73db99",
+      "sha256": "9d661484288e234490191931e5f98a9cebdb0cbec2dbd72cc3e572797f73db99",
+      "modifications": "None; exact bytes",
+      "category": "characters/portrait"
+    },
+    {
+      "assetId": "npc-face.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Actor/Character/OldMan/Faceset.png",
+      "outputPath": "public/assets/npc-face.png",
+      "originalSha256": "1fc8a30d27b6e324a733c5d13761a45fa90d88e8b47a130bbd96bbe348e83b04",
+      "sha256": "1fc8a30d27b6e324a733c5d13761a45fa90d88e8b47a130bbd96bbe348e83b04",
+      "modifications": "None; exact bytes",
+      "category": "characters/portrait"
+    },
+    {
+      "assetId": "ahe-idle.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Actor/Character/Woman/SeparateAnim/Idle.png",
+      "outputPath": "public/assets/ahe-idle.png",
+      "originalSha256": "328eaf6fbcba3b976a3771e84232d5fd00ba90a79a8cfaf81a5d3f8c79abdc98",
+      "sha256": "328eaf6fbcba3b976a3771e84232d5fd00ba90a79a8cfaf81a5d3f8c79abdc98",
+      "modifications": "None; exact bytes",
+      "category": "characters/animation"
+    },
+    {
+      "assetId": "ahe-face.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Actor/Character/Woman/Faceset.png",
+      "outputPath": "public/assets/ahe-face.png",
+      "originalSha256": "358744f38e355c57d00276aa546611e17b55523ff303e80544535ff69a9935d5",
+      "sha256": "358744f38e355c57d00276aa546611e17b55523ff303e80544535ff69a9935d5",
+      "modifications": "None; exact bytes",
+      "category": "characters/portrait"
+    },
+    {
+      "assetId": "luozhou-idle.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Actor/Character/Hunter/SeparateAnim/Idle.png",
+      "outputPath": "public/assets/luozhou-idle.png",
+      "originalSha256": "fc5c84df8a2ba641fe3444ec2cdd06827c646bbf723a433ccaea27bd65dc4ea9",
+      "sha256": "fc5c84df8a2ba641fe3444ec2cdd06827c646bbf723a433ccaea27bd65dc4ea9",
+      "modifications": "None; exact bytes",
+      "category": "characters/animation"
+    },
+    {
+      "assetId": "luozhou-face.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Actor/Character/Hunter/Faceset.png",
+      "outputPath": "public/assets/luozhou-face.png",
+      "originalSha256": "c961b7d3aa9250616d6b648ff3ac702e93362e80058454fb049c91ed1f3f8555",
+      "sha256": "c961b7d3aa9250616d6b648ff3ac702e93362e80058454fb049c91ed1f3f8555",
+      "modifications": "None; exact bytes",
+      "category": "characters/portrait"
+    },
+    {
+      "assetId": "pine.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png",
+      "outputPath": "public/assets/pine.png",
+      "originalSha256": "51eedd957ad4ac88988d170aa83a42404ef8fdebff9e6753b6fe80841ab3d5bb",
+      "sha256": "96c511edceeb0000f0cb1f65f6f3b409b6aa6963cbc8680f907e39745567d097",
+      "modifications": "Lossless crop (32, 0, 64, 32)",
+      "category": "plants"
+    },
+    {
+      "assetId": "grove.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png",
+      "outputPath": "public/assets/grove.png",
+      "originalSha256": "51eedd957ad4ac88988d170aa83a42404ef8fdebff9e6753b6fe80841ab3d5bb",
+      "sha256": "e1e022e224071f7bc995d6622dd0f32f60a678ebb80c622f70077bcd5dde39b8",
+      "modifications": "Lossless crop (0, 288, 48, 336)",
+      "category": "plants"
+    },
+    {
+      "assetId": "house-sage.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetHouse.png",
+      "outputPath": "public/assets/house-sage.png",
+      "originalSha256": "acdec09ff389883a48af18ebd344cac4081db0388154d4d13be0089cd376d508",
+      "sha256": "1d7aa60a6635368277af1d43fe01010cdcff24e035908690c4b5cd9bfa6c17d3",
+      "modifications": "Lossless crop (304, 0, 368, 48)",
+      "category": "buildings"
+    },
+    {
+      "assetId": "house-amber.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetHouse.png",
+      "outputPath": "public/assets/house-amber.png",
+      "originalSha256": "acdec09ff389883a48af18ebd344cac4081db0388154d4d13be0089cd376d508",
+      "sha256": "f04447f2a9107d7486ad75ade4f391079da36dbeed2e496731484f29d1ff4995",
+      "modifications": "Lossless crop (128, 0, 192, 48)",
+      "category": "buildings"
+    },
+    {
+      "assetId": "bush.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png",
+      "outputPath": "public/assets/bush.png",
+      "originalSha256": "51eedd957ad4ac88988d170aa83a42404ef8fdebff9e6753b6fe80841ab3d5bb",
+      "sha256": "ffc3d3c5f25dd4955b705188a24e6cea3b05269d5467c9051a958f3386e70a52",
+      "modifications": "Lossless crop (16, 160, 32, 176)",
+      "category": "plants"
+    },
+    {
+      "assetId": "reeds.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png",
+      "outputPath": "public/assets/reeds.png",
+      "originalSha256": "51eedd957ad4ac88988d170aa83a42404ef8fdebff9e6753b6fe80841ab3d5bb",
+      "sha256": "b96d4bcbb61894f806f7949abce9d3a9d3a9d33ccfc25119b63a0ea04add7b7f",
+      "modifications": "Lossless crop (112, 176, 128, 192)",
+      "category": "plants"
+    },
+    {
+      "assetId": "leaf.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetFloorDetail.png",
+      "outputPath": "public/assets/leaf.png",
+      "originalSha256": "eab91fc2a1d10191e3c26a6e936175a2492b6ef481c4ba7d984b717954bf1c01",
+      "sha256": "e978cb4feb937eb566a18d1eac92dffb41daa3be7967ad7ac206c983b117e059",
+      "modifications": "Lossless crop (96, 32, 112, 48)",
+      "category": "plants"
+    },
+    {
+      "assetId": "petals.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetFloorDetail.png",
+      "outputPath": "public/assets/petals.png",
+      "originalSha256": "eab91fc2a1d10191e3c26a6e936175a2492b6ef481c4ba7d984b717954bf1c01",
+      "sha256": "1c7331fe2641d4b1b7bcf9ad3e574f9c116ec69361c4c2ac2432f3fb2098b683",
+      "modifications": "Lossless crop (32, 0, 48, 16)",
+      "category": "plants"
+    },
+    {
+      "assetId": "wood-node.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png",
+      "outputPath": "public/assets/wood-node.png",
+      "originalSha256": "51eedd957ad4ac88988d170aa83a42404ef8fdebff9e6753b6fe80841ab3d5bb",
+      "sha256": "7567051db9f1cfd5a0d251e3cf8834ad410e27700c91cdc62f6b5023c69b5b66",
+      "modifications": "Lossless crop (32, 128, 64, 160)",
+      "category": "resource"
+    },
+    {
+      "assetId": "rock-node.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png",
+      "outputPath": "public/assets/rock-node.png",
+      "originalSha256": "51eedd957ad4ac88988d170aa83a42404ef8fdebff9e6753b6fe80841ab3d5bb",
+      "sha256": "e7079f4ebd33f0f5c4906c604d2751702354bd2005f66393175dd5a543602e56",
+      "modifications": "Lossless crop (272, 224, 336, 272)",
+      "category": "resource"
+    },
+    {
+      "assetId": "boulders.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png",
+      "outputPath": "public/assets/boulders.png",
+      "originalSha256": "51eedd957ad4ac88988d170aa83a42404ef8fdebff9e6753b6fe80841ab3d5bb",
+      "sha256": "c4c4dd7d43c0981cf67523c0767d546d971278e52b2a1c209668ff4f39cd21fe",
+      "modifications": "Lossless crop (256, 80, 320, 128)",
+      "category": "plants"
+    },
+    {
+      "assetId": "log-stump.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png",
+      "outputPath": "public/assets/log-stump.png",
+      "originalSha256": "51eedd957ad4ac88988d170aa83a42404ef8fdebff9e6753b6fe80841ab3d5bb",
+      "sha256": "50b068e07b4bf235705c19b77da49fdbbc7e98ddc0a46f1c6659cca98c963904",
+      "modifications": "Lossless crop (192, 272, 208, 288)",
+      "category": "plants"
+    },
+    {
+      "assetId": "pebbles.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png",
+      "outputPath": "public/assets/pebbles.png",
+      "originalSha256": "51eedd957ad4ac88988d170aa83a42404ef8fdebff9e6753b6fe80841ab3d5bb",
+      "sha256": "a872a2dc8ae30feb42228f10b6a63f60627b77adb50b6d52a0a330c99840fbf8",
+      "modifications": "Lossless crop (272, 288, 288, 304)",
+      "category": "terrain"
+    },
+    {
+      "assetId": "ruin-arch.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetHouse.png",
+      "outputPath": "public/assets/ruin-arch.png",
+      "originalSha256": "acdec09ff389883a48af18ebd344cac4081db0388154d4d13be0089cd376d508",
+      "sha256": "1e444a72307edcf254e62592bf05642543dabeaf62b685be1438782460a83c3b",
+      "modifications": "Lossless crop (464, 320, 512, 368)",
+      "category": "ruins"
+    },
+    {
+      "assetId": "ruin-stone.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetHouse.png",
+      "outputPath": "public/assets/ruin-stone.png",
+      "originalSha256": "acdec09ff389883a48af18ebd344cac4081db0388154d4d13be0089cd376d508",
+      "sha256": "0542f055d5919497823ebbc321dca13032c02a5cb77e888aa4137620b36ab29b",
+      "modifications": "Lossless crop (16, 304, 48, 352)",
+      "category": "ruins"
+    },
+    {
+      "assetId": "ruin-wall.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetVillageAbandoned.png",
+      "outputPath": "public/assets/ruin-wall.png",
+      "originalSha256": "6787c6e22a4d44ceee4f158309b2519707bdb70c59aca00b3d49006cadcca06e",
+      "sha256": "5259f2318b0d3d77646879baa5970a0d49a342efd9360726414ea9198123c944",
+      "modifications": "Lossless crop (272, 48, 320, 80)",
+      "category": "ruins"
+    },
+    {
+      "assetId": "supply-crate.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetElement.png",
+      "outputPath": "public/assets/supply-crate.png",
+      "originalSha256": "63d64985697d77033372256b9304ea85db7061f0fc19aafd0714492a9b57140e",
+      "sha256": "56c5e50f5f0d8194fd1657e96410ccc3033f5e73e4aa7fa19060705f4efbc421",
+      "modifications": "Lossless crop (0, 0, 16, 16)",
+      "category": "props"
+    },
+    {
+      "assetId": "signpost.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetElement.png",
+      "outputPath": "public/assets/signpost.png",
+      "originalSha256": "63d64985697d77033372256b9304ea85db7061f0fc19aafd0714492a9b57140e",
+      "sha256": "e83a8611d214cad7082d7c9bab3430d2516dfb12f34f568fe63d0b5f7a01c3ee",
+      "modifications": "Lossless crop (112, 32, 128, 48)",
+      "category": "props"
+    },
+    {
+      "assetId": "valley-ground.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetFloor.png",
+      "outputPath": "public/assets/valley-ground.png",
+      "originalSha256": "e111065065edf806e7e893330086e68efc8755175d92f14d087b42d40a331e16",
+      "sha256": "f5d8c1e7a76128ad86165c59d6805f0747045fc4a7f4ac6cb14b0a63c6e064be",
+      "modifications": "16px cells in order: [(0, 12), (1, 12), (2, 12), (3, 12), (4, 12), (12, 12), (13, 12), (14, 12), (15, 12), (0, 7), (1, 7), (2, 7), (0, 8), (1, 8), (2, 8), (0, 9), (1, 9), (2, 9)]",
+      "category": "terrain"
+    },
+    {
+      "assetId": "valley-river.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetWater.png",
+      "outputPath": "public/assets/valley-river.png",
+      "originalSha256": "927e1fa1e793bb0398fdaad40cea22792c20f66703cdba80fb9462df7cbc275c",
+      "sha256": "8bf9e8f34a0dad10eb91b5f7784be325f4ea385a47bc1e442248c6c62c7ba997",
+      "modifications": "16px cells (0,7) (2,7) (1,7) (11,1) (11,3) (11,4); muted original blue pixels; eight rounded banks shift original foam pixels and reuse base water",
+      "category": "terrain"
+    },
+    {
+      "assetId": "bridge-open.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetWater.png",
+      "outputPath": "public/assets/bridge-open.png",
+      "originalSha256": "927e1fa1e793bb0398fdaad40cea22792c20f66703cdba80fb9462df7cbc275c",
+      "sha256": "d9c019788779cb6c6760f0e33001f552d9941429189224516dc0cef052e89beb",
+      "modifications": "112x32 deck repeating original boards (66,195,82,222), rails (17,237,33,242) and mirrored end caps (62,194,67,223)",
+      "category": "buildings"
+    },
+    {
+      "assetId": "bridge-broken.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetWater.png",
+      "outputPath": "public/assets/bridge-broken.png",
+      "originalSha256": "927e1fa1e793bb0398fdaad40cea22792c20f66703cdba80fb9462df7cbc275c",
+      "sha256": "813b7569d4d931de9ab5e731f44ee66d521ac039004bf187e05c8d8ccba54e15",
+      "modifications": "112x32 deck repeating original boards (66,195,82,222), rails (17,237,33,242) and mirrored end caps (62,194,67,223); jagged transparent gap mask",
+      "category": "buildings"
+    },
+    {
+      "assetId": "wood.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Items/Resource/Branch.png",
+      "outputPath": "public/assets/wood.png",
+      "originalSha256": "63e6e963724c36007a6e9a9892108de480de971fe9354b31f6a3b8f7cd406741",
+      "sha256": "63e6e963724c36007a6e9a9892108de480de971fe9354b31f6a3b8f7cd406741",
+      "modifications": "None; exact bytes",
+      "category": "items"
+    },
+    {
+      "assetId": "stone.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Items/Resource/Rock.png",
+      "outputPath": "public/assets/stone.png",
+      "originalSha256": "c86c7f19f5f6b909337c2ecdd6fe0bbb789266a953dfbc2635b04896936f6ed7",
+      "sha256": "c86c7f19f5f6b909337c2ecdd6fe0bbb789266a953dfbc2635b04896936f6ed7",
+      "modifications": "None; exact bytes",
+      "category": "items"
+    },
+    {
+      "assetId": "food.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Items/Food/Onigiri.png",
+      "outputPath": "public/assets/food.png",
+      "originalSha256": "9bc8230353163735fe1763c34a2643c8777a83055508cd6c3c00fcc48745edd4",
+      "sha256": "9bc8230353163735fe1763c34a2643c8777a83055508cd6c3c00fcc48745edd4",
+      "modifications": "None; exact bytes",
+      "category": "items"
+    },
+    {
+      "assetId": "toolbox.png",
+      "pack": "Ninja Adventure",
+      "authors": [
+        "Pixel-Boy",
+        "AAA"
+      ],
+      "sourceUrl": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+      "version": "itch upload 16981275 / 2026-03-29 (Update 8)",
+      "acquired": "2026-11-24 Asia/Shanghai",
+      "license": "CC0-1.0",
+      "originalPath": "Ninja Adventure - Asset Pack/Items/Object/CrateEmpty.png",
+      "outputPath": "public/assets/toolbox.png",
+      "originalSha256": "31c045afe73071c3f0eafd50088d5c766452f501f36a1c4cf1b0400199279b1f",
+      "sha256": "31c045afe73071c3f0eafd50088d5c766452f501f36a1c4cf1b0400199279b1f",
+      "modifications": "None; exact bytes",
+      "category": "items"
     }
   ]
 }

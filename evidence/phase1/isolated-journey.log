@@ -1,0 +1,78 @@
+
+> mistsea-phase1@0.1.0-phase1 test:e2e
+> playwright test --grep fresh journey
+
+[WebServer] 
+[WebServer] > mistsea-phase1@0.1.0-phase1 dev:client
+[WebServer] > vite --host 127.0.0.1
+[WebServer] 
+[WebServer] 
+[WebServer]   VITE v8.3.8  ready in 166 ms
+[WebServer] 
+[WebServer]   ➜  Local:   http://127.0.0.1:5174/
+
+Running 1 test using 1 worker
+
+(node:193845) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 10:41:34 PM [vite] (client) page reload evidence/phase1/isolated/playwright-artifacts/.playwright-artifacts-0/traces/resources/a4cc449fc5bf32cdfcca364559642c558bb70614.html
+[WebServer] 10:41:34 PM [vite] (client) page reload evidence/phase1/isolated/playwright-artifacts/.playwright-artifacts-0/traces/resources/a4cc449fc5bf32cdfcca364559642c558bb70614.html
+[WebServer] 10:41:51 PM [vite] ws proxy error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1031:24)
+[WebServer]     at Socket.emit (node:events:514:28)
+[WebServer]     at addChunk (node:internal/streams/readable:569:12)
+[WebServer] 10:41:51 PM [vite] ws proxy socket error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1031:24)
+[WebServer]     at Socket.emit (node:events:514:28)
+[WebServer]     at addChunk (node:internal/streams/readable:569:12)
+[WebServer] 10:41:56 PM [vite] (client) page reload assets/manifest.json
+[WebServer] 10:41:56 PM [vite] (client) page reload data/foglamp-valley.json
+[WebServer] 10:41:56 PM [vite] (client) page reload evidence/phase1/isolated/playwright-artifacts/.playwright-artifacts-0/traces/resources/09d6088f31b2cb06b8b0aa7ce44c9f2ae92715e0.html
+[WebServer] 10:42:00 PM [vite] (client) page reload release/client/index.html
+[WebServer] 10:42:00 PM [vite] (client) page reload release/client/index.html
+  ✘  1 tests/scene.e2e.ts:146:1 › fresh journey collects all materials, repairs, crosses, explores and restores (27.5s)
+
+
+  1) tests/scene.e2e.ts:146:1 › fresh journey collects all materials, repairs, crosses, explores and restores 
+
+    TimeoutError: page.waitForFunction: Timeout 2654.5454545454545ms exceeded.
+
+      115 |     await page.keyboard.down(key);
+      116 |     try {
+    > 117 |       await page.waitForFunction(
+          |                  ^
+      118 |         ({ axis, value, sign }) => {
+      119 |           const current = Number(
+      120 |             document.getElementById("game")!.dataset[axis],
+        at walk (/workspace/mistsea-phase1/tests/scene.e2e.ts:117:18)
+        at approach (/workspace/mistsea-phase1/tests/scene.e2e.ts:135:3)
+        at /workspace/mistsea-phase1/tests/scene.e2e.ts:220:5
+
+    Error Context: evidence/phase1/isolated/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    evidence/phase1/isolated/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/trace.zip
+    Usage:
+
+        npx playwright show-trace evidence/phase1/isolated/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/scene.e2e.ts:146:1 › fresh journey collects all materials, repairs, crosses, explores and restores 

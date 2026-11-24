@@ -1,0 +1,19 @@
+index.html 53ms
+src/client/main.ts 97ms
+src/client/ui.ts 30ms
+src/client/style.css 61ms
+src/client/input.ts 9ms
+src/client/connection.ts 16ms
+src/client/scene.ts 38ms
+src/server/app.ts 14ms
+src/server/index.ts 3ms (unchanged)
+src/server/save.ts 9ms
+src/server/world.ts 15ms
+src/shared/protocol.ts 6ms
+src/shared/world.ts 11ms
+tests/paths.ts 11ms
+tests/scene.e2e.ts 57ms
+tests/unit.test.ts 59ms
+vite.config.ts 3ms (unchanged)
+playwright.config.ts 2ms (unchanged)
+scripts/production-smoke.mjs 26ms

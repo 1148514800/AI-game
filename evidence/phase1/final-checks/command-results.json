@@ -1,0 +1,74 @@
+[
+  {
+    "command": "npm ci",
+    "exitCode": 1,
+    "startedAt": "2026-11-24T22:41:50.434298+08:00",
+    "log": "evidence/phase1/final-checks/npm-ci.log"
+  },
+  {
+    "command": "npm ci --ignore-scripts",
+    "exitCode": 0,
+    "startedAt": "2026-11-24T22:41:53.115518+08:00",
+    "log": "evidence/phase1/final-checks/npm-ci-ignore-scripts.log"
+  },
+  {
+    "command": "npm run assets:fetch",
+    "exitCode": 0,
+    "startedAt": "2026-11-24T22:41:55.390457+08:00",
+    "log": "evidence/phase1/final-checks/assets-fetch.log"
+  },
+  {
+    "command": "npm run assets:prepare",
+    "exitCode": 0,
+    "startedAt": "2026-11-24T22:41:55.705441+08:00",
+    "log": "evidence/phase1/final-checks/assets-prepare.log"
+  },
+  {
+    "command": "npm run world:generate",
+    "exitCode": 0,
+    "startedAt": "2026-11-24T22:41:56.170363+08:00",
+    "log": "evidence/phase1/final-checks/world-generate.log"
+  },
+  {
+    "command": "npm run dev",
+    "exitCode": 1,
+    "startedAt": "2026-11-24T22:41:56.435670+08:00",
+    "log": "evidence/phase1/final-checks/dev.log"
+  },
+  {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "startedAt": "2026-11-24T22:41:56.750749+08:00",
+    "log": "evidence/phase1/final-checks/typecheck.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "startedAt": "2026-11-24T22:41:57.223521+08:00",
+    "log": "evidence/phase1/final-checks/unit-test.log"
+  },
+  {
+    "command": "npm run test:e2e -- --list",
+    "exitCode": 0,
+    "startedAt": "2026-11-24T22:41:58.046941+08:00",
+    "log": "evidence/phase1/final-checks/e2e-list.log"
+  },
+  {
+    "command": "npm run test:e2e",
+    "exitCode": 1,
+    "startedAt": "2026-11-24T22:41:58.562529+08:00",
+    "log": "evidence/phase1/final-checks/e2e.log"
+  },
+  {
+    "command": "npm run build",
+    "exitCode": 0,
+    "startedAt": "2026-11-24T22:41:59.433722+08:00",
+    "log": "evidence/phase1/final-checks/build.log"
+  },
+  {
+    "command": "node scripts/production-smoke.mjs",
+    "exitCode": 1,
+    "startedAt": "2026-11-24T22:42:00.659561+08:00",
+    "log": "evidence/phase1/final-checks/production-smoke.log"
+  }
+]

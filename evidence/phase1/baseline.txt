@@ -1,0 +1,2 @@
+GitHub baseline aa3e1a0102efb51cb52bd29de4bcde77b066f0f2
+Clean clone before any edits; original Phase0 directory is not a git repository and was not changed.

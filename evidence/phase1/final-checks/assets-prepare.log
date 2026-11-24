@@ -1,0 +1,5 @@
+
+> mistsea-phase1@0.1.0-phase1 assets:prepare
+> python3 scripts/assets/prepare.py
+
+Verified CC0 archive and prepared 45 registered runtime assets

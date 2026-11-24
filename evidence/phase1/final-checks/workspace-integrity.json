@@ -1,0 +1,23 @@
+{
+  "restoredArtifacts": {
+    "docs/AI_Game_Research_and_Design_v2.pdf": {
+      "sha256": "8623390d64c8f0684e89749247cbf2d3206f3c859bd0c7e34f8567a5d252efc7",
+      "bytes": 3766566
+    },
+    "public/assets/village.ogg": {
+      "sha256": "686b6963fb15ed8e45da4cb7a72b696e65d3b9b86c7bcd6fc615dd444d5bddfe",
+      "bytes": 3433463
+    }
+  },
+  "originalDesignPages": 29,
+  "pageTextMatched": true,
+  "modifiedTrackedPhase0Evidence": [],
+  "originalArchiveIgnored": true,
+  "oversizedLocalDebugOnly": [
+    {
+      "path": "evidence/phase1/isolated/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/trace.zip",
+      "bytes": 71023923,
+      "sha256": "c1a1ee48f1b66232672096c4bcfd5c954c5f68591eeab8b55ceb889982628efe"
+    }
+  ]
+}

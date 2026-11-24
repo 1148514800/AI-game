@@ -1,0 +1,102 @@
+[
+  {
+    "path": "docs/AI_Game_Research_and_Design_v2.pdf",
+    "baselineSha256": "df491913488fed94a77f208b262dc4fa1473b4c0be4dfcca24eb582ff6fe493d",
+    "expectedSha256": "8623390d64c8f0684e89749247cbf2d3206f3c859bd0c7e34f8567a5d252efc7",
+    "baselineBytes": 786445,
+    "restored": true,
+    "restoredBytes": 3766566
+  },
+  {
+    "path": "public/assets/player-walk.png",
+    "baselineSha256": "2b888eb00722a4049bb9d489463d50a3d90b004147152508b60f7b062358bbae",
+    "expectedSha256": "2b888eb00722a4049bb9d489463d50a3d90b004147152508b60f7b062358bbae",
+    "baselineBytes": 4584,
+    "restored": false
+  },
+  {
+    "path": "public/assets/player-idle.png",
+    "baselineSha256": "631553826b80df332dc69853e454a5756dfc91f06fb4412fdda126dcd3039cc8",
+    "expectedSha256": "631553826b80df332dc69853e454a5756dfc91f06fb4412fdda126dcd3039cc8",
+    "baselineBytes": 912,
+    "restored": false
+  },
+  {
+    "path": "public/assets/npc-walk.png",
+    "baselineSha256": "548e3e38992d8efd49b2902ed3091a35b2a88ad9e491d9300fd235ce91846d00",
+    "expectedSha256": "548e3e38992d8efd49b2902ed3091a35b2a88ad9e491d9300fd235ce91846d00",
+    "baselineBytes": 4117,
+    "restored": false
+  },
+  {
+    "path": "public/assets/npc-idle.png",
+    "baselineSha256": "cdfc13059800c9645b73da0aaf459939a3064504befdfdff91abcbff1ac1c4d6",
+    "expectedSha256": "cdfc13059800c9645b73da0aaf459939a3064504befdfdff91abcbff1ac1c4d6",
+    "baselineBytes": 3357,
+    "restored": false
+  },
+  {
+    "path": "public/assets/grass.png",
+    "baselineSha256": "e81711cb655ba7e699a3c15ba9fce40b03f0d1f93fae628a02e37f03465b717d",
+    "expectedSha256": "e81711cb655ba7e699a3c15ba9fce40b03f0d1f93fae628a02e37f03465b717d",
+    "baselineBytes": 86,
+    "restored": false
+  },
+  {
+    "path": "public/assets/path.png",
+    "baselineSha256": "de3b4012049e1ccc7fc896f1451d5387f39e929885960e134174bd7d6b5043e0",
+    "expectedSha256": "de3b4012049e1ccc7fc896f1451d5387f39e929885960e134174bd7d6b5043e0",
+    "baselineBytes": 192,
+    "restored": false
+  },
+  {
+    "path": "public/assets/tree.png",
+    "baselineSha256": "aaf0485f2eee71e4e325b225d44dd0597ea901d4e2bcb2ba6d093ef13df3e13b",
+    "expectedSha256": "aaf0485f2eee71e4e325b225d44dd0597ea901d4e2bcb2ba6d093ef13df3e13b",
+    "baselineBytes": 596,
+    "restored": false
+  },
+  {
+    "path": "public/assets/house.png",
+    "baselineSha256": "2b11bcb58d500e80a0ce1b81884147793bba920f1f78caae19927f1971739238",
+    "expectedSha256": "2b11bcb58d500e80a0ce1b81884147793bba920f1f78caae19927f1971739238",
+    "baselineBytes": 1134,
+    "restored": false
+  },
+  {
+    "path": "public/assets/flowers.png",
+    "baselineSha256": "90474e3c0550b560040eb2388677296c394ff1ec6979bd2966c82cb44cf56f8b",
+    "expectedSha256": "90474e3c0550b560040eb2388677296c394ff1ec6979bd2966c82cb44cf56f8b",
+    "baselineBytes": 253,
+    "restored": false
+  },
+  {
+    "path": "public/assets/letter.png",
+    "baselineSha256": "c3e66567d0309d3c25b696354c9bf895d93e972e930cdb68f5d3dc5fc68e9ba3",
+    "expectedSha256": "c3e66567d0309d3c25b696354c9bf895d93e972e930cdb68f5d3dc5fc68e9ba3",
+    "baselineBytes": 216,
+    "restored": false
+  },
+  {
+    "path": "public/assets/arrow.png",
+    "baselineSha256": "7e18bb1f611b4875b851b4fbb76d8512f5a8d4d47e9863adbc54759ee2532ddb",
+    "expectedSha256": "7e18bb1f611b4875b851b4fbb76d8512f5a8d4d47e9863adbc54759ee2532ddb",
+    "baselineBytes": 2857,
+    "restored": false
+  },
+  {
+    "path": "public/assets/village.ogg",
+    "baselineSha256": "93cf2033c874a8175fb6025f0311f3e6ba5ca8980099c84dd62aaa6f1386dc6e",
+    "expectedSha256": "686b6963fb15ed8e45da4cb7a72b696e65d3b9b86c7bcd6fc615dd444d5bddfe",
+    "baselineBytes": 786444,
+    "restored": true,
+    "restoredBytes": 3433463
+  },
+  {
+    "path": "public/assets/alert.wav",
+    "baselineSha256": "abdccbc57827194b9bc643560692d4b2b3caddf6b128aafc2ddf80ffdbe6c104",
+    "expectedSha256": "abdccbc57827194b9bc643560692d4b2b3caddf6b128aafc2ddf80ffdbe6c104",
+    "baselineBytes": 87296,
+    "restored": false
+  }
+]

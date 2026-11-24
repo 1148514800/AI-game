@@ -1,0 +1,395 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/lib/nodejs/node",
+      "/workspace/mistsea-phase1/node_modules/.bin/playwright",
+      "test"
+    ],
+    "configFile": "/workspace/mistsea-phase1/playwright.config.ts",
+    "rootDir": "/workspace/mistsea-phase1/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/mistsea-phase1/evidence/phase1/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/workspace/mistsea-phase1/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "*.e2e.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/mistsea-phase1/evidence/phase1/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/workspace/mistsea-phase1/tests",
+        "snapshotDir": "/workspace/mistsea-phase1/tests",
+        "testIgnore": [],
+        "testMatch": "*.e2e.ts",
+        "timeout": 150000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5174",
+          "viewport": {
+            "width": 1280,
+            "height": 960
+          },
+          "headless": true,
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/phase1/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev:client",
+      "env": {
+        "PORT": "3003",
+        "MISTSEA_VITE_PORT": "5174"
+      },
+      "url": "http://127.0.0.1:5174",
+      "reuseExistingServer": false,
+      "timeout": 15000
+    }
+  },
+  "suites": [
+    {
+      "title": "scene.e2e.ts",
+      "file": "scene.e2e.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fresh journey collects all materials, repairs, crosses, explores and restores",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 61280,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#objective')\nExpected: \u001b[32m\"查看航标遗迹\"\u001b[39m\nReceived: \u001b[31m\"修复雾灯旧桥\"\u001b[39m\nTimeout:  20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('#objective') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for locator('#objective')\u001b[22m\n\u001b[2m    42 × locator resolved to <h2 id=\"objective\">修复雾灯旧桥</h2>\u001b[22m\n\u001b[2m       - unexpected value \"修复雾灯旧桥\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#objective')\nExpected: \u001b[32m\"查看航标遗迹\"\u001b[39m\nReceived: \u001b[31m\"修复雾灯旧桥\"\u001b[39m\nTimeout:  20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('#objective') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for locator('#objective')\u001b[22m\n\u001b[2m    42 × locator resolved to <h2 id=\"objective\">修复雾灯旧桥</h2>\u001b[22m\n\u001b[2m       - unexpected value \"修复雾灯旧桥\"\u001b[22m\n\n    at /workspace/mistsea-phase1/tests/scene.e2e.ts:191:44",
+                    "location": {
+                      "file": "/workspace/mistsea-phase1/tests/scene.e2e.ts",
+                      "column": 44,
+                      "line": 191
+                    },
+                    "snippet": "  189 |   await expect(page.locator(\"#game\")).toHaveAttribute(\"data-working\", \"false\");\n  190 |   await page.getByRole(\"button\", { name: \"开始施工\" }).click();\n> 191 |   await expect(page.locator(\"#objective\")).toHaveText(\"查看航标遗迹\", { timeout: 20000 });\n      |                                            ^\n  192 |   expect(await progress(page)).toBe(100);\n  193 |   await screenshot(page, \"bridge-after\");\n  194 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/mistsea-phase1/tests/scene.e2e.ts",
+                        "column": 44,
+                        "line": 191
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#objective')\nExpected: \u001b[32m\"查看航标遗迹\"\u001b[39m\nReceived: \u001b[31m\"修复雾灯旧桥\"\u001b[39m\nTimeout:  20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('#objective') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for locator('#objective')\u001b[22m\n\u001b[2m    42 × locator resolved to <h2 id=\"objective\">修复雾灯旧桥</h2>\u001b[22m\n\u001b[2m       - unexpected value \"修复雾灯旧桥\"\u001b[22m\n\n\n  189 |   await expect(page.locator(\"#game\")).toHaveAttribute(\"data-working\", \"false\");\n  190 |   await page.getByRole(\"button\", { name: \"开始施工\" }).click();\n> 191 |   await expect(page.locator(\"#objective\")).toHaveText(\"查看航标遗迹\", { timeout: 20000 });\n      |                                            ^\n  192 |   expect(await progress(page)).toBe(100);\n  193 |   await screenshot(page, \"bridge-after\");\n  194 |\n    at /workspace/mistsea-phase1/tests/scene.e2e.ts:191:44"
+                    },
+                    {
+                      "message": "Error: ENOENT: no such file or directory, unlink '/workspace/mistsea-phase1/evidence/phase1/playwright-artifacts/.playwright-artifacts-0/369dd65be054ba7e81f543b995b6ea50.zip'"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-24T14:36:32.285Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/mistsea-phase1/evidence/phase1/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/mistsea-phase1/tests/scene.e2e.ts",
+                    "column": 44,
+                    "line": 191
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-8cfed86e4e10b67e4909",
+          "file": "scene.e2e.ts",
+          "line": 91,
+          "column": 1
+        },
+        {
+          "title": "four-way walk frames, pause, a following camera and opt-in music",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7487,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-24T14:37:39.439Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-34d39b477a15d74c38c6",
+          "file": "scene.e2e.ts",
+          "line": 227,
+          "column": 1
+        },
+        {
+          "title": "390px narrow window renders the scene, residents and touch controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2777,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-24T14:37:47.023Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-15061960749edc48377e",
+          "file": "scene.e2e.ts",
+          "line": 267,
+          "column": 1
+        },
+        {
+          "title": "missing bridge art blocks readiness with a clear error",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3080,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-24T14:37:49.809Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-2bfad38282105d69eeca",
+          "file": "scene.e2e.ts",
+          "line": 281,
+          "column": 1
+        },
+        {
+          "title": "HTTP failure stays unavailable and automatically recovers",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3048,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-24T14:37:52.899Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-a057622a1be6c936388f",
+          "file": "scene.e2e.ts",
+          "line": 291,
+          "column": 1
+        },
+        {
+          "title": "WebSocket handshake failure remains visible and prevents input",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2192,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-24T14:37:55.958Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-333880c46c724bb008d8",
+          "file": "scene.e2e.ts",
+          "line": 300,
+          "column": 1
+        },
+        {
+          "title": "the real server rejects augmented movement and out-of-range actions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1202,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-24T14:37:58.159Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-6137f46c1363dff36b3c",
+          "file": "scene.e2e.ts",
+          "line": 308,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-24T14:36:31.452Z",
+    "duration": 88052.762,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

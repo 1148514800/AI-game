@@ -1,0 +1,197 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/lib/nodejs/node",
+      "/workspace/mistsea-phase1/node_modules/.bin/playwright",
+      "test",
+      "--grep",
+      "fresh journey"
+    ],
+    "configFile": "/workspace/mistsea-phase1/playwright.config.ts",
+    "rootDir": "/workspace/mistsea-phase1/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/mistsea-phase1/evidence/phase1/isolated/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/workspace/mistsea-phase1/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "*.e2e.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/mistsea-phase1/evidence/phase1/isolated/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/workspace/mistsea-phase1/tests",
+        "snapshotDir": "/workspace/mistsea-phase1/tests",
+        "testIgnore": [],
+        "testMatch": "*.e2e.ts",
+        "timeout": 150000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5174",
+          "viewport": {
+            "width": 1280,
+            "height": 960
+          },
+          "headless": true,
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/phase1/isolated/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev:client",
+      "env": {
+        "PORT": "3003",
+        "MISTSEA_VITE_PORT": "5174"
+      },
+      "url": "http://127.0.0.1:5174",
+      "reuseExistingServer": false,
+      "stdout": "pipe",
+      "stderr": "pipe",
+      "timeout": 15000
+    }
+  },
+  "suites": [
+    {
+      "title": "scene.e2e.ts",
+      "file": "scene.e2e.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fresh journey collects all materials, repairs, crosses, explores and restores",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 27520,
+                  "error": {
+                    "message": "TimeoutError: page.waitForFunction: Timeout 2654.5454545454545ms exceeded.",
+                    "stack": "TimeoutError: page.waitForFunction: Timeout 2654.5454545454545ms exceeded.\n    at walk (/workspace/mistsea-phase1/tests/scene.e2e.ts:117:18)\n    at approach (/workspace/mistsea-phase1/tests/scene.e2e.ts:135:3)\n    at /workspace/mistsea-phase1/tests/scene.e2e.ts:220:5",
+                    "location": {
+                      "file": "/workspace/mistsea-phase1/tests/scene.e2e.ts",
+                      "column": 18,
+                      "line": 117
+                    },
+                    "snippet": "  115 |     await page.keyboard.down(key);\n  116 |     try {\n> 117 |       await page.waitForFunction(\n      |                  ^\n  118 |         ({ axis, value, sign }) => {\n  119 |           const current = Number(\n  120 |             document.getElementById(\"game\")!.dataset[axis],"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/mistsea-phase1/tests/scene.e2e.ts",
+                        "column": 18,
+                        "line": 117
+                      },
+                      "message": "TimeoutError: page.waitForFunction: Timeout 2654.5454545454545ms exceeded.\n\n  115 |     await page.keyboard.down(key);\n  116 |     try {\n> 117 |       await page.waitForFunction(\n      |                  ^\n  118 |         ({ axis, value, sign }) => {\n  119 |           const current = Number(\n  120 |             document.getElementById(\"game\")!.dataset[axis],\n    at walk (/workspace/mistsea-phase1/tests/scene.e2e.ts:117:18)\n    at approach (/workspace/mistsea-phase1/tests/scene.e2e.ts:135:3)\n    at /workspace/mistsea-phase1/tests/scene.e2e.ts:220:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-24T14:41:33.507Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/mistsea-phase1/evidence/phase1/isolated/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/mistsea-phase1/evidence/phase1/isolated/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/mistsea-phase1/tests/scene.e2e.ts",
+                    "column": 18,
+                    "line": 117
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-8cfed86e4e10b67e4909",
+          "file": "scene.e2e.ts",
+          "line": 146,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-24T14:41:32.639Z",
+    "duration": 30945.632,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

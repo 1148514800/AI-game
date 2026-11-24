@@ -1,54 +1,98 @@
 import { spawn } from "node:child_process";
 import { once } from "node:events";
-import { writeFileSync } from "node:fs";
-import { chromium } from "@playwright/test";
+import { closeSync, mkdirSync, mkdtempSync, openSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { chromium, expect } from "@playwright/test";
+
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase1";
+mkdirSync(evidence, { recursive: true });
+const directory = mkdtempSync(join(tmpdir(), "mistsea-production-"));
+const output = openSync(join(evidence, "production-server.log"), "w");
+const url = "http://127.0.0.1:3002";
 const child = spawn(process.execPath, ["release/server/src/server/index.js"], {
-  env: { ...process.env, PORT: "3002", HOST: "127.0.0.1" },
-  stdio: ["ignore", "pipe", "pipe"],
+  env: {
+    PATH: process.env.PATH,
+    PORT: "3002",
+    HOST: "127.0.0.1",
+    MISTSEA_SAVE: join(directory, "valley.sqlite"),
+  },
+  stdio: ["ignore", output, output],
 });
-let log = "";
-child.stdout.on("data", (d) => (log += d));
-child.stderr.on("data", (d) => (log += d));
 let browser;
+
 try {
-  const deadline = Date.now() + 15000;
-  while (true) {
-    if (child.exitCode !== null) throw Error("Server exited " + child.exitCode);
-    try {
-      const r = await fetch("http://127.0.0.1:3002/health");
-      if (r.ok) break;
-    } catch {}
-    if (Date.now() > deadline) throw Error("Startup timeout");
-    await new Promise((r) => setTimeout(r, 100));
-  }
+  await expect
+    .poll(
+      async () => {
+        if (child.exitCode !== null)
+          throw Error(
+            `Compiled server exited ${child.exitCode}; see production-server.log`,
+          );
+        try {
+          return (await fetch(`${url}/health`)).json();
+        } catch {
+          return null;
+        }
+      },
+      { timeout: 10000 },
+    )
+    .toMatchObject({
+      status: "ok",
+      phase: 1,
+      schemaVersion: 1,
+      contentVersion: 1,
+    });
   browser = await chromium.launch();
   const page = await browser.newPage({
     viewport: { width: 1280, height: 960 },
   });
   const errors = [];
-  page.on("pageerror", (e) => errors.push(e.message));
-  page.on("console", (m) => {
-    if (m.type() === "error") errors.push(m.text());
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
   });
-  await page.goto("http://127.0.0.1:3002/");
-  await page.waitForFunction(() => window.__PHASE0__?.ready);
-  await page.waitForSelector("#asset-status");
+  page.on("request", (request) => {
+    if (
+      new URL(request.url()).origin !== url &&
+      !request.url().startsWith("data:")
+    )
+      errors.push(request.url());
+  });
+  page.on("response", (response) => {
+    if (response.status() >= 400)
+      errors.push(`${response.status()} ${response.url()}`);
+  });
+  await page.goto(url);
+  const stage = page.locator("#game");
+  await expect(stage).toHaveAttribute("data-ready", "true");
+  await expect(page.locator("canvas")).toBeVisible();
+  await expect(page.locator("#objective")).toHaveText("修复雾灯旧桥");
+  const initial = Number(await stage.getAttribute("data-x"));
+  await page.keyboard.down("d");
+  try {
+    await expect
+      .poll(async () => Number(await stage.getAttribute("data-x")))
+      .toBeGreaterThan(initial + 10);
+  } finally {
+    await page.keyboard.up("d");
+  }
+  await expect(stage).toHaveAttribute("data-moving", "false");
   await page.screenshot({
-    path: "evidence/scene-production.png",
+    path: join(evidence, "scene-production.png"),
     fullPage: true,
   });
-  const state = await page.evaluate(() => window.__PHASE0__);
-  if (state.assetsLoaded !== 13 || errors.length)
-    throw Error(JSON.stringify({ state, errors }));
+  expect(errors).toEqual([]);
   console.log(
-    "PASS: compiled client + Fastify static server + SQLite health + 13 assets, no browser errors.",
+    "PASS: compiled Fastify, SQLite, WebSocket, local assets and keyboard movement without API keys.",
   );
 } finally {
   if (browser) await browser.close();
-  if (child.exitCode === null) {
+  if (child.exitCode === null && child.signalCode === null) {
     const exit = once(child, "exit");
     child.kill("SIGTERM");
     await exit;
   }
-  writeFileSync("evidence/production-server.log", log);
+  closeSync(output);
+  rmSync(directory, { recursive: true, force: true });
 }

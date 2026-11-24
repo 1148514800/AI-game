@@ -1,0 +1,53 @@
+
+> mistsea-phase1@0.1.0-phase1 test:e2e
+> playwright test
+
+[WebServer] 
+[WebServer] > mistsea-phase1@0.1.0-phase1 dev:client
+[WebServer] > vite --host 127.0.0.1
+[WebServer] 
+[WebServer] 
+[WebServer]   VITE v8.3.8  ready in 157 ms
+[WebServer] 
+[WebServer]   ➜  Local:   http://127.0.0.1:5174/
+
+Running 7 tests using 1 worker
+
+(node:199055) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 10:47:55 PM [vite] ws proxy error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1031:24)
+[WebServer]     at Socket.emit (node:events:514:28)
+[WebServer]     at addChunk (node:internal/streams/readable:569:12)
+[WebServer] 10:47:55 PM [vite] ws proxy socket error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1031:24)
+[WebServer]     at Socket.emit (node:events:514:28)
+[WebServer]     at addChunk (node:internal/streams/readable:569:12)
+  ✓  1 tests/scene.e2e.ts:146:1 › fresh journey collects all materials, repairs, crosses, explores and restores (54.1s)
+  ✓  2 tests/scene.e2e.ts:299:1 › four-way walk frames, pause, a following camera and opt-in music (7.7s)
+  ✓  3 tests/scene.e2e.ts:359:1 › 390px narrow window renders the scene, residents and touch controls (2.9s)
+[WebServer] 10:48:45 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓  4 tests/scene.e2e.ts:387:1 › missing bridge art blocks readiness with a clear error (3.1s)
+  ✓  5 tests/scene.e2e.ts:401:1 › HTTP failure stays unavailable and automatically recovers (3.1s)
+  ✓  6 tests/scene.e2e.ts:416:1 › WebSocket handshake failure remains visible and prevents input (2.2s)
+  ✓  7 tests/scene.e2e.ts:430:1 › the real server rejects augmented movement and out-of-range actions (1.2s)
+
+  7 passed (1.3m)

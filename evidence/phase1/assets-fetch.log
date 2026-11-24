@@ -1,0 +1,5 @@
+
+> mistsea-phase0@0.0.1 assets:fetch
+> python3 scripts/assets/fetch.py
+
+Existing original archive verified; no network needed.

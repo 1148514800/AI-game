@@ -1,0 +1,39 @@
+
+> mistsea-phase1@0.1.0-phase1 test
+> node --import tsx --test --test-isolation=none tests/unit.test.ts
+
+存档无法打开，已保留原件。 Error: file is not a database
+    at new SaveFile (/workspace/mistsea-phase1/src/server/save.ts:59:33)
+    at createApp (/workspace/mistsea-phase1/src/server/app.ts:20:12)
+    at TestContext.<anonymous> (/workspace/mistsea-phase1/tests/unit.test.ts:274:15)
+    at Test.runInAsyncScope (node:async_hooks:227:14)
+    at Test.run (node:internal/test_runner/test:1402:25)
+    at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    at Test.postRun (node:internal/test_runner/test:1542:19)
+    at Test.run (node:internal/test_runner/test:1467:12)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+  code: 'ERR_SQLITE_ERROR',
+  errcode: 26,
+  errstr: 'file is not a database'
+}
+✔ strict input accepts intent only and requires explicit reset confirmation (7.586403ms)
+✔ runtime assets exactly match the CC0 manifest and every map reference (12.072285ms)
+✔ map dimensions, terrain frames, unique stable IDs and spawn match data (0.914849ms)
+✔ west bank resources are reachable and the only route east is the repaired crossing (39.256729ms)
+✔ server ticks enforce normalized speed, expiring input and no message-driven movement (27.475535ms)
+✔ wall, tree, rock, closed river and bounds use the same foot collision (5.389447ms)
+✔ distant, wrong-target, unknown and insufficient actions do not touch storage (4.015703ms)
+✔ collection is durable, cooldown prevents rush and duplicate id remains rejected after restart (3.945435ms)
+✔ delivery is atomic and timed work can pause and resume without counting offline time (85.173091ms)
+✔ checked reset is durable and a repeated reset cannot wipe subsequent progress (4.152108ms)
+✔ conflicting save revision leaves the winning storage and losing world untouched (3.8526ms)
+✔ bad SQLite and incompatible state produce a health error without replacing the original (115.046408ms)
+✔ healthy Fastify opens a versioned local save without API keys (2.419586ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 928.009038

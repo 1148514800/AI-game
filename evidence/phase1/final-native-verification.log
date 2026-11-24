@@ -1,0 +1,6 @@
+{'command': 'npm ci', 'exitCode': 0, 'startedAt': '2026-11-24T22:47:32.873762+08:00', 'log': 'evidence/phase1/verification-20261124-224732-873553/npm-ci.log'}
+{'command': 'npm run typecheck', 'exitCode': 0, 'startedAt': '2026-11-24T22:47:35.302753+08:00', 'log': 'evidence/phase1/verification-20261124-224732-873553/typecheck.log'}
+{'command': 'npm test', 'exitCode': 0, 'startedAt': '2026-11-24T22:47:35.720982+08:00', 'log': 'evidence/phase1/verification-20261124-224732-873553/unit-test.log'}
+{'command': 'npm run test:e2e', 'exitCode': 0, 'startedAt': '2026-11-24T22:47:36.493450+08:00', 'log': 'evidence/phase1/verification-20261124-224732-873553/e2e.log'}
+{'command': 'npm run build', 'exitCode': 0, 'startedAt': '2026-11-24T22:48:52.312129+08:00', 'log': 'evidence/phase1/verification-20261124-224732-873553/build.log'}
+{'command': 'node scripts/production-smoke.mjs', 'exitCode': 0, 'startedAt': '2026-11-24T22:48:53.618491+08:00', 'log': 'evidence/phase1/verification-20261124-224732-873553/production-smoke.log'}

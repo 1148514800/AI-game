@@ -1,0 +1,19 @@
+
+> mistsea-phase0@0.0.1 typecheck
+> tsc --noEmit
+
+tests/scene.e2e.ts(23,43): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(50,59): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(53,59): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(64,50): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(66,44): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(70,44): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(72,51): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(75,43): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(82,43): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(101,43): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(113,43): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(117,46): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/scene.e2e.ts(123,46): error TS2339: Property '__PHASE0__' does not exist on type 'Window & typeof globalThis'.
+tests/unit.test.ts(7,10): error TS2305: Module '"../src/shared/protocol.js"' has no exported member 'pingSchema'.
+tests/unit.test.ts(7,22): error TS2305: Module '"../src/shared/protocol.js"' has no exported member 'clampPosition'.

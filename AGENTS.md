@@ -1,10 +1,13 @@
 # 开发 AI 必须遵守
 - 唯一完整设计基线：docs/GAME_DESIGN.md（原始 PDF 同目录）。优先服从本轮用户的范围限制。技术变更只登记 docs/DECISIONS.md，不复制相互冲突的设计。
-- 当前已授权仅 Phase 0。交付即停，后续 Phase 1–6 必须新获授权。不得补写采集、修桥、AI 记忆/社交、战斗、经济或多人系统。
+- 当前执行规格 docs/PHASE1_TASK.md 授权 AG-2 / Phase 1《可玩的小世界》，覆盖原 Phase 0 限制：正式雾灯谷地图、权威移动/采集/背包/修桥/遗迹、SQLite存档与恢复、素材与测试。交付即停，不进入 Phase 2。禁止 AI 记忆/社交/自主目标、大模型对话、战斗、经济或多人系统。
 - 无真实大模型 API、无付费、无购买、无公网部署、无远程推送。不得读取/泄露凭据或修改工作区外无关文件。
 - TypeScript、Phaser 4.2.1、Vite、单 Node/Fastify、WebSocket、SQLite、Zod、Playwright；保留稳定 ID 和清晰目录，不引入微服务/Redis/向量库/Agent 框架。
 - 仅官方来源且准入完成的 CC0 素材；所有运行素材本地化并逐文件列 manifest、哈希与修改。下载更新必须重新核查授权。
 - 资产脚本 `npm run assets:fetch && npm run assets:prepare`；Python Pillow 是离线重建资源的开发工具，游戏运行无需 Python。
 - 修改后实际 npm ci/dev/typecheck/test/test:e2e/build；截图必须是真实浏览器输出，必须看图并修复。不得把未执行项写为 PASS。
-- 不把 NPC 动画样例描述为 AI，不把基础 SQLite 连通描述成存档系统。
+- NPC 仅固定身份与确定性表现，不能称为真正 AI。所有玩法副作用由服务端校验与事务持久化；不得使用客户端注入或改库背包代替真实完整试玩。
+- 保留原设计PDF和Phase0证据；本轮交付工作树，由协调代理复核后处理本地提交。严禁push/远程PR/部署。附件每件严格小于25,000,000字节。
+- 原始素材处理与正式地图/动画数据独立；重复素材处理不得覆盖正式地图、扩展manifest。测试验证清单与文件一致，不固定素材数。
 - 用户优先 Codex CLI gpt-6.2 sol high；调用前验证参数和可用性，不虚构模型名、额度或重置时间。额度确实用尽时保存工作并报告，勿用 sleep 阻塞五小时。
+- 默认单人存档为 `saves/foglamp-valley.sqlite`，可用 `MISTSEA_SAVE` 指定隔离路径。浏览器测试与生产冒烟均用临时存档，日志和真实浏览器截图写入 `evidence/phase1/`。回环和 Chromium 若受沙箱限制，记实际错误、继续可执行验收并交协调代理复核。

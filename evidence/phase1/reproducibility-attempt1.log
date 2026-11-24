@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/tmp/mistsea-rebuild-smdagfzy/scripts/assets/prepare.py", line 195, in <module>
+    prepare()
+    ~~~~~~~^^
+  File "/tmp/mistsea-rebuild-smdagfzy/scripts/assets/prepare.py", line 101, in prepare
+    (ROOT / LICENSE_PATH).write_bytes(license_text)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_abc.py", line 641, in write_bytes
+    with self.open(mode='wb') as f:
+         ~~~~~~~~~^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 539, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/mistsea-rebuild-smdagfzy/assets/licenses/NinjaAdventure-CC0.txt'
+Pinned original README confirms CC0.
+Traceback (most recent call last):
+  File "<stdin>", line 29, in <module>
+  File "/usr/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/usr/bin/python3', '/tmp/mistsea-rebuild-smdagfzy/scripts/assets/prepare.py']' returned non-zero exit status 1.
