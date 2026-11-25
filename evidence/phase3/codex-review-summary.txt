@@ -1,0 +1,7 @@
+Phase3 server changes are ready for the coordinator’s native validation and 30-minute soak.
+
+- Live dialogue lets the model interpret requests such as `劳驾到北坡捡点木头`. It accepts plain conversation or a strictly validated optional plan. Malformed and stale replies cannot start actions. A format failure briefly blocks new plan acceptance while ordinary chat remains available. [planning.ts](/workspace/mistsea-phase3/src/server/dialogue/planning.ts) · [session.ts](/workspace/mistsea-phase3/src/server/dialogue/session.ts)
+- Cenyan holds position and preserves his accepted plan during a valid dialogue. He resumes execution when the dialogue closes or the player leaves range. Player and world ticks continue. [app.ts](/workspace/mistsea-phase3/src/server/app.ts) · [world.ts](/workspace/mistsea-phase3/src/server/world.ts)
+- Added regression coverage and documented the contract. [dialogue.integration.ts](/workspace/mistsea-phase3/tests/dialogue.integration.ts) · [phase3.test.ts](/workspace/mistsea-phase3/tests/phase3.test.ts) · [DECISIONS.md](/workspace/mistsea-phase3/docs/DECISIONS.md:96)
+
+`npm run typecheck`, all **45 unit tests**, formatting, and `git diff --check` passed. The three focused HTTP/WebSocket tests exited with code 1 because the sandbox denied binding to `127.0.0.1` with `EPERM`; they remain unverified. Existing evidence was preserved. No real provider calls were made.

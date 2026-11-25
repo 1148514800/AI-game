@@ -18,3 +18,7 @@ evidence/phase2/**/trace.zip
 
 # Generated local delivery metadata; injected into source ZIP after commit.
 /DELIVERY_COMMIT.txt
+
+evidence/phase3/**/trace.zip
+
+__pycache__/

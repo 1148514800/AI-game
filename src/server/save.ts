@@ -1,12 +1,28 @@
 import { existsSync, mkdirSync, statSync } from "node:fs";
 import { dirname } from "node:path";
 import { DatabaseSync } from "node:sqlite";
+import { cenyanId, home, type Memory } from "../shared/cenyan.js";
 import {
+  legacySaveSchema,
   saveSchema,
   schemaVersion,
   type SaveState,
 } from "../shared/protocol.js";
 import { isPassable, resources, valley } from "../shared/world.js";
+
+function freshActor(): SaveState["cenyan"] {
+  return {
+    id: cenyanId,
+    x: home.x,
+    y: home.y,
+    facing: home.facing,
+    bag: { wood: 0, stone: 0 },
+    goal: "stock-wood",
+    generation: 0,
+    plan: null,
+    last: null,
+  };
+}
 
 export function freshState(): SaveState {
   return {
@@ -24,17 +40,25 @@ export function freshState(): SaveState {
       repaired: false,
     },
     explored: false,
+    cenyan: freshActor(),
   };
 }
 
-function decode(payload: string): SaveState {
-  const save = saveSchema.parse(JSON.parse(payload));
+function decode(payload: string, version: number): SaveState {
+  const raw: unknown = JSON.parse(payload);
+  const save: SaveState =
+    version === 1
+      ? { ...legacySaveSchema.parse(raw), schemaVersion, cenyan: freshActor() }
+      : saveSchema.parse(raw);
   const bridge = save.bridge;
   const full =
     bridge.wood === valley.bridge.required.wood &&
     bridge.stone === valley.bridge.required.stone;
+  const actor = save.cenyan;
   if (
     !isPassable(save.player.x, save.player.y, bridge.repaired) ||
+    !isPassable(actor.x, actor.y, bridge.repaired) ||
+    (actor.plan && actor.plan.index >= actor.plan.steps.length) ||
     Object.keys(save.cooldowns).some((id) => !resources.has(id)) ||
     (!bridge.discovered && (bridge.wood !== 0 || bridge.stone !== 0)) ||
     (!full && bridge.progressMs !== 0) ||
@@ -45,6 +69,16 @@ function decode(payload: string): SaveState {
   }
   return save;
 }
+
+const memoryTable = `
+  CREATE TABLE cenyan_memory (
+    id TEXT PRIMARY KEY, actor TEXT NOT NULL, at INTEGER NOT NULL,
+    kind TEXT NOT NULL, source TEXT NOT NULL, event TEXT NOT NULL,
+    topic TEXT NOT NULL, content TEXT NOT NULL
+  ) STRICT;
+  CREATE INDEX memory_actor_at ON cenyan_memory(actor, at);
+  CREATE INDEX memory_actor_topic_at ON cenyan_memory(actor, topic, at);
+`;
 
 export class SaveFile {
   readonly initial: SaveState;
@@ -68,6 +102,7 @@ export class SaveFile {
             payload TEXT NOT NULL
           ) STRICT;
           CREATE TABLE receipts (id TEXT PRIMARY KEY) STRICT;
+          ${memoryTable}
           PRAGMA user_version = ${schemaVersion};
           `);
           this.db
@@ -79,12 +114,11 @@ export class SaveFile {
         .prepare("PRAGMA quick_check")
         .get()?.quick_check;
       if (integrity !== "ok") throw Error("SQLite 完整性检查失败");
-      if (
-        this.db.prepare("PRAGMA user_version").get()?.user_version !==
-        schemaVersion
-      ) {
+      const version = this.db
+        .prepare("PRAGMA user_version")
+        .get()?.user_version;
+      if (version !== 1 && version !== schemaVersion)
         throw Error("SQLite 存档版本不受支持");
-      }
       const row = this.db
         .prepare("SELECT revision, payload FROM world WHERE slot = 1")
         .get();
@@ -97,8 +131,24 @@ export class SaveFile {
       )
         throw Error("找不到有效的单人存档");
       this.db.prepare("SELECT id FROM receipts LIMIT 1").get();
-      this.initial = decode(row.payload);
+      this.initial = decode(row.payload, version);
       this.revision = row.revision;
+      if (version === 1) {
+        // VACUUM INTO includes any committed WAL pages. A previous backup is
+        // retained, including when a migration was interrupted after backup.
+        const base = path + ".pre-phase3.sqlite";
+        let backupPath = base;
+        for (let suffix = 1; existsSync(backupPath); suffix++)
+          backupPath = base + "." + suffix;
+        this.db.prepare("VACUUM INTO ?").run(backupPath);
+        this.transaction(() => {
+          this.db.exec(memoryTable);
+          this.update(this.initial);
+          this.db.exec(`PRAGMA user_version = ${schemaVersion}`);
+        });
+        this.revision++;
+      }
+      this.db.prepare("SELECT id FROM cenyan_memory LIMIT 1").get();
     } catch (error) {
       this.db.close();
       throw error;
@@ -111,22 +161,67 @@ export class SaveFile {
     );
   }
 
-  write(state: SaveState, receipt?: string) {
+  memories(topic?: string, limit = 6): Memory[] {
+    const latest = this.db
+      .prepare(
+        "SELECT * FROM cenyan_memory WHERE actor = ? ORDER BY at DESC, rowid DESC LIMIT ?",
+      )
+      .all(cenyanId, limit) as Memory[];
+    if (!topic) return latest;
+    const related = this.db
+      .prepare(
+        "SELECT * FROM cenyan_memory WHERE actor = ? AND topic = ? ORDER BY at DESC, rowid DESC LIMIT 3",
+      )
+      .all(cenyanId, topic) as Memory[];
+    return [
+      ...new Map(
+        [...related, ...latest].map((item) => [item.id, item]),
+      ).values(),
+    ].slice(0, limit);
+  }
+
+  write(
+    state: SaveState,
+    receipt?: string,
+    memories: Memory[] = [],
+    reset = false,
+  ) {
     this.transaction(() => {
-      const change = this.db
-        .prepare(
-          "UPDATE world SET revision = revision + 1, payload = ? WHERE slot = 1 AND revision = ?",
-        )
-        .run(JSON.stringify(state), this.revision);
-      if (change.changes !== 1) throw Error("存档已由另一个服务修改");
+      this.update(state);
       if (receipt)
         this.db.prepare("INSERT INTO receipts VALUES (?)").run(receipt);
+      if (reset) this.db.exec("DELETE FROM cenyan_memory");
+      if (memories.length) {
+        const insert = this.db.prepare(
+          "INSERT INTO cenyan_memory VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        );
+        for (const m of memories)
+          insert.run(
+            m.id,
+            m.actor,
+            m.at,
+            m.kind,
+            m.source,
+            m.event,
+            m.topic,
+            m.content,
+          );
+      }
     });
     this.revision++;
   }
 
   close() {
     this.db.close();
+  }
+
+  private update(state: SaveState) {
+    const change = this.db
+      .prepare(
+        "UPDATE world SET revision = revision + 1, payload = ? WHERE slot = 1 AND revision = ?",
+      )
+      .run(JSON.stringify(state), this.revision);
+    if (change.changes !== 1) throw Error("存档已由另一个服务修改");
   }
 
   private transaction(operation: () => void) {

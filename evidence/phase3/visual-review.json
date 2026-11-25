@@ -1,0 +1,53 @@
+{
+  "method": "Actual Read image inspection of real Playwright PNGs; no fabricated screenshots",
+  "reviewed": [
+    {
+      "path": "evidence/phase3/acceptance-final/phase3-action-accepted.png",
+      "sha256": "6c6ba79a92f8c434c16a09e56cf0ef7498e481adec036aed71cfde7c2959ed7d"
+    },
+    {
+      "path": "evidence/phase3/acceptance-final/phase3-npc-moving.png",
+      "sha256": "e538bc3c3165bd3523f7d1fc0f7b69b145321d5d2ed4e068460ce142f72d9240"
+    },
+    {
+      "path": "evidence/phase3/acceptance-final/phase3-npc-collected.png",
+      "sha256": "a8ff20ccac4b85019bd0ea3d4c515431d883fe6cdc16c06cc7b6087cb7a3fc7b"
+    },
+    {
+      "path": "evidence/phase3/acceptance-final/phase3-npc-building.png",
+      "sha256": "e4e1f4c884d78c358f7c6e388fb3a535bbef9402c4032a61daeb1c4f15e9e085"
+    },
+    {
+      "path": "evidence/phase3/acceptance-final/phase3-npc-bridge-restored.png",
+      "sha256": "05c2b1f1efacf562997b03ee7a731c6431d7188be58ea75cbe31041f04286d55"
+    },
+    {
+      "path": "evidence/phase3/acceptance-final/phase3-npc-debug-narrow.png",
+      "sha256": "7b123196db3cc3148d117a1f31d32f5858fc15407bfc1fc3199f4d6927612aa9"
+    },
+    {
+      "path": "evidence/phase3/acceptance-final/beacon-ruin.png",
+      "sha256": "5adceb0293fd075e3a9b7d90e694291debfe4dd9a5be21f7cd97bc9a5e41a9af"
+    },
+    {
+      "path": "evidence/phase3/acceptance-final/dialogue-thinking.png",
+      "sha256": "5f57097b7f045e92bfa355ffa7239f1fe2b1fc668d4d74e9e8eb993d89ab19de"
+    },
+    {
+      "path": "evidence/phase3/acceptance-final/dialogue-budget.png",
+      "sha256": "83ac83fe3c61da74de48da04a9c1b4c1f3799b7fe9bdca0555225c1e08b8e372"
+    },
+    {
+      "path": "evidence/phase3/acceptance-final/dialogue-narrow.png",
+      "sha256": "9cdc073c4899fcc0c011bc9225dfaa1cf472be6a945afea10e0560afc1702d46"
+    }
+  ],
+  "findingsAndFixes": [
+    "Initial action receipt label wrapped in3em column; widened to4.5em and re-read final image.",
+    "Initial390px Debug occupied half-width; residents/debug now span full narrow journal width, final image re-read.",
+    "NPC harvest originally outside follow-camera viewport; full-valley overview screenshot now shows real actor location with authoritative bag/result.",
+    "NPC pixel art, moving nameplate, bridge construction1percent and repaired100percent visually inspected; distinct bridge artwork and independent player/NPC inventory visible.",
+    "Normal empty-bag keyboard journey beacon screenshot shows journey complete; actual underlying browser test includes refresh and child server restart."
+  ],
+  "scope": "Linux headless browser visual check; no user Mac visual/performance claim, no Phase3 Live API run"
+}

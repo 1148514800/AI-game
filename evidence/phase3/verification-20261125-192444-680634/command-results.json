@@ -1,0 +1,76 @@
+[
+  {
+    "command": "npm ci",
+    "exitCode": 1,
+    "startedAt": "2026-11-25T19:24:44.683094+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/npm-ci.log"
+  },
+  {
+    "command": "node scripts/dev-smoke.mjs",
+    "exitCode": 1,
+    "startedAt": "2026-11-25T19:24:48.281780+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/dev.log"
+  },
+  {
+    "command": "npm run typecheck",
+    "exitCode": 127,
+    "startedAt": "2026-11-25T19:24:48.460557+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/typecheck.log"
+  },
+  {
+    "command": "node node_modules/typescript/bin/tsc -p scripts/performance/tsconfig.json",
+    "exitCode": 1,
+    "startedAt": "2026-11-25T19:24:48.563461+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/performance-typecheck.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 7,
+    "startedAt": "2026-11-25T19:24:48.591867+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/unit-test.log"
+  },
+  {
+    "command": "npm run test:integration",
+    "exitCode": 7,
+    "startedAt": "2026-11-25T19:24:48.734714+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/integration.log"
+  },
+  {
+    "command": "npm run test:e2e -- --list",
+    "exitCode": 127,
+    "startedAt": "2026-11-25T19:24:48.869736+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/e2e-list.log"
+  },
+  {
+    "command": "npm run test:e2e",
+    "exitCode": 127,
+    "startedAt": "2026-11-25T19:24:48.982825+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/e2e.log"
+  },
+  {
+    "command": "npm run build",
+    "exitCode": 127,
+    "startedAt": "2026-11-25T19:24:49.080998+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/build.log"
+  },
+  {
+    "command": "node scripts/assert-client-no-secret.mjs",
+    "exitCode": null,
+    "startedAt": "2026-11-25T19:24:49.182177+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/client-key-sentinel.log",
+    "notRun": "No fresh production build."
+  },
+  {
+    "command": "node scripts/production-smoke.mjs",
+    "exitCode": null,
+    "startedAt": "2026-11-25T19:24:49.182402+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/production-smoke.log",
+    "notRun": "No fresh production build."
+  },
+  {
+    "command": "node --check scripts/soak-phase3.mjs",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T19:24:49.182538+08:00",
+    "log": "evidence/phase3/verification-20261125-192444-680634/soak-syntax.log"
+  }
+]

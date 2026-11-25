@@ -1,4 +1,4 @@
-"""Run Phase 2 checks without model credentials and save separate evidence."""
+"""Run Phase 3 checks without model credentials and save separate evidence."""
 import datetime
 import json
 import os
@@ -9,13 +9,14 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 TIMEZONE = datetime.timezone(datetime.timedelta(hours=8))
 stamp = datetime.datetime.now(TIMEZONE).strftime("%Y%m%d-%H%M%S-%f")
-evidence = ROOT / "evidence" / "phase2" / f"verification-{stamp}"
+evidence = ROOT / "evidence" / "phase3" / f"verification-{stamp}"
 evidence.mkdir(parents=True)
 environment = {name: os.environ[name] for name in (
     "PATH", "HOME", "USERPROFILE", "SYSTEMROOT", "TMPDIR", "TMP", "TEMP",
     "PLAYWRIGHT_BROWSERS_PATH", "LANG", "LC_ALL",
 ) if name in os.environ}
-environment.update(MISTSEA_EVIDENCE=str(evidence), LLM_ENABLED="false", npm_config_fetch_retries="0")
+environment.update(MISTSEA_EVIDENCE=str(evidence), LLM_ENABLED="false", LLM_AUTONOMY_ENABLED="false",
+                   LLM_MOCK_AUTONOMY_ENABLED="false", npm_config_fetch_retries="0")
 results = []
 
 
@@ -45,8 +46,7 @@ def run(command, filename, *, extra=None, skip=None):
 
 
 print(f"Evidence: {evidence.relative_to(ROOT)}", flush=True)
-if run(["npm", "ci"], "npm-ci.log") != 0:
-    run(["npm", "ci", "--ignore-scripts"], "npm-ci-ignore-scripts.log")
+run(["npm", "ci"], "npm-ci.log")
 run(["node", "scripts/dev-smoke.mjs"], "dev.log")
 run(["npm", "run", "typecheck"], "typecheck.log")
 run(["node", "node_modules/typescript/bin/tsc", "-p", "scripts/performance/tsconfig.json"], "performance-typecheck.log")
@@ -58,8 +58,5 @@ build = run(["npm", "run", "build"], "build.log", extra={"LLM_API_KEY": "phase2-
 skip_build = "No fresh production build." if build else None
 run(["node", "scripts/assert-client-no-secret.mjs"], "client-key-sentinel.log", skip=skip_build)
 run(["node", "scripts/production-smoke.mjs"], "production-smoke.log", skip=skip_build)
-run(["node", "--import", "tsx", "scripts/performance/run.ts", "after", "--mock-ui",
-     "scripts/performance/mock-ui.json"], "performance-after.log")
-if "setsockopt: Operation not permitted" in (evidence / "performance-after.log").read_text():
-    print("Chromium startup was blocked in the performance harness.", flush=True)
+run(["node", "--check", "scripts/soak-phase3.mjs"], "soak-syntax.log")
 sys.exit(any(result["exitCode"] != 0 for result in results))

@@ -1,6 +1,6 @@
 import { defineConfig } from "@playwright/test";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase2";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3";
 export default defineConfig({
   testDir: "./tests",
   testMatch: "*.e2e.ts",

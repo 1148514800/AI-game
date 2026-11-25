@@ -17,7 +17,7 @@ import {
 } from "../src/shared/world.js";
 import { route } from "./paths.js";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase2";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3";
 const backendUrl = "http://127.0.0.1:3003";
 
 const test = base.extend<{
@@ -105,7 +105,11 @@ async function waitStill(page: Page) {
 }
 
 async function walk(page: Page, goal: (p: Point) => boolean, repaired = false) {
-  const steps = route(await position(page), goal, repaired);
+  const npc = await page.locator("#game").evaluate((el) => ({
+    x: Number(el.dataset.cenyanX),
+    y: Number(el.dataset.cenyanY),
+  }));
+  const steps = route(await position(page), goal, repaired, [npc]);
   for (const step of steps) {
     const axis = step.axis;
     const value = step[axis];
@@ -308,6 +312,9 @@ test("four-way walk frames, pause, a following camera and opt-in music", async (
   await page.goto("/");
   await ready(page);
   const stage = page.locator("#game");
+  // Use a real reachable open plaza, not the tree beside the spawn. Frequent
+  // observation prevents the test itself holding a key into a distant obstacle.
+  await walk(page, (point) => distance(point, { x: 208, y: 376 }) <= 4);
   for (const [key, axis, sign, facing, column] of [
     ["d", "x", 1, "right", 3],
     ["s", "y", 1, "down", 0],
@@ -318,14 +325,18 @@ test("four-way walk frames, pause, a following camera and opt-in music", async (
     await page.keyboard.down(key);
     try {
       await expect
-        .poll(async () => ((await position(page))[axis] - before) * sign)
+        .poll(async () => ((await position(page))[axis] - before) * sign, {
+          intervals: [16, 25, 50],
+        })
         .toBeGreaterThan(12);
       await expect(stage).toHaveAttribute("data-direction", facing);
       await expect(stage).toHaveAttribute("data-moving", "true");
       const frame = Number(await stage.getAttribute("data-frame"));
       expect(frame % 4).toBe(column);
       await expect
-        .poll(async () => Number(await stage.getAttribute("data-frame")))
+        .poll(async () => Number(await stage.getAttribute("data-frame")), {
+          intervals: [16, 25, 50],
+        })
         .not.toBe(frame);
     } finally {
       await page.keyboard.up(key);

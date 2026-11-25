@@ -1,0 +1,51 @@
+{
+  "startedAt": "2026-11-25T11:34:28.088Z",
+  "endedAt": "2026-11-25T11:34:40.186Z",
+  "pid": 311269,
+  "durationSec": 12,
+  "activeElapsedSec": 12.001443745000001,
+  "elapsedSec": 12.097832635000001,
+  "smoke": true,
+  "result": "SMOKE PASS (not acceptance)",
+  "exitCode": 0,
+  "counters": {
+    "collections": 1,
+    "recoveredHarvests": 0,
+    "cooldownFailures": 1,
+    "deliveries": 0,
+    "bridges": 0,
+    "rests": 0,
+    "completedCycles": 0,
+    "modelRecovery": 1,
+    "motionSamples": 30
+  },
+  "maxPending": 1,
+  "maxQueued": 0,
+  "ledger": [
+    {
+      "mode": "mock",
+      "purpose": "autonomy",
+      "status": "invalid",
+      "calls": 1,
+      "chargedTokens": 2913,
+      "chargedNanoUsd": null
+    },
+    {
+      "mode": "mock",
+      "purpose": "autonomy",
+      "status": "ok",
+      "calls": 1,
+      "chargedTokens": 2909,
+      "chargedNanoUsd": null
+    },
+    {
+      "mode": "mock",
+      "purpose": "dialogue",
+      "status": "ok",
+      "calls": 1,
+      "chargedTokens": 1809,
+      "chargedNanoUsd": null
+    }
+  ],
+  "trajectory": "/workspace/mistsea-phase3/evidence/phase3/soak-smoke-pYrCh7/trajectory.jsonl"
+}

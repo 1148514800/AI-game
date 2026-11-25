@@ -1,0 +1,6 @@
+
+> mistsea-phase1@0.3.0-phase3 typecheck
+> tsc --noEmit
+
+
+NATIVE_EXIT=0

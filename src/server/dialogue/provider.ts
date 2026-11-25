@@ -156,7 +156,11 @@ export async function generate(
       throw new DialogueFailure("invalid", usage);
     const text = message.content?.trim();
     if (!text) throw new DialogueFailure("empty", usage);
-    if (text.length > 1800 || /[\u0000-\u0008\u000e-\u001f]/.test(text))
+    if (
+      text.length > 1800 ||
+      /[\u0000-\u0008\u000e-\u001f]/.test(text) ||
+      /<\/?think(?:ing)?\b[^>]*>/i.test(text)
+    )
       throw new DialogueFailure("invalid", usage);
     return { text: text.replaceAll(key, "[已隐藏]"), usage };
   } catch (error) {

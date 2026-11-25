@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium, expect } from "@playwright/test";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase2";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3";
 mkdirSync(evidence, { recursive: true });
 const directory = mkdtempSync(join(tmpdir(), "mistsea-production-"));
 const output = openSync(join(evidence, "production-server.log"), "w");
@@ -39,8 +39,8 @@ try {
     )
     .toMatchObject({
       status: "ok",
-      phase: 2,
-      schemaVersion: 1,
+      phase: 3,
+      schemaVersion: 2,
       contentVersion: 1,
     });
   browser = await chromium.launch({

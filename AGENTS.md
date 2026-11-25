@@ -1,3 +1,10 @@
+# AG-4 / Phase3 当前授权（覆盖下文旧阶段限制）
+用户2026-11-25明确授权仅Phase3。Phase0/1验收、Phase2源码审核及用户本人真实AI接入验证已通过；这是用户验证，不是本代理的Live数据。仅岑砚自主思考/1–3步严格计划/受控真实行动/A*/持久记忆/轻量Debug/共享预算，保留Phase2对话、thinking兼容、全部原玩法和有效测试。禁止Phase4、其他NPC智能、社交经济战斗新地图、屋顶建造系统、大型框架。
+无本轮Phase3真实调用额度授权：默认LLM_AUTONOMY_ENABLED=false，不读取.env/开发工具密钥，不付费Live；Mock与HTTP桩不是真实AI规划。仅本地Codex CLI、最终本地commit，无push/PR/部署，不碰Mac/旧Phase2/同步快照。完整范围见docs/PHASE3_TASK.md。历史证据不删改；新证据仅evidence/phase3。必须真实30分钟elapsed、有实际动作资源循环的Mock自主soak（不能虚拟时钟代替），报告实际退出状态，不伪造通过。附件每件<25,000,000字节。
+
+本次编码交接由协调者在原生环境运行 `python3 scripts/verify.py` 与 `node --import tsx scripts/soak-phase3.mjs --duration 1800`。记录实际状态，完成验收后由协调者执行本地提交与打包。
+
+## 以下为Phase2历史规则（仅兼容性与未被本轮覆盖条目继续适用）
 # 开发 AI 必须遵守
 - 唯一完整设计基线：docs/GAME_DESIGN.md（原始 PDF 同目录）。优先服从本轮用户的范围限制。技术变更只登记 docs/DECISIONS.md，不复制相互冲突的设计。
 - 当前唯一授权为 AG-3 / Phase 2《接入第一名 AI 角色》，见 docs/PHASE2_TASK.md，覆盖旧 Phase0/1限制。仅岑砚文字对话、轻量服务端LLM适配/有限短期上下文/持久预算、低风险实测性能优化。交付即停，不进入Phase3；禁止自主行动、长期记忆、社交、战斗、经济或多人系统。

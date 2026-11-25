@@ -1,4 +1,4 @@
-import { isPassable, type Point } from "../src/shared/world.js";
+import { distance, isPassable, type Point } from "../src/shared/world.js";
 
 type Stop = Point & { axis: "x" | "y" };
 const grid = 8;
@@ -13,6 +13,7 @@ export function route(
   start: Point,
   reached: (point: Point) => boolean,
   repaired: boolean,
+  occupants: Point[] = [],
 ): Stop[] {
   if (reached(start)) return [];
   const queue = [{ point: start, parent: -1, axis: "x" as Stop["axis"] }];
@@ -20,6 +21,7 @@ export function route(
   let found = -1;
   function clear(x: number, y: number) {
     return (
+      occupants.every((other) => distance({ x, y }, other) >= 14) &&
       isPassable(x - 3, y - 3, repaired) &&
       isPassable(x + 3, y + 3, repaired) &&
       isPassable(x + 3, y - 3, repaired) &&

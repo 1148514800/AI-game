@@ -1,0 +1,487 @@
+{
+  "source": "Actual Playwright DOM snapshots; sparse observations, not interpolated WS data",
+  "trace": "evidence/phase3/acceptance-final/playwright-artifacts/dialogue.e2e.ts-Phase-3-au-beaf2-ith-folded-responsive-debug/trace.zip",
+  "traceSha256": "ef5cf9ed498f3d176d30e51e28f6c27f8fbd114ddfbeec04dd82518fc0eec3a0",
+  "samples": [
+    {
+      "traceTimeMs": 36285.685,
+      "snapshot": null,
+      "cenyan": {
+        "x": "255.0000",
+        "y": "285.8824",
+        "activity": "moving",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36288.628,
+      "snapshot": null,
+      "cenyan": {
+        "x": "255.0000",
+        "y": "285.8824",
+        "activity": "moving",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36298.008,
+      "snapshot": null,
+      "cenyan": {
+        "x": "255.0000",
+        "y": "281.5173",
+        "activity": "moving",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36355.186,
+      "snapshot": null,
+      "cenyan": {
+        "x": "255.0000",
+        "y": "277.1173",
+        "activity": "moving",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36362.893,
+      "snapshot": null,
+      "cenyan": {
+        "x": "255.0000",
+        "y": "277.1173",
+        "activity": "moving",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36365.834,
+      "snapshot": null,
+      "cenyan": {
+        "x": "255.0000",
+        "y": "277.1173",
+        "activity": "moving",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36368.322,
+      "snapshot": null,
+      "cenyan": {
+        "x": "255.0000",
+        "y": "277.1173",
+        "activity": "moving",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36370.434,
+      "snapshot": null,
+      "cenyan": {
+        "x": "255.0000",
+        "y": "277.1173",
+        "activity": "moving",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36396.871,
+      "snapshot": null,
+      "cenyan": {
+        "x": "252.7380",
+        "y": "275.0000",
+        "activity": "moving",
+        "direction": "up",
+        "frame": "5"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36399.645,
+      "snapshot": null,
+      "cenyan": {
+        "x": "252.7380",
+        "y": "275.0000",
+        "activity": "moving",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36537.449,
+      "snapshot": null,
+      "cenyan": {
+        "x": "243.9629",
+        "y": "275.0000",
+        "activity": "moving",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36571.782,
+      "snapshot": null,
+      "cenyan": {
+        "x": "239.5629",
+        "y": "275.0000",
+        "activity": "moving",
+        "direction": "left",
+        "frame": "6"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 36585.354,
+      "snapshot": null,
+      "cenyan": {
+        "x": "239.5629",
+        "y": "275.0000",
+        "activity": "moving",
+        "direction": "left",
+        "frame": "6"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 37878.823,
+      "snapshot": null,
+      "cenyan": {
+        "x": "207.0000",
+        "y": "215.4143",
+        "activity": "collecting",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 38079.793,
+      "snapshot": null,
+      "cenyan": {
+        "x": "207.0000",
+        "y": "215.4143",
+        "activity": "collecting",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "184.0000",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 40421.625,
+      "snapshot": null,
+      "cenyan": {
+        "x": "187.9287",
+        "y": "199.4143",
+        "activity": "collecting",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "385.8498",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 40433.475,
+      "snapshot": null,
+      "cenyan": {
+        "x": "187.9287",
+        "y": "199.4143",
+        "activity": "collecting",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "385.8498",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 40449.849,
+      "snapshot": null,
+      "cenyan": {
+        "x": "187.9287",
+        "y": "199.4143",
+        "activity": "collecting",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "385.8498",
+        "y": "384.0000"
+      }
+    },
+    {
+      "traceTimeMs": 40517.655,
+      "snapshot": null,
+      "cenyan": {
+        "x": "187.9287",
+        "y": "199.4143",
+        "activity": "collecting",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "385.8498",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 40534.915,
+      "snapshot": null,
+      "cenyan": {
+        "x": "187.9287",
+        "y": "199.4143",
+        "activity": "collecting",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "385.8498",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 40617.608,
+      "snapshot": null,
+      "cenyan": {
+        "x": "187.9287",
+        "y": "199.4143",
+        "activity": "collecting",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 70592.067,
+      "snapshot": null,
+      "cenyan": {
+        "x": "431.9222",
+        "y": "396.0252",
+        "activity": "delivering",
+        "direction": "right",
+        "frame": "3"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 70786.419,
+      "snapshot": null,
+      "cenyan": {
+        "x": "431.9222",
+        "y": "396.0252",
+        "activity": "working",
+        "direction": "right",
+        "frame": "3"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 70794.488,
+      "snapshot": null,
+      "cenyan": {
+        "x": "431.9222",
+        "y": "396.0252",
+        "activity": "working",
+        "direction": "right",
+        "frame": "3"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 70800.148,
+      "snapshot": null,
+      "cenyan": {
+        "x": "431.9222",
+        "y": "396.0252",
+        "activity": "working",
+        "direction": "right",
+        "frame": "3"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 84835.727,
+      "snapshot": null,
+      "cenyan": {
+        "x": "431.9222",
+        "y": "396.0252",
+        "activity": "idle",
+        "direction": "right",
+        "frame": "3"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 85013.821,
+      "snapshot": null,
+      "cenyan": {
+        "x": "418.7222",
+        "y": "396.0252",
+        "activity": "moving",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 85021.284,
+      "snapshot": null,
+      "cenyan": {
+        "x": "418.7222",
+        "y": "396.0252",
+        "activity": "moving",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 85025.876,
+      "snapshot": null,
+      "cenyan": {
+        "x": "418.7222",
+        "y": "396.0252",
+        "activity": "moving",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 85030.973,
+      "snapshot": null,
+      "cenyan": {
+        "x": "418.7222",
+        "y": "396.0252",
+        "activity": "moving",
+        "direction": "left",
+        "frame": "2"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 85066.762,
+      "snapshot": null,
+      "cenyan": {
+        "x": "415.9222",
+        "y": "394.4721",
+        "activity": "moving",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    },
+    {
+      "traceTimeMs": 85150.973,
+      "snapshot": null,
+      "cenyan": {
+        "x": "415.9222",
+        "y": "390.0721",
+        "activity": "moving",
+        "direction": "up",
+        "frame": "1"
+      },
+      "player": {
+        "x": "394.6118",
+        "y": "375.2587"
+      }
+    }
+  ]
+}

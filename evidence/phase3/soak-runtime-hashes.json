@@ -1,0 +1,21 @@
+{
+  "data/animations.json": "6eb345f710dd7155abf36b2147b14e06dd06f12bf988b4335549b769cb8fc9a7",
+  "data/foglamp-valley.json": "9f2e886bf858d72a74b8c759e32028e79b14bb78e5334c34c7f6417024d5d9d0",
+  "data/npcs/cenyan.json": "dc6bed824204e4e718fb35042efd5d59bd299f4f1fde87f7e253dd6de7a27323",
+  "data/preview-map.json": "b944b8c83ca1b922b412e6fc7ffcf43a56d462e3fd38638fef9ce54716bdc353",
+  "scripts/soak-phase3.mjs": "4a1da1d04bb41d8aafc89299d2ade1bea095dcd212077cde913eadbcdc1c44fe",
+  "src/server/app.ts": "29fa742fa40503da380a089f7b8129e34d4b55ef7d3b15509e653737ff495773",
+  "src/server/dialogue/cenyan.ts": "98fbb4cfc826d02689ef44a7830b41f0000b469bbcd8320b84156791da357358",
+  "src/server/dialogue/config.ts": "1b0e8b33d8dccb685dd4cc4c617bc25c85c57d121b0c8e534386595d9503b9f0",
+  "src/server/dialogue/ledger.ts": "a1474c77db79b82197a8fddc56e123be606847672090b20b61016f9d8810bd81",
+  "src/server/dialogue/planning.ts": "78895900f6ebc6f33eb2b3f8fb5ba320ba0fc2503571cf51587dae6ba02e9e6b",
+  "src/server/dialogue/provider.ts": "ba3e6802c24cd574ea15e6a70063b753c73dbbd6f8bfbc76fd06c6bf844ba9f1",
+  "src/server/dialogue/session.ts": "6a8bdb3cee09ecb7fbba113e7319ecb45fbc0671511b0aaae2d171309c6f9004",
+  "src/server/index.ts": "c2d93292b45d96557a6ca9a0b31858250ee5ad844506b8d0f3e63bee6e2042ce",
+  "src/server/path.ts": "0cb1ec55b3f43a7a16cf51ef312f6f06fdca91cc474b89a06aa5439b9d13b5f6",
+  "src/server/save.ts": "54d9a7c2db73bc94d3aa5c055c7f71cadf7d98916cd6dc6713ac0dc5123b7d06",
+  "src/server/world.ts": "d656d820ebf50db86e2910d62fc5ea1b3bd5db2628b804b3c89b94d49c35ed9c",
+  "src/shared/cenyan.ts": "475ad8cb5a7de04024d36954e81363e26f7238f2c331907a1aecd80080ab27c7",
+  "src/shared/protocol.ts": "fd9141570a88b107375e8de7a5b2387d8da8cbca69dc889481fc369261696a8a",
+  "src/shared/world.ts": "5b6f89f80b52cfd736cf4594df09f278ebb8bff42af5faa63e9b8426c2c45020"
+}

@@ -1,7 +1,9 @@
 import { z } from "zod";
 import { inventoryLimit, valley } from "./world.js";
 
-export const schemaVersion = 1;
+import { actorSchema, type CenyanStatus } from "./cenyan.js";
+
+export const schemaVersion = 2;
 const directions = z.enum(["down", "up", "left", "right"]);
 const axis = z.union([z.literal(-1), z.literal(0), z.literal(1)]);
 const id = z.string().regex(/^[a-z0-9-]{1,64}$/);
@@ -25,6 +27,7 @@ export type DialogueEvent =
       requestId: string;
       dialogId: string;
       text: string;
+      action?: "accepted" | "deferred" | "rejected";
     }
   | {
       type: "dialogue";
@@ -62,8 +65,8 @@ export const clientMessage = z.discriminatedUnion("type", [
 export type ClientMessage = z.infer<typeof clientMessage>;
 export type Action = Extract<ClientMessage, { type: "action" }>;
 
-export const saveSchema = z.strictObject({
-  schemaVersion: z.literal(schemaVersion),
+export const legacySaveSchema = z.strictObject({
+  schemaVersion: z.literal(1),
   contentVersion: z.literal(valley.contentVersion),
   worldId: z.literal(valley.id),
   player: z.strictObject({ x: z.number(), y: z.number(), facing: directions }),
@@ -83,6 +86,10 @@ export const saveSchema = z.strictObject({
   }),
   explored: z.boolean(),
 });
+export const saveSchema = legacySaveSchema.extend({
+  schemaVersion: z.literal(schemaVersion),
+  cenyan: actorSchema,
+});
 export type SaveState = z.infer<typeof saveSchema>;
 
 export type Snapshot = {
@@ -91,6 +98,7 @@ export type Snapshot = {
   state: SaveState;
   moving: boolean;
   working: boolean;
+  cenyan: CenyanStatus;
 };
 export type Result = {
   type: "result";

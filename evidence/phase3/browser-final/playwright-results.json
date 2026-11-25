@@ -1,0 +1,682 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/lib/nodejs/node",
+      "/workspace/mistsea-phase3/node_modules/.bin/playwright",
+      "test"
+    ],
+    "configFile": "/workspace/mistsea-phase3/playwright.config.ts",
+    "rootDir": "/workspace/mistsea-phase3/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/mistsea-phase3/evidence/phase3/browser-final/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/workspace/mistsea-phase3/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "*.e2e.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/mistsea-phase3/evidence/phase3/browser-final/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/workspace/mistsea-phase3/tests",
+        "snapshotDir": "/workspace/mistsea-phase3/tests",
+        "testIgnore": [],
+        "testMatch": "*.e2e.ts",
+        "timeout": 150000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5174",
+          "viewport": {
+            "width": 1280,
+            "height": 960
+          },
+          "headless": true,
+          "launchOptions": {
+            "chromiumSandbox": true,
+            "ignoreDefaultArgs": [
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/phase3/browser-final/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev:client",
+      "env": {
+        "PORT": "3003",
+        "MISTSEA_VITE_PORT": "5174"
+      },
+      "url": "http://127.0.0.1:5174",
+      "reuseExistingServer": false,
+      "stdout": "pipe",
+      "stderr": "pipe",
+      "timeout": 15000
+    }
+  },
+  "suites": [
+    {
+      "title": "dialogue.e2e.ts",
+      "file": "dialogue.e2e.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10548,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:46:55.236Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/mistsea-phase3/evidence/phase3/browser-final/playwright-artifacts/dialogue.e2e.ts-ordinary-E-135e9-se-text-and-keeps-rendering/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c794e62394207bd76f82-508935573b11913b9b18",
+          "file": "dialogue.e2e.ts",
+          "line": 105,
+          "column": 1
+        }
+      ],
+      "suites": [
+        {
+          "title": "limited Mock",
+          "file": "dialogue.e2e.ts",
+          "line": 178,
+          "column": 6,
+          "specs": [
+            {
+              "title": "390px dialogue fits and exposes budget failure with a manual retry",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5179,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:47:06.912Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/browser-final/playwright-artifacts/dialogue.e2e.ts-limited-Mo-9ecf8-failure-with-a-manual-retry/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-733487d3886dade7d5ef",
+              "file": "dialogue.e2e.ts",
+              "line": 182,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "faulted Mock",
+          "file": "dialogue.e2e.ts",
+          "line": 222,
+          "column": 6,
+          "specs": [
+            {
+              "title": "timeout is visible and manual retry remains Mock",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5730,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:47:12.488Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/browser-final/playwright-artifacts/dialogue.e2e.ts-faulted-Mo-16f2b-d-manual-retry-remains-Mock/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-4fd83ed3ffdd812cdc89",
+              "file": "dialogue.e2e.ts",
+              "line": 224,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Phase 3 offline action request",
+          "file": "dialogue.e2e.ts",
+          "line": 239,
+          "column": 6,
+          "specs": [
+            {
+              "title": "natural request accepts a plan and the actor actually harvests after the dialogue closes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7925,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:47:18.869Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/browser-final/playwright-artifacts/dialogue.e2e.ts-Phase-3-of-ce2fb-s-after-the-dialogue-closes/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-2ecc80ffe1ba12215c9f",
+              "file": "dialogue.e2e.ts",
+              "line": 242,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Phase 3 autonomous Mock journey",
+          "file": "dialogue.e2e.ts",
+          "line": 267,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 53300,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:47:27.583Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/browser-final/playwright-artifacts/dialogue.e2e.ts-Phase-3-au-beaf2-ith-folded-responsive-debug/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-a779f1f2618991b995b9",
+              "file": "dialogue.e2e.ts",
+              "line": 277,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "scene.e2e.ts",
+      "file": "scene.e2e.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fresh journey collects all materials, repairs, crosses, explores and restores",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 33945,
+                  "error": {
+                    "message": "TimeoutError: page.waitForFunction: Timeout 4108.9ms exceeded.",
+                    "stack": "TimeoutError: page.waitForFunction: Timeout 4108.9ms exceeded.\n    at walk (/workspace/mistsea-phase3/tests/scene.e2e.ts:118:18)\n    at approach (/workspace/mistsea-phase3/tests/scene.e2e.ts:136:3)\n    at /workspace/mistsea-phase3/tests/scene.e2e.ts:226:5",
+                    "location": {
+                      "file": "/workspace/mistsea-phase3/tests/scene.e2e.ts",
+                      "column": 18,
+                      "line": 118
+                    },
+                    "snippet": "  116 |     await page.keyboard.down(key);\n  117 |     try {\n> 118 |       await page.waitForFunction(\n      |                  ^\n  119 |         ({ axis, value, sign }) => {\n  120 |           const current = Number(\n  121 |             document.getElementById(\"game\")!.dataset[axis],"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/mistsea-phase3/tests/scene.e2e.ts",
+                        "column": 18,
+                        "line": 118
+                      },
+                      "message": "TimeoutError: page.waitForFunction: Timeout 4108.9ms exceeded.\n\n  116 |     await page.keyboard.down(key);\n  117 |     try {\n> 118 |       await page.waitForFunction(\n      |                  ^\n  119 |         ({ axis, value, sign }) => {\n  120 |           const current = Number(\n  121 |             document.getElementById(\"game\")!.dataset[axis],\n    at walk (/workspace/mistsea-phase3/tests/scene.e2e.ts:118:18)\n    at approach (/workspace/mistsea-phase3/tests/scene.e2e.ts:136:3)\n    at /workspace/mistsea-phase3/tests/scene.e2e.ts:226:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:48:23.051Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/mistsea-phase3/evidence/phase3/browser-final/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/mistsea-phase3/evidence/phase3/browser-final/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/mistsea-phase3/tests/scene.e2e.ts",
+                    "column": 18,
+                    "line": 118
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-8cfed86e4e10b67e4909",
+          "file": "scene.e2e.ts",
+          "line": 147,
+          "column": 1
+        },
+        {
+          "title": "four-way walk frames, pause, a following camera and opt-in music",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 9892,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-frame=\"1\" data-ready=\"true\" data-x=\"175.1701\" data-y=\"414.6627\" data-direction=\"up\" data-moving=\"false\" data-working=\"false\" data-camera-x=\"0.00\" data-cenyan-frame=\"0\" data-camera-y=\"273.66\" data-cenyan-x=\"255.0000\" data-cenyan-y=\"299.0000\" data-cenyan-activity=\"idle\" data-cenyan-direction=\"down\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-frame=\"1\" data-ready=\"true\" data-x=\"175.1701\" data-y=\"414.6627\" data-direction=\"up\" data-moving=\"false\" data-working=\"false\" data-camera-x=\"0.00\" data-cenyan-frame=\"0\" data-camera-y=\"273.66\" data-cenyan-x=\"255.0000\" data-cenyan-y=\"299.0000\" data-cenyan-activity=\"idle\" data-cenyan-direction=\"down\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at /workspace/mistsea-phase3/tests/scene.e2e.ts:324:27",
+                    "location": {
+                      "file": "/workspace/mistsea-phase3/tests/scene.e2e.ts",
+                      "column": 27,
+                      "line": 324
+                    },
+                    "snippet": "  322 |         .toBeGreaterThan(12);\n  323 |       await expect(stage).toHaveAttribute(\"data-direction\", facing);\n> 324 |       await expect(stage).toHaveAttribute(\"data-moving\", \"true\");\n      |                           ^\n  325 |       const frame = Number(await stage.getAttribute(\"data-frame\"));\n  326 |       expect(frame % 4).toBe(column);\n  327 |       await expect"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/mistsea-phase3/tests/scene.e2e.ts",
+                        "column": 27,
+                        "line": 324
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-frame=\"1\" data-ready=\"true\" data-x=\"175.1701\" data-y=\"414.6627\" data-direction=\"up\" data-moving=\"false\" data-working=\"false\" data-camera-x=\"0.00\" data-cenyan-frame=\"0\" data-camera-y=\"273.66\" data-cenyan-x=\"255.0000\" data-cenyan-y=\"299.0000\" data-cenyan-activity=\"idle\" data-cenyan-direction=\"down\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  322 |         .toBeGreaterThan(12);\n  323 |       await expect(stage).toHaveAttribute(\"data-direction\", facing);\n> 324 |       await expect(stage).toHaveAttribute(\"data-moving\", \"true\");\n      |                           ^\n  325 |       const frame = Number(await stage.getAttribute(\"data-frame\"));\n  326 |       expect(frame % 4).toBe(column);\n  327 |       await expect\n    at /workspace/mistsea-phase3/tests/scene.e2e.ts:324:27"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:49:01.289Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/mistsea-phase3/evidence/phase3/browser-final/playwright-artifacts/scene.e2e.ts-four-way-walk-9ad9a-ing-camera-and-opt-in-music/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/mistsea-phase3/evidence/phase3/browser-final/playwright-artifacts/scene.e2e.ts-four-way-walk-9ad9a-ing-camera-and-opt-in-music/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/mistsea-phase3/tests/scene.e2e.ts",
+                    "column": 27,
+                    "line": 324
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-34d39b477a15d74c38c6",
+          "file": "scene.e2e.ts",
+          "line": 305,
+          "column": 1
+        },
+        {
+          "title": "390px narrow window renders the scene, residents and touch controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2892,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:49:12.517Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-15061960749edc48377e",
+          "file": "scene.e2e.ts",
+          "line": 365,
+          "column": 1
+        },
+        {
+          "title": "missing bridge art blocks readiness with a clear error",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2848,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:49:15.526Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-2bfad38282105d69eeca",
+          "file": "scene.e2e.ts",
+          "line": 393,
+          "column": 1
+        },
+        {
+          "title": "HTTP failure stays unavailable and automatically recovers",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3627,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:49:18.387Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-a057622a1be6c936388f",
+          "file": "scene.e2e.ts",
+          "line": 407,
+          "column": 1
+        },
+        {
+          "title": "WebSocket handshake failure remains visible and prevents input",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2445,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:49:22.025Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-333880c46c724bb008d8",
+          "file": "scene.e2e.ts",
+          "line": 422,
+          "column": 1
+        },
+        {
+          "title": "the real server rejects augmented movement and out-of-range actions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1204,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:49:24.482Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-6137f46c1363dff36b3c",
+          "file": "scene.e2e.ts",
+          "line": 436,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-25T11:46:54.163Z",
+    "duration": 151633.274,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "browserInitialFailure": "Client health handshake still expected Phase2 while server reports Phase3; coordinator corrected only src/client/connection.ts to3 during native initial diagnosis. Final full suite rerun required.",
+  "newBrowserActionTestFailure": "New test clicked a fill-only suggestion but omitted Send. Added real UI Send click and nonempty input assertion; no runtime/server changes.",
+  "newAutonomyBrowserTestFailure": "New test held D into existing building, despite NPC successfully repairing bridge. Replaced observer movement with ordinary keyboard map route; added full-valley collection view so the harvesting NPC is visible. No runtime changes.",
+  "visualReview": "Read real action screenshot: four-character action receipt label wrapped in old three-em speaker column. Widened dialogue speaker column to4.5em; client CSS only, no soak runtime change. Final targeted action/narrow screenshots to be rechecked.",
+  "legacyBrowserRouteAndTiming": "Actual trace showed old static test route crossing runtime Cenyan at255,299; adapted keyboard route helper to observed authoritative NPC obstacle (14px safety, rule radius8 unchanged). Four-way test observed held keys too slowly and drifted into spawn tree; keeps every direction/frame/pause/camera assertion but first normally walks to open plaza208,376 and samples at16/25/50ms. No game rules weakened, no teleports or injected inventory.",
+  "narrowVisualReview": "Read full 390px Debug screenshot: inherited two-column journal left long AI Debug confined to half width. Residents/Debug and save bar now span both narrow-screen columns; objectives and inventory remain compact. Client CSS only, authoritative soak hashes unchanged."
+}

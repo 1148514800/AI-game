@@ -1,3 +1,4 @@
+import { destinationNames, goals, type Step } from "../shared/cenyan.js";
 import type { Action, Result, Snapshot } from "../shared/protocol.js";
 import {
   distance,
@@ -107,8 +108,123 @@ export function enableActions(enabled: boolean) {
   if (inspect.disabled === enabled) inspect.disabled = !enabled;
 }
 
+const activities = {
+  idle: "空闲",
+  moving: "赶路",
+  collecting: "正在采集",
+  delivering: "正在交材",
+  working: "正在施工",
+  waiting: "在等待",
+  resting: "在休息",
+  paused: "已暂停",
+};
+const steps = {
+  move_to: "前往",
+  collect: "采集",
+  deliver: "交付给",
+  work: "施工",
+  wait: "等待",
+  rest: "休息",
+};
+const triggerNames: Record<string, string> = {
+  "first-active": "首次活跃",
+  "plan-complete": "计划完成",
+  "step-failed": "行动受阻",
+  "bridge-repaired": "旧桥完工",
+  "bridge-materials": "材料交齐",
+  "goal-changed": "目标变化",
+  periodic: "定期",
+  "player-action": "旅人请求",
+  dialogue: "对话",
+};
+const memoryLabels = {
+  fact: "规则事实",
+  claim: "旅人声称",
+  opinion: "岑砚观点",
+};
+
+function stepText(step: Step) {
+  return (
+    steps[step.type] +
+    ("target_id" in step
+      ? " " + (destinationNames.get(step.target_id) ?? step.target_id)
+      : ` ${step.seconds} 秒`)
+  );
+}
+
+let shownMemory = "";
+function renderCenyan(snapshot: Snapshot) {
+  const actor = snapshot.state.cenyan;
+  const { activity, model, memory } = snapshot.cenyan;
+  const activityLabel =
+    activity === "idle" && model?.kind === "pending"
+      ? "正在斟酌"
+      : activities[activity];
+  const mode =
+    model?.mode === "mock" && (model.kind !== "disabled" || actor.plan)
+      ? " · Mock 模拟"
+      : "";
+  setText(element("cenyan-status"), "岑砚 · " + activityLabel + mode);
+  setText(element("cenyan-goal"), goals[actor.goal]);
+  setText(
+    element("cenyan-plan"),
+    actor.plan
+      ? actor.plan.steps
+          .map(
+            (step, index) =>
+              `${index + 1}. ${stepText(step)}${index === actor.plan!.index ? "（当前）" : ""}`,
+          )
+          .join(" → ")
+      : "暂无计划",
+  );
+  setText(
+    element("cenyan-bag"),
+    `木材 ${actor.bag.wood} · 石材 ${actor.bag.stone}`,
+  );
+  setText(element("cenyan-result"), actor.last?.text ?? "暂无回执");
+  const modelNames = {
+    disabled: "自主关闭",
+    idle: "等待",
+    pending: "请求中",
+    backoff: "冷却",
+    blocked: "受限",
+  };
+  setText(
+    element("cenyan-model"),
+    model
+      ? [
+          model.mode === "mock"
+            ? "Mock 模拟"
+            : model.mode === "live"
+              ? "Live"
+              : "",
+          modelNames[model.kind],
+          model.trigger ? (triggerNames[model.trigger] ?? "") : "",
+          model.result ?? "",
+          model.elapsedMs === undefined ? "" : `${model.elapsedMs} ms`,
+          model.tokens === undefined ? "" : `计入 ${model.tokens} Token`,
+          model.estimatedUsd === undefined
+            ? ""
+            : `估算 $${model.estimatedUsd.toFixed(6)}`,
+        ]
+          .filter(Boolean)
+          .join(" · ")
+      : "暂无调用",
+  );
+  const memoryKey = memory.map(({ id }) => id).join("|");
+  if (shownMemory !== memoryKey) {
+    shownMemory = memoryKey;
+    element("cenyan-memory").replaceChildren(
+      ...memory.map((entry) =>
+        label(`${memoryLabels[entry.kind]} · ${entry.content}`, "li"),
+      ),
+    );
+  }
+}
+
 export function render(snapshot: Snapshot, enabled: boolean) {
   const { state, now, working } = snapshot;
+  renderCenyan(snapshot);
   for (const [key, amount] of Object.entries(state.inventory))
     setText(itemCounts.get(key)!, String(amount));
   setText(
@@ -142,16 +258,18 @@ export function render(snapshot: Snapshot, enabled: boolean) {
         ? "穿过旧桥，顺着东岸小路前往航标遗迹。"
         : working
           ? "正在铺设桥板。留在渡口，直到施工完成。"
-          : hasMaterials
-            ? "材料已到位。在渡口开始施工。"
-            : built.discovered
-              ? "北坡林地采木，南坡岩场取石，再回渡口交付。"
-              : "向东走到河边，查看雾灯旧桥。",
+          : snapshot.cenyan.activity === "working"
+            ? "岑砚正在旧桥施工。"
+            : hasMaterials
+              ? "材料已到位。在渡口开始施工。"
+              : built.discovered
+                ? "北坡林地采木，南坡岩场取石，再回渡口交付。"
+                : "向东走到河边，查看雾灯旧桥。",
   );
   if (goal.hasAttribute("data-complete") !== built.repaired)
     goal.toggleAttribute("data-complete", built.repaired);
 
-  const target = nearbyTarget(state.player);
+  const target = nearbyTarget(state.player, state.cenyan);
   let nextSelection: typeof selection;
   let hint = "沿小路探索，靠近居民或采集点后按 E。";
   let image = "player-face";
@@ -198,6 +316,13 @@ export function render(snapshot: Snapshot, enabled: boolean) {
           target: bridge.id,
           verb: "deliver",
           label: "交付材料",
+        };
+      } else if (snapshot.cenyan.activity === "working") {
+        hint = "岑砚正在施工，请给他腾出工地。";
+        nextSelection = {
+          target: bridge.id,
+          verb: "inspect",
+          label: "查看旧桥",
         };
       } else if (working) {
         hint = "留在渡口完成施工，走动会暂停。";

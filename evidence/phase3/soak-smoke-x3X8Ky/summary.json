@@ -1,0 +1,27 @@
+{
+  "startedAt": "2026-11-25T11:32:52.308Z",
+  "endedAt": "2026-11-25T11:32:52.379Z",
+  "pid": 3,
+  "durationSec": 12,
+  "activeElapsedSec": 0,
+  "elapsedSec": 0.07045612299999994,
+  "smoke": true,
+  "result": "FAIL",
+  "exitCode": 1,
+  "reason": "listen EPERM: operation not permitted 127.0.0.1",
+  "counters": {
+    "collections": 0,
+    "recoveredHarvests": 0,
+    "cooldownFailures": 0,
+    "deliveries": 0,
+    "bridges": 0,
+    "rests": 0,
+    "completedCycles": 0,
+    "modelRecovery": 0,
+    "motionSamples": 0
+  },
+  "maxPending": 0,
+  "maxQueued": 0,
+  "ledger": [],
+  "trajectory": "/workspace/mistsea-phase3/evidence/phase3/soak-smoke-x3X8Ky/trajectory.jsonl"
+}

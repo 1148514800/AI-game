@@ -1,0 +1,14 @@
+**SOAK_READY.** Phase 3 is implemented and the working tree is uncommitted. 岑砚 now follows validated 1–3 step plans, moves through the world using A*, and uses the same collection, delivery, and construction rules as the player. His inventory, plan progress, and important memories persist in SQLite.
+
+Run the acceptance soak from the native environment after `npm ci` succeeds:
+
+```bash
+cd /workspace/mistsea-phase3
+node --import tsx scripts/soak-phase3.mjs --duration 1800
+```
+
+The script prints its PID and evidence directory. It records per-minute metrics, the action trajectory, and the actual exit status under `evidence/phase3/soak-*/`. The long soak has not been run.
+
+**Verified here:** 43 unit tests passed, including all 25 prior cases. Type checking, production build, and the dummy-key scan passed. Playwright discovered all 12 cases, including the 10 prior cases. Sandbox `EPERM` blocked the four HTTP/WS integration cases, browser execution, native smoke tests, and the short soak at startup. Screenshots and visual review remain pending. Standard `npm ci` hit an esbuild lifecycle restriction, so offline checks used the locked dependencies installed with `--ignore-scripts`.
+
+The user’s Phase 2 Live verification is recorded separately. Phase 3 Live calls remain unauthorized and were not made. [Phase 3 report and evidence](/workspace/mistsea-phase3/docs/PHASE3_REPORT.md)

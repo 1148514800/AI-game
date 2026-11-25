@@ -1,0 +1,5 @@
+
+> mistsea-phase1@0.2.0-phase2 build
+> vite build --outDir release/client && tsc -p tsconfig.server.json
+
+sh: 1: vite: not found

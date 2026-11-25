@@ -1,0 +1,82 @@
+{
+  "environment": "native box; credential-free explicit test env; no Live calls authorized",
+  "started": "2026-11-25T19:34:16.585216+08:00",
+  "steps": [
+    {
+      "name": "npm-ci",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 2.722,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/npm-ci.log"
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.619,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/typecheck.log"
+    },
+    {
+      "name": "unit",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.82,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/unit.log"
+    },
+    {
+      "name": "integration",
+      "command": [
+        "npm",
+        "run",
+        "test:integration"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 56.43,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/integration.log"
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 84.272,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/e2e.log"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.419,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/build.log"
+    },
+    {
+      "name": "production-smoke",
+      "command": [
+        "node",
+        "scripts/production-smoke.mjs"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.82,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/production-smoke.log"
+    }
+  ],
+  "finished": "2026-11-25T19:36:45.690147+08:00",
+  "allExitZero": false
+}

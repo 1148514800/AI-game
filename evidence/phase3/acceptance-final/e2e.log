@@ -1,0 +1,45 @@
+COMMAND npm run test:e2e
+
+> mistsea-phase1@0.3.0-phase3 test:e2e
+> playwright test
+
+[WebServer] 
+[WebServer] > mistsea-phase1@0.3.0-phase3 dev:client
+[WebServer] > vite --host 127.0.0.1
+[WebServer] 
+[WebServer] (node:325637) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer]   VITE v8.3.8  ready in 187 ms
+[WebServer] 
+[WebServer]   ➜  Local:   http://127.0.0.1:5174/
+
+Running 12 tests using 1 worker
+
+(node:325674) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/dialogue.e2e.ts:105:1 › ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering (10.7s)
+  ✓   2 tests/dialogue.e2e.ts:182:3 › limited Mock › 390px dialogue fits and exposes budget failure with a manual retry (5.3s)
+  ✓   3 tests/dialogue.e2e.ts:224:3 › faulted Mock › timeout is visible and manual retry remains Mock (5.4s)
+  ✓   4 tests/dialogue.e2e.ts:242:3 › Phase 3 offline action request › natural request accepts a plan and the actor actually harvests after the dialogue closes (8.0s)
+[WebServer] 7:53:36 PM [vite] (client) hmr update /src/client/style.css
+  ✓   5 tests/dialogue.e2e.ts:277:3 › Phase 3 autonomous Mock journey › fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug (52.8s)
+(node:326597) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 7:54:42 PM [vite] http proxy error: /health
+[WebServer] Error: connect ECONNREFUSED 127.0.0.1:3003
+[WebServer]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[WebServer] 7:55:02 PM [vite] http proxy error: /health
+[WebServer] Error: connect ECONNREFUSED 127.0.0.1:3003
+[WebServer]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+  ✓   6 tests/scene.e2e.ts:151:1 › fresh journey collects all materials, repairs, crosses, explores and restores (57.0s)
+  ✓   7 tests/scene.e2e.ts:309:1 › four-way walk frames, pause, a following camera and opt-in music (7.4s)
+  ✓   8 tests/scene.e2e.ts:376:1 › 390px narrow window renders the scene, residents and touch controls (2.7s)
+  ✓   9 tests/scene.e2e.ts:404:1 › missing bridge art blocks readiness with a clear error (2.7s)
+  ✓  10 tests/scene.e2e.ts:418:1 › HTTP failure stays unavailable and automatically recovers (2.6s)
+  ✓  11 tests/scene.e2e.ts:433:1 › WebSocket handshake failure remains visible and prevents input (2.4s)
+  ✓  12 tests/scene.e2e.ts:447:1 › the real server rejects augmented movement and out-of-range actions (1.2s)
+
+  12 passed (2.7m)
+
+NATIVE_EXIT=0

@@ -1,0 +1,612 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/lib/nodejs/node",
+      "/workspace/mistsea-phase3/node_modules/.bin/playwright",
+      "test"
+    ],
+    "configFile": "/workspace/mistsea-phase3/playwright.config.ts",
+    "rootDir": "/workspace/mistsea-phase3/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/workspace/mistsea-phase3/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "*.e2e.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/workspace/mistsea-phase3/tests",
+        "snapshotDir": "/workspace/mistsea-phase3/tests",
+        "testIgnore": [],
+        "testMatch": "*.e2e.ts",
+        "timeout": 150000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5174",
+          "viewport": {
+            "width": 1280,
+            "height": 960
+          },
+          "headless": true,
+          "launchOptions": {
+            "chromiumSandbox": true,
+            "ignoreDefaultArgs": [
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev:client",
+      "env": {
+        "PORT": "3003",
+        "MISTSEA_VITE_PORT": "5174"
+      },
+      "url": "http://127.0.0.1:5174",
+      "reuseExistingServer": false,
+      "stdout": "pipe",
+      "stderr": "pipe",
+      "timeout": 15000
+    }
+  },
+  "suites": [
+    {
+      "title": "dialogue.e2e.ts",
+      "file": "dialogue.e2e.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10696,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:52:39.499Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/playwright-artifacts/dialogue.e2e.ts-ordinary-E-135e9-se-text-and-keeps-rendering/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c794e62394207bd76f82-508935573b11913b9b18",
+          "file": "dialogue.e2e.ts",
+          "line": 105,
+          "column": 1
+        }
+      ],
+      "suites": [
+        {
+          "title": "limited Mock",
+          "file": "dialogue.e2e.ts",
+          "line": 178,
+          "column": 6,
+          "specs": [
+            {
+              "title": "390px dialogue fits and exposes budget failure with a manual retry",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5281,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:52:51.352Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/playwright-artifacts/dialogue.e2e.ts-limited-Mo-9ecf8-failure-with-a-manual-retry/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-733487d3886dade7d5ef",
+              "file": "dialogue.e2e.ts",
+              "line": 182,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "faulted Mock",
+          "file": "dialogue.e2e.ts",
+          "line": 222,
+          "column": 6,
+          "specs": [
+            {
+              "title": "timeout is visible and manual retry remains Mock",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5424,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:52:57.054Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/playwright-artifacts/dialogue.e2e.ts-faulted-Mo-16f2b-d-manual-retry-remains-Mock/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-4fd83ed3ffdd812cdc89",
+              "file": "dialogue.e2e.ts",
+              "line": 224,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Phase 3 offline action request",
+          "file": "dialogue.e2e.ts",
+          "line": 239,
+          "column": 6,
+          "specs": [
+            {
+              "title": "natural request accepts a plan and the actor actually harvests after the dialogue closes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7967,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:53:03.089Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/playwright-artifacts/dialogue.e2e.ts-Phase-3-of-ce2fb-s-after-the-dialogue-closes/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-2ecc80ffe1ba12215c9f",
+              "file": "dialogue.e2e.ts",
+              "line": 242,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Phase 3 autonomous Mock journey",
+          "file": "dialogue.e2e.ts",
+          "line": 267,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 52766,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:53:11.780Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/playwright-artifacts/dialogue.e2e.ts-Phase-3-au-beaf2-ith-folded-responsive-debug/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-a779f1f2618991b995b9",
+              "file": "dialogue.e2e.ts",
+              "line": 277,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "scene.e2e.ts",
+      "file": "scene.e2e.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fresh journey collects all materials, repairs, crosses, explores and restores",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 57011,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:54:06.698Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-8cfed86e4e10b67e4909",
+          "file": "scene.e2e.ts",
+          "line": 151,
+          "column": 1
+        },
+        {
+          "title": "four-way walk frames, pause, a following camera and opt-in music",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7370,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:55:03.854Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-34d39b477a15d74c38c6",
+          "file": "scene.e2e.ts",
+          "line": 309,
+          "column": 1
+        },
+        {
+          "title": "390px narrow window renders the scene, residents and touch controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2694,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:55:11.236Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-15061960749edc48377e",
+          "file": "scene.e2e.ts",
+          "line": 376,
+          "column": 1
+        },
+        {
+          "title": "missing bridge art blocks readiness with a clear error",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2654,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:55:13.939Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-2bfad38282105d69eeca",
+          "file": "scene.e2e.ts",
+          "line": 404,
+          "column": 1
+        },
+        {
+          "title": "HTTP failure stays unavailable and automatically recovers",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2571,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:55:16.602Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-a057622a1be6c936388f",
+          "file": "scene.e2e.ts",
+          "line": 418,
+          "column": 1
+        },
+        {
+          "title": "WebSocket handshake failure remains visible and prevents input",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2381,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:55:19.182Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-333880c46c724bb008d8",
+          "file": "scene.e2e.ts",
+          "line": 433,
+          "column": 1
+        },
+        {
+          "title": "the real server rejects augmented movement and out-of-range actions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1202,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:55:21.574Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-6137f46c1363dff36b3c",
+          "file": "scene.e2e.ts",
+          "line": 447,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-25T11:52:38.417Z",
+    "duration": 164556.394,
+    "expected": 12,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "startedAt": "2026-11-25T11:41:31.678Z",
+  "endedAt": "2026-11-25T12:11:31.772Z",
+  "pid": 316881,
+  "durationSec": 1800,
+  "activeElapsedSec": 1800.0067128269998,
+  "elapsedSec": 1800.0934768280001,
+  "smoke": false,
+  "result": "PASS",
+  "exitCode": 0,
+  "counters": {
+    "collections": 202,
+    "recoveredHarvests": 13,
+    "cooldownFailures": 25,
+    "deliveries": 13,
+    "bridges": 13,
+    "rests": 12,
+    "completedCycles": 12,
+    "modelRecovery": 13,
+    "motionSamples": 5548
+  },
+  "maxPending": 1,
+  "maxQueued": 0,
+  "ledger": [
+    {
+      "mode": "mock",
+      "purpose": "autonomy",
+      "status": "cancelled",
+      "calls": 12,
+      "chargedTokens": 40748,
+      "chargedNanoUsd": null
+    },
+    {
+      "mode": "mock",
+      "purpose": "autonomy",
+      "status": "invalid",
+      "calls": 13,
+      "chargedTokens": 38064,
+      "chargedNanoUsd": null
+    },
+    {
+      "mode": "mock",
+      "purpose": "autonomy",
+      "status": "ok",
+      "calls": 239,
+      "chargedTokens": 866873,
+      "chargedNanoUsd": null
+    },
+    {
+      "mode": "mock",
+      "purpose": "dialogue",
+      "status": "ok",
+      "calls": 1,
+      "chargedTokens": 1809,
+      "chargedNanoUsd": null
+    }
+  ],
+  "trajectory": "/workspace/mistsea-phase3/evidence/phase3/soak-vLUMsY/trajectory.jsonl"
+}

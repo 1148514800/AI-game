@@ -1,0 +1,25 @@
+{
+  "commit": "4d8572ff0aa64692d4e09b4b7e5b488bf8f7e70e",
+  "thinkingComparison": {
+    ".env.example": {
+      "remote": "fe9c85be1d1027991bc7ec98ce108e8ea85101dcf571064e788df0716b50a848",
+      "macSync": "fe9c85be1d1027991bc7ec98ce108e8ea85101dcf571064e788df0716b50a848"
+    },
+    "docs/DECISIONS.md": {
+      "remote": "cbc0f4cb5cd3eefdc7a65908466ced798a8d43df6104e274986ff712707c2c3d",
+      "macSync": "cbc0f4cb5cd3eefdc7a65908466ced798a8d43df6104e274986ff712707c2c3d"
+    },
+    "src/server/dialogue/config.ts": {
+      "remote": "be6d911fd62b5eebb91ce1ce2b52055130a6150ec108238c7206ca749af44381",
+      "macSync": "be6d911fd62b5eebb91ce1ce2b52055130a6150ec108238c7206ca749af44381"
+    },
+    "src/server/dialogue/provider.ts": {
+      "remote": "a7005a7046c1d422dce92ecf19f67c156bb3e37f83b7cbc594f517a4dd32b566",
+      "macSync": "a7005a7046c1d422dce92ecf19f67c156bb3e37f83b7cbc594f517a4dd32b566"
+    },
+    "tests/dialogue.integration.ts": {
+      "remote": "55b1095ae6faa6bf77cf0d680701a021b45f752bbf3af7861a2c46e3b4f20014",
+      "macSync": "55b1095ae6faa6bf77cf0d680701a021b45f752bbf3af7861a2c46e3b4f20014"
+    }
+  }
+}

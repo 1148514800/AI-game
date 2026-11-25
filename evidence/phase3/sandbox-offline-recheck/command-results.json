@@ -1,0 +1,126 @@
+{
+  "environment": "Coding sandbox with EPERM loopback listen",
+  "baseline": "4d8572ff0aa64692d4e09b4b7e5b488bf8f7e70e",
+  "results": [
+    {
+      "command": "npm ci --ignore-scripts",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/npm-ci-ignore-scripts.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/typecheck.log"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p scripts/performance/tsconfig.json",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/performance-typecheck.log"
+    },
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/unit-test.log"
+    },
+    {
+      "command": "npm run test:integration",
+      "exitCode": 1,
+      "log": "evidence/phase3/sandbox-offline-recheck/integration.log"
+    },
+    {
+      "command": "node scripts/dev-smoke.mjs",
+      "exitCode": 1,
+      "log": "evidence/phase3/sandbox-offline-recheck/dev.log"
+    },
+    {
+      "command": "npm run test:e2e -- --list",
+      "exitCode": 1,
+      "log": "evidence/phase3/sandbox-offline-recheck/e2e-list.log"
+    },
+    {
+      "command": "npm run test:e2e",
+      "exitCode": 1,
+      "log": "evidence/phase3/sandbox-offline-recheck/e2e.log"
+    },
+    {
+      "command": "env LLM_API_KEY=phase2-build-dummy-key-do-not-expose npm run build",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/build.log"
+    },
+    {
+      "command": "node --check scripts/soak-phase3.mjs",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/soak-syntax.log"
+    },
+    {
+      "command": "npm run test:e2e -- --list",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/e2e-list-final.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/typecheck-final.log"
+    },
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/unit-test-final.log"
+    },
+    {
+      "command": "npm run test:e2e",
+      "exitCode": 1,
+      "log": "evidence/phase3/sandbox-offline-recheck/e2e-final.log"
+    },
+    {
+      "command": "npm run test:integration",
+      "exitCode": 1,
+      "log": "evidence/phase3/sandbox-offline-recheck/integration-final.log"
+    },
+    {
+      "command": "env LLM_API_KEY=phase2-build-dummy-key-do-not-expose npm run build",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/build-final.log"
+    },
+    {
+      "command": "node --check scripts/soak-phase3.mjs",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/soak-syntax-final.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/typecheck-delivery.log"
+    },
+    {
+      "command": "npm run build (dummy Key in environment)",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/build-delivery.log"
+    },
+    {
+      "command": "node scripts/assert-client-no-secret.mjs",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/client-key-delivery.log"
+    },
+    {
+      "command": "node scripts/production-smoke.mjs",
+      "exitCode": 1,
+      "log": "evidence/phase3/sandbox-offline-recheck/production-smoke.log"
+    },
+    {
+      "command": "node --import tsx scripts/soak-phase3.mjs --smoke --duration 12",
+      "exitCode": 1,
+      "log": "evidence/phase3/sandbox-offline-recheck/soak-smoke-delivery.log"
+    },
+    {
+      "command": "node --import tsx scripts/soak-phase3.mjs --duration 1799",
+      "exitCode": 1,
+      "log": "evidence/phase3/sandbox-offline-recheck/soak-duration-guard.log"
+    },
+    {
+      "command": "Compiled Fastify in-process /health check",
+      "exitCode": 0,
+      "log": "evidence/phase3/sandbox-offline-recheck/compiled-health-in-process.log"
+    }
+  ]
+}

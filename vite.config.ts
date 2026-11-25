@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 
 const backend = `127.0.0.1:${process.env.PORT ?? 3001}`;
 export default defineConfig({
+  envDir: false,
   server: {
     host: "127.0.0.1",
     port: Number(process.env.MISTSEA_VITE_PORT ?? 5173),

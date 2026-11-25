@@ -1,0 +1,7 @@
+COMMAND npm run typecheck
+
+> mistsea-phase1@0.2.0-phase2 typecheck
+> tsc --noEmit
+
+
+NATIVE_EXIT=0

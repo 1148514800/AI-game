@@ -1,0 +1,53 @@
+{
+  "phase": "3 only / AG-4",
+  "workspace": "/workspace/mistsea-phase3",
+  "baseline": "4d8572ff0aa64692d4e09b4b7e5b488bf8f7e70e",
+  "branch": "ag-4-phase3",
+  "codingJob": {
+    "shellId": "964859",
+    "pid": 296879,
+    "session": "01a21265-dcaa-76d1-9f14-d0877825999a",
+    "log": "evidence/phase3/codex-implementation.log",
+    "state": "completed exit0; observed"
+  },
+  "npmCiInitial": {
+    "exitCode": 0,
+    "log": "evidence/phase3/npm-ci-initial.log"
+  },
+  "soak": {
+    "started": true,
+    "shellId": "964864",
+    "wrapperPid": 316876,
+    "nodePid": 316881,
+    "startAsiaShanghai": "2026-11-25T19:41:31.678+08:00",
+    "expectedEarliestEndAsiaShanghai": "2026-11-25T20:11:31.761+08:00",
+    "requiredRealSeconds": 1800,
+    "log": "evidence/phase3/soak-native-1800.log",
+    "directory": "evidence/phase3/soak-vLUMsY",
+    "runtimeHashes": "evidence/phase3/soak-runtime-hashes.json",
+    "state": "completed PASS exit0; observed; activeElapsed1800.006712827s;12completeCycles13bridges"
+  },
+  "live": "Phase2 USER verified; Phase3 no paid call authorization, do not use any key. Mock/HTTP fixture only.",
+  "oldWorkspaces": "Do not modify /workspace/mistsea-phase2 or /workspace/mistsea-phase2-mac-sync-20261125",
+  "remaining": [
+    "Generate committed clean-tree delivery with package-delivery.py; final commit/ZIP sizes/SHA recorded outside tree in delivery-info.json"
+  ],
+  "reviewJob": {
+    "shellId": "964862",
+    "state": "completed exit0; observed",
+    "summary": "evidence/phase3/codex-review-summary.txt"
+  },
+  "validation": {
+    "shellId": "964867",
+    "state": "completed all seven commands exit0; observed",
+    "summary": "evidence/phase3/acceptance-final/summary.json",
+    "counts": {
+      "unit": 45,
+      "integration": 4,
+      "browser": 12
+    }
+  },
+  "recovery": "Host interruption did not terminate soak. All coding/tests/performance/soak jobs now observed completed; no quota failure, no Live calls. No active project services expected.",
+  "engineeringCommit": "8763f2df0867107c36753552f2fbcbb6c464a646",
+  "deliveryState": "All runtime/coding/validation/soak work complete and observed. Engineering committed. No running project services. Packaging-only remaining; final HEAD in ignored DELIVERY_COMMIT.txt and external delivery-info.json."
+}

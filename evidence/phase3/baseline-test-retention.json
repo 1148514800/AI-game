@@ -1,0 +1,79 @@
+[
+  {
+    "file": "tests/unit.test.ts",
+    "baselineCount": 14,
+    "currentCount": 14,
+    "baselineTitlesRetained": [
+      "strict input accepts intent only and requires explicit reset confirmation",
+      "runtime assets exactly match the CC0 manifest and every map reference",
+      "map dimensions, terrain frames, unique stable IDs and spawn match data",
+      "west bank resources are reachable and the only route east is the repaired crossing",
+      "server ticks enforce normalized speed, expiring input and no message-driven movement",
+      "wall, tree, rock, closed river and bounds use the same foot collision",
+      "distant, wrong-target, unknown and insufficient actions do not touch storage",
+      "collection is durable, cooldown prevents rush and duplicate id remains rejected after restart",
+      "delivery is atomic and timed work can pause and resume without counting offline time",
+      "checked reset is durable and a repeated reset cannot wipe subsequent progress",
+      "conflicting save revision leaves the winning storage and losing world untouched",
+      "bad SQLite and incompatible state produce a health error without replacing the original",
+      "healthy Fastify opens a versioned local save without API keys",
+      "fresh rules-only journey follows walkable paths, collects six wood and two stone, and reaches the beacon"
+    ],
+    "changedTitles": []
+  },
+  {
+    "file": "tests/dialogue.test.ts",
+    "baselineCount": 11,
+    "currentCount": 11,
+    "baselineTitlesRetained": [
+      "dialogue transport is strict and accepts full Chinese input",
+      "invalid Live configuration never silently changes to Mock or permits embedded credentials",
+      "Cenyan",
+      "context contains public world facts, bounded recent turns, and unverified player text",
+      "ledger separates modes, retains cancelled and interrupted reservations, and survives restart",
+      "minute, durable one-hour window, and lifetime request limits apply without free resets",
+      "money reservation settles observed usage without double-counting reasoning and preserves unknown usage",
+      "nonempty provider text with zero usage keeps its reservation, and extra tokens are charged conservatively",
+      "broken dialogue configuration or ledger leaves ordinary world health available",
+      "only successful recent turns survive close and world reset clears them",
+      "a reply that resolves despite Abort cannot reappear or enter the next dialogue history"
+    ],
+    "changedTitles": []
+  },
+  {
+    "file": "tests/dialogue.integration.ts",
+    "baselineCount": 2,
+    "currentCount": 4,
+    "baselineTitlesRetained": [
+      "real local HTTP adapter supports both token fields, usage, sanitized errors, timeout and abort",
+      "real WS and HTTP fixture enforce distance, continuity, no world effects, cancellation and durable budget"
+    ],
+    "changedTitles": []
+  },
+  {
+    "file": "tests/scene.e2e.ts",
+    "baselineCount": 7,
+    "currentCount": 7,
+    "baselineTitlesRetained": [
+      "fresh journey collects all materials, repairs, crosses, explores and restores",
+      "four-way walk frames, pause, a following camera and opt-in music",
+      "390px narrow window renders the scene, residents and touch controls",
+      "missing bridge art blocks readiness with a clear error",
+      "HTTP failure stays unavailable and automatically recovers",
+      "WebSocket handshake failure remains visible and prevents input",
+      "the real server rejects augmented movement and out-of-range actions"
+    ],
+    "changedTitles": []
+  },
+  {
+    "file": "tests/dialogue.e2e.ts",
+    "baselineCount": 3,
+    "currentCount": 5,
+    "baselineTitlesRetained": [
+      "ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering",
+      "390px dialogue fits and exposes budget failure with a manual retry",
+      "timeout is visible and manual retry remains Mock"
+    ],
+    "changedTitles": []
+  }
+]

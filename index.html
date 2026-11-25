@@ -78,6 +78,9 @@
                 <button type="button" data-suggestion="修旧桥前需要准备什么？">
                   聊聊旧桥
                 </button>
+                <button type="button" data-suggestion="请你帮忙修桥，可以吗？">
+                  请岑砚修桥
+                </button>
               </div>
               <div class="dialogue-compose">
                 <label class="dialogue-input-label" for="dialogue-input"
@@ -170,6 +173,19 @@
           <section class="panel residents">
             <h2>谷中居民</h2>
             <ul id="residents"></ul>
+            <p id="cenyan-status" class="cenyan-status">岑砚 · 等待连接</p>
+            <details id="cenyan-debug" class="cenyan-debug">
+              <summary>AI Debug</summary>
+              <dl>
+                <dt>目标</dt><dd id="cenyan-goal"></dd>
+                <dt>行动</dt><dd id="cenyan-plan"></dd>
+                <dt>岑砚的背包</dt><dd id="cenyan-bag"></dd>
+                <dt>规则回执</dt><dd id="cenyan-result"></dd>
+                <dt>调用</dt><dd id="cenyan-model"></dd>
+              </dl>
+              <h3>近期重要记忆</h3>
+              <ul id="cenyan-memory"></ul>
+            </details>
           </section>
 
           <footer class="save-bar">

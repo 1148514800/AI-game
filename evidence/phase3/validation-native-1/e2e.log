@@ -1,0 +1,273 @@
+COMMAND npm run test:e2e
+
+> mistsea-phase1@0.2.0-phase2 test:e2e
+> playwright test
+
+[WebServer] 
+[WebServer] > mistsea-phase1@0.2.0-phase2 dev:client
+[WebServer] > vite --host 127.0.0.1
+[WebServer] 
+[WebServer] (node:311731) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer]   VITE v8.3.8  ready in 199 ms
+[WebServer] 
+[WebServer]   ➜  Local:   http://127.0.0.1:5174/
+
+Running 12 tests using 1 worker
+
+(node:311770) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 7:35:20 PM [vite] (client) [optimizer] bundling dependencies...
+  ✘   1 tests/dialogue.e2e.ts:103:1 › ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering (8.6s)
+(node:311939) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   2 tests/dialogue.e2e.ts:180:3 › limited Mock › 390px dialogue fits and exposes budget failure with a manual retry (7.8s)
+(node:312110) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   3 tests/dialogue.e2e.ts:222:3 › faulted Mock › timeout is visible and manual retry remains Mock (7.9s)
+(node:312419) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   4 tests/dialogue.e2e.ts:240:3 › Phase 3 offline action request › natural request accepts a plan and the actor actually harvests after the dialogue closes (7.9s)
+(node:312645) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   5 tests/dialogue.e2e.ts:273:3 › Phase 3 autonomous Mock journey › fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug (7.9s)
+(node:312889) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   6 tests/scene.e2e.ts:147:1 › fresh journey collects all materials, repairs, crosses, explores and restores (15.0s)
+[WebServer] 7:36:20 PM [vite] (client) page reload src/client/connection.ts
+(node:313196) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   7 tests/scene.e2e.ts:305:1 › four-way walk frames, pause, a following camera and opt-in music (8.4s)
+  ✓   8 tests/scene.e2e.ts:365:1 › 390px narrow window renders the scene, residents and touch controls (2.9s)
+  ✓   9 tests/scene.e2e.ts:393:1 › missing bridge art blocks readiness with a clear error (2.8s)
+  ✓  10 tests/scene.e2e.ts:407:1 › HTTP failure stays unavailable and automatically recovers (3.7s)
+  ✓  11 tests/scene.e2e.ts:422:1 › WebSocket handshake failure remains visible and prevents input (2.5s)
+  ✓  12 tests/scene.e2e.ts:436:1 › the real server rejects augmented movement and out-of-range actions (1.2s)
+
+
+  1) tests/dialogue.e2e.ts:103:1 › ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#game')
+    Expected: "true"
+    Received: "false"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#game') with timeout 5000ms
+      - waiting for locator('#game')
+        14 × locator resolved to <div id="game" tabindex="0" data-ready="false" aria-label="游戏场景，方向键或 WASD 移动，E 交互">…</div>
+           - unexpected value "false"
+
+
+      76 | async function approach(page: Page) {
+      77 |   const stage = page.locator("#game");
+    > 78 |   await expect(stage).toHaveAttribute("data-ready", "true");
+         |                       ^
+      79 |   await expect(panel(page)).toBeHidden();
+      80 |   for (const [key, axis, sign, target] of [
+      81 |     ["d", "x", 1, 247],
+        at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)
+        at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:107:9
+
+    Error Context: evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-ordinary-E-135e9-se-text-and-keeps-rendering/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-ordinary-E-135e9-se-text-and-keeps-rendering/trace.zip
+    Usage:
+
+        npx playwright show-trace evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-ordinary-E-135e9-se-text-and-keeps-rendering/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/dialogue.e2e.ts:180:3 › limited Mock › 390px dialogue fits and exposes budget failure with a manual retry 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#game')
+    Expected: "true"
+    Received: "false"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#game') with timeout 5000ms
+      - waiting for locator('#game')
+        14 × locator resolved to <div id="game" tabindex="0" data-ready="false" aria-label="游戏场景，方向键或 WASD 移动，E 交互">…</div>
+           - unexpected value "false"
+
+
+      76 | async function approach(page: Page) {
+      77 |   const stage = page.locator("#game");
+    > 78 |   await expect(stage).toHaveAttribute("data-ready", "true");
+         |                       ^
+      79 |   await expect(panel(page)).toBeHidden();
+      80 |   for (const [key, axis, sign, target] of [
+      81 |     ["d", "x", 1, 247],
+        at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)
+        at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:191:13
+
+    Error Context: evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-limited-Mo-9ecf8-failure-with-a-manual-retry/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-limited-Mo-9ecf8-failure-with-a-manual-retry/trace.zip
+    Usage:
+
+        npx playwright show-trace evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-limited-Mo-9ecf8-failure-with-a-manual-retry/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/dialogue.e2e.ts:222:3 › faulted Mock › timeout is visible and manual retry remains Mock ─
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#game')
+    Expected: "true"
+    Received: "false"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#game') with timeout 5000ms
+      - waiting for locator('#game')
+        14 × locator resolved to <div id="game" tabindex="0" data-ready="false" aria-label="游戏场景，方向键或 WASD 移动，E 交互">…</div>
+           - unexpected value "false"
+
+
+      76 | async function approach(page: Page) {
+      77 |   const stage = page.locator("#game");
+    > 78 |   await expect(stage).toHaveAttribute("data-ready", "true");
+         |                       ^
+      79 |   await expect(panel(page)).toBeHidden();
+      80 |   for (const [key, axis, sign, target] of [
+      81 |     ["d", "x", 1, 247],
+        at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)
+        at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:224:11
+
+    Error Context: evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-faulted-Mo-16f2b-d-manual-retry-remains-Mock/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-faulted-Mo-16f2b-d-manual-retry-remains-Mock/trace.zip
+    Usage:
+
+        npx playwright show-trace evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-faulted-Mo-16f2b-d-manual-retry-remains-Mock/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/dialogue.e2e.ts:240:3 › Phase 3 offline action request › natural request accepts a plan and the actor actually harvests after the dialogue closes 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#game')
+    Expected: "true"
+    Received: "false"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#game') with timeout 5000ms
+      - waiting for locator('#game')
+        14 × locator resolved to <div id="game" tabindex="0" data-ready="false" aria-label="游戏场景，方向键或 WASD 移动，E 交互">…</div>
+           - unexpected value "false"
+
+
+      76 | async function approach(page: Page) {
+      77 |   const stage = page.locator("#game");
+    > 78 |   await expect(stage).toHaveAttribute("data-ready", "true");
+         |                       ^
+      79 |   await expect(panel(page)).toBeHidden();
+      80 |   for (const [key, axis, sign, target] of [
+      81 |     ["d", "x", 1, 247],
+        at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)
+        at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:244:11
+
+    Error Context: evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-Phase-3-of-ce2fb-s-after-the-dialogue-closes/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-Phase-3-of-ce2fb-s-after-the-dialogue-closes/trace.zip
+    Usage:
+
+        npx playwright show-trace evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-Phase-3-of-ce2fb-s-after-the-dialogue-closes/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests/dialogue.e2e.ts:273:3 › Phase 3 autonomous Mock journey › fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#game')
+    Expected: "true"
+    Received: "false"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#game') with timeout 5000ms
+      - waiting for locator('#game')
+        14 × locator resolved to <div id="game" tabindex="0" data-ready="false" aria-label="游戏场景，方向键或 WASD 移动，E 交互">…</div>
+           - unexpected value "false"
+
+
+      278 |     await page.goto(url);
+      279 |     const stage = page.locator("#game");
+    > 280 |     await expect(stage).toHaveAttribute("data-ready", "true");
+          |                         ^
+      281 |     await expect(page.locator("#cenyan-debug")).not.toHaveAttribute("open", "");
+      282 |     await page.locator("#cenyan-debug summary").click();
+      283 |     await expect(page.locator("#cenyan-status")).toContainText("Mock 模拟");
+        at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:280:25
+
+    Error Context: evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-Phase-3-au-beaf2-ith-folded-responsive-debug/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-Phase-3-au-beaf2-ith-folded-responsive-debug/trace.zip
+    Usage:
+
+        npx playwright show-trace evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-Phase-3-au-beaf2-ith-folded-responsive-debug/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests/scene.e2e.ts:147:1 › fresh journey collects all materials, repairs, crosses, explores and restores 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#game')
+    Expected: "true"
+    Received: "false"
+    Timeout:  12000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#game') with timeout 12000ms
+      - waiting for locator('#game')
+        28 × locator resolved to <div id="game" tabindex="0" data-ready="false" aria-label="游戏场景，方向键或 WASD 移动，E 交互">…</div>
+           - unexpected value "false"
+
+
+      88 |
+      89 | const ready = (page: Page) =>
+    > 90 |   expect(page.locator("#game")).toHaveAttribute("data-ready", "true", {
+         |                                 ^
+      91 |     timeout: 12000,
+      92 |   });
+      93 | const bag = (page: Page, item: string) => page.locator(`[data-item="${item}"]`);
+        at ready (/workspace/mistsea-phase3/tests/scene.e2e.ts:90:33)
+        at /workspace/mistsea-phase3/tests/scene.e2e.ts:169:9
+
+    Error Context: evidence/phase3/validation-native-1/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    evidence/phase3/validation-native-1/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/trace.zip
+    Usage:
+
+        npx playwright show-trace evidence/phase3/validation-native-1/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    tests/dialogue.e2e.ts:103:1 › ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering 
+    tests/dialogue.e2e.ts:180:3 › limited Mock › 390px dialogue fits and exposes budget failure with a manual retry 
+    tests/dialogue.e2e.ts:222:3 › faulted Mock › timeout is visible and manual retry remains Mock ──
+    tests/dialogue.e2e.ts:240:3 › Phase 3 offline action request › natural request accepts a plan and the actor actually harvests after the dialogue closes 
+    tests/dialogue.e2e.ts:273:3 › Phase 3 autonomous Mock journey › fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug 
+    tests/scene.e2e.ts:147:1 › fresh journey collects all materials, repairs, crosses, explores and restores 
+  6 passed (1.4m)
+
+NATIVE_EXIT=1

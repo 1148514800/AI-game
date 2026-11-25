@@ -16,6 +16,7 @@ import { WebSocket } from "ws";
 import { createApp } from "../src/server/app.js";
 import { readDialogueConfig } from "../src/server/dialogue/config.js";
 import { DialogueFailure, generate } from "../src/server/dialogue/provider.js";
+import { distance, isPassable, valley } from "../src/shared/world.js";
 import type {
   ClientMessage,
   DialogueEvent,
@@ -36,8 +37,9 @@ const textReply = (text: string, usage?: object) =>
 async function waitFor<T>(
   read: () => T | undefined,
   label: string,
+  timeout = 4500,
 ): Promise<T> {
-  const until = performance.now() + 4500;
+  const until = performance.now() + timeout;
   while (performance.now() < until) {
     const value = read();
     if (value !== undefined) return value;
@@ -231,10 +233,10 @@ async function connect(url: string) {
 }
 
 type Player = Awaited<ReturnType<typeof connect>>;
-async function nearCenyan(player: Player) {
+async function nearCenyan(player: Player, y = 321) {
   for (const [axis, target] of [
     ["x", 247],
-    ["y", 321],
+    ["y", y],
   ] as const) {
     const move = {
       type: "move",
@@ -523,6 +525,239 @@ test(
           ["ok", 2],
           ["rate-limit", 1],
         ],
+      );
+    } finally {
+      ledger.close();
+    }
+  },
+);
+
+test(
+  "local HTTP dialogue accepts a natural request, validates optional plans and holds a walking Cenyan until close",
+  { timeout: 25_000 },
+  async (t) => {
+    const resource = valley.resources[2];
+    const request = "劳驾到北坡捡点木头";
+    const smallTalk = "今天雾大吗？";
+    const invalid = "未知地点测试";
+    const malformed = "截断计划测试";
+    const decision = {
+      goal: "stock-wood",
+      speech: "我先去找木料。",
+      plan: [
+        { type: "move_to", target_id: resource.id },
+        { type: "collect", target_id: resource.id },
+      ],
+    };
+    const calls: ProviderBody[] = [];
+    const aborted: number[] = [];
+    const env = await localProvider(t, (_request, response, body) => {
+      const index = calls.push(body) - 1;
+      const input = body.messages.at(-1)!.content;
+      let content = JSON.stringify(decision);
+      if (input.endsWith(smallTalk)) content = "今天雾重，走路当心。";
+      if (input.endsWith(invalid))
+        content = JSON.stringify({
+          ...decision,
+          plan: [{ type: "move_to", target_id: "unknown-place" }],
+        });
+      if (input.endsWith(malformed)) content = content.slice(0, -1);
+      const payload = textReply(content, {
+        prompt_tokens: 60,
+        completion_tokens: 50,
+      });
+      if (index === 0 || input.endsWith(smallTalk)) {
+        const timer = setTimeout(() => response.end(payload), 1200);
+        response.on("close", () => {
+          clearTimeout(timer);
+          if (!response.writableEnded) aborted.push(index);
+        });
+      } else response.end(payload);
+    });
+    const dir = mkdtempSync(join(tmpdir(), "mistsea-phase3-action-http-"));
+    const savePath = join(dir, "world.sqlite");
+    let app: ReturnType<typeof createApp>;
+    async function start() {
+      app = createApp({
+        savePath,
+        dialogueEnv: { ...env, LLM_AUTONOMY_ENABLED: "false" },
+      });
+      return app.listen({ port: 0, host: "127.0.0.1" });
+    }
+    t.after(async () => {
+      await app?.close();
+      rmSync(dir, { recursive: true, force: true });
+    });
+    let url = await start();
+    let player = await connect(url);
+    await nearCenyan(player, 312);
+    let dialog = await opened(player);
+    const stale = submit(player, dialog, request);
+    await waitFor(() => calls[0], "first local HTTP action request");
+    player.send({ type: "dialogue-close", dialogId: dialog });
+    await waitFor(() => aborted.length || undefined, "upstream abort");
+    assert.equal(player.state().state.cenyan.plan, null);
+    assert.ok(
+      !player.events.some(
+        (e) =>
+          e.type === "dialogue" &&
+          e.event === "reply" &&
+          e.requestId === stale.id,
+      ),
+    );
+
+    dialog = await opened(player);
+    const active = submit(player, dialog, request);
+    const accepted = await player.dialogue(
+      "reply",
+      (e) => e.requestId === active.id,
+    );
+    assert.equal(accepted.action, "accepted");
+    player.send({ type: "dialogue-close", dialogId: dialog });
+
+    await waitFor(
+      () => player.state().cenyan.activity === "moving" || undefined,
+      "Cenyan starts walking",
+    );
+    dialog = await opened(player);
+    const held = await waitFor(
+      () =>
+        player.state().cenyan.activity === "idle"
+          ? player.state().state.cenyan
+          : undefined,
+      "walking Cenyan holds position",
+    );
+    assert.equal(held.plan?.id, active.id);
+    const chat = submit(player, dialog, smallTalk);
+    const ordinaryReply = await player.dialogue(
+      "reply",
+      (e) => e.requestId === chat.id,
+    );
+    assert.equal(ordinaryReply.text, "今天雾重，走路当心。");
+    assert.equal(ordinaryReply.action, undefined);
+    assert.deepEqual(player.state().state.cenyan, held);
+    for (const text of [invalid, malformed]) {
+      const rejected = submit(player, dialog, text);
+      assert.equal(
+        (await player.dialogue("error", (e) => e.requestId === rejected.id))
+          .code,
+        "invalid",
+      );
+      assert.deepEqual(player.state().state.cenyan, held);
+    }
+    player.send({ type: "dialogue-close", dialogId: dialog });
+    await waitFor(
+      () => player.state().state.cenyan.bag.wood === 1 || undefined,
+      "Cenyan harvested",
+    );
+    const result = player.state();
+    assert.equal(result.state.inventory.wood, 0);
+    assert.ok(result.state.cooldowns[resource.id] > result.now);
+    assert.ok(calls[1].messages[0].content.includes(resource.id));
+    assert.ok(calls[1].messages[0].content.includes("附近人物"));
+    assert.match(calls[1].messages[0].content, /根据旅人话语的含义/);
+    assert.equal(calls.length, 5, "one provider request per turn");
+
+    await app!.close();
+    url = await start();
+    player = await connect(url);
+    const restarted = player.state();
+    assert.deepEqual(restarted.state.cenyan, result.state.cenyan);
+    assert.deepEqual(restarted.cenyan.memory, result.cenyan.memory);
+    assert.ok(
+      restarted.cenyan.memory.some(
+        (m) => m.kind === "claim" && m.event === active.id,
+      ),
+    );
+    assert.ok(
+      restarted.cenyan.memory.some(
+        (m) =>
+          m.kind === "fact" &&
+          m.event.includes(active.id) &&
+          /获得 木材/.test(m.content),
+      ),
+    );
+  },
+);
+
+test(
+  "real WS clearly marked Mock starts without dialogue and walks, harvests, delivers and works a fresh bridge",
+  { timeout: 120_000 },
+  async (t) => {
+    const dir = mkdtempSync(join(tmpdir(), "mistsea-phase3-autonomy-ws-"));
+    const savePath = join(dir, "world.sqlite");
+    const app = createApp({
+      savePath,
+      dialogueEnv: {
+        LLM_ENABLED: "false",
+        LLM_MOCK_AUTONOMY_ENABLED: "true",
+        LLM_MOCK_DELAY_MS: "120",
+        LLM_AUTONOMY_REQUESTS_PER_MINUTE: "20",
+        LLM_MAX_REQUESTS_PER_MINUTE: "24",
+      },
+    });
+    t.after(async () => {
+      await app.close();
+      rmSync(dir, { recursive: true, force: true });
+    });
+    const url = await app.listen({ port: 0, host: "127.0.0.1" });
+    const player = await connect(url);
+    const start = player.state().state.cenyan;
+    await waitFor(
+      () => player.state().cenyan.activity === "moving" || undefined,
+      "moving Mock actor",
+    );
+    const moved = player.state();
+    assert.ok(distance(moved.state.cenyan, start) > 0);
+    assert.equal(moved.cenyan.model?.mode, "mock");
+    assert.ok(isPassable(moved.state.cenyan.x, moved.state.cenyan.y, false));
+    await waitFor(
+      () => player.state().state.cenyan.bag.wood > 0 || undefined,
+      "harvest",
+      25_000,
+    );
+    await waitFor(
+      () => player.state().state.bridge.wood === 6 || undefined,
+      "NPC delivery",
+      80_000,
+    );
+    const delivery = player.state().state;
+    assert.equal(delivery.bridge.stone, 2);
+    assert.deepEqual(delivery.cenyan.bag, { wood: 0, stone: 0 });
+    await waitFor(
+      () => player.state().state.bridge.progressMs > 0 || undefined,
+      "start work",
+    );
+    const workingAt = performance.now();
+    await waitFor(
+      () => player.state().state.bridge.repaired || undefined,
+      "finish work",
+      22_000,
+    );
+    assert.ok(performance.now() - workingAt >= 13_500);
+    const repaired = player.state();
+    assert.equal(repaired.state.bridge.progressMs, valley.bridge.workMs);
+    assert.deepEqual(repaired.state.inventory, {
+      wood: 0,
+      stone: 0,
+      food: 0,
+      toolbox: 0,
+    });
+    assert.ok(
+      repaired.cenyan.memory.some(
+        (m) => m.kind === "fact" && /已修通/.test(m.content),
+      ),
+    );
+    const ledger = new DatabaseSync(savePath + ".llm.sqlite", {
+      readOnly: true,
+    });
+    try {
+      const calls = ledger
+        .prepare("SELECT DISTINCT mode, purpose FROM calls")
+        .all();
+      assert.deepEqual(
+        calls.map((row) => [row.mode, row.purpose]),
+        [["mock", "autonomy"]],
       );
     } finally {
       ledger.close();

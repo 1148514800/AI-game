@@ -2,6 +2,8 @@
 
 更新：2026-11-25（Asia/Shanghai，UTC+8）。指定并实际核对的 GitHub 基线：`62c5c2a10dff3afc18dbe875341f3a274ca3b436`；工作分支 `ag-3-phase2`，工程 `/workspace/mistsea-phase2`。原 `/workspace/mistsea-phase1` 与历史归档未改动。
 
+> 2026-11-25 用户后续确认已亲自完成 Phase 2 真实模型接入验证。下文保留 AG-3 当时的工程验证与调用授权范围。用户的真实模型验证属于 Phase 2，Phase 3 的真实计划、用量和兼容性另行验收。
+
 ## 结论与验收边界
 
 |项目|结果|

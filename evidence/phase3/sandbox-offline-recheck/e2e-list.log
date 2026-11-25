@@ -1,0 +1,19 @@
+
+> mistsea-phase1@0.2.0-phase2 test:e2e
+> playwright test --list
+
+
+Cannot use({ trace }) in a describe group, because it forces a new worker.
+Make it top-level in the test file or put in the configuration file.
+
+   at dialogue.e2e.ts:261
+
+  259 |
+  260 | test.describe("Phase 3 autonomous Mock journey", () => {
+> 261 |   test.use({
+      |        ^
+  262 |     mockEnv: {
+  263 |       LLM_MOCK_AUTONOMY_ENABLED: "true",
+  264 |       LLM_MOCK_DELAY_MS: "180",
+Listing tests:
+Total: 0 tests in 0 files

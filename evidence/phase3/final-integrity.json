@@ -1,0 +1,11 @@
+{
+  "baseline": "4d8572ff0aa64692d4e09b4b7e5b488bf8f7e70e",
+  "historicalEvidenceFilesByteExact": 506,
+  "runtimeAssetsVerified": 45,
+  "pdfSha256": "8623390d64c8f0684e89749247cbf2d3206f3c859bd0c7e34f8567a5d252efc7",
+  "soakRuntimeFilesUnchanged": 19,
+  "oldPhase2Head": "628c80632c7108cb639d52e03f7bccef2e7f906c",
+  "oldPhase2Status": "",
+  "macSnapshotFiles": 168,
+  "macSnapshotBytes": 12968878
+}

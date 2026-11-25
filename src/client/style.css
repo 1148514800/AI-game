@@ -567,6 +567,10 @@ dialog form {
   .journal {
     gap: 7px;
   }
+  .residents,
+  .save-bar {
+    grid-column: 1 / -1;
+  }
   .inventory ul {
     grid-template-columns: 1fr;
   }
@@ -621,7 +625,7 @@ dialog form {
 #dialogue-transcript p {
   margin: 4px 0 8px;
   display: grid;
-  grid-template-columns: 3em 1fr;
+  grid-template-columns: 4.5em 1fr;
   line-height: 1.5;
 }
 #dialogue-transcript span {
@@ -680,3 +684,25 @@ dialog form {
     gap: 6px;
   }
 }
+
+.cenyan-status {
+  margin: 0.75rem 0 0;
+  color: var(--muted, #bfc8b2);
+  font-size: 0.85rem;
+}
+
+.cenyan-debug {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #516458;
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.cenyan-debug summary { cursor: pointer; }
+.cenyan-debug dl { margin: 0.65rem 0; }
+.cenyan-debug dt { font-weight: bold; }
+.cenyan-debug dd { margin: 0 0 0.45rem; }
+.cenyan-debug h3 { font-size: inherit; }
+.cenyan-debug li { line-height: 1.45; }
+.dialogue-suggestions { flex-wrap: wrap; }

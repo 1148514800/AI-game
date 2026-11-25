@@ -16,7 +16,7 @@ export type ChatMessage = {
   content: string;
 };
 
-const identity = [
+export const identity = [
   personality.background,
   personality.goals,
   personality.knowledge,
@@ -34,10 +34,12 @@ export function buildMessages(
   bridge: PublicBridge,
   history: Turn[],
   player: string,
+  context?: string,
 ) {
   const opening: ChatMessage = {
     role: "system",
-    content: identity + "\n" + bridgeNotice(bridge),
+    content:
+      identity + "\n" + bridgeNotice(bridge) + (context ? "\n" + context : ""),
   };
   const userMessage = (content: string): ChatMessage => ({
     role: "user",

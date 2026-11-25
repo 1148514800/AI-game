@@ -22,6 +22,9 @@ const budget = z.object({
   LLM_MAX_TOTAL_REQUESTS: integer(500, 100_000),
   LLM_MAX_TOTAL_TOKENS: integer(500_000, 100_000_000),
   LLM_MAX_TOTAL_USD: z.coerce.number().positive().max(1000).optional(),
+  LLM_AUTONOMY_REQUESTS_PER_MINUTE: integer(4, 60),
+  LLM_AUTONOMY_REQUESTS_PER_SESSION: integer(24, 500),
+  LLM_AUTONOMY_MAX_TOTAL_REQUESTS: integer(300, 50_000),
   LLM_MOCK_DELAY_MS: integer(650, 30_000),
   LLM_MOCK_FAILURE: z.enum(["timeout", "rate-limit", "network"]).optional(),
 });
@@ -31,6 +34,7 @@ export type Prices = { input: number; output: number };
 export type DialogueConfig = {
   mode: "mock" | "live";
   model: string;
+  autonomy: boolean;
   limits: Limits;
   prices?: Prices;
   live?: {
@@ -55,10 +59,21 @@ export function readDialogueConfig(
     LLM_MAX_TOTAL_REQUESTS: env.LLM_MAX_TOTAL_REQUESTS,
     LLM_MAX_TOTAL_TOKENS: env.LLM_MAX_TOTAL_TOKENS,
     LLM_MAX_TOTAL_USD: env.LLM_MAX_TOTAL_USD || undefined,
+    LLM_AUTONOMY_REQUESTS_PER_MINUTE: env.LLM_AUTONOMY_REQUESTS_PER_MINUTE,
+    LLM_AUTONOMY_REQUESTS_PER_SESSION: env.LLM_AUTONOMY_REQUESTS_PER_SESSION,
+    LLM_AUTONOMY_MAX_TOTAL_REQUESTS: env.LLM_AUTONOMY_MAX_TOTAL_REQUESTS,
     LLM_MOCK_DELAY_MS: env.LLM_MOCK_DELAY_MS,
     LLM_MOCK_FAILURE: env.LLM_MOCK_FAILURE || undefined,
   });
-  if (!enabled) return { mode: "mock", model: "cenyan-scripted-mock", limits };
+  const autonomy =
+    z
+      .enum(["true", "false"])
+      .default("false")
+      .parse(
+        enabled ? env.LLM_AUTONOMY_ENABLED : env.LLM_MOCK_AUTONOMY_ENABLED,
+      ) === "true";
+  if (!enabled)
+    return { mode: "mock", model: "cenyan-scripted-mock", limits, autonomy };
 
   const key = z
     .string()
@@ -111,6 +126,7 @@ export function readDialogueConfig(
   return {
     mode: "live",
     model,
+    autonomy,
     limits,
     prices,
     live: {

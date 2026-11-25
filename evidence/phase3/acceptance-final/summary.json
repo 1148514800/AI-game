@@ -1,0 +1,82 @@
+{
+  "environment": "native box; credential-free explicit test env; no Live calls authorized",
+  "started": "2026-11-25T19:51:34.733909+08:00",
+  "steps": [
+    {
+      "name": "npm-ci",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 2.821,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/npm-ci.log"
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.519,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/typecheck.log"
+    },
+    {
+      "name": "unit",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.719,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/unit.log"
+    },
+    {
+      "name": "integration",
+      "command": [
+        "npm",
+        "run",
+        "test:integration"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 58.032,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/integration.log"
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 165.205,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/e2e.log"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.52,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/build.log"
+    },
+    {
+      "name": "production-smoke",
+      "command": [
+        "node",
+        "scripts/production-smoke.mjs"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 2.169,
+      "log": "/workspace/mistsea-phase3/evidence/phase3/acceptance-final/production-smoke.log"
+    }
+  ],
+  "finished": "2026-11-25T19:55:26.722245+08:00",
+  "allExitZero": true
+}

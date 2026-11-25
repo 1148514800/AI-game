@@ -1,0 +1,792 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/lib/nodejs/node",
+      "/workspace/mistsea-phase3/node_modules/.bin/playwright",
+      "test"
+    ],
+    "configFile": "/workspace/mistsea-phase3/playwright.config.ts",
+    "rootDir": "/workspace/mistsea-phase3/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/workspace/mistsea-phase3/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "*.e2e.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/workspace/mistsea-phase3/tests",
+        "snapshotDir": "/workspace/mistsea-phase3/tests",
+        "testIgnore": [],
+        "testMatch": "*.e2e.ts",
+        "timeout": 150000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5174",
+          "viewport": {
+            "width": 1280,
+            "height": 960
+          },
+          "headless": true,
+          "launchOptions": {
+            "chromiumSandbox": true,
+            "ignoreDefaultArgs": [
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev:client",
+      "env": {
+        "PORT": "3003",
+        "MISTSEA_VITE_PORT": "5174"
+      },
+      "url": "http://127.0.0.1:5174",
+      "reuseExistingServer": false,
+      "stdout": "pipe",
+      "stderr": "pipe",
+      "timeout": 15000
+    }
+  },
+  "suites": [
+    {
+      "title": "dialogue.e2e.ts",
+      "file": "dialogue.e2e.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 8590,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)\n    at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:107:9",
+                    "location": {
+                      "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                      "column": 23,
+                      "line": 78
+                    },
+                    "snippet": "  76 | async function approach(page: Page) {\n  77 |   const stage = page.locator(\"#game\");\n> 78 |   await expect(stage).toHaveAttribute(\"data-ready\", \"true\");\n     |                       ^\n  79 |   await expect(panel(page)).toBeHidden();\n  80 |   for (const [key, axis, sign, target] of [\n  81 |     [\"d\", \"x\", 1, 247],"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                        "column": 23,
+                        "line": 78
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  76 | async function approach(page: Page) {\n  77 |   const stage = page.locator(\"#game\");\n> 78 |   await expect(stage).toHaveAttribute(\"data-ready\", \"true\");\n     |                       ^\n  79 |   await expect(panel(page)).toBeHidden();\n  80 |   for (const [key, axis, sign, target] of [\n  81 |     [\"d\", \"x\", 1, 247],\n    at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)\n    at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:107:9"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:35:19.824Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-ordinary-E-135e9-se-text-and-keeps-rendering/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-ordinary-E-135e9-se-text-and-keeps-rendering/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                    "column": 23,
+                    "line": 78
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c794e62394207bd76f82-508935573b11913b9b18",
+          "file": "dialogue.e2e.ts",
+          "line": 103,
+          "column": 1
+        }
+      ],
+      "suites": [
+        {
+          "title": "limited Mock",
+          "file": "dialogue.e2e.ts",
+          "line": 176,
+          "column": 6,
+          "specs": [
+            {
+              "title": "390px dialogue fits and exposes budget failure with a manual retry",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 7774,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)\n    at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:191:13",
+                        "location": {
+                          "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                          "column": 23,
+                          "line": 78
+                        },
+                        "snippet": "  76 | async function approach(page: Page) {\n  77 |   const stage = page.locator(\"#game\");\n> 78 |   await expect(stage).toHaveAttribute(\"data-ready\", \"true\");\n     |                       ^\n  79 |   await expect(panel(page)).toBeHidden();\n  80 |   for (const [key, axis, sign, target] of [\n  81 |     [\"d\", \"x\", 1, 247],"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                            "column": 23,
+                            "line": 78
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  76 | async function approach(page: Page) {\n  77 |   const stage = page.locator(\"#game\");\n> 78 |   await expect(stage).toHaveAttribute(\"data-ready\", \"true\");\n     |                       ^\n  79 |   await expect(panel(page)).toBeHidden();\n  80 |   for (const [key, axis, sign, target] of [\n  81 |     [\"d\", \"x\", 1, 247],\n    at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)\n    at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:191:13"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:35:29.761Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-limited-Mo-9ecf8-failure-with-a-manual-retry/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-limited-Mo-9ecf8-failure-with-a-manual-retry/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                        "column": 23,
+                        "line": 78
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-733487d3886dade7d5ef",
+              "file": "dialogue.e2e.ts",
+              "line": 180,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "faulted Mock",
+          "file": "dialogue.e2e.ts",
+          "line": 220,
+          "column": 6,
+          "specs": [
+            {
+              "title": "timeout is visible and manual retry remains Mock",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 7943,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)\n    at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:224:11",
+                        "location": {
+                          "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                          "column": 23,
+                          "line": 78
+                        },
+                        "snippet": "  76 | async function approach(page: Page) {\n  77 |   const stage = page.locator(\"#game\");\n> 78 |   await expect(stage).toHaveAttribute(\"data-ready\", \"true\");\n     |                       ^\n  79 |   await expect(panel(page)).toBeHidden();\n  80 |   for (const [key, axis, sign, target] of [\n  81 |     [\"d\", \"x\", 1, 247],"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                            "column": 23,
+                            "line": 78
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  76 | async function approach(page: Page) {\n  77 |   const stage = page.locator(\"#game\");\n> 78 |   await expect(stage).toHaveAttribute(\"data-ready\", \"true\");\n     |                       ^\n  79 |   await expect(panel(page)).toBeHidden();\n  80 |   for (const [key, axis, sign, target] of [\n  81 |     [\"d\", \"x\", 1, 247],\n    at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)\n    at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:224:11"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:35:38.332Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-faulted-Mo-16f2b-d-manual-retry-remains-Mock/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-faulted-Mo-16f2b-d-manual-retry-remains-Mock/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                        "column": 23,
+                        "line": 78
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-4fd83ed3ffdd812cdc89",
+              "file": "dialogue.e2e.ts",
+              "line": 222,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Phase 3 offline action request",
+          "file": "dialogue.e2e.ts",
+          "line": 237,
+          "column": 6,
+          "specs": [
+            {
+              "title": "natural request accepts a plan and the actor actually harvests after the dialogue closes",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 7941,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)\n    at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:244:11",
+                        "location": {
+                          "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                          "column": 23,
+                          "line": 78
+                        },
+                        "snippet": "  76 | async function approach(page: Page) {\n  77 |   const stage = page.locator(\"#game\");\n> 78 |   await expect(stage).toHaveAttribute(\"data-ready\", \"true\");\n     |                       ^\n  79 |   await expect(panel(page)).toBeHidden();\n  80 |   for (const [key, axis, sign, target] of [\n  81 |     [\"d\", \"x\", 1, 247],"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                            "column": 23,
+                            "line": 78
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  76 | async function approach(page: Page) {\n  77 |   const stage = page.locator(\"#game\");\n> 78 |   await expect(stage).toHaveAttribute(\"data-ready\", \"true\");\n     |                       ^\n  79 |   await expect(panel(page)).toBeHidden();\n  80 |   for (const [key, axis, sign, target] of [\n  81 |     [\"d\", \"x\", 1, 247],\n    at approach (/workspace/mistsea-phase3/tests/dialogue.e2e.ts:78:23)\n    at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:244:11"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:35:47.125Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-Phase-3-of-ce2fb-s-after-the-dialogue-closes/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-Phase-3-of-ce2fb-s-after-the-dialogue-closes/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                        "column": 23,
+                        "line": 78
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-2ecc80ffe1ba12215c9f",
+              "file": "dialogue.e2e.ts",
+              "line": 240,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Phase 3 autonomous Mock journey",
+          "file": "dialogue.e2e.ts",
+          "line": 263,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 7857,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:280:25",
+                        "location": {
+                          "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                          "column": 25,
+                          "line": 280
+                        },
+                        "snippet": "  278 |     await page.goto(url);\n  279 |     const stage = page.locator(\"#game\");\n> 280 |     await expect(stage).toHaveAttribute(\"data-ready\", \"true\");\n      |                         ^\n  281 |     await expect(page.locator(\"#cenyan-debug\")).not.toHaveAttribute(\"open\", \"\");\n  282 |     await page.locator(\"#cenyan-debug summary\").click();\n  283 |     await expect(page.locator(\"#cenyan-status\")).toContainText(\"Mock 模拟\");"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                            "column": 25,
+                            "line": 280
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  278 |     await page.goto(url);\n  279 |     const stage = page.locator(\"#game\");\n> 280 |     await expect(stage).toHaveAttribute(\"data-ready\", \"true\");\n      |                         ^\n  281 |     await expect(page.locator(\"#cenyan-debug\")).not.toHaveAttribute(\"open\", \"\");\n  282 |     await page.locator(\"#cenyan-debug summary\").click();\n  283 |     await expect(page.locator(\"#cenyan-status\")).toContainText(\"Mock 模拟\");\n    at /workspace/mistsea-phase3/tests/dialogue.e2e.ts:280:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-25T11:35:55.996Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-Phase-3-au-beaf2-ith-folded-responsive-debug/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/dialogue.e2e.ts-Phase-3-au-beaf2-ith-folded-responsive-debug/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspace/mistsea-phase3/tests/dialogue.e2e.ts",
+                        "column": 25,
+                        "line": 280
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c794e62394207bd76f82-a779f1f2618991b995b9",
+              "file": "dialogue.e2e.ts",
+              "line": 273,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "scene.e2e.ts",
+      "file": "scene.e2e.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fresh journey collects all materials, repairs, crosses, explores and restores",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14954,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  12000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 12000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    28 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  12000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 12000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    28 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at ready (/workspace/mistsea-phase3/tests/scene.e2e.ts:90:33)\n    at /workspace/mistsea-phase3/tests/scene.e2e.ts:169:9",
+                    "location": {
+                      "file": "/workspace/mistsea-phase3/tests/scene.e2e.ts",
+                      "column": 33,
+                      "line": 90
+                    },
+                    "snippet": "  88 |\n  89 | const ready = (page: Page) =>\n> 90 |   expect(page.locator(\"#game\")).toHaveAttribute(\"data-ready\", \"true\", {\n     |                                 ^\n  91 |     timeout: 12000,\n  92 |   });\n  93 | const bag = (page: Page, item: string) => page.locator(`[data-item=\"${item}\"]`);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/mistsea-phase3/tests/scene.e2e.ts",
+                        "column": 33,
+                        "line": 90
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#game')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  12000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#game') with timeout 12000ms\u001b[22m\n\u001b[2m  - waiting for locator('#game')\u001b[22m\n\u001b[2m    28 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  88 |\n  89 | const ready = (page: Page) =>\n> 90 |   expect(page.locator(\"#game\")).toHaveAttribute(\"data-ready\", \"true\", {\n     |                                 ^\n  91 |     timeout: 12000,\n  92 |   });\n  93 | const bag = (page: Page, item: string) => page.locator(`[data-item=\"${item}\"]`);\n    at ready (/workspace/mistsea-phase3/tests/scene.e2e.ts:90:33)\n    at /workspace/mistsea-phase3/tests/scene.e2e.ts:169:9"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:36:04.711Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/mistsea-phase3/evidence/phase3/validation-native-1/playwright-artifacts/scene.e2e.ts-fresh-journey-3dfd8-osses-explores-and-restores/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/mistsea-phase3/tests/scene.e2e.ts",
+                    "column": 33,
+                    "line": 90
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-8cfed86e4e10b67e4909",
+          "file": "scene.e2e.ts",
+          "line": 147,
+          "column": 1
+        },
+        {
+          "title": "four-way walk frames, pause, a following camera and opt-in music",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8358,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:36:20.640Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-34d39b477a15d74c38c6",
+          "file": "scene.e2e.ts",
+          "line": 305,
+          "column": 1
+        },
+        {
+          "title": "390px narrow window renders the scene, residents and touch controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2879,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:36:29.126Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-15061960749edc48377e",
+          "file": "scene.e2e.ts",
+          "line": 365,
+          "column": 1
+        },
+        {
+          "title": "missing bridge art blocks readiness with a clear error",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2763,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:36:32.016Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-2bfad38282105d69eeca",
+          "file": "scene.e2e.ts",
+          "line": 393,
+          "column": 1
+        },
+        {
+          "title": "HTTP failure stays unavailable and automatically recovers",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3717,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:36:34.791Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-a057622a1be6c936388f",
+          "file": "scene.e2e.ts",
+          "line": 407,
+          "column": 1
+        },
+        {
+          "title": "WebSocket handshake failure remains visible and prevents input",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2528,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:36:38.517Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-333880c46c724bb008d8",
+          "file": "scene.e2e.ts",
+          "line": 422,
+          "column": 1
+        },
+        {
+          "title": "the real server rejects augmented movement and out-of-range actions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1201,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T11:36:41.055Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d6b51f24cf0a03d38a6b-6137f46c1363dff36b3c",
+          "file": "scene.e2e.ts",
+          "line": 436,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-25T11:35:18.835Z",
+    "duration": 83554.075,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 6,
+    "flaky": 0
+  }
+}

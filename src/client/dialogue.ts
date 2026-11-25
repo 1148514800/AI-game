@@ -142,8 +142,18 @@ export function bindDialogue(callbacks: {
     const text = request.text;
     request = undefined;
     progress(false);
-    if (message.event === "reply") append("岑砚", message.text);
-    else {
+    if (message.event === "reply") {
+      append("岑砚", message.text);
+      if (message.action)
+        append(
+          "行动回执",
+          {
+            accepted: "计划已接受，等待规则执行。",
+            deferred: "岑砚有进行中的计划，这次请求暂缓。",
+            rejected: "这次没有接受行动计划。",
+          }[message.action],
+        );
+    } else {
       failedText = text;
       showError(message.text, true);
     }

@@ -14,12 +14,18 @@ import {
 const spritesheets = new Set([
   "player-walk",
   "player-idle",
+  "npc-walk",
   ...valley.residents.map((actor) => `${actor.asset}-idle`),
 ]);
 const variants = new Map(valley.resources.map((entry) => [entry.id, entry]));
 
 export class ValleyScene extends Phaser.Scene {
   private player?: Phaser.GameObjects.Sprite;
+  private cenyan?: {
+    sprite: Phaser.GameObjects.Sprite;
+    shadow: Phaser.GameObjects.Ellipse;
+    name: Phaser.GameObjects.Text;
+  };
   private shadow?: Phaser.GameObjects.Ellipse;
   private marker?: Phaser.GameObjects.Image;
   private bridge?: Phaser.GameObjects.Image;
@@ -32,6 +38,7 @@ export class ValleyScene extends Phaser.Scene {
   private music?: Phaser.Sound.BaseSound;
   private markerTarget?: ReturnType<typeof nearbyTarget>;
   private markerPlayer?: Snapshot["state"]["player"];
+  private markerCenyan?: Snapshot["state"]["cenyan"];
 
   constructor(private readonly onAssets: (failures: string[]) => void) {
     super("foglamp-valley");
@@ -120,30 +127,37 @@ export class ValleyScene extends Phaser.Scene {
         .setScale(0.7);
     }
     for (const resident of valley.residents) {
-      this.drawShadow(resident.x, resident.y);
-      this.add
+      const actor =
+        resident.id === "cenyan"
+          ? (this.current?.state.cenyan ?? resident)
+          : resident;
+      const shadow = this.drawShadow(actor.x, actor.y);
+      const sprite = this.add
         .sprite(
-          resident.x,
-          resident.y,
+          actor.x,
+          actor.y,
           `${resident.asset}-idle`,
-          animations.directionColumns[resident.facing],
+          animations.directionColumns[actor.facing],
         )
         .setOrigin(0.5, 1)
-        .setDepth(resident.y);
-      this.nameplate(resident.x, resident.y, resident.name);
+        .setDepth(actor.y);
+      const name = this.nameplate(actor.x, actor.y, resident.name);
+      if (resident.id === "cenyan") this.cenyan = { sprite, shadow, name };
     }
     for (const direction of Object.keys(
       animations.walk.framesByDirection,
     ) as Direction[]) {
-      this.anims.create({
-        key: `walk-${direction}`,
-        frames: animations.walk.framesByDirection[direction].map((frame) => ({
-          key: "player-walk",
-          frame,
-        })),
-        frameRate: animations.walk.frameRate,
-        repeat: -1,
-      });
+      for (const actor of ["player", "npc"]) {
+        this.anims.create({
+          key: `${actor}-walk-${direction}`,
+          frames: animations.walk.framesByDirection[direction].map((frame) => ({
+            key: `${actor}-walk`,
+            frame,
+          })),
+          frameRate: animations.walk.frameRate,
+          repeat: -1,
+        });
+      }
     }
     const start = this.current?.state.player ?? valley.spawn;
     this.shadow = this.drawShadow(start.x, start.y);
@@ -191,6 +205,12 @@ export class ValleyScene extends Phaser.Scene {
     this.setDebug("y", snapshot.state.player.y.toFixed(4));
     if (distance(player, snapshot.state.player) > 48)
       player.setPosition(snapshot.state.player.x, snapshot.state.player.y);
+    const actor = snapshot.state.cenyan;
+    this.setDebug("cenyanX", actor.x.toFixed(4));
+    this.setDebug("cenyanY", actor.y.toFixed(4));
+    this.setDebug("cenyanActivity", snapshot.cenyan.activity);
+    if (this.cenyan && distance(this.cenyan.sprite, actor) > 48)
+      this.cenyan.sprite.setPosition(actor.x, actor.y);
     const bridgeTexture = snapshot.state.bridge.repaired
       ? "bridge-open"
       : "bridge-broken";
@@ -238,37 +258,47 @@ export class ValleyScene extends Phaser.Scene {
     const { state, moving, working } = this.current;
     const { x, y, facing } = state.player;
     const sprite = this.player;
-    if (sprite.x !== x || sprite.y !== y) {
-      const remaining = Math.pow(0.08, elapsed / 50);
-      const settle = (actual: number, target: number) =>
-        Math.abs(actual - target) < 0.01
-          ? target
-          : target + (actual - target) * remaining;
-      sprite.setPosition(settle(sprite.x, x), settle(sprite.y, y));
+    this.drawActor(
+      sprite,
+      this.shadow,
+      state.player,
+      "player",
+      moving,
+      elapsed,
+    );
+    if (this.cenyan) {
+      const { sprite: npc, shadow, name } = this.cenyan;
+      const activity = this.current.cenyan.activity;
+      this.drawActor(
+        npc,
+        shadow,
+        state.cenyan,
+        "npc",
+        activity === "moving",
+        elapsed,
+      );
+      if (name.x !== npc.x || name.y !== npc.y - 19)
+        name.setPosition(npc.x, npc.y - 19);
+      const captions: Partial<Record<typeof activity, string>> = {
+        collecting: "岑砚 · 采集",
+        delivering: "岑砚 · 交材",
+        working: "岑砚 · 施工",
+        resting: "岑砚 · 休息",
+      };
+      const caption = captions[activity] ?? "岑砚";
+      if (name.text !== caption) name.setText(caption);
+      this.setDebug("cenyanDirection", state.cenyan.facing);
+      this.setDebug("cenyanFrame", String(npc.frame.name));
     }
-    if (this.shadow.x !== sprite.x || this.shadow.y !== sprite.y - 1)
-      this.shadow.setPosition(sprite.x, sprite.y - 1);
-    if (sprite.depth !== sprite.y) sprite.setDepth(sprite.y);
-    if (this.shadow.depth !== sprite.y - 0.5)
-      this.shadow.setDepth(sprite.y - 0.5);
-
-    if (!this.halted && moving) {
-      const key = `walk-${facing}`;
-      if (sprite.anims.currentAnim?.key !== key || !sprite.anims.isPlaying)
-        sprite.play(key, true);
-    } else {
-      if (sprite.anims.isPlaying) sprite.stop();
-      const frame = animations.directionColumns[facing];
-      if (
-        sprite.texture.key !== "player-idle" ||
-        String(sprite.frame.name) !== String(frame)
-      )
-        sprite.setTexture("player-idle", frame);
-    }
-
-    if (this.markerPlayer?.x !== x || this.markerPlayer?.y !== y) {
+    if (
+      this.markerPlayer?.x !== x ||
+      this.markerPlayer?.y !== y ||
+      this.markerCenyan?.x !== state.cenyan.x ||
+      this.markerCenyan?.y !== state.cenyan.y
+    ) {
       this.markerPlayer = state.player;
-      this.markerTarget = nearbyTarget(state.player);
+      this.markerCenyan = state.cenyan;
+      this.markerTarget = nearbyTarget(state.player, state.cenyan);
     }
     const target = this.markerTarget;
     const show = !this.halted && !this.overview && Boolean(working || target);
@@ -299,6 +329,43 @@ export class ValleyScene extends Phaser.Scene {
     this.setDebug("working", String(working));
     this.setDebug("cameraX", this.cameras.main.scrollX.toFixed(2));
     this.setDebug("cameraY", this.cameras.main.scrollY.toFixed(2));
+  }
+
+  private drawActor(
+    sprite: Phaser.GameObjects.Sprite,
+    shadow: Phaser.GameObjects.Ellipse,
+    target: { x: number; y: number; facing: Direction },
+    asset: "player" | "npc",
+    moving: boolean,
+    elapsed: number,
+  ) {
+    const { x, y, facing } = target;
+    if (sprite.x !== x || sprite.y !== y) {
+      const remaining = Math.pow(0.08, elapsed / 50);
+      const settle = (actual: number, target: number) =>
+        Math.abs(actual - target) < 0.01
+          ? target
+          : target + (actual - target) * remaining;
+      sprite.setPosition(settle(sprite.x, x), settle(sprite.y, y));
+    }
+    if (shadow.x !== sprite.x || shadow.y !== sprite.y - 1)
+      shadow.setPosition(sprite.x, sprite.y - 1);
+    if (sprite.depth !== sprite.y) sprite.setDepth(sprite.y);
+    if (shadow.depth !== sprite.y - 0.5) shadow.setDepth(sprite.y - 0.5);
+    if (!this.halted && moving) {
+      const key = `${asset}-walk-${facing}`;
+      if (sprite.anims.currentAnim?.key !== key || !sprite.anims.isPlaying)
+        sprite.play(key, true);
+      return;
+    }
+    if (sprite.anims.isPlaying) sprite.stop();
+    const frame = animations.directionColumns[facing];
+    const texture = `${asset}-idle`;
+    if (
+      sprite.texture.key !== texture ||
+      String(sprite.frame.name) !== String(frame)
+    )
+      sprite.setTexture(texture, frame);
   }
 
   private setDebug(key: string, value: string) {
@@ -365,7 +432,7 @@ export class ValleyScene extends Phaser.Scene {
   }
 
   private nameplate(x: number, y: number, name: string) {
-    this.add
+    return this.add
       .text(x, y - 19, name, {
         fontFamily:
           '"Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif',

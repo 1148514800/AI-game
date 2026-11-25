@@ -59,10 +59,14 @@ export function distance(a: Point, b: Point) {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
-export function nearbyTarget(player: Point) {
+export function nearbyTarget(player: Point, cenyan?: Point) {
   let nearby: Target | undefined;
   let closest = Infinity;
-  for (const target of targets) {
+  for (const entry of targets) {
+    const target =
+      entry.id === "cenyan" && cenyan
+        ? { ...entry, x: cenyan.x, y: cenyan.y }
+        : entry;
     const distanceToPlayer = distance(player, target);
     if (distanceToPlayer <= target.range && distanceToPlayer < closest) {
       nearby = target;

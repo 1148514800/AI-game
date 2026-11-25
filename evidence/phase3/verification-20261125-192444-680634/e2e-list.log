@@ -1,0 +1,5 @@
+
+> mistsea-phase1@0.2.0-phase2 test:e2e
+> playwright test --list
+
+sh: 1: playwright: not found

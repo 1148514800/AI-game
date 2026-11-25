@@ -90,7 +90,10 @@ function updateControls() {
     music.disabled = assetState !== "ready";
   setText(element("save-status"), connected ? "本地自动存档" : "等待本地存档");
   if (snapshot) render(snapshot, canPlay() && !pending);
-  else enableActions(false);
+  else {
+    enableActions(false);
+    setText(element("cenyan-status"), "岑砚 · 等待连接");
+  }
 
   const hideScreen = connected && !paused;
   if (screen.hidden !== hideScreen) screen.hidden = hideScreen;

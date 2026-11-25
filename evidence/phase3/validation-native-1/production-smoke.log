@@ -1,0 +1,4 @@
+COMMAND node scripts/production-smoke.mjs
+PASS: compiled Fastify, SQLite, WebSocket, local assets and keyboard movement without API keys.
+
+NATIVE_EXIT=0

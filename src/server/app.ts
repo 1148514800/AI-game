@@ -11,6 +11,7 @@ import {
 import { tickMs, valley } from "../shared/world.js";
 import { SaveFile } from "./save.js";
 import { World } from "./world.js";
+import type { MockDecision } from "./dialogue/planning.js";
 import { DialogueSession } from "./dialogue/session.js";
 
 export function createApp(
@@ -18,6 +19,13 @@ export function createApp(
     savePath?: string;
     staticRoot?: string;
     dialogueEnv?: NodeJS.ProcessEnv;
+    mockDecision?: MockDecision;
+    observeTick?: (sample: {
+      elapsedMs: number;
+      durationMs: number;
+      pending: number;
+      queued: number;
+    }) => void;
   } = {},
 ) {
   const app = Fastify({ logger: false });
@@ -38,7 +46,7 @@ export function createApp(
 
   app.get("/health", (_request, reply) => {
     const info = {
-      phase: 2,
+      phase: 3,
       schemaVersion,
       contentVersion: valley.contentVersion,
     };
@@ -59,6 +67,9 @@ export function createApp(
   let lastSent = 0;
   let wasMoving = false;
   let wasWorking = false;
+  let lastCenyanActivity: ReturnType<World["snapshot"]>["cenyan"]["activity"] =
+    "idle";
+  let lastModel: DialogueSession["status"] | undefined;
 
   function send(socket: WebSocket, message: ServerMessage) {
     if (socket.readyState !== WebSocket.OPEN) return;
@@ -69,6 +80,8 @@ export function createApp(
     socket.send(JSON.stringify(message));
   }
 
+  const isActive = () =>
+    !paused && active?.readyState === WebSocket.OPEN && !unavailable;
   const dialogue = new DialogueSession(
     savePath === ":memory:" ? savePath : `${savePath}.llm.sqlite`,
     (socket) => {
@@ -85,14 +98,22 @@ export function createApp(
     },
     send,
     options.dialogueEnv,
-    () => world?.halt(),
+    () => world?.haltPlayer(),
+    world
+      ? {
+          world,
+          active: isActive,
+          storageError,
+          mockDecision: options.mockDecision,
+        }
+      : undefined,
   );
 
   function storageError(error: unknown) {
     console.error("存档写入失败。", error);
     unavailable = "存档写入失败。请检查磁盘与存档，再重新启动服务。";
     world?.halt();
-    dialogue.cancel("存档不可用，对话已结束。");
+    dialogue.suspend("存档不可用，对话已结束。");
     if (active) {
       send(active, { type: "error", code: "SAVE_ERROR", text: unavailable });
       active.close(1011);
@@ -101,11 +122,13 @@ export function createApp(
 
   function update(clock = performance.now()) {
     if (!active || !world) return;
-    const snapshot = world.snapshot();
+    const snapshot = world.snapshot(Date.now(), paused);
+    lastCenyanActivity = snapshot.cenyan.activity;
+    lastModel = dialogue.status;
+    snapshot.cenyan.model = dialogue.status;
     send(active, snapshot);
     lastSent = clock;
-    wasMoving = snapshot.moving;
-    wasWorking = snapshot.working;
+    ({ moving: wasMoving, working: wasWorking } = world.activity);
   }
 
   const timer = setInterval(() => {
@@ -117,7 +140,7 @@ export function createApp(
       if (clock - lastPing >= 2000) {
         if (!answered) {
           world.halt();
-          dialogue.cancel("连接已断开。", false);
+          dialogue.suspend("连接已断开。", false);
           active.terminate();
           return;
         }
@@ -127,19 +150,30 @@ export function createApp(
           active.ping();
         }
       }
-      world.tick(clock, elapsed);
-      dialogue.checkDistance();
+      if (isActive()) {
+        world.tick(clock, elapsed, Date.now(), dialogue.holdsCenyan);
+        dialogue.checkDistance();
+        dialogue.tick(clock);
+      }
       const { moving, working } = world.activity;
       if (
         moving ||
         working ||
         wasMoving ||
         wasWorking ||
+        (!paused && world.cenyanActivity !== lastCenyanActivity) ||
+        dialogue.status !== lastModel ||
         clock - lastSent >= 1000
       )
         update(clock);
     } catch (error) {
       storageError(error);
+    } finally {
+      options.observeTick?.({
+        elapsedMs: elapsed,
+        durationMs: performance.now() - clock,
+        ...dialogue.load,
+      });
     }
   }, tickMs);
   timer.unref();
@@ -172,13 +206,14 @@ export function createApp(
     }
     const current = world;
     if (active) {
-      dialogue.cancel("另一标签页已接管旅程。", false);
+      dialogue.suspend("另一标签页已接管旅程。", false);
       active.close(4001, "single player");
     }
     current.halt();
     active = socket;
     paused = false;
     lastPing = performance.now();
+    dialogue.resume(lastPing);
     answered = true;
     socket.on("pong", () => {
       if (active === socket) answered = true;
@@ -246,10 +281,14 @@ export function createApp(
             if (!paused) current.setMovement(message, clock);
             break;
           case "pause":
-            paused = message.paused;
-            if (paused) dialogue.cancel("旅程已暂停。");
-            current.halt();
-            current.flush();
+            if (paused !== message.paused) {
+              paused = message.paused;
+              if (paused) {
+                dialogue.suspend("旅程已暂停。");
+                current.halt();
+                current.flush();
+              } else dialogue.resume(clock);
+            }
             update(clock);
             break;
           case "action":
@@ -282,7 +321,7 @@ export function createApp(
     socket.on("close", () => {
       if (active !== socket) return;
       active = undefined;
-      dialogue.cancel("连接已断开。", false);
+      dialogue.suspend("连接已断开。", false);
       current.halt();
       if (!unavailable) {
         try {
@@ -297,7 +336,7 @@ export function createApp(
 
   app.addHook("preClose", async () => {
     clearInterval(timer);
-    dialogue.cancel("服务正在关闭。", false);
+    dialogue.suspend("服务正在关闭。", false);
     for (const socket of ws.clients) socket.terminate();
     active = undefined;
     if (!unavailable) {

@@ -1,0 +1,3 @@
+PASS: compiled Fastify, SQLite, WebSocket, local assets and keyboard movement without API keys.
+
+NATIVE_POST_SENTINEL_PRODUCTION_EXIT=0

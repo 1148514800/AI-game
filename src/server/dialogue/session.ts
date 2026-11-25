@@ -1,23 +1,42 @@
 import { randomUUID } from "node:crypto";
 import type { WebSocket } from "ws";
 import {
+  actionReplySchema,
+  decisionSchema,
+  type ActionReply,
+  type Decision,
+  type ModelStatus,
+} from "../../shared/cenyan.js";
+import {
   dialogueInputLimit,
   type ClientMessage,
   type DialogueEvent,
 } from "../../shared/protocol.js";
+import type { World } from "../world.js";
 import {
   buildMessages,
   mockReply,
+  type ChatMessage,
   type PublicBridge,
   type Turn,
 } from "./cenyan.js";
 import {
+  contextBytes,
   historyTurns,
   npcId,
   readDialogueConfig,
   type DialogueConfig,
 } from "./config.js";
-import { DialogueLedger } from "./ledger.js";
+import { DialogueLedger, type Purpose } from "./ledger.js";
+import {
+  autonomyMessages,
+  dialoguePlanInstructions,
+  mockAction,
+  mockActionRequest,
+  mockPlan,
+  perceptionText,
+  type MockDecision,
+} from "./planning.js";
 import { DialogueFailure, generate, type Usage } from "./provider.js";
 
 const failures: Record<string, string> = {
@@ -40,21 +59,53 @@ const failures: Record<string, string> = {
   empty: "对话服务返回了空回复，可手动重试。",
   invalid: "对话服务返回了无法使用的内容，可手动重试。",
   cancelled: "这次请求已取消。",
+  cooldown: "上一次行动计划有误，请稍后再请求。",
 };
 
-type OpenDialog = { id: string; owner: WebSocket; epoch: number };
-type Request = { dialog: OpenDialog; id: string; abort: AbortController };
+type OpenDialog = { id: string; owner: WebSocket };
 type State = { near: boolean; bridge?: PublicBridge } | undefined;
+type Job = {
+  id: string;
+  purpose: Purpose;
+  trigger: string;
+  messages: ChatMessage[];
+  reservedInputTokens: number;
+  mock: () => string;
+  format: "text" | "optional-plan" | "plan";
+  valid: () => boolean;
+  invalidated?: () => void;
+  done: (status: string, text?: string, plan?: ActionReply) => void;
+};
+
+type Options = {
+  world: World;
+  active: () => boolean;
+  storageError: (error: unknown) => void;
+  mockDecision?: MockDecision;
+};
+
+const periodMs = 120_000;
+const eventDelayMs = 3500;
 
 export class DialogueSession {
   private config?: DialogueConfig;
   private ledger?: DialogueLedger;
   private unavailable?: "config" | "ledger";
   private dlg?: OpenDialog;
-  private pending?: Request;
+  private pending?: { job: Job; abort: AbortController };
+  private queued?: Job;
   private running?: Promise<void>;
-  private epoch = 0;
   private history: Turn[] = [];
+  private epoch = 0;
+  private seenEvent = -1;
+  private nextPeriod = 0;
+  private nextTry = 0;
+  private streak = 0;
+  private stepFailures = 0;
+  private failureEvent = -1;
+  private actionRetryAt = 0;
+  private focusedTopic?: string;
+  private model: ModelStatus = { kind: "disabled" };
 
   constructor(
     path: string,
@@ -62,6 +113,7 @@ export class DialogueSession {
     private readonly send: (socket: WebSocket, event: DialogueEvent) => void,
     env?: NodeJS.ProcessEnv,
     private readonly stopMovement?: () => void,
+    private readonly options?: Options,
   ) {
     try {
       this.config = readDialogueConfig(env);
@@ -71,20 +123,35 @@ export class DialogueSession {
     }
     try {
       this.ledger = new DialogueLedger(path);
+      this.model = {
+        kind: this.config.autonomy ? "idle" : "disabled",
+        mode: this.config.mode,
+      };
     } catch {
       this.disable("ledger");
     }
   }
 
+  get status(): ModelStatus {
+    return this.model;
+  }
+  get load() {
+    return { pending: Number(!!this.pending), queued: Number(!!this.queued) };
+  }
+  get holdsCenyan() {
+    return !!this.dlg;
+  }
+
   private disable(code: "config" | "ledger") {
     this.unavailable = code;
+    this.model = { kind: "blocked", mode: this.config?.mode, result: code };
     console.warn(`[dialogue] ${code}`);
   }
 
   private error(
     owner: WebSocket,
     requestId: string,
-    code: keyof typeof failures,
+    code: string,
     dialogId?: string,
   ) {
     this.send(owner, {
@@ -93,7 +160,7 @@ export class DialogueSession {
       requestId,
       dialogId,
       code,
-      text: failures[code],
+      text: failures[code] ?? failures.provider,
     });
   }
 
@@ -108,20 +175,19 @@ export class DialogueSession {
     }
     const state = this.state(owner);
     const dialogId = msg.type === "dialogue-send" ? msg.dialogId : undefined;
-    const fail = (code: keyof typeof failures) =>
-      this.error(owner, msg.id, code, dialogId);
+    const fail = (code: string) => this.error(owner, msg.id, code, dialogId);
     if (!state) return fail("inactive");
     if (msg.type === "dialogue-open" && msg.npc !== npcId) return fail("npc");
     if (!state.near || !state.bridge) return fail("distance");
-    const bridge = state.bridge;
-    if (this.unavailable || !this.config || !this.ledger)
-      return fail(this.unavailable ?? "ledger");
+    const { bridge } = state;
     const config = this.config;
+    if (this.unavailable || !config || !this.ledger)
+      return fail(this.unavailable ?? "ledger");
     if (msg.type === "dialogue-open") {
       if (this.dlg) this.cancel("旧对话已关闭。", false);
       this.stopMovement?.();
       const id = randomUUID();
-      this.dlg = { id, owner, epoch: this.epoch };
+      this.dlg = { id, owner };
       this.send(owner, {
         type: "dialogue",
         event: "opened",
@@ -134,8 +200,11 @@ export class DialogueSession {
     const dialog = this.dlg;
     if (!dialog || dialog.owner !== owner || dialog.id !== msg.dialogId)
       return fail("stale");
-    if (this.pending?.id === msg.id && this.pending.dialog === dialog) return;
-    if (this.pending) return fail("busy");
+    const occupied =
+      this.queued ??
+      (this.pending?.job.purpose === "dialogue" ? this.pending.job : undefined);
+    if (occupied?.id === msg.id && occupied.valid()) return;
+    if (occupied) return fail("busy");
     const text = msg.text.trim();
     if (
       !text ||
@@ -146,88 +215,301 @@ export class DialogueSession {
     const player = config.live
       ? text.replaceAll(config.live.key, "[已隐藏]")
       : text;
+    const world = this.options?.world;
     const history = this.history.slice();
-    const { messages, reservedInputTokens } = buildMessages(
-      bridge,
-      history,
-      player,
-    );
+    const mockActionRequested =
+      !!world && config.mode === "mock" && mockActionRequest(player);
+    const canPlan = !!world && (config.mode === "live" || mockActionRequested);
+    if (mockActionRequested && performance.now() < this.actionRetryAt)
+      return fail("cooldown");
+    const view = world?.perceive(world.topic(player));
+    const context = view ? perceptionText(view) : "";
+    const epoch = this.epoch;
+    const generation = world?.decisionState.generation;
+    const job: Job = {
+      id: msg.id,
+      purpose: "dialogue",
+      trigger: mockActionRequested ? "player-action" : "dialogue",
+      ...buildMessages(
+        bridge,
+        history,
+        player,
+        canPlan ? dialoguePlanInstructions + "\n" + context : context,
+      ),
+      format: canPlan ? "optional-plan" : "text",
+      mock: () =>
+        mockActionRequested && view
+          ? JSON.stringify(mockAction(view, player))
+          : mockReply(bridge, history, player),
+      valid: () =>
+        this.dlg === dialog &&
+        this.epoch === epoch &&
+        !!this.state(owner)?.near &&
+        (!canPlan || world?.decisionState.generation === generation),
+      invalidated: () => {
+        if (this.dlg === dialog && this.epoch === epoch) fail("stale");
+      },
+      done: (status, speech, proposal) => {
+        if (status !== "ok" || !speech) {
+          if (canPlan && ["empty", "invalid"].includes(status))
+            this.actionRetryAt = performance.now() + 5000;
+          fail(status);
+          return;
+        }
+        if (proposal?.plan && performance.now() < this.actionRetryAt)
+          return fail("cooldown");
+        const resolution = proposal
+          ? world?.recordActionReply(msg.id, player, proposal)
+          : undefined;
+        if (!proposal) world?.rememberExchange(msg.id, player, speech);
+        if (proposal && world) this.focusedTopic = world.topic(player);
+        this.history.push({ player, reply: speech });
+        if (this.history.length > historyTurns) this.history.shift();
+        this.send(owner, {
+          type: "dialogue",
+          event: "reply",
+          requestId: msg.id,
+          dialogId: dialog.id,
+          text: speech,
+          action: resolution,
+        });
+      },
+    };
+    if (this.pending) {
+      this.queued = job;
+      this.pending.abort.abort();
+      this.send(owner, {
+        type: "dialogue",
+        event: "pending",
+        requestId: msg.id,
+        dialogId: dialog.id,
+      });
+    } else {
+      this.start(job, () =>
+        this.send(owner, {
+          type: "dialogue",
+          event: "pending",
+          requestId: msg.id,
+          dialogId: dialog.id,
+        }),
+      );
+    }
+  }
+
+  tick(clock: number) {
+    const options = this.options;
+    if (
+      !options?.active() ||
+      !this.config?.autonomy ||
+      this.unavailable ||
+      this.pending ||
+      this.dlg
+    )
+      return;
+    const state = options.world.decisionState;
+    if (state.executing) return;
+    if (state.trigger === "step-failed" && this.failureEvent !== state.serial) {
+      this.failureEvent = state.serial;
+      this.stepFailures = Math.min(5, this.stepFailures + 1);
+      this.nextTry = Math.max(
+        this.nextTry,
+        clock + Math.min(periodMs, 5000 * 2 ** (this.stepFailures - 1)),
+      );
+    }
+    if (state.trigger !== "step-failed") this.stepFailures = 0;
+    if (
+      clock < this.nextTry ||
+      (state.serial === this.seenEvent && clock < this.nextPeriod)
+    )
+      return;
+    const trigger =
+      state.serial === this.seenEvent ? "periodic" : state.trigger;
+    const view = options.world.perceive(this.focusedTopic ?? state.topic);
+    this.focusedTopic = undefined;
+    const input = autonomyMessages(view, trigger);
+    this.seenEvent = state.serial;
+    this.nextPeriod = clock + periodMs;
+    const epoch = this.epoch;
+    const id = randomUUID();
+    if (input.reservedInputTokens > contextBytes) {
+      this.autonomyOutcome("invalid");
+      return;
+    }
+    this.start({
+      id,
+      purpose: "autonomy",
+      trigger,
+      ...input,
+      format: "plan",
+      mock: () =>
+        options.mockDecision?.(view, trigger) ?? JSON.stringify(mockPlan(view)),
+      valid: () =>
+        options.active() &&
+        this.epoch === epoch &&
+        options.world.decisionState.generation === state.generation &&
+        !options.world.decisionState.executing,
+      done: (status, _speech, plan) => {
+        if (status === "ok" && plan?.plan)
+          options.world.accept(id, plan as Decision);
+        this.autonomyOutcome(status);
+      },
+    });
+  }
+
+  private autonomyOutcome(status: string) {
+    const now = performance.now();
+    if (status === "ok") {
+      this.streak = 0;
+      this.nextTry = now + eventDelayMs;
+      return;
+    }
+    this.streak = Math.min(6, this.streak + 1);
+    this.nextTry =
+      now +
+      (status === "budget"
+        ? 60_000
+        : Math.min(periodMs, 5000 * 2 ** (this.streak - 1)));
+    this.nextPeriod = Math.min(this.nextPeriod, this.nextTry);
+  }
+
+  private start(job: Job, onStart?: () => void) {
+    if (!job.valid()) {
+      job.invalidated?.();
+      return;
+    }
+    const config = this.config;
+    const ledger = this.ledger;
+    if (this.unavailable || !config || !ledger)
+      return this.deliver(job, this.unavailable ?? "ledger");
+    let status: ReturnType<DialogueLedger["reserve"]>;
     try {
-      const status = this.ledger.reserve(config, msg.id, reservedInputTokens);
-      if (status !== "ok") return fail(status);
+      status = ledger.reserve(
+        config,
+        job.id,
+        job.reservedInputTokens,
+        Date.now(),
+        job.purpose,
+      );
     } catch {
       this.disable("ledger");
-      return fail("ledger");
+      this.deliver(job, "ledger");
+      return;
     }
-    const request: Request = {
-      dialog,
-      id: msg.id,
-      abort: new AbortController(),
-    };
-    this.pending = request;
-    this.send(owner, {
-      type: "dialogue",
-      event: "pending",
-      requestId: msg.id,
-      dialogId: dialog.id,
-    });
-    this.running = this.run(
-      request,
-      config,
-      this.ledger,
-      messages,
-      () => mockReply(bridge, history, player),
-      player,
-    );
+    if (status !== "ok") {
+      this.model = {
+        kind: "blocked",
+        mode: config.mode,
+        trigger: job.trigger,
+        result: status,
+      };
+      this.deliver(job, status);
+      return;
+    }
+    const abort = new AbortController();
+    this.pending = { job, abort };
+    this.model = { kind: "pending", mode: config.mode, trigger: job.trigger };
+    onStart?.();
+    this.running = this.run(job, config, ledger, abort);
   }
 
   private async run(
-    request: Request,
+    job: Job,
     config: DialogueConfig,
     ledger: DialogueLedger,
-    messages: ReturnType<typeof buildMessages>["messages"],
-    mock: () => string,
-    player: string,
+    abort: AbortController,
   ) {
     const start = performance.now();
-    const { dialog, id, abort } = request;
-    let result: Awaited<ReturnType<typeof generate>> | undefined;
     let status = "ok";
     let usage: Usage | undefined;
+    let speech: string | undefined;
+    let plan: ActionReply | undefined;
     try {
-      result = await generate(config, messages, mock, abort.signal);
+      const result = await generate(
+        config,
+        job.messages,
+        job.mock,
+        abort.signal,
+      );
       usage = result.usage;
+      if (job.format === "text") speech = result.text;
+      else {
+        let raw: unknown;
+        try {
+          raw = JSON.parse(result.text);
+        } catch {
+          // A structured reply must parse as a whole before it can carry a plan.
+          if (job.format === "plan" || /^(?:\{|\[|```|~~~)/.test(result.text))
+            throw new DialogueFailure("invalid", usage);
+          speech = result.text;
+        }
+        if (speech === undefined) {
+          const parsed = (
+            job.format === "plan" ? decisionSchema : actionReplySchema
+          ).safeParse(raw);
+          if (!parsed.success) throw new DialogueFailure("invalid", usage);
+          plan = parsed.data;
+          speech = plan.speech;
+        }
+      }
     } catch (error) {
       status = error instanceof DialogueFailure ? error.code : "provider";
       if (error instanceof DialogueFailure) usage = error.usage;
     }
-    const current =
-      this.dlg === dialog &&
-      this.epoch === dialog.epoch &&
-      this.state(dialog.owner)?.near &&
-      !abort.signal.aborted;
-    if (!current) status = "cancelled";
+    if (abort.signal.aborted || !job.valid()) status = "cancelled";
+    const elapsedMs = Math.round(performance.now() - start);
+    let account: ReturnType<DialogueLedger["finish"]>;
     try {
-      ledger.finish(config, id, status, performance.now() - start, usage);
+      account = ledger.finish(config, job.id, status, elapsedMs, usage);
     } catch {
       this.disable("ledger");
       status = "ledger";
     }
+    this.model = {
+      kind:
+        status === "ledger"
+          ? "blocked"
+          : status !== "ok" && status !== "cancelled"
+            ? "backoff"
+            : config.autonomy
+              ? "idle"
+              : "disabled",
+      mode: config.mode,
+      trigger: job.trigger,
+      result: status,
+      elapsedMs,
+      tokens:
+        typeof account?.charged_tokens === "number"
+          ? account.charged_tokens
+          : undefined,
+      estimatedUsd:
+        typeof account?.estimated_nano === "number"
+          ? account.estimated_nano / 1e9
+          : undefined,
+    };
     this.pending = undefined;
-    if (!current) return;
-    if (status !== "ok" || !result) {
-      this.error(dialog.owner, id, status, dialog.id);
-      return;
+    if (status !== "cancelled") this.deliver(job, status, speech, plan);
+    else if (job.purpose === "dialogue") job.invalidated?.();
+    else if (job.purpose === "autonomy" && job.valid()) {
+      this.seenEvent = -1;
+      this.nextTry = performance.now() + eventDelayMs;
     }
-    this.history.push({ player, reply: result.text });
-    if (this.history.length > historyTurns) this.history.shift();
-    this.send(dialog.owner, {
-      type: "dialogue",
-      event: "reply",
-      requestId: id,
-      dialogId: dialog.id,
-      text: result.text,
-    });
+    const queued = this.queued;
+    this.queued = undefined;
+    if (queued) this.start(queued);
+  }
+
+  private deliver(
+    job: Job,
+    status: string,
+    speech?: string,
+    plan?: ActionReply,
+  ) {
+    if (!job.valid()) return;
+    try {
+      job.done(status, speech, plan);
+    } catch (error) {
+      this.options?.storageError(error);
+    }
   }
 
   checkDistance() {
@@ -239,7 +521,8 @@ export class DialogueSession {
     const dialog = this.dlg;
     if (!dialog) return;
     this.dlg = undefined;
-    if (this.pending?.dialog === dialog) this.pending.abort.abort();
+    this.queued = undefined;
+    if (this.pending?.job.purpose === "dialogue") this.pending.abort.abort();
     if (notify)
       this.send(dialog.owner, {
         type: "dialogue",
@@ -249,14 +532,36 @@ export class DialogueSession {
       });
   }
 
-  reset() {
-    this.cancel("旅程已重开。");
+  suspend(text: string, notify = true) {
+    this.cancel(text, notify);
     this.epoch++;
+    if (this.pending?.job.purpose === "autonomy") {
+      this.pending.abort.abort();
+      this.seenEvent = -1;
+    }
+    // Set the next periodic deadline on active ticks only. No offline debt.
+    if (this.seenEvent !== -1) this.nextPeriod = Infinity;
+  }
+
+  resume(clock: number) {
+    if (this.nextPeriod === Infinity) this.nextPeriod = clock + periodMs;
+  }
+
+  reset() {
+    this.suspend("旅程已重开。");
     this.history = [];
+    this.seenEvent = -1;
+    this.nextTry = 0;
+    this.nextPeriod = 0;
+    this.streak = 0;
+    this.stepFailures = 0;
+    this.failureEvent = -1;
+    this.focusedTopic = undefined;
+    this.actionRetryAt = 0;
   }
 
   async close() {
-    this.cancel("服务正在关闭。", false);
+    this.suspend("服务正在关闭。", false);
     await this.running;
     this.ledger?.close();
     this.ledger = undefined;
