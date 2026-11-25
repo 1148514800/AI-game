@@ -2,7 +2,7 @@
 
 来源：AI_Game_Research_and_Design_v2.pdf，29 页。以下逐页保留提取的全部正文与表格；仅添加 Markdown 页标题，保留原排版以免丢失表格关系。PDF 是原始依据。
 
-> 下文保留原报告的完整 v0.1 设计。当前 AG-2 实施范围见 [PHASE1_TASK.md](PHASE1_TASK.md)。历史研究和价格沿用原报告的核查日期。
+> 下文保留原报告的完整 v0.1 设计。当前 AG-3 / Phase 2 实施范围见 [PHASE2_TASK.md](PHASE2_TASK.md)。历史研究和价格沿用原报告的核查日期。
 
 ## 原报告第 1 页
 

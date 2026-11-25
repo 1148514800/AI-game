@@ -17,7 +17,7 @@ import {
 } from "../src/shared/world.js";
 import { route } from "./paths.js";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase1";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase2";
 const backendUrl = "http://127.0.0.1:3003";
 
 const test = base.extend<{
@@ -41,7 +41,8 @@ const test = base.extend<{
           ["--import", "tsx", "src/server/index.ts"],
           {
             env: {
-              ...process.env,
+              PATH: process.env.PATH,
+              LLM_ENABLED: "false",
               HOST: "127.0.0.1",
               PORT: "3003",
               MISTSEA_SAVE: join(directory, "valley.sqlite"),
@@ -196,6 +197,11 @@ test("fresh journey collects all materials, repairs, crosses, explores and resto
       `/assets/${resident.asset}-face.png`,
     );
     await screenshot(page, `resident-${resident.id}`);
+    if (resident.id === "cenyan") {
+      await expect(page.getByRole("dialog", { name: "岑砚" })).toBeVisible();
+      await expect(page.locator("#dialogue-mode")).toContainText("模拟");
+      await page.getByRole("button", { name: "关闭对话" }).click();
+    }
   }
   await approach(page, valley.bridge);
   await page.keyboard.press("e");

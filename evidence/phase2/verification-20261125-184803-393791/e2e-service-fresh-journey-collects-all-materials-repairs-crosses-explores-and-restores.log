@@ -1,0 +1,9 @@
+(node:60093) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+雾灯谷 · http://127.0.0.1:3003
+(node:60134) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+雾灯谷 · http://127.0.0.1:3003
+(node:60135) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+雾灯谷 · http://127.0.0.1:3003

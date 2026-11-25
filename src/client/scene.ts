@@ -30,6 +30,8 @@ export class ValleyScene extends Phaser.Scene {
   private halted = true;
   private view?: HTMLElement;
   private music?: Phaser.Sound.BaseSound;
+  private markerTarget?: ReturnType<typeof nearbyTarget>;
+  private markerPlayer?: Snapshot["state"]["player"];
 
   constructor(private readonly onAssets: (failures: string[]) => void) {
     super("foglamp-valley");
@@ -185,19 +187,23 @@ export class ValleyScene extends Phaser.Scene {
     const player = this.player;
     this.current = snapshot;
     if (!player || !this.view) return;
-    this.view.dataset.x = snapshot.state.player.x.toFixed(4);
-    this.view.dataset.y = snapshot.state.player.y.toFixed(4);
+    this.setDebug("x", snapshot.state.player.x.toFixed(4));
+    this.setDebug("y", snapshot.state.player.y.toFixed(4));
     if (distance(player, snapshot.state.player) > 48)
       player.setPosition(snapshot.state.player.x, snapshot.state.player.y);
-    this.bridge?.setTexture(
-      snapshot.state.bridge.repaired ? "bridge-open" : "bridge-broken",
-    );
+    const bridgeTexture = snapshot.state.bridge.repaired
+      ? "bridge-open"
+      : "bridge-broken";
+    if (this.bridge && this.bridge.texture.key !== bridgeTexture)
+      this.bridge.setTexture(bridgeTexture);
     for (const [id, node] of this.nodeSprites) {
       const resource = variants.get(id)!;
       const spent = (snapshot.state.cooldowns[id] ?? 0) > snapshot.now;
-      node.setAlpha(spent ? 0.61 : 1);
-      if (resource.item === "wood")
-        node.setTexture(spent ? resource.spent : resource.asset);
+      const alpha = spent ? 0.61 : 1;
+      if (node.alpha !== alpha) node.setAlpha(alpha);
+      const texture =
+        spent && resource.item === "wood" ? resource.spent : resource.asset;
+      if (node.texture.key !== texture) node.setTexture(texture);
     }
   }
 
@@ -232,27 +238,47 @@ export class ValleyScene extends Phaser.Scene {
     const { state, moving, working } = this.current;
     const { x, y, facing } = state.player;
     const sprite = this.player;
-    const remaining = Math.pow(0.08, elapsed / 50);
-    sprite
-      .setPosition(
-        x + (sprite.x - x) * remaining,
-        y + (sprite.y - y) * remaining,
+    if (sprite.x !== x || sprite.y !== y) {
+      const remaining = Math.pow(0.08, elapsed / 50);
+      const settle = (actual: number, target: number) =>
+        Math.abs(actual - target) < 0.01
+          ? target
+          : target + (actual - target) * remaining;
+      sprite.setPosition(settle(sprite.x, x), settle(sprite.y, y));
+    }
+    if (this.shadow.x !== sprite.x || this.shadow.y !== sprite.y - 1)
+      this.shadow.setPosition(sprite.x, sprite.y - 1);
+    if (sprite.depth !== sprite.y) sprite.setDepth(sprite.y);
+    if (this.shadow.depth !== sprite.y - 0.5)
+      this.shadow.setDepth(sprite.y - 0.5);
+
+    if (!this.halted && moving) {
+      const key = `walk-${facing}`;
+      if (sprite.anims.currentAnim?.key !== key || !sprite.anims.isPlaying)
+        sprite.play(key, true);
+    } else {
+      if (sprite.anims.isPlaying) sprite.stop();
+      const frame = animations.directionColumns[facing];
+      if (
+        sprite.texture.key !== "player-idle" ||
+        String(sprite.frame.name) !== String(frame)
       )
-      .setDepth(sprite.y);
-    this.shadow.setPosition(sprite.x, sprite.y - 1).setDepth(sprite.y - 0.5);
-    if (!this.halted && moving) sprite.play(`walk-${facing}`, true);
-    else {
-      sprite.stop();
-      sprite.setTexture("player-idle", animations.directionColumns[facing]);
+        sprite.setTexture("player-idle", frame);
     }
 
-    const target = nearbyTarget(state.player);
-    if (working && !this.halted && !this.overview) {
-      this.marker
-        .setTexture("toolbox")
-        .setPosition(sprite.x, sprite.y - 19)
-        .setVisible(true);
-    } else if (target && !this.halted && !this.overview) {
+    if (this.markerPlayer?.x !== x || this.markerPlayer?.y !== y) {
+      this.markerPlayer = state.player;
+      this.markerTarget = nearbyTarget(state.player);
+    }
+    const target = this.markerTarget;
+    const show = !this.halted && !this.overview && Boolean(working || target);
+    if (this.marker.visible !== show) this.marker.setVisible(show);
+    if (show && working) {
+      if (this.marker.texture.key !== "toolbox")
+        this.marker.setTexture("toolbox");
+      if (this.marker.x !== sprite.x || this.marker.y !== sprite.y - 19)
+        this.marker.setPosition(sprite.x, sprite.y - 19);
+    } else if (show && target) {
       const node = this.nodeSprites.get(target.id);
       const height =
         target.id === valley.ruin.id
@@ -262,21 +288,22 @@ export class ValleyScene extends Phaser.Scene {
             : node
               ? node.height + 2
               : 36;
-      this.marker
-        .setTexture("arrow")
-        .setPosition(target.x, target.y - height)
-        .setVisible(true);
-    } else this.marker.setVisible(false);
+      if (this.marker.texture.key !== "arrow") this.marker.setTexture("arrow");
+      if (this.marker.x !== target.x || this.marker.y !== target.y - height)
+        this.marker.setPosition(target.x, target.y - height);
+    }
 
-    const view = this.view.dataset;
-    view.x = x.toFixed(4);
-    view.y = y.toFixed(4);
-    view.direction = facing;
-    view.frame = String(sprite.frame.name);
-    view.moving = String(moving);
-    view.working = String(working);
-    view.cameraX = this.cameras.main.scrollX.toFixed(2);
-    view.cameraY = this.cameras.main.scrollY.toFixed(2);
+    this.setDebug("direction", facing);
+    this.setDebug("frame", String(sprite.frame.name));
+    this.setDebug("moving", String(moving));
+    this.setDebug("working", String(working));
+    this.setDebug("cameraX", this.cameras.main.scrollX.toFixed(2));
+    this.setDebug("cameraY", this.cameras.main.scrollY.toFixed(2));
+  }
+
+  private setDebug(key: string, value: string) {
+    const data = this.view?.dataset;
+    if (data && data[key] !== value) data[key] = value;
   }
 
   private drawTerrain() {

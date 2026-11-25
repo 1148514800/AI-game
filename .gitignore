@@ -5,11 +5,16 @@ playwright-report/
 assets/source/unpacked/
 *.sqlite*
 .env
+.env.*
+!.env.example
 
 assets/source/*.zip
 .local/
 saves/
-*.sqlite*
 
 # Playwright traces can embed full responses and exceed the attachment limit.
 evidence/phase1/**/trace.zip
+evidence/phase2/**/trace.zip
+
+# Generated local delivery metadata; injected into source ZIP after commit.
+/DELIVERY_COMMIT.txt

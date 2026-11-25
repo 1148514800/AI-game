@@ -1,0 +1,74 @@
+[
+  {
+    "command": "npm ci",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:48:03.394629+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/npm-ci.log"
+  },
+  {
+    "command": "node scripts/dev-smoke.mjs",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:48:06.037539+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/dev.log"
+  },
+  {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:48:06.858271+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/typecheck.log"
+  },
+  {
+    "command": "node node_modules/typescript/bin/tsc -p scripts/performance/tsconfig.json",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:48:07.786755+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/performance-typecheck.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:48:07.863024+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/unit-test.log"
+  },
+  {
+    "command": "npm run test:integration",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:48:08.505582+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/integration.log"
+  },
+  {
+    "command": "npm run test:e2e -- --list",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:48:12.929371+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/e2e-list.log"
+  },
+  {
+    "command": "npm run test:e2e",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:48:13.484258+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/e2e.log"
+  },
+  {
+    "command": "npm run build",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:49:32.788626+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/build.log"
+  },
+  {
+    "command": "node scripts/assert-client-no-secret.mjs",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:49:33.901437+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/client-key-sentinel.log"
+  },
+  {
+    "command": "node scripts/production-smoke.mjs",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:49:33.928257+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/production-smoke.log"
+  },
+  {
+    "command": "node --import tsx scripts/performance/run.ts after --mock-ui scripts/performance/mock-ui.json",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T18:49:35.143568+08:00",
+    "log": "evidence/phase2/verification-20261125-184803-393791/performance-after.log"
+  }
+]

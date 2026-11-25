@@ -1,0 +1,93 @@
+{
+  "mode": "before",
+  "expectedBaseline": "62c5c2a10dff3afc18dbe875341f3a274ca3b436",
+  "checkoutHead": "62c5c2a10dff3afc18dbe875341f3a274ca3b436",
+  "startedAt": "2026-11-24T16:11:28.651Z",
+  "finishedAt": "2026-11-24T16:11:44.380Z",
+  "environment": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "kernel": "6.12.113+",
+    "architecture": "x64",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "logicalCpus": 8,
+    "viewport": {
+      "width": 1280,
+      "height": 960
+    },
+    "deviceScaleFactor": 1,
+    "chromiumLaunch": {
+      "channel": "chromium",
+      "headless": true,
+      "chromiumSandbox": true,
+      "ignoreDefaultArgs": [
+        "--enable-unsafe-swiftshader"
+      ],
+      "timeout": 7000
+    },
+    "build": "production",
+    "durationMs": 5000,
+    "warmupMs": 1000,
+    "tickPeriodMs": 50,
+    "mockDelayMs": null,
+    "sqliteLocation": "isolated evidence-directory filesystem"
+  },
+  "browser": {
+    "version": "159.0.8154.6",
+    "error": "page.evaluate: ReferenceError: __name is not defined\n    at eval (eval at evaluate (:370:30), <anonymous>:1:19)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+  },
+  "variants": [
+    {
+      "name": "baseline-canvas",
+      "renderer": "original-canvas",
+      "cases": {
+        "dialogue-pending": {
+          "status": "N/A",
+          "reason": "Phase 1 baseline has no generated dialogue."
+        },
+        "idle": {
+          "status": "failed",
+          "reason": "page.evaluate: ReferenceError: __name is not defined\n    at eval (eval at evaluate (:370:30), <anonymous>:1:585)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        "movement": {
+          "status": "not-run",
+          "reason": "page.evaluate: ReferenceError: __name is not defined\n    at eval (eval at evaluate (:370:30), <anonymous>:1:585)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        "construction": {
+          "status": "not-run",
+          "reason": "page.evaluate: ReferenceError: __name is not defined\n    at eval (eval at evaluate (:370:30), <anonymous>:1:585)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        }
+      },
+      "sourceSha256": "f5b85e50a78eaab0b0cadc867c191ea1009c1ea906d88199cfc1ffc92cf8ee71",
+      "lockfileSha256": "17dabcef1897bf18981bbc670adb37fff13535370edbb0f04bf302e21ef1f786",
+      "status": "failed",
+      "reason": "page.evaluate: ReferenceError: __name is not defined\n    at eval (eval at evaluate (:370:30), <anonymous>:1:585)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+    },
+    {
+      "name": "baseline-webgl-variant",
+      "renderer": "webgl-only-source-change",
+      "cases": {
+        "dialogue-pending": {
+          "status": "N/A",
+          "reason": "Phase 1 baseline has no generated dialogue."
+        },
+        "idle": {
+          "status": "failed",
+          "reason": "expect(locator).toHaveAttribute(expected) failed\n\nLocator:  locator('#game')\nExpected: \"true\"\nReceived: \"false\"\nTimeout:  8000ms\n\nCall log:\n  - Expect \"toHaveAttribute\" locator('#game') with timeout 8000ms\n  - waiting for locator('#game')\n    20 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\"></div>\n       - unexpected value \"false\"\n"
+        },
+        "movement": {
+          "status": "not-run",
+          "reason": "expect(locator).toHaveAttribute(expected) failed\n\nLocator:  locator('#game')\nExpected: \"true\"\nReceived: \"false\"\nTimeout:  8000ms\n\nCall log:\n  - Expect \"toHaveAttribute\" locator('#game') with timeout 8000ms\n  - waiting for locator('#game')\n    20 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\"></div>\n       - unexpected value \"false\"\n"
+        },
+        "construction": {
+          "status": "not-run",
+          "reason": "expect(locator).toHaveAttribute(expected) failed\n\nLocator:  locator('#game')\nExpected: \"true\"\nReceived: \"false\"\nTimeout:  8000ms\n\nCall log:\n  - Expect \"toHaveAttribute\" locator('#game') with timeout 8000ms\n  - waiting for locator('#game')\n    20 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\"></div>\n       - unexpected value \"false\"\n"
+        }
+      },
+      "sourceSha256": "70818da8ff10b80727b65f0e3b1aacb8baed9627cf6bf08e44450c42b665ea76",
+      "lockfileSha256": "17dabcef1897bf18981bbc670adb37fff13535370edbb0f04bf302e21ef1f786",
+      "status": "failed",
+      "reason": "expect(locator).toHaveAttribute(expected) failed\n\nLocator:  locator('#game')\nExpected: \"true\"\nReceived: \"false\"\nTimeout:  8000ms\n\nCall log:\n  - Expect \"toHaveAttribute\" locator('#game') with timeout 8000ms\n  - waiting for locator('#game')\n    20 × locator resolved to <div id=\"game\" tabindex=\"0\" data-ready=\"false\" aria-label=\"游戏场景，方向键或 WASD 移动，E 交互\"></div>\n       - unexpected value \"false\"\n"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+
+> mistsea-phase1@0.1.0-phase1 test:integration
+> node --import tsx --test --test-isolation=none tests/dialogue.integration.ts
+
+✔ real local HTTP adapter supports both token fields, usage, sanitized errors, timeout and abort (169.092837ms)
+✔ real WS and HTTP fixture enforce distance, continuity, no world effects, cancellation and durable budget (4022.116992ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4504.321762

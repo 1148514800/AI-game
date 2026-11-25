@@ -571,3 +571,112 @@ dialog form {
     grid-template-columns: 1fr;
   }
 }
+
+#cenyan-dialogue {
+  position: absolute;
+  inset: auto 12px 12px auto;
+  z-index: 1;
+  margin: 0;
+  width: min(410px, calc(100% - 24px));
+  padding: 12px;
+  background: #1a2b29;
+  border: 2px solid #7d896b;
+  box-shadow: 0 8px 24px #101916b0;
+}
+.dialogue-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dialogue-header img {
+  width: 38px;
+  height: 38px;
+  padding: 3px;
+  background: #2b4138;
+}
+#dialogue-title {
+  font-size: 16px;
+}
+.dialogue-header p {
+  margin: 0;
+  font-size: 11px;
+}
+#dialogue-mode {
+  margin-inline-start: auto;
+  color: #f3d79d;
+  font-size: 11px;
+}
+#dialogue-mode[data-mode="live"] {
+  color: #c4d795;
+}
+#dialogue-transcript {
+  min-height: 42px;
+  max-height: 155px;
+  overflow: auto;
+  margin: 9px 0;
+  padding: 5px 8px;
+  background: #111f1e;
+  border: 1px solid #425049;
+}
+#dialogue-transcript p {
+  margin: 4px 0 8px;
+  display: grid;
+  grid-template-columns: 3em 1fr;
+  line-height: 1.5;
+}
+#dialogue-transcript span {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+#dialogue-transcript strong {
+  color: #eac58a;
+}
+#dialogue-pending,
+#dialogue-error {
+  margin: 5px 0;
+  color: #f6d0a1;
+}
+.dialogue-actions,
+.dialogue-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+.dialogue-compose {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+  align-items: end;
+}
+.dialogue-input-label {
+  grid-column: 1 / -1;
+  font-size: 12px;
+}
+#dialogue-input {
+  width: 100%;
+  resize: vertical;
+  max-height: 72px;
+  color: #eee9d8;
+  background: #101e1d;
+  border: 1px solid #72816c;
+  border-radius: 4px;
+  padding: 5px;
+  font: inherit;
+  font-size: 13px;
+}
+@media (max-width: 540px) {
+  #cenyan-dialogue {
+    inset: auto 6px 6px;
+    width: calc(100% - 12px);
+    max-height: calc(100% - 12px);
+    overflow: auto;
+    padding: 8px;
+  }
+  #dialogue-transcript {
+    max-height: 90px;
+  }
+  .dialogue-header {
+    gap: 6px;
+  }
+}

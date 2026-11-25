@@ -1,0 +1,9 @@
+六项收口已完成，工作树已停写，未提交 Git。
+
+- 岑砚人格移入独立 JSON，测试验证角色绑定与提示组装。[人格配置](/workspace/mistsea-phase2/data/npcs/cenyan.json)
+- 非空回复的全零 usage 标记为未确认，保留预算预留。额外未分类 Token 单独入账，按较高单价保守计费。推理 Token 子集只计一次。HTTP/WS 桩新增了有效回复、错误体的 dummy Key 脱敏断言，保留全部取消路径和重复并发断言。
+- 恢复 `.env.example` 的四项基础设置，允许短的非空 ASCII Key。`/health` 返回 Phase 2，包版本更新为 `0.2.0-phase2`，依赖解析保持一致。已验证忽略规则保留正式截图和日志。
+
+收口后，项目及采样工具类型检查、25/25 单元测试、生产构建和 dummy Key 扫描均通过。报告保留了收口前全套原生通过及原始性能数据。帧率基本持平，施工 tick 波动扩大，即时事务保留。[交付报告](/workspace/mistsea-phase2/docs/PHASE2_REPORT.md) · [收口检查](/workspace/mistsea-phase2/evidence/phase2/closeout-20261125-003845-292488/command-results.json)
+
+最终原生复测由协调代理执行。真实供应商调用和计费仍待授权验证。

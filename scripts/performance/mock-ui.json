@@ -1,0 +1,7 @@
+{
+  "input": "#dialogue-input",
+  "send": "#dialogue-send",
+  "pending": "#dialogue-pending",
+  "mockBadge": "#dialogue-mode[data-mode=mock]",
+  "delayEnv": "LLM_MOCK_DELAY_MS"
+}

@@ -1,0 +1,49 @@
+{
+  "mode": "before",
+  "expectedBaseline": "62c5c2a10dff3afc18dbe875341f3a274ca3b436",
+  "checkoutHead": "",
+  "startedAt": "2026-11-24T16:06:51.351Z",
+  "finishedAt": "2026-11-24T16:06:51.357Z",
+  "environment": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "kernel": "6.12.113+",
+    "architecture": "x64",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "logicalCpus": 8,
+    "viewport": {
+      "width": 1280,
+      "height": 960
+    },
+    "deviceScaleFactor": 1,
+    "chromiumLaunch": {
+      "channel": "chromium",
+      "headless": true,
+      "chromiumSandbox": true,
+      "ignoreDefaultArgs": [
+        "--enable-unsafe-swiftshader"
+      ],
+      "timeout": 7000
+    },
+    "build": "production",
+    "durationMs": 5000,
+    "warmupMs": 1000,
+    "tickPeriodMs": 50,
+    "mockDelayMs": null,
+    "sqliteLocation": "isolated evidence-directory filesystem"
+  },
+  "browser": {},
+  "variants": [
+    {
+      "name": "baseline-canvas",
+      "renderer": "original-canvas",
+      "cases": {}
+    },
+    {
+      "name": "baseline-webgl-variant",
+      "renderer": "webgl-only-source-change",
+      "cases": {}
+    }
+  ],
+  "error": "spawnSync git EPERM"
+}

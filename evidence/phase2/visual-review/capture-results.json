@@ -1,0 +1,8 @@
+{
+  "mode": "Mock only; not a real model test",
+  "input": "normal keyboard/UI",
+  "world": "fresh isolated save; no state injection",
+  "completedTurns": 2,
+  "pageErrors": [],
+  "exitCode": 0
+}

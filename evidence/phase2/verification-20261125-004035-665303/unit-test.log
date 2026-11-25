@@ -1,0 +1,53 @@
+
+> mistsea-phase1@0.2.0-phase2 test
+> node --import tsx --test --test-isolation=none tests/unit.test.ts tests/dialogue.test.ts
+
+[dialogue] config
+✔ dialogue transport is strict and accepts full Chinese input (2.886089ms)
+✔ invalid Live configuration never silently changes to Mock or permits embedded credentials (4.784932ms)
+✔ Cenyan's standalone personality config is bound to the resident and assembled into the prompt (0.280207ms)
+✔ context contains public world facts, bounded recent turns, and unverified player text (0.461404ms)
+✔ ledger separates modes, retains cancelled and interrupted reservations, and survives restart (13.955664ms)
+✔ minute, durable one-hour window, and lifetime request limits apply without free resets (0.668584ms)
+✔ money reservation settles observed usage without double-counting reasoning and preserves unknown usage (4.049043ms)
+✔ nonempty provider text with zero usage keeps its reservation, and extra tokens are charged conservatively (23.487633ms)
+[dialogue] ledger
+✔ broken dialogue configuration or ledger leaves ordinary world health available (68.540176ms)
+✔ only successful recent turns survive close and world reset clears them (96.888199ms)
+✔ a reply that resolves despite Abort cannot reappear or enter the next dialogue history (40.018234ms)
+✔ strict input accepts intent only and requires explicit reset confirmation (1.71499ms)
+✔ runtime assets exactly match the CC0 manifest and every map reference (5.466301ms)
+✔ map dimensions, terrain frames, unique stable IDs and spawn match data (0.606188ms)
+✔ west bank resources are reachable and the only route east is the repaired crossing (31.104427ms)
+✔ server ticks enforce normalized speed, expiring input and no message-driven movement (4.428971ms)
+✔ wall, tree, rock, closed river and bounds use the same foot collision (4.29415ms)
+✔ distant, wrong-target, unknown and insufficient actions do not touch storage (5.016199ms)
+✔ collection is durable, cooldown prevents rush and duplicate id remains rejected after restart (3.505782ms)
+✔ delivery is atomic and timed work can pause and resume without counting offline time (83.152012ms)
+✔ checked reset is durable and a repeated reset cannot wipe subsequent progress (2.928417ms)
+✔ conflicting save revision leaves the winning storage and losing world untouched (3.262578ms)
+存档无法打开，已保留原件。 Error: file is not a database
+    at new SaveFile (/workspace/mistsea-phase2/src/server/save.ts:79:10)
+    at createApp (/workspace/mistsea-phase2/src/server/app.ts:32:12)
+    at TestContext.<anonymous> (/workspace/mistsea-phase2/tests/unit.test.ts:435:15)
+    at Test.runInAsyncScope (node:async_hooks:227:14)
+    at Test.run (node:internal/test_runner/test:1402:25)
+    at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    at Test.postRun (node:internal/test_runner/test:1542:19)
+    at Test.run (node:internal/test_runner/test:1467:12)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+  code: 'ERR_SQLITE_ERROR',
+  errcode: 26,
+  errstr: 'file is not a database'
+}
+✔ bad SQLite and incompatible state produce a health error without replacing the original (11.088317ms)
+✔ healthy Fastify opens a versioned local save without API keys (2.633618ms)
+✔ fresh rules-only journey follows walkable paths, collects six wood and two stone, and reaches the beacon (157.119435ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 884.373799

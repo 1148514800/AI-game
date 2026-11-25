@@ -11,9 +11,14 @@ import {
 import { tickMs, valley } from "../shared/world.js";
 import { SaveFile } from "./save.js";
 import { World } from "./world.js";
+import { DialogueSession } from "./dialogue/session.js";
 
 export function createApp(
-  options: { savePath?: string; staticRoot?: string } = {},
+  options: {
+    savePath?: string;
+    staticRoot?: string;
+    dialogueEnv?: NodeJS.ProcessEnv;
+  } = {},
 ) {
   const app = Fastify({ logger: false });
   const staticRoot = options.staticRoot ?? resolve("release/client");
@@ -22,10 +27,9 @@ export function createApp(
   let save: SaveFile | undefined;
   let world: World | undefined;
   let unavailable: string | undefined;
+  const savePath = options.savePath ?? resolve("saves/foglamp-valley.sqlite");
   try {
-    save = new SaveFile(
-      options.savePath ?? resolve("saves/foglamp-valley.sqlite"),
-    );
+    save = new SaveFile(savePath);
     world = new World(save);
   } catch (error) {
     console.error("存档无法打开，已保留原件。", error);
@@ -34,7 +38,7 @@ export function createApp(
 
   app.get("/health", (_request, reply) => {
     const info = {
-      phase: 1,
+      phase: 2,
       schemaVersion,
       contentVersion: valley.contentVersion,
     };
@@ -46,7 +50,7 @@ export function createApp(
     return { ...info, status: "ok" };
   });
 
-  const ws = new WebSocketServer({ noServer: true, maxPayload: 1024 });
+  const ws = new WebSocketServer({ noServer: true, maxPayload: 8192 });
   let active: WebSocket | undefined;
   let paused = false;
   let lastPing = 0;
@@ -65,10 +69,30 @@ export function createApp(
     socket.send(JSON.stringify(message));
   }
 
+  const dialogue = new DialogueSession(
+    savePath === ":memory:" ? savePath : `${savePath}.llm.sqlite`,
+    (socket) => {
+      if (
+        active !== socket ||
+        socket.readyState !== WebSocket.OPEN ||
+        paused ||
+        !world ||
+        unavailable
+      )
+        return;
+      const near = world.canTalkToCenyan();
+      return { near, bridge: near ? world.publicBridge() : undefined };
+    },
+    send,
+    options.dialogueEnv,
+    () => world?.halt(),
+  );
+
   function storageError(error: unknown) {
     console.error("存档写入失败。", error);
     unavailable = "存档写入失败。请检查磁盘与存档，再重新启动服务。";
     world?.halt();
+    dialogue.cancel("存档不可用，对话已结束。");
     if (active) {
       send(active, { type: "error", code: "SAVE_ERROR", text: unavailable });
       active.close(1011);
@@ -93,6 +117,7 @@ export function createApp(
       if (clock - lastPing >= 2000) {
         if (!answered) {
           world.halt();
+          dialogue.cancel("连接已断开。", false);
           active.terminate();
           return;
         }
@@ -103,6 +128,7 @@ export function createApp(
         }
       }
       world.tick(clock, elapsed);
+      dialogue.checkDistance();
       const { moving, working } = world.activity;
       if (
         moving ||
@@ -145,7 +171,10 @@ export function createApp(
       return;
     }
     const current = world;
-    if (active) active.close(4001, "single player");
+    if (active) {
+      dialogue.cancel("另一标签页已接管旅程。", false);
+      active.close(4001, "single player");
+    }
     current.halt();
     active = socket;
     paused = false;
@@ -188,6 +217,29 @@ export function createApp(
       }
 
       const message = parsed.data;
+      if (
+        message.type === "dialogue-open" ||
+        message.type === "dialogue-send" ||
+        message.type === "dialogue-close"
+      ) {
+        try {
+          dialogue.handle(socket, message);
+        } catch {
+          console.warn("[dialogue] internal");
+          if (message.type !== "dialogue-close")
+            send(socket, {
+              type: "dialogue",
+              event: "error",
+              requestId: message.id,
+              dialogId:
+                message.type === "dialogue-send" ? message.dialogId : undefined,
+              code: "internal",
+              text: "暂时无法处理对话，可手动重试。",
+            });
+        }
+        return;
+      }
+
       try {
         switch (message.type) {
           case "move":
@@ -195,6 +247,7 @@ export function createApp(
             break;
           case "pause":
             paused = message.paused;
+            if (paused) dialogue.cancel("旅程已暂停。");
             current.halt();
             current.flush();
             update(clock);
@@ -215,6 +268,7 @@ export function createApp(
               message.type === "reset"
                 ? current.reset(message)
                 : current.perform(message);
+            if (message.type === "reset" && result.ok) dialogue.reset();
             update(clock);
             send(socket, result);
             break;
@@ -228,6 +282,7 @@ export function createApp(
     socket.on("close", () => {
       if (active !== socket) return;
       active = undefined;
+      dialogue.cancel("连接已断开。", false);
       current.halt();
       if (!unavailable) {
         try {
@@ -242,6 +297,7 @@ export function createApp(
 
   app.addHook("preClose", async () => {
     clearInterval(timer);
+    dialogue.cancel("服务正在关闭。", false);
     for (const socket of ws.clients) socket.terminate();
     active = undefined;
     if (!unavailable) {
@@ -253,6 +309,9 @@ export function createApp(
     }
     ws.close();
   });
-  app.addHook("onClose", async () => save?.close());
+  app.addHook("onClose", async () => {
+    await dialogue.close();
+    save?.close();
+  });
   return app;
 }

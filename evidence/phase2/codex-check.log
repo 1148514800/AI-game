@@ -1,0 +1,19 @@
+Reading additional input from stdin...
+OpenAI Codex v0.166.0
+--------
+workdir: /workspace/mistsea-phase2
+model: gpt-6.2-sol
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 01a20e48-674f-7910-af82-413af949cf36
+--------
+user
+只回复OK
+codex
+OK
+tokens used
+10,131
+OK

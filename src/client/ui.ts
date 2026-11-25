@@ -18,8 +18,19 @@ const feedbackIcon = element<HTMLImageElement>("feedback-icon");
 const primary = element<HTMLButtonElement>("interact");
 const inspect = element<HTMLButtonElement>("bridge-check");
 const progress = element<HTMLProgressElement>("progress");
+const location = element("location");
+const percentLabel = element("percent");
+const deliveredWood = element("bridge-wood");
+const deliveredStone = element("bridge-stone");
+const objective = element("objective");
+const nextStep = element("next-step");
+const goal = document.querySelector(".goal")!;
 const itemCounts = new Map<string, HTMLElement>();
 const bridge = valley.bridge;
+
+export function setText(node: HTMLElement, value: string) {
+  if (node.textContent !== value) node.textContent = value;
+}
 
 function icon(key: string, className = "pixel") {
   const image = document.createElement("img");
@@ -66,6 +77,7 @@ let lastTarget: string | undefined;
 let lastVerb: string | undefined;
 let lastHint = "";
 let shownResult = false;
+let renderedSelection = false;
 
 export function showResult(result: Result) {
   if (result.code === "RESET") {
@@ -90,48 +102,54 @@ export function selectedAction() {
 }
 
 export function enableActions(enabled: boolean) {
-  primary.disabled = !enabled || !selection;
-  inspect.disabled = !enabled;
+  const disabled = !enabled || !selection;
+  if (primary.disabled !== disabled) primary.disabled = disabled;
+  if (inspect.disabled === enabled) inspect.disabled = !enabled;
 }
 
 export function render(snapshot: Snapshot, enabled: boolean) {
   const { state, now, working } = snapshot;
   for (const [key, amount] of Object.entries(state.inventory))
-    itemCounts.get(key)!.textContent = String(amount);
-  element("location").textContent =
+    setText(itemCounts.get(key)!, String(amount));
+  setText(
+    location,
     valley.regions.find(
       (region) => distance(region, state.player) < region.radius,
-    )?.name ?? "雾灯谷小径";
+    )?.name ?? "雾灯谷小径",
+  );
   const built = state.bridge;
   const hasMaterials =
     built.wood === bridge.required.wood &&
     built.stone === bridge.required.stone;
   const percent = Math.floor((built.progressMs / bridge.workMs) * 100);
-  progress.value = percent;
-  element("percent").textContent = `${percent}%`;
-  element("bridge-wood").textContent =
-    `${built.wood} / ${bridge.required.wood}`;
-  element("bridge-stone").textContent =
-    `${built.stone} / ${bridge.required.stone}`;
-  element("objective").textContent = state.explored
-    ? "旅程完成"
-    : built.repaired
-      ? "查看航标遗迹"
-      : "修复雾灯旧桥";
-  element("next-step").textContent = state.explored
-    ? "你已在东岸找到航标线索，可以继续探索雾灯谷。"
-    : built.repaired
-      ? "穿过旧桥，顺着东岸小路前往航标遗迹。"
-      : working
-        ? "正在铺设桥板。留在渡口，直到施工完成。"
-        : hasMaterials
-          ? "材料已到位。在渡口开始施工。"
-          : built.discovered
-            ? "北坡林地采木，南坡岩场取石，再回渡口交付。"
-            : "向东走到河边，查看雾灯旧桥。";
-  document
-    .querySelector(".goal")!
-    .toggleAttribute("data-complete", built.repaired);
+  if (progress.value !== percent) progress.value = percent;
+  setText(percentLabel, `${percent}%`);
+  setText(deliveredWood, `${built.wood} / ${bridge.required.wood}`);
+  setText(deliveredStone, `${built.stone} / ${bridge.required.stone}`);
+  setText(
+    objective,
+    state.explored
+      ? "旅程完成"
+      : built.repaired
+        ? "查看航标遗迹"
+        : "修复雾灯旧桥",
+  );
+  setText(
+    nextStep,
+    state.explored
+      ? "你已在东岸找到航标线索，可以继续探索雾灯谷。"
+      : built.repaired
+        ? "穿过旧桥，顺着东岸小路前往航标遗迹。"
+        : working
+          ? "正在铺设桥板。留在渡口，直到施工完成。"
+          : hasMaterials
+            ? "材料已到位。在渡口开始施工。"
+            : built.discovered
+              ? "北坡林地采木，南坡岩场取石，再回渡口交付。"
+              : "向东走到河边，查看雾灯旧桥。",
+  );
+  if (goal.hasAttribute("data-complete") !== built.repaired)
+    goal.toggleAttribute("data-complete", built.repaired);
 
   const target = nearbyTarget(state.player);
   let nextSelection: typeof selection;
@@ -142,8 +160,15 @@ export function render(snapshot: Snapshot, enabled: boolean) {
     const resource = resources.get(target.id);
     if (resident) {
       image = `${resident.asset}-face`;
-      hint = `${resident.role} · 听听${resident.name}的介绍。`;
-      nextSelection = { target: target.id, verb: "inspect", label: "认识居民" };
+      const conversational = target.id === "cenyan";
+      hint = conversational
+        ? "木匠 · 和岑砚聊聊。"
+        : `${resident.role} · 听听${resident.name}的介绍。`;
+      nextSelection = {
+        target: target.id,
+        verb: "inspect",
+        label: conversational ? "与岑砚交谈" : "认识居民",
+      };
     } else if (resource) {
       image = resource.item;
       const wait = Math.ceil(((state.cooldowns[target.id] ?? 0) - now) / 1000);
@@ -190,7 +215,8 @@ export function render(snapshot: Snapshot, enabled: boolean) {
   const changed = target?.id !== lastTarget;
   const actionChanged = nextSelection?.verb !== lastVerb;
   if (changed) shownResult = false;
-  if (changed || actionChanged || !selection) {
+  if (changed || actionChanged || !renderedSelection) {
+    renderedSelection = true;
     targetName.textContent = target?.name ?? "探索雾灯谷";
     if (target) {
       feedbackIcon.src = `/assets/${image}.png`;

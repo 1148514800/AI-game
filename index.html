@@ -48,6 +48,51 @@
               aria-label="游戏场景，方向键或 WASD 移动，E 交互"
               data-ready="false"
             ></div>
+            <dialog id="cenyan-dialogue" aria-labelledby="dialogue-title">
+              <header class="dialogue-header">
+                <img class="pixel" src="/assets/npc-face.png" alt="" />
+                <div>
+                  <h2 id="dialogue-title">岑砚</h2>
+                  <p>木匠</p>
+                </div>
+                <span id="dialogue-mode"></span>
+                <button id="dialogue-close" type="button">关闭对话</button>
+              </header>
+              <div
+                id="dialogue-transcript"
+                aria-label="对话记录"
+                role="log"
+                aria-live="polite"
+              ></div>
+              <p id="dialogue-pending" role="status" hidden>岑砚正在斟酌……</p>
+              <div class="dialogue-actions">
+                <p id="dialogue-error" role="alert" hidden></p>
+                <button id="dialogue-retry" type="button" hidden>
+                  重试这条消息
+                </button>
+              </div>
+              <div class="dialogue-suggestions">
+                <button type="button" data-suggestion="你最近在忙什么？">
+                  问问近况
+                </button>
+                <button type="button" data-suggestion="修旧桥前需要准备什么？">
+                  聊聊旧桥
+                </button>
+              </div>
+              <div class="dialogue-compose">
+                <label class="dialogue-input-label" for="dialogue-input"
+                  >对岑砚说</label
+                >
+                <textarea
+                  id="dialogue-input"
+                  rows="2"
+                  placeholder="想和岑砚聊什么？"
+                ></textarea>
+                <button id="dialogue-send" class="primary" type="button">
+                  发送
+                </button>
+              </div>
+            </dialog>
             <div id="screen-message" class="screen-message" role="status">
               <strong id="screen-title">正在进入雾灯谷</strong>
               <span id="screen-detail">正在读取本地素材和存档。</span>

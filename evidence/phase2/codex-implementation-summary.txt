@@ -1,0 +1,7 @@
+Phase 2 离线实现已完成，工作树已停写，留给协调代理原生复核和本地提交。
+
+- 岑砚支持自由中文多轮对话，默认明确标为 Mock。服务端校验交互距离、连接和请求归属，取消或迟到的回复不会进入新对话或历史。独立 SQLite 账本保留重开、重启前的预算占用。
+- 客户端减少重复 DOM、动画、贴图和深度更新。保留 Canvas、20 Hz 同步、渲染插值和施工即时持久化。原生基线约 60 FPS，目前没有可报告的性能提升，Mac 和硬件 WebGL 仍待实测。
+- 项目与采样工具类型检查、23/23 单元测试、生产构建及客户端 dummy Key 扫描通过。沙箱阻断了标准安装的 esbuild 生命周期、回环 HTTP/WS 和 Chromium 启动。本地 HTTP 集成、10 项浏览器测试、生产冒烟、截图复核和 after 采样仍待原生验证。[交付报告](/workspace/mistsea-phase2/docs/PHASE2_REPORT.md) · [逐项退出码](/workspace/mistsea-phase2/evidence/phase2/verification-20261125-003146-203537/command-results.json)
+
+协调代理可在仓库根目录运行 `python3 scripts/verify.py` 完成原生复核。真实供应商调用、生成质量和计费仍待专用 Key 与授权验证。

@@ -1,0 +1,19 @@
+已完成 Phase 2 性能采样工具和[复现说明](/workspace/mistsea-phase2/docs/DECISIONS.md)。工具从 `62c5c2a` 构建原样 Canvas 基线，并在浏览器支持时用独立副本采样 WebGL。静止、移动、施工各采约 5 秒，记录真实页面的平均 FPS、帧耗时均值和 P95，以及服务端 20 Hz 回调的实际耗时。施工使用标明用途的临时存档。基线对话为 `N/A`，复测已预留通过普通 UI 触发的 Mock 等待场景。
+
+协调代理在仓库根目录原生运行：
+
+```bash
+node --import tsx scripts/performance/run.ts before
+```
+
+后续接入 Mock UI 并填写选择器配置后运行：
+
+```bash
+node --import tsx scripts/performance/run.ts after --mock-ui scripts/performance/mock-ui.json
+```
+
+每次运行独立写入 `evidence/phase2/performance/<before|after>-<后缀>/`。`report.json` 含环境、渲染器、汇总指标和原始样本。变体子目录保存构建日志、场景日志和真实浏览器截图。
+
+项目和采样工具的类型检查均通过，现有单元测试 14/14 通过，基线生产构建成功。沙箱内的 `before` 退出码为 1，Fastify 回环监听报 `EPERM`，Chromium 启动时报 `setsockopt: Operation not permitted`。本次未取得性能样本或截图，优化前置仍待原生采样满足。[采样报告](/workspace/mistsea-phase2/evidence/phase2/performance/before-n35e7Q/report.json) · [Fastify 日志](/workspace/mistsea-phase2/evidence/phase2/performance/before-n35e7Q/baseline-canvas/idle.server.log) · [Chromium 日志](/workspace/mistsea-phase2/evidence/phase2/performance/before-n35e7Q/chromium.log)
+
+生产代码、现有测试和历史证据均保留原样。工作树留待协调代理复核。

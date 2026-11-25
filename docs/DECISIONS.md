@@ -48,3 +48,41 @@ Phase 1 的授权工作区由 Codex 直接编辑，前序本地 CLI 探针记录
 
 ## AG-2最终原生复核
 初轮浏览器失败与Vite监听证据HTML/重建产物导致整页重载相关；协调代理最小配置修正后，在Codex完全停止修改的稳定源码上重新全量执行 npm ci/typecheck/test/test:e2e/build/生产冒烟，全0；14单元、7浏览器通过。保留早期失败、沙箱拒绝、最终成功的各自日志，不通过延长超时掩盖问题。
+
+## D013 — Phase 2 性能采样
+
+安装锁定依赖及 Playwright Chromium 后，从仓库根目录执行以下命令。原生 `before` 须取得 `baseline-canvas` 三个场景的实际样本，才进入优化步骤。复测沿用同一台机器、Chromium 版本、1280×960 视口和工作区文件系统。
+
+```bash
+node node_modules/typescript/bin/tsc -p scripts/performance/tsconfig.json
+node --import tsx scripts/performance/run.ts before
+node --import tsx scripts/performance/run.ts after --mock-ui scripts/performance/mock-ui.json
+```
+
+`before` 从 `62c5c2a10dff3afc18dbe875341f3a274ca3b436` 导出原样 Canvas 生产构建。另探测 Chromium 的 Canvas、WebGL 和 WebGL2 能力。Chromium 支持 Phaser 所用的 WebGL 上下文时，在独立副本只将 `Phaser.CANVAS` 改为 `Phaser.WEBGL`，结果归入 `baseline-webgl-variant`。保留 Chromium 沙箱，移除 Playwright 默认的 `--enable-unsafe-swiftshader`。报告记录实际游戏 canvas 上下文和 GPU 信息，headless 结果只适用于所报环境。
+
+每个场景单独启动 Fastify，使用独立临时 SQLite。观察约 5 秒真实页面 RAF 及时间窗内的 20 Hz 回调，输出原始间隔和回调耗时、均值、最近秩 P95、平均 FPS 与实测回调频率。施工 fixture 预置已交材料和渡口位置，背包为空，使用普通按钮启动真实施工。该 fixture 仅用于性能负载。
+
+基线对话为 `N/A`。接入 Mock 后，提供 `mock-ui.json`，其中 `input`、`send`、`pending`、`mockBadge` 填实际 UI 的 Playwright 选择器，`delayEnv` 填 Mock 延迟毫秒配置名，例如 `LLM_MOCK_DELAY_MS`。脚本用普通键盘接近岑砚，再经界面发送中文输入，验证采样首尾都显示等待。未提供配置时，`after` 仍可采三个共同场景，并将对话标为 `not-run`。子服务只收到白名单环境变量，关闭 Live 且没有 Key。
+
+每次标准运行创建 `evidence/phase2/performance/<before|after>-<独立后缀>/`。`report.json` 包含环境、源码与锁文件哈希、能力探测、场景状态和样本。变体子目录存放 `build.log`、`<场景>.server.log`、`<场景>.browser.log` 和成功进入场景时的真实 `<场景>.png`。Chromium 启动失败写 `chromium.log`，保留已有证据，结束时清理临时副本、存档及子服务。
+
+## D014 — 岑砚文字对话与独立预算
+
+只在岑砚附近显式打开发送入口。服务端校验连接、交互距离、对话 ID、请求 ID 和世界代次。单个在途请求用异步 fetch 与 Abort 处理，完成时再核对归属。游戏存档事务和模型等待互相独立。成功往返仅在内存中保留至多八轮，并按 UTF-8 字节加消息开销估算和裁剪总上下文。岑砚的人格资料由 `data/npcs/cenyan.json` 独立管理。提示只取角色背景、公开桥况和玩家对白。输出作为安全文本展示。
+
+同一存档旁的独立 SQLite 账本按模式分账，持久滑动窗口限制每分钟和每 60 分钟请求数，生命周期上限约束请求、Token 和 Live 金额。Live 配置要求明确单价、总金额上限及一个供应商支持的输出参数。调用前原子占用，收到可信用量再结算。缺用量、全零未确认用量、取消、失败或中断保留已占预算。总量超出输入与输出之和时，差额单独登记并按两者中的较高单价保守占用金额。推理等明细按供应商返回记录，属于已汇总的子集时不加总。对话故障单独显示并保留原玩法。真实供应商模式待另行验证。
+
+## D015 — 按实际状态更新画面
+
+保留生产 Canvas、20 Hz 服务端模拟与广播条件、客户端插值和施工即时写库。原生 before 的 WebGL 上下文探测失败。三种共同场景约 60 FPS，施工回调均值 2.781 ms、P95 4.409 ms，现有样本不足以为变更持久性或强制更换 renderer 提供依据。客户端仅在内容变化时改面板文本和调试属性，减少重复动画、贴图、位置和深度写入。首次原生 after 约 60 FPS，施工 tick 波动较大。最终同环境after已完成，静止/施工约59.4/59.2FPS、移动与Mock等待约60FPS；施工tick均值3.718ms/P955.382ms。没有测得FPS提升，硬件WebGL与Mac仍未测。
+
+## D016 — AG-3原生收口与小附件交付
+
+最终原生 `verification-20261125-004035-665303` 12项命令全退出0，25单元+2真实本地HTTP/WS桩集成+10浏览器通过，保留原空包修桥遗迹及真实服务重启回归。编码沙箱EPERM失败与原生成功各保留，不篡改。游戏73个最终验证输入哈希不变；额外干净截图0 pageerrors并实际Read。无真实Key或付费授权，Live尚未验收，不把HTTP假供应商说成真实模型。
+
+总源码加全部历史/新证据超过25MB硬限制，采用互补核心/证据ZIP，全部实际运行素材与原PDF在核心，所有正式历史/新日志截图在证据包。排除node_modules、个人存档、机密.env、未用原包及仅调试的大型trace。无.git源码包可直接运行和after采样，before必须保有真实Git审核历史。实际独立无Git副本的after复现退出0，未替换正式before/after数据。仅本地提交不推送，具体提交ID与ZIP哈希由交付元数据记录，避免归档自引用。
+
+## D017 — 岑砚实时对话关闭思考模式
+
+硅基流动的 Qwen3.5 可以通过服务端配置 `LLM_ENABLE_THINKING=false` 关闭思考模式。留空时不发送该参数，以兼容其他供应商。硅基流动的 `max_tokens` 只限制可见输出，因此关闭思考可消除已观察到的额外推理开销。账本仍以供应商返回的输入和输出用量结算，输出总计已包含的推理 Token 不重复计费。游戏内金额是按配置单价计算的估算，取消或缺少用量时保留预留金额，实际收费由供应商结算。

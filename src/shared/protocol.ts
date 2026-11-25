@@ -8,9 +8,45 @@ const id = z.string().regex(/^[a-z0-9-]{1,64}$/);
 const count = z.int().min(0).max(inventoryLimit);
 const material = valley.bridge.required;
 const actionId = z.uuid();
+export const dialogueInputLimit = 480;
+export type DialogueMode = "mock" | "live";
+export type DialogueEvent =
+  | {
+      type: "dialogue";
+      event: "opened";
+      requestId: string;
+      dialogId: string;
+      mode: DialogueMode;
+    }
+  | { type: "dialogue"; event: "pending"; requestId: string; dialogId: string }
+  | {
+      type: "dialogue";
+      event: "reply";
+      requestId: string;
+      dialogId: string;
+      text: string;
+    }
+  | {
+      type: "dialogue";
+      event: "error";
+      requestId: string;
+      dialogId?: string;
+      code: string;
+      text: string;
+    }
+  | { type: "dialogue"; event: "closed"; dialogId: string; text: string };
+
 export const clientMessage = z.discriminatedUnion("type", [
   z.strictObject({ type: z.literal("move"), dx: axis, dy: axis }),
   z.strictObject({ type: z.literal("pause"), paused: z.boolean() }),
+  z.strictObject({ type: z.literal("dialogue-open"), id: actionId, npc: id }),
+  z.strictObject({
+    type: z.literal("dialogue-send"),
+    id: actionId,
+    dialogId: actionId,
+    text: z.string().max(4096),
+  }),
+  z.strictObject({ type: z.literal("dialogue-close"), dialogId: actionId }),
   z.strictObject({
     type: z.literal("action"),
     id: actionId,
@@ -67,6 +103,7 @@ export type Result = {
 export type ServerMessage =
   | Snapshot
   | Result
+  | DialogueEvent
   | {
       type: "error";
       code: string;

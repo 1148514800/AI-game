@@ -1,0 +1,42 @@
+
+> mistsea-phase1@0.1.0-phase1 test:integration
+> node --import tsx --test --test-isolation=none tests/dialogue.integration.ts
+
+✖ real local HTTP adapter supports both token fields, usage, sanitized errors, timeout and abort (5.969465ms)
+✖ real WS and HTTP fixture enforce distance, continuity, no world effects, cancellation and durable budget (1.456944ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 318.368165
+
+✖ failing tests:
+
+test at tests/dialogue.integration.ts:1:1815
+✖ real local HTTP adapter supports both token fields, usage, sanitized errors, timeout and abort (5.969465ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+      at listenInCluster (node:net:2499:12)
+      at node:net:2728:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/dialogue.integration.ts:1:5804
+✖ real WS and HTTP fixture enforce distance, continuity, no world effects, cancellation and durable budget (1.456944ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+      at listenInCluster (node:net:2499:12)
+      at node:net:2728:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }

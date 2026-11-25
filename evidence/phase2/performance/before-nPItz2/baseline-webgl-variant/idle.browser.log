@@ -1,0 +1,13 @@
+Cannot create WebGL context, aborting.
+expect(locator).toHaveAttribute(expected) failed
+
+Locator:  locator('#game')
+Expected: "true"
+Received: "false"
+Timeout:  8000ms
+
+Call log:
+  - Expect "toHaveAttribute" locator('#game') with timeout 8000ms
+  - waiting for locator('#game')
+    20 × locator resolved to <div id="game" tabindex="0" data-ready="false" aria-label="游戏场景，方向键或 WASD 移动，E 交互"></div>
+       - unexpected value "false"

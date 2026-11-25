@@ -1,4 +1,4 @@
-"""Run Phase 1 checks and keep each invocation's evidence alongside the game."""
+"""Run Phase 2 checks without model credentials and save separate evidence."""
 import datetime
 import json
 import os
@@ -9,30 +9,57 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 TIMEZONE = datetime.timezone(datetime.timedelta(hours=8))
 stamp = datetime.datetime.now(TIMEZONE).strftime("%Y%m%d-%H%M%S-%f")
-evidence = ROOT / "evidence" / "phase1" / f"verification-{stamp}"
+evidence = ROOT / "evidence" / "phase2" / f"verification-{stamp}"
 evidence.mkdir(parents=True)
-environment = {**os.environ, "MISTSEA_EVIDENCE": str(evidence)}
-commands = [
-    (["npm", "ci"], "npm-ci.log"),
-    (["npm", "run", "typecheck"], "typecheck.log"),
-    (["npm", "test"], "unit-test.log"),
-    (["npm", "run", "test:e2e"], "e2e.log"),
-    (["npm", "run", "build"], "build.log"),
-    (["node", "scripts/production-smoke.mjs"], "production-smoke.log"),
-]
+environment = {name: os.environ[name] for name in (
+    "PATH", "HOME", "USERPROFILE", "SYSTEMROOT", "TMPDIR", "TMP", "TEMP",
+    "PLAYWRIGHT_BROWSERS_PATH", "LANG", "LC_ALL",
+) if name in os.environ}
+environment.update(MISTSEA_EVIDENCE=str(evidence), LLM_ENABLED="false", npm_config_fetch_retries="0")
 results = []
-for command, filename in commands:
-    start = datetime.datetime.now(TIMEZONE).isoformat()
+
+
+def run(command, filename, *, extra=None, skip=None):
+    started = datetime.datetime.now(TIMEZONE).isoformat()
     path = evidence / filename
+    code = None
     with path.open("w") as output:
-        code = subprocess.run(command, cwd=ROOT, env=environment, stdout=output,
-                              stderr=subprocess.STDOUT, check=False).returncode
-    result = {"command": " ".join(command), "exitCode": code, "startedAt": start,
+        if skip:
+            print(skip, file=output)
+        else:
+            try:
+                code = subprocess.run(command, cwd=ROOT, env={**environment, **(extra or {})},
+                                      stdout=output, stderr=subprocess.STDOUT, check=False).returncode
+            except OSError as error:
+                print(error, file=output)
+                code = 1
+    result = {"command": " ".join(command), "exitCode": code, "startedAt": started,
               "log": str(path.relative_to(ROOT))}
+    if skip:
+        result["notRun"] = skip
     results.append(result)
     print(result, flush=True)
     (evidence / "command-results.json").write_text(
         json.dumps(results, ensure_ascii=False, indent=2) + "\n")
-    if command == ["npm", "ci"] and code != 0:
-        break
+    return code
+
+
+print(f"Evidence: {evidence.relative_to(ROOT)}", flush=True)
+if run(["npm", "ci"], "npm-ci.log") != 0:
+    run(["npm", "ci", "--ignore-scripts"], "npm-ci-ignore-scripts.log")
+run(["node", "scripts/dev-smoke.mjs"], "dev.log")
+run(["npm", "run", "typecheck"], "typecheck.log")
+run(["node", "node_modules/typescript/bin/tsc", "-p", "scripts/performance/tsconfig.json"], "performance-typecheck.log")
+run(["npm", "test"], "unit-test.log")
+run(["npm", "run", "test:integration"], "integration.log")
+run(["npm", "run", "test:e2e", "--", "--list"], "e2e-list.log")
+run(["npm", "run", "test:e2e"], "e2e.log")
+build = run(["npm", "run", "build"], "build.log", extra={"LLM_API_KEY": "phase2-build-dummy-key-do-not-expose"})
+skip_build = "No fresh production build." if build else None
+run(["node", "scripts/assert-client-no-secret.mjs"], "client-key-sentinel.log", skip=skip_build)
+run(["node", "scripts/production-smoke.mjs"], "production-smoke.log", skip=skip_build)
+run(["node", "--import", "tsx", "scripts/performance/run.ts", "after", "--mock-ui",
+     "scripts/performance/mock-ui.json"], "performance-after.log")
+if "setsockopt: Operation not permitted" in (evidence / "performance-after.log").read_text():
+    print("Chromium startup was blocked in the performance harness.", flush=True)
 sys.exit(any(result["exitCode"] != 0 for result in results))

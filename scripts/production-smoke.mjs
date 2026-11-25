@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium, expect } from "@playwright/test";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase1";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase2";
 mkdirSync(evidence, { recursive: true });
 const directory = mkdtempSync(join(tmpdir(), "mistsea-production-"));
 const output = openSync(join(evidence, "production-server.log"), "w");
@@ -39,11 +39,14 @@ try {
     )
     .toMatchObject({
       status: "ok",
-      phase: 1,
+      phase: 2,
       schemaVersion: 1,
       contentVersion: 1,
     });
-  browser = await chromium.launch();
+  browser = await chromium.launch({
+    chromiumSandbox: true,
+    ignoreDefaultArgs: ["--enable-unsafe-swiftshader"],
+  });
   const page = await browser.newPage({
     viewport: { width: 1280, height: 960 },
   });

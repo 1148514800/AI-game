@@ -1,0 +1,27 @@
+[
+  {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "log": "evidence/phase2/closeout-20261125-003845-292488/typecheck.log"
+  },
+  {
+    "command": "node node_modules/typescript/bin/tsc -p scripts/performance/tsconfig.json",
+    "exitCode": 0,
+    "log": "evidence/phase2/closeout-20261125-003845-292488/performance-typecheck.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "log": "evidence/phase2/closeout-20261125-003845-292488/unit-test.log"
+  },
+  {
+    "command": "npm run build",
+    "exitCode": 0,
+    "log": "evidence/phase2/closeout-20261125-003845-292488/build.log"
+  },
+  {
+    "command": "node scripts/assert-client-no-secret.mjs",
+    "exitCode": 0,
+    "log": "evidence/phase2/closeout-20261125-003845-292488/client-key-sentinel.log"
+  }
+]

@@ -16,6 +16,7 @@ import {
   tickMs,
   valley,
 } from "../shared/world.js";
+import type { PublicBridge } from "./dialogue/cenyan.js";
 import { freshState, SaveFile } from "./save.js";
 
 const leaseMs = 420;
@@ -51,6 +52,24 @@ export class World {
 
   get activity() {
     return { moving: this.moving, working: this.working };
+  }
+
+  canTalkToCenyan() {
+    const npc = residents.get("cenyan");
+    return !!npc && distance(this.state.player, npc) <= npc.range;
+  }
+
+  publicBridge(): PublicBridge {
+    const value = this.state.bridge;
+    return {
+      discovered: value.discovered,
+      wood: value.wood,
+      stone: value.stone,
+      woodRequired: bridge.required.wood,
+      stoneRequired: bridge.required.stone,
+      progressPercent: Math.floor((value.progressMs * 100) / bridge.workMs),
+      repaired: value.repaired,
+    };
   }
 
   snapshot(now = Date.now()): Snapshot {

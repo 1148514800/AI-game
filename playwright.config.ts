@@ -1,6 +1,6 @@
 import { defineConfig } from "@playwright/test";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase1";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase2";
 export default defineConfig({
   testDir: "./tests",
   testMatch: "*.e2e.ts",
@@ -15,6 +15,10 @@ export default defineConfig({
     baseURL: "http://127.0.0.1:5174",
     viewport: { width: 1280, height: 960 },
     headless: true,
+    launchOptions: {
+      chromiumSandbox: true,
+      ignoreDefaultArgs: ["--enable-unsafe-swiftshader"],
+    },
     trace: "retain-on-failure",
   },
   webServer: {

@@ -1,0 +1,16 @@
+
+> mistsea-phase1@0.2.0-phase2 test:integration
+> node --import tsx --test --test-isolation=none tests/dialogue.integration.ts
+
+(node:59868) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ real local HTTP adapter supports both token fields, usage, sanitized errors, timeout and abort (132.244792ms)
+✔ real WS and HTTP fixture enforce distance, continuity, no world effects, cancellation and durable budget (4051.728458ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4315.210334

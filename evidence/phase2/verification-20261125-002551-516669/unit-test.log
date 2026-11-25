@@ -1,0 +1,50 @@
+
+> mistsea-phase1@0.1.0-phase1 test
+> node --import tsx --test --test-isolation=none tests/unit.test.ts tests/dialogue.test.ts
+
+[dialogue] config
+✔ dialogue transport is strict and accepts full Chinese input (3.195512ms)
+✔ invalid Live configuration never silently changes to Mock or permits embedded credentials (4.347811ms)
+✔ context contains public world facts, bounded recent turns, and unverified player text (0.68553ms)
+✔ ledger separates modes, retains cancelled and interrupted reservations, and survives restart (8.893633ms)
+✔ minute, durable one-hour window, and lifetime request limits apply without free resets (0.635928ms)
+✔ money reservation settles observed usage without double-counting reasoning and preserves unknown usage (3.461036ms)
+[dialogue] ledger
+✔ broken dialogue configuration or ledger leaves ordinary world health available (73.587701ms)
+✔ only successful recent turns survive close and world reset clears them (95.624392ms)
+✔ strict input accepts intent only and requires explicit reset confirmation (1.618503ms)
+✔ runtime assets exactly match the CC0 manifest and every map reference (5.862931ms)
+✔ map dimensions, terrain frames, unique stable IDs and spawn match data (0.515941ms)
+✔ west bank resources are reachable and the only route east is the repaired crossing (29.37986ms)
+✔ server ticks enforce normalized speed, expiring input and no message-driven movement (2.513142ms)
+✔ wall, tree, rock, closed river and bounds use the same foot collision (3.04357ms)
+✔ distant, wrong-target, unknown and insufficient actions do not touch storage (3.385385ms)
+✔ collection is durable, cooldown prevents rush and duplicate id remains rejected after restart (5.184068ms)
+✔ delivery is atomic and timed work can pause and resume without counting offline time (104.357086ms)
+✔ checked reset is durable and a repeated reset cannot wipe subsequent progress (3.025623ms)
+✔ conflicting save revision leaves the winning storage and losing world untouched (3.115626ms)
+存档无法打开，已保留原件。 Error: file is not a database
+    at new SaveFile (/workspace/mistsea-phase2/src/server/save.ts:79:10)
+    at createApp (/workspace/mistsea-phase2/src/server/app.ts:32:12)
+    at TestContext.<anonymous> (/workspace/mistsea-phase2/tests/unit.test.ts:435:15)
+    at Test.runInAsyncScope (node:async_hooks:227:14)
+    at Test.run (node:internal/test_runner/test:1402:25)
+    at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    at Test.postRun (node:internal/test_runner/test:1542:19)
+    at Test.run (node:internal/test_runner/test:1467:12)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+  code: 'ERR_SQLITE_ERROR',
+  errcode: 26,
+  errstr: 'file is not a database'
+}
+✔ bad SQLite and incompatible state produce a health error without replacing the original (14.026371ms)
+✔ healthy Fastify opens a versioned local save without API keys (2.346369ms)
+✔ fresh rules-only journey follows walkable paths, collects six wood and two stone, and reaches the beacon (146.456699ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 816.375012

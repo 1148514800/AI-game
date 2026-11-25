@@ -461,7 +461,7 @@ test("healthy Fastify opens a versioned local save without API keys", async () =
     const response = await app.inject("/health");
     assert.equal(response.statusCode, 200);
     assert.deepEqual(response.json(), {
-      phase: 1,
+      phase: 2,
       schemaVersion: 1,
       contentVersion: valley.contentVersion,
       status: "ok",

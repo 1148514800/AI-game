@@ -1,0 +1,4 @@
+
+> mistsea-phase1@0.1.0-phase1 typecheck
+> tsc --noEmit
+

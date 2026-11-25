@@ -2,6 +2,7 @@ import {
   saveSchema,
   schemaVersion,
   type ClientMessage,
+  type DialogueEvent,
   type Result,
   type Snapshot,
 } from "../shared/protocol.js";
@@ -24,6 +25,7 @@ export class Connection {
       status: (status: ConnectionStatus) => void;
       snapshot: (snapshot: Snapshot) => void;
       result: (result: Result) => void;
+      dialogue: (event: DialogueEvent) => void;
       error: (message: string) => void;
     },
   ) {}
@@ -56,7 +58,7 @@ export class Connection {
       if (attempt !== this.attempt) return;
       if (
         health.status !== "ok" ||
-        health.phase !== 1 ||
+        health.phase !== 2 ||
         health.schemaVersion !== schemaVersion ||
         health.contentVersion !== valley.contentVersion
       ) {
@@ -114,6 +116,8 @@ export class Connection {
           }
           timeout();
           this.callbacks.snapshot({ ...message, state });
+        } else if (message.type === "dialogue") {
+          this.callbacks.dialogue(message);
         } else if (message.type === "result") {
           this.callbacks.result(message);
         } else if (message.type === "error" && message.code === "SAVE_ERROR") {

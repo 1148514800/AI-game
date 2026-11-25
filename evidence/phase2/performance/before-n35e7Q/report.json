@@ -1,0 +1,90 @@
+{
+  "mode": "before",
+  "expectedBaseline": "62c5c2a10dff3afc18dbe875341f3a274ca3b436",
+  "checkoutHead": "62c5c2a10dff3afc18dbe875341f3a274ca3b436",
+  "startedAt": "2026-11-24T16:10:30.862Z",
+  "finishedAt": "2026-11-24T16:10:32.229Z",
+  "environment": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "kernel": "6.12.113+",
+    "architecture": "x64",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "logicalCpus": 8,
+    "viewport": {
+      "width": 1280,
+      "height": 960
+    },
+    "deviceScaleFactor": 1,
+    "chromiumLaunch": {
+      "channel": "chromium",
+      "headless": true,
+      "chromiumSandbox": true,
+      "ignoreDefaultArgs": [
+        "--enable-unsafe-swiftshader"
+      ],
+      "timeout": 7000
+    },
+    "build": "production",
+    "durationMs": 5000,
+    "warmupMs": 1000,
+    "tickPeriodMs": 50,
+    "mockDelayMs": null,
+    "sqliteLocation": "isolated evidence-directory filesystem"
+  },
+  "browser": {
+    "error": "browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /home/box/.cache/ms-playwright/chromium-1255/chrome-linux64/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-stack-profiler --disable-infobars --disable-sync --do-not-de-elevate --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --user-data-dir=/tmp/playwright_chromiumdev_profile-1dcCav --remote-debugging-pipe --no-startup-window\n<launched> pid=34\n[pid=34][err] [34:34:1125/001030.914017:ERROR:third_party/crashpad/crashpad/util/linux/socket.cc:45] setsockopt: Operation not permitted (1)\nCall log:\n  - <launching> /home/box/.cache/ms-playwright/chromium-1255/chrome-linux64/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-stack-profiler --disable-infobars --disable-sync --do-not-de-elevate --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --user-data-dir=/tmp/playwright_chromiumdev_profile-1dcCav --remote-debugging-pipe --no-startup-window\n  - <launched> pid=34\n  - [pid=34][err] [34:34:1125/001030.914017:ERROR:third_party/crashpad/crashpad/util/linux/socket.cc:45] setsockopt: Operation not permitted (1)\n  - [pid=34] <gracefully close start>\n  - [pid=34] <kill>\n  - [pid=34] <will force kill>\n  - [pid=34] <process did exit: exitCode=null, signal=SIGTRAP>\n  - [pid=34] starting temporary directories cleanup\n  - [pid=34] finished temporary directories cleanup\n  - [pid=34] <gracefully close end>\n"
+  },
+  "variants": [
+    {
+      "name": "baseline-canvas",
+      "renderer": "original-canvas",
+      "cases": {
+        "dialogue-pending": {
+          "status": "N/A",
+          "reason": "Phase 1 baseline has no generated dialogue."
+        },
+        "idle": {
+          "status": "not-run",
+          "reason": "Server stopped before readiness (1). See evidence/phase2/performance/before-n35e7Q/baseline-canvas/idle.server.log."
+        },
+        "movement": {
+          "status": "not-run",
+          "reason": "Server stopped before readiness (1). See evidence/phase2/performance/before-n35e7Q/baseline-canvas/idle.server.log."
+        },
+        "construction": {
+          "status": "not-run",
+          "reason": "Server stopped before readiness (1). See evidence/phase2/performance/before-n35e7Q/baseline-canvas/idle.server.log."
+        }
+      },
+      "sourceSha256": "f5b85e50a78eaab0b0cadc867c191ea1009c1ea906d88199cfc1ffc92cf8ee71",
+      "lockfileSha256": "17dabcef1897bf18981bbc670adb37fff13535370edbb0f04bf302e21ef1f786",
+      "status": "failed",
+      "reason": "Server stopped before readiness (1). See evidence/phase2/performance/before-n35e7Q/baseline-canvas/idle.server.log."
+    },
+    {
+      "name": "baseline-webgl-variant",
+      "renderer": "webgl-only-source-change",
+      "cases": {
+        "dialogue-pending": {
+          "status": "N/A",
+          "reason": "Phase 1 baseline has no generated dialogue."
+        },
+        "idle": {
+          "status": "not-run",
+          "reason": "Chromium did not start."
+        },
+        "movement": {
+          "status": "not-run",
+          "reason": "Chromium did not start."
+        },
+        "construction": {
+          "status": "not-run",
+          "reason": "Chromium did not start."
+        }
+      },
+      "status": "blocked",
+      "reason": "Chromium did not start."
+    }
+  ]
+}
