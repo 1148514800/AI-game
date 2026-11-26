@@ -1,0 +1,2734 @@
+OpenAI Codex v0.166.0
+--------
+workdir: /workspace/mistsea-phase3_1
+model: gpt-6.2-sol
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: high
+reasoning summaries: none
+session id: 01a212ec-f679-7a21-9ba2-c3f6ebda1432
+--------
+user
+原生验证已实际运行。首批 verification-20261125-221918-478020 全13浏览器包括A-F通过，只有旧集成逐字提示语断言失败，协调者已把planning.ts同义短语恢复为原 根据旅人话语的含义（保留原断言）。第二批 verification-20261125-222436-838764 全63单元/5集成/构建/生产冒烟通过，但合作浏览器在tests/phase3_1.e2e.ts:407 walk调用抛 No walkable route from current position；其余12浏览器通过。不要仅反复重跑赌通过，请读取两批e2e.log、cooperation/trajectory.json、第二批playwright-artifacts/error-context.md、tests/paths.ts和walk辅助函数，诊断动态NPC跟随期间测试键盘路线为何会随机静态无路。修复真实原因，合理支持动态NPC避让/重新规划/短暂等待或正常合法键盘路线，不取消碰撞、不放宽世界不可达保护、不传送或注入背包、不以WS替代正常UI，也不要简单延长超时或删除A-F断言。也检查是真世界NPC挡路还是测试网格假不可达，达不到时保留明确诊断。你只修必要源码/测试并运行无需监听的类型单元检查；协调者再原生针对合作e2e复测和完整verify。不要在沙箱跑监听/安装，不提交/打包，不Live/私密env/Mac/push/部署/Phase4。保留全部失败日志。源码无Git副本已实际npm ci/build/生产浏览器冒烟全0，证据standalone-reproduction。
+codex
+我会对照两次浏览器轨迹、失败页面和路线代码，判断是岑砚临时挡住了通道，还是测试网格把可走的路线判成了无路。修复后只跑类型和单元检查。
+exec
+/bin/bash -lc 'cat evidence/phase3_1/verification-20261125-221918-478020/e2e.log; cat evidence/phase3_1/verification-20261125-222436-838764/e2e.log' in /workspace/mistsea-phase3_1
+ succeeded in 0ms:
+
+> mistsea-phase1@0.3.0-phase3 test:e2e
+> playwright test
+
+2026-11-25T14:20:34.152Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:20:34.158Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-25T14:20:34.158Z pw:webserver Starting WebServer process npm run dev:client...
+2026-11-25T14:20:34.162Z pw:webserver Process started
+2026-11-25T14:20:34.162Z pw:webserver Waiting for availability...
+2026-11-25T14:20:34.163Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:20:34.168Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-25T14:20:34.168Z pw:webserver Waiting 100ms
+[WebServer] 
+[WebServer] > mistsea-phase1@0.3.0-phase3 dev:client
+[WebServer] > vite --host 127.0.0.1
+[WebServer] 
+2026-11-25T14:20:34.268Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:20:34.269Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-25T14:20:34.269Z pw:webserver Waiting 250ms
+[WebServer] 
+[WebServer]   VITE v8.3.8  ready in 175 ms
+[WebServer] 
+[WebServer]   ➜  Local:   http://127.0.0.1:5174/
+2026-11-25T14:20:34.519Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:20:34.551Z pw:webserver HTTP Status: 200
+2026-11-25T14:20:34.552Z pw:webserver WebServer available
+
+Running 13 tests using 1 worker
+
+  ✓   1 tests/dialogue.e2e.ts:103:1 › ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering (9.0s)
+  ✓   2 tests/dialogue.e2e.ts:180:3 › limited Mock › 390px dialogue fits and exposes budget failure with a manual retry (4.0s)
+  ✓   3 tests/dialogue.e2e.ts:222:3 › faulted Mock › timeout is visible and manual retry remains Mock (4.3s)
+  ✓   4 tests/dialogue.e2e.ts:240:3 › Phase 3 offline action request › natural request accepts a plan and the actor actually harvests after the dialogue closes (6.7s)
+[WebServer] 10:21:50 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   5 tests/dialogue.e2e.ts:275:3 › Phase 3 autonomous Mock journey › fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug (51.1s)
+  ✓   6 tests/scene.e2e.ts:151:1 › fresh journey collects all materials, repairs, crosses, explores and restores (52.8s)
+  ✓   7 tests/scene.e2e.ts:309:1 › four-way walk frames, pause, a following camera and opt-in music (6.4s)
+  ✓   8 tests/scene.e2e.ts:376:1 › 390px narrow window renders the scene, residents and touch controls (1.7s)
+  ✓   9 tests/scene.e2e.ts:404:1 › missing bridge art blocks readiness with a clear error (1.9s)
+  ✓  10 tests/scene.e2e.ts:418:1 › HTTP failure stays unavailable and automatically recovers (2.2s)
+  ✓  11 tests/scene.e2e.ts:433:1 › WebSocket handshake failure remains visible and prevents input (1.5s)
+  ✓  12 tests/scene.e2e.ts:447:1 › the real server rejects augmented movement and out-of-range actions (1.2s)
+  ✓  13 tests/phase3_1.e2e.ts:142:1 › Phase3.1 A–F normal UI: consent, persisted plan, following, shared bridge and restarted context (51.4s)
+2026-11-25T14:23:50.653Z pw:webserver Terminating the WebServer
+2026-11-25T14:23:50.703Z pw:webserver Terminated the WebServer
+
+  13 passed (3.3m)
+
+> mistsea-phase1@0.3.0-phase3 test:e2e
+> playwright test
+
+2026-11-25T14:25:53.715Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:25:53.727Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-25T14:25:53.727Z pw:webserver Starting WebServer process npm run dev:client...
+2026-11-25T14:25:53.734Z pw:webserver Process started
+2026-11-25T14:25:53.734Z pw:webserver Waiting for availability...
+2026-11-25T14:25:53.734Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:25:53.735Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-25T14:25:53.736Z pw:webserver Waiting 100ms
+[WebServer] 
+[WebServer] > mistsea-phase1@0.3.0-phase3 dev:client
+[WebServer] > vite --host 127.0.0.1
+[WebServer] 
+2026-11-25T14:25:53.836Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:25:53.837Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-25T14:25:53.837Z pw:webserver Waiting 250ms
+[WebServer] 
+[WebServer]   VITE v8.3.8  ready in 152 ms
+[WebServer] 
+[WebServer]   ➜  Local:   http://127.0.0.1:5174/
+2026-11-25T14:25:54.086Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:25:54.154Z pw:webserver HTTP Status: 200
+2026-11-25T14:25:54.156Z pw:webserver WebServer available
+
+Running 13 tests using 1 worker
+
+[WebServer] 10:26:03 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   1 tests/dialogue.e2e.ts:103:1 › ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering (8.8s)
+  ✓   2 tests/dialogue.e2e.ts:180:3 › limited Mock › 390px dialogue fits and exposes budget failure with a manual retry (4.1s)
+  ✓   3 tests/dialogue.e2e.ts:222:3 › faulted Mock › timeout is visible and manual retry remains Mock (4.2s)
+  ✓   4 tests/dialogue.e2e.ts:240:3 › Phase 3 offline action request › natural request accepts a plan and the actor actually harvests after the dialogue closes (6.6s)
+  ✓   5 tests/dialogue.e2e.ts:275:3 › Phase 3 autonomous Mock journey › fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug (51.1s)
+[WebServer] 10:27:42 PM [vite] http proxy error: /health
+[WebServer] Error: connect ECONNREFUSED 127.0.0.1:3003
+[WebServer]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[WebServer] 10:28:00 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 10:28:00 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   6 tests/scene.e2e.ts:151:1 › fresh journey collects all materials, repairs, crosses, explores and restores (52.8s)
+  ✓   7 tests/scene.e2e.ts:309:1 › four-way walk frames, pause, a following camera and opt-in music (6.7s)
+  ✓   8 tests/scene.e2e.ts:376:1 › 390px narrow window renders the scene, residents and touch controls (1.8s)
+  ✓   9 tests/scene.e2e.ts:404:1 › missing bridge art blocks readiness with a clear error (1.9s)
+  ✓  10 tests/scene.e2e.ts:418:1 › HTTP failure stays unavailable and automatically recovers (2.3s)
+  ✓  11 tests/scene.e2e.ts:433:1 › WebSocket handshake failure remains visible and prevents input (1.5s)
+  ✓  12 tests/scene.e2e.ts:447:1 › the real server rejects augmented movement and out-of-range actions (1.2s)
+  ✘  13 tests/phase3_1.e2e.ts:142:1 › Phase3.1 A–F normal UI: consent, persisted plan, following, shared bridge and restarted context (35.3s)
+2026-11-25T14:28:53.987Z pw:webserver Terminating the WebServer
+2026-11-25T14:28:54.009Z pw:webserver Terminated the WebServer
+
+
+  1) tests/phase3_1.e2e.ts:142:1 › Phase3.1 A–F normal UI: consent, persisted plan, following, shared bridge and restarted context 
+
+    Error: No walkable route from current position
+
+       at paths.ts:51
+
+      49 |     }
+      50 |   }
+    > 51 |   if (found < 0) throw Error("No walkable route from current position");
+         |                        ^
+      52 |   const steps: Stop[] = [];
+      53 |   for (let i = found; queue[i].parent >= 0; i = queue[i].parent) {
+      54 |     const { point, axis } = queue[i];
+        at route (/workspace/mistsea-phase3_1/tests/paths.ts:51:24)
+        at walk (/workspace/mistsea-phase3_1/tests/phase3_1.e2e.ts:62:24)
+        at /workspace/mistsea-phase3_1/tests/phase3_1.e2e.ts:407:5
+
+    Error Context: evidence/phase3_1/verification-20261125-222436-838764/playwright-artifacts/phase3_1.e2e.ts-Phase3-1-A-55be8-ridge-and-restarted-context/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    evidence/phase3_1/verification-20261125-222436-838764/playwright-artifacts/phase3_1.e2e.ts-Phase3-1-A-55be8-ridge-and-restarted-context/trace.zip
+    Usage:
+
+        npx playwright show-trace evidence/phase3_1/verification-20261125-222436-838764/playwright-artifacts/phase3_1.e2e.ts-Phase3-1-A-55be8-ridge-and-restarted-context/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/phase3_1.e2e.ts:142:1 › Phase3.1 A–F normal UI: consent, persisted plan, following, shared bridge and restarted context 
+  12 passed (3.0m)
+
+exec
+/bin/bash -lc "rg --files evidence/phase3_1/verification-20261125-222436-838764/playwright-artifacts | rg 'error-context\\.md"'$'"'; cat tests/paths.ts; sed -n '25,150p;370,455p' tests/phase3_1.e2e.ts; git status --short" in /workspace/mistsea-phase3_1
+ succeeded in 0ms:
+evidence/phase3_1/verification-20261125-222436-838764/playwright-artifacts/phase3_1.e2e.ts-Phase3-1-A-55be8-ridge-and-restarted-context/error-context.md
+import { distance, isPassable, type Point } from "../src/shared/world.js";
+
+type Stop = Point & { axis: "x" | "y" };
+const grid = 8;
+const cardinal = [
+  [1, 0],
+  [-1, 0],
+  [0, 1],
+  [0, -1],
+];
+
+export function route(
+  start: Point,
+  reached: (point: Point) => boolean,
+  repaired: boolean,
+  occupants: Point[] = [],
+): Stop[] {
+  if (reached(start)) return [];
+  const queue = [{ point: start, parent: -1, axis: "x" as Stop["axis"] }];
+  const visited = new Set(["0,0"]);
+  let found = -1;
+  function clear(x: number, y: number) {
+    return (
+      occupants.every((other) => distance({ x, y }, other) >= 14) &&
+      isPassable(x - 3, y - 3, repaired) &&
+      isPassable(x + 3, y + 3, repaired) &&
+      isPassable(x + 3, y - 3, repaired) &&
+      isPassable(x - 3, y + 3, repaired)
+    );
+  }
+  for (let i = 0; i < queue.length; i++) {
+    const { point } = queue[i];
+    if (reached(point)) {
+      found = i;
+      break;
+    }
+    for (const [dx, dy] of cardinal) {
+      const next = { x: point.x + dx * grid, y: point.y + dy * grid };
+      // Lattice indices stay stable when the start is a fractional server position.
+      const key = `${Math.round((next.x - start.x) / grid)},${Math.round((next.y - start.y) / grid)}`;
+      if (
+        visited.has(key) ||
+        !clear(next.x, next.y) ||
+        !clear(point.x + dx * 4, point.y + dy * 4)
+      )
+        continue;
+      visited.add(key);
+      queue.push({ point: next, parent: i, axis: dx ? "x" : "y" });
+    }
+  }
+  if (found < 0) throw Error("No walkable route from current position");
+  const steps: Stop[] = [];
+  for (let i = found; queue[i].parent >= 0; i = queue[i].parent) {
+    const { point, axis } = queue[i];
+    if (steps.at(-1)?.axis !== axis) steps.push({ ...point, axis });
+  }
+  return steps.reverse();
+}
+} from "../src/shared/world.js";
+import { route } from "./paths.js";
+
+const evidence = resolve(
+  process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1",
+  "cooperation",
+);
+const stage = (page: Page) => page.locator("#game");
+const log = (page: Page) => page.getByRole("log");
+const replyInput = (page: Page) => page.locator("#dialogue-input");
+const playerWood = (page: Page) => page.locator("[data-item=wood]");
+const npcBag = (page: Page) => page.locator("#cenyan-bag");
+const ready = (page: Page) =>
+  expect(stage(page)).toHaveAttribute("data-ready", "true", {
+    timeout: 12_000,
+  });
+const activity = (page: Page, expected: string, timeout = 12_000) =>
+  expect(stage(page)).toHaveAttribute("data-cenyan-activity", expected, {
+    timeout,
+  });
+
+async function positions(page: Page) {
+  return stage(page).evaluate((el) => ({
+    player: { x: Number(el.dataset.x), y: Number(el.dataset.y) },
+    cenyan: { x: Number(el.dataset.cenyanX), y: Number(el.dataset.cenyanY) },
+  }));
+}
+
+async function walk(
+  page: Page,
+  reached: (p: Point, npc: Point) => boolean,
+  repaired = false,
+) {
+  await stage(page).focus();
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const { player, cenyan } = await positions(page);
+    if (reached(player, cenyan)) return;
+    for (const step of route(
+      player,
+      (point) => reached(point, cenyan),
+      repaired,
+      [cenyan],
+    )) {
+      const axis = step.axis;
+      const endpoint = step[axis];
+      const delta = endpoint - (await positions(page)).player[axis];
+      if (Math.abs(delta) <= 2) continue;
+      const sign = Math.sign(delta);
+      const key = axis === "x" ? (sign > 0 ? "d" : "a") : sign > 0 ? "s" : "w";
+      await page.keyboard.down(key);
+      try {
+        await page.waitForFunction(
+          ({ axis, endpoint, sign }) =>
+            (Number(document.getElementById("game")!.dataset[axis]) -
+              endpoint) *
+              sign >=
+            -1.7,
+          { axis, endpoint, sign },
+          { timeout: 1600 + (Math.abs(delta) * 1000) / speed },
+        );
+      } catch (error) {
+        if (!(error instanceof Error && error.name === "TimeoutError"))
+          throw error;
+        break;
+      } finally {
+        await page.keyboard.up(key);
+      }
+    }
+    await expect(stage(page)).toHaveAttribute("data-moving", "false");
+  }
+  const { player, cenyan } = await positions(page);
+  expect(
+    reached(player, cenyan),
+    `keyboard route ended at ${JSON.stringify({ player, cenyan })}`,
+  ).toBe(true);
+}
+
+async function openChat(page: Page, moveToNpc = true) {
+  if (moveToNpc)
+    await walk(
+      page,
+      (player, npc) =>
+        distance(player, npc) <= residents.get("cenyan")!.range - 5,
+    );
+  const { player, cenyan } = await positions(page);
+  expect(distance(player, cenyan)).toBeLessThanOrEqual(
+    residents.get("cenyan")!.range,
+  );
+  if (nearbyTarget(player, cenyan)?.id === "cenyan") {
+    await stage(page).focus();
+    await page.keyboard.press("e");
+  } else await page.locator("#nearby-cenyan").click();
+  await expect(replyInput(page)).toBeVisible();
+  await expect(page.locator("#dialogue-mode")).toContainText("Mock");
+}
+async function say(page: Page, text: string, expected: string) {
+  const rows = log(page).locator("p").filter({ hasText: expected });
+  const previous = await rows.count();
+  await replyInput(page).fill(text);
+  await replyInput(page).press("Enter");
+  await expect(rows).toHaveCount(previous + 1);
+  await expect(page.locator("#dialogue-pending")).toBeHidden();
+}
+const closeChat = (page: Page) => page.locator("#dialogue-close").click();
+async function resumeForestMove(page: Page) {
+  const held = (await positions(page)).cenyan;
+  await closeChat(page);
+  await expect
+    .poll(async () => distance(held, (await positions(page)).cenyan))
+    .toBeGreaterThan(2);
+  await activity(page, "moving");
+}
+
+test.use({
+  trace: { mode: "on", screenshots: false, snapshots: false, sources: false },
+});
+
+test("Phase3.1 A–F normal UI: consent, persisted plan, following, shared bridge and restarted context", async ({
+  page,
+}) => {
+  test.setTimeout(150_000);
+  mkdirSync(evidence, { recursive: true });
+  const directory = mkdtempSync(join(tmpdir(), "mistsea-phase31-browser-"));
+  const capture = join(evidence, "mock-context.jsonl");
+  writeFileSync(capture, "");
+  const traceFile = join(evidence, "trajectory.json");
+    );
+    await expect(page.locator("#cenyan-decision")).toContainText("reject");
+    mark("D-replace-defer-reject");
+    await shoot("D-persisted-pending");
+    // Dialogue holds the current movement and pending plan until the process actually exits.
+    await stop();
+    await expect(stage(page)).toHaveAttribute("data-ready", "false");
+    await start();
+    await ready(page);
+    await expect(page.locator("#cenyan-goal")).toHaveText("抵达后采两处倒木", {
+      timeout: 15_000,
+    });
+    await expect(page.locator("#cenyan-pending")).toHaveText("暂无");
+    await expect(npcBag(page)).toHaveText("木材 2 · 石材 0", {
+      timeout: 15_000,
+    });
+    mark("D-promoted-and-harvested");
+
+    for (const [index, text] of [
+      "请到南坡采第一份石料。",
+      "再从另一处采一份石料吧。",
+    ].entries()) {
+      await openChat(page);
+      await say(page, text, "计划已接受");
+      await closeChat(page);
+      await expect(npcBag(page)).toHaveText(`木材 2 · 石材 ${index + 1}`, {
+        timeout: 15_000,
+      });
+      mark("A-cenyan-harvested", { count: index + 1 });
+    }
+    await openChat(page);
+    await say(page, "我们一起去桥边吧。", "好，我跟你到桥边。");
+    await expect(page.locator("#cenyan-plan")).toContainText("跟随 旅人");
+    const callsBeforeFollowing = latest!.cenyan.model!.sharedUsage!.requests;
+    await closeChat(page);
+    mark("B-accepted-and-closed");
+    followTrajectory = true;
+    await walk(page, (point) => distance(point, { x: 399, y: 449 }) <= 14);
+    await activity(page, "waiting");
+    mark("B-player-stops-cenyan-waits");
+    await shoot("B-follow-stop");
+    await walk(page, (point) => distance(point, valley.bridge) <= 15);
+    await expect(page.locator("#cenyan-result")).toContainText(
+      "同行抵达旧桥边",
+    );
+    followTrajectory = false;
+    expect(followViolations).toEqual([]);
+    expect(followMovement).toBeGreaterThan(55);
+    expect(followMinGap).toBeGreaterThanOrEqual(7.99);
+    expect(latest!.cenyan.model!.sharedUsage!.requests).toBe(
+      callsBeforeFollowing,
+    );
+    mark("B-follow-arrived", {
+      followMovement,
+      followMinGap,
+      callsBeforeFollowing,
+    });
+    await shoot("B-follow-arrived");
+
+    await page.locator("#delivery-qty").fill("2");
+    await page.locator("#delivery-send").click();
+    await expect(page.locator("#bridge-wood")).toHaveText("2 / 6");
+    await expect(playerWood(page)).toHaveText("2");
+    await page.locator("#delivery-send").click();
+    await expect(page.locator("#bridge-wood")).toHaveText("4 / 6");
+    await expect(playerWood(page)).toHaveText("0");
+    await expect(page.locator("#bridge-player-contribution")).toContainText(
+      "木材 4 · 石材 0",
+    );
+    await openChat(page, false);
+    await say(page, "请把你这次采的木石交到工地。", "计划已接受");
+    await closeChat(page);
+    await expect(page.locator("#bridge-wood")).toHaveText("6 / 6");
+    await expect(page.locator("#bridge-stone")).toHaveText("2 / 2");
+    await expect(npcBag(page)).toHaveText("木材 0 · 石材 0");
+    await expect(page.locator("#bridge-cenyan-contribution")).toContainText(
+      "木材 2 · 石材 2",
+    );
+    mark("A-shared-materials");
+    await shoot("A-shared-materials");
+
+    await openChat(page, false);
+    await say(page, "我们一起铺桥板吧。", "计划已接受");
+    await closeChat(page);
+    await activity(page, "working");
+    await page.getByRole("button", { name: "开始施工" }).click();
+ M .gitignore
+ M AGENTS.md
+ M README.md
+ M docs/DECISIONS.md
+ M docs/ROADMAP.md
+ M index.html
+ M package.json
+ M playwright.config.ts
+ M scripts/performance/fixtures/construction.mjs
+ M scripts/production-smoke.mjs
+ M scripts/soak-phase3.mjs
+ M scripts/verify.py
+ M src/client/dialogue.ts
+ M src/client/input.ts
+ M src/client/main.ts
+ M src/client/style.css
+ M src/client/ui.ts
+ M src/server/app.ts
+ M src/server/dialogue/cenyan.ts
+ M src/server/dialogue/ledger.ts
+ M src/server/dialogue/planning.ts
+ M src/server/dialogue/provider.ts
+ M src/server/dialogue/session.ts
+ M src/server/save.ts
+ M src/server/world.ts
+ M src/shared/cenyan.ts
+ M src/shared/protocol.ts
+ M tests/dialogue.e2e.ts
+ M tests/phase3.test.ts
+ M tests/scene.e2e.ts
+ M tests/unit.test.ts
+ M tsconfig.json
+?? docs/PHASE3_1_REPORT.md
+?? docs/PHASE3_1_TASK.md
+?? evidence/phase3_1/
+?? scripts/package-phase3_1.py
+?? scripts/regress-phase3_1.ts
+?? tests/fixtures/
+?? tests/phase3_1.e2e.ts
+?? tests/phase3_1.integration.ts
+?? tests/phase3_1.test.ts
+
+exec
+/bin/bash -lc "python3 - <<'PY'
+import json
+from pathlib import Path
+for v in ['221918-478020','222436-838764']:
+ p=Path('evidence/phase3_1')/('verification-20261125-'+v)/'cooperation/trajectory.json'
+ data=json.loads(p.read_text())
+ print(v,'starts',data['starts'],'errors',data['errors'],'samples',len(data['trajectory']))
+ for row in data['trajectory']:
+  step=row.get('step')
+  if step:
+   state=row.get('state') or {}; npc=state.get('cenyan',{})
+   print(step, 'player',state.get('player'),'npc',tuple(npc.get(a) for a in ('x','y')), 'act',row.get('activity'), 'plan', (npc.get('plan') or {}).get('index'), 'bridge progress', state.get('bridge',{}).get('progressMs'))
+  elif 'player' in row and row.get('progressMs') == 0:
+   print('motion',row['player'],row['cenyan'],row['activity'])
+ print('last rows:',[(row.get('step'),row.get('activity'),row.get('message',{}).get('text')) for row in data['trajectory'][-5:]])
+PY" in /workspace/mistsea-phase3_1
+ succeeded in 0ms:
+221918-478020 starts [374489, 374636, 374853] errors [] samples 67
+service-started player None npc (None, None) act None plan None bridge progress None
+A-fresh player {'x': 184, 'y': 384, 'facing': 'down'} npc (255, 299) act idle plan None bridge progress 0
+A-player-harvested player {'x': 109.35801702399995, 'y': 230.45093338400036, 'facing': 'up'} npc (255, 299) act idle plan None bridge progress 0
+A-player-harvested player {'x': 148.8444849679999, 'y': 212.92392304800026, 'facing': 'up'} npc (255, 299) act idle plan None bridge progress 0
+A-player-harvested player {'x': 205.884187864, 'y': 204.1190585840003, 'facing': 'up'} npc (255, 299) act idle plan None bridge progress 0
+A-player-harvested player {'x': 245.41649377599998, 'y': 173.44159568000023, 'facing': 'right'} npc (255, 299) act idle plan None bridge progress 0
+E-bidirectional-consent player {'x': 245.480045528, 'y': 278.37056224000014, 'facing': 'right'} npc (255, 299) act idle plan None bridge progress 0
+D-replace-defer-reject player {'x': 245.480045528, 'y': 291.50844409600023, 'facing': 'down'} npc (241.02883742399993, 277.80000000000007) act idle plan 0 bridge progress 0
+service-stopped player {'x': 245.480045528, 'y': 291.50844409600023, 'facing': 'down'} npc (241.02883742399993, 277.80000000000007) act idle plan 0 bridge progress 0
+service-started player {'x': 245.480045528, 'y': 291.50844409600023, 'facing': 'down'} npc (210.32716739199992, 277.80000000000007) act moving plan 0 bridge progress 0
+D-promoted-and-harvested player {'x': 245.480045528, 'y': 291.50844409600023, 'facing': 'down'} npc (186.33262849599984, 142.472823976) act collecting plan None bridge progress 0
+A-cenyan-harvested player {'x': 179.59243745599997, 'y': 164.24003276000028, 'facing': 'up'} npc (306.33262849599987, 438.472823976) act collecting plan None bridge progress 0
+A-cenyan-harvested player {'x': 306.86309120799956, 'y': 418.6392423519995, 'facing': 'down'} npc (338.33262849599987, 494.2567618) act collecting plan None bridge progress 0
+B-accepted-and-closed player {'x': 337.6083107679995, 'y': 475.684993927999, 'facing': 'down'} npc (338.33262849599987, 494.2567618) act idle plan 0 bridge progress 0
+motion {'x': 337.6083107679995, 'y': 475.684993927999, 'facing': 'down'} {'x': 338.33262849599987, 'y': 494.2567618} waiting
+motion {'x': 355.1528571279996, 'y': 449.3459820639995, 'facing': 'up'} {'x': 346.33262849599987, 'y': 477.47584521600027} moving
+motion {'x': 385.8132515519994, 'y': 436.1567870559995, 'facing': 'right'} {'x': 356.59302291999967, 'y': 446.2567618} moving
+B-player-stops-cenyan-waits player {'x': 403.3562018559992, 'y': 436.1567870559995, 'facing': 'right'} npc (382.93597322399944, 438.2567618) act waiting plan 0 bridge progress 0
+motion {'x': 407.73425659199916, 'y': 436.1567870559995, 'facing': 'right'} {'x': 387.3140279599994, 'y': 438.2567618} moving
+motion {'x': 434.0638271999991, 'y': 418.55678705599956, 'facing': 'up'} {'x': 420.8998226479995, 'y': 438.2567618} moving
+motion {'x': 434.0638271999991, 'y': 379.05974054399985, 'facing': 'up'} {'x': 422.93597322399944, 'y': 401.1526612080001} moving
+B-follow-arrived player {'x': 434.0638271999991, 'y': 379.05974054399985, 'facing': 'up'} npc (422.93597322399944, 392.35266120800014) act idle plan None bridge progress 0
+A-shared-materials player {'x': 434.0638271999991, 'y': 379.05974054399985, 'facing': 'up'} npc (422.93597322399944, 392.35266120800014) act delivering plan None bridge progress 0
+C-simultaneous-work player {'x': 434.0638271999991, 'y': 379.05974054399985, 'facing': 'up'} npc (422.93597322399944, 392.35266120800014) act working plan 0 bridge progress 1297.1045589999958
+C-repaired player {'x': 434.0638271999991, 'y': 379.05974054399985, 'facing': 'up'} npc (422.93597322399944, 392.35266120800014) act idle plan None bridge progress 14000
+service-stopped player {'x': 434.0638271999991, 'y': 379.05974054399985, 'facing': 'up'} npc (422.93597322399944, 392.35266120800014) act idle plan None bridge progress 14000
+service-started player {'x': 434.0638271999991, 'y': 379.05974054399985, 'facing': 'up'} npc (422.93597322399944, 392.35266120800014) act idle plan None bridge progress 14000
+F-restarted-model-context player {'x': 434.0638271999991, 'y': 379.05974054399985, 'facing': 'up'} npc (422.93597322399944, 392.35266120800014) act idle plan None bridge progress 14000
+C-crossed-under-keyboard-control player {'x': 561.3179900159987, 'y': 370.2769822079999, 'facing': 'right'} npc (422.93597322399944, 392.35266120800014) act idle plan None bridge progress 14000
+service-stopped player {'x': 561.3179900159987, 'y': 370.2769822079999, 'facing': 'right'} npc (422.93597322399944, 392.35266120800014) act idle plan None bridge progress 14000
+last rows: [('service-started', 'idle', None), (None, None, '旅人与岑砚合力修通旧桥。实际施工：旅人 6.95 秒，岑砚 7.05 秒。'), ('F-restarted-model-context', 'idle', None), ('C-crossed-under-keyboard-control', 'idle', None), ('service-stopped', 'idle', None)]
+222436-838764 starts [378329, 378469] errors [] samples 32
+service-started player None npc (None, None) act None plan None bridge progress None
+A-fresh player {'x': 184, 'y': 384, 'facing': 'down'} npc (255, 299) act idle plan None bridge progress 0
+A-player-harvested player {'x': 109.33083012799996, 'y': 230.43973080800035, 'facing': 'up'} npc (255, 299) act idle plan None bridge progress 0
+A-player-harvested player {'x': 148.75858148, 'y': 212.84077352000037, 'facing': 'up'} npc (255, 299) act idle plan None bridge progress 0
+A-player-harvested player {'x': 205.82660735200017, 'y': 212.80738596800035, 'facing': 'up'} npc (255, 299) act idle plan None bridge progress 0
+A-player-harvested player {'x': 245.33600528000017, 'y': 173.2989262080003, 'facing': 'right'} npc (255, 299) act idle plan None bridge progress 0
+E-bidirectional-consent player {'x': 245.3176996080002, 'y': 278.564168752, 'facing': 'right'} npc (255, 299) act idle plan None bridge progress 0
+D-replace-defer-reject player {'x': 245.3176996080002, 'y': 287.36416875199996, 'facing': 'down'} npc (241.0573044560001, 277.83365815200005) act idle plan 0 bridge progress 0
+service-stopped player {'x': 245.3176996080002, 'y': 287.36416875199996, 'facing': 'down'} npc (241.0573044560001, 277.83365815200005) act idle plan 0 bridge progress 0
+service-started player {'x': 245.3176996080002, 'y': 287.36416875199996, 'facing': 'down'} npc (210.26451385600006, 277.83365815200005) act moving plan 0 bridge progress 0
+D-promoted-and-harvested player {'x': 245.3176996080002, 'y': 287.36416875199996, 'facing': 'down'} npc (186.2776295520001, 142.23574616799993) act collecting plan None bridge progress 0
+A-cenyan-harvested player {'x': 179.46919636000007, 'y': 160.02072615199995, 'facing': 'up'} npc (306.2776295520001, 438.23574616799993) act idle plan None bridge progress 0
+A-cenyan-harvested player {'x': 306.71849039999995, 'y': 414.5889644719994, 'facing': 'down'} npc (338.2776295520001, 494.01815455200006) act collecting plan None bridge progress 0
+B-accepted-and-closed player {'x': 337.4662169919999, 'y': 471.6158417199991, 'facing': 'down'} npc (338.2776295520001, 494.01815455200006) act idle plan 0 bridge progress 0
+service-stopped player {'x': 337.4662169919999, 'y': 471.6158417199991, 'facing': 'down'} npc (338.2776295520001, 494.01815455200006) act idle plan 0 bridge progress 0
+last rows: [(None, None, '我换个岩簇再采一份。'), ('A-cenyan-harvested', 'collecting', None), (None, None, '好，我跟你到桥边。'), ('B-accepted-and-closed', 'idle', None), ('service-stopped', 'idle', None)]
+
+exec
+/bin/bash -lc 'cat evidence/phase3_1/verification-20261125-222436-838764/playwright-artifacts/*/error-context.md' in /workspace/mistsea-phase3_1
+ succeeded in 0ms:
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: phase3_1.e2e.ts >> Phase3.1 A–F normal UI: consent, persisted plan, following, shared bridge and restarted context
+- Location: tests/phase3_1.e2e.ts:142:1
+
+# Error details
+
+```
+Error: No walkable route from current position
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e6]:
+      - heading "雾海行纪" [level=1] [ref=e7]
+      - paragraph [ref=e8]: 雾灯谷
+    - generic [ref=e9]:
+      - status [ref=e10]: 重连中
+      - button "音乐关" [ref=e11] [cursor=pointer]
+      - button "暂停" [disabled] [ref=e12]
+  - main [ref=e13]:
+    - region "雾灯谷场景" [ref=e14]:
+      - generic [ref=e15]:
+        - heading "南坡岩场" [level=2] [ref=e18]
+        - button "全谷地图" [disabled] [ref=e19]
+      - generic [ref=e20]:
+        - generic "游戏场景，方向键或 WASD 移动，E 交互" [active] [ref=e21]
+        - status [ref=e23]:
+          - strong [ref=e24]: 正在重连雾灯谷
+          - generic [ref=e25]: 与雾灯谷失去连接，正在恢复存档。
+          - button "重试连接" [ref=e26] [cursor=pointer]
+      - generic [ref=e27]:
+        - generic [ref=e29]:
+          - strong [ref=e30]: 岑砚
+          - paragraph [ref=e31]: 修得慢一点也好。答应修好的桥，得经得住下一次雾潮。
+        - button "与岑砚交谈 E" [disabled] [ref=e33]:
+          - text: 与岑砚交谈
+          - generic [ref=e34]: E
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]: W
+          - generic [ref=e38]: A
+          - generic [ref=e39]: S
+          - generic [ref=e40]: D
+          - text: 或方向键 移动
+        - generic [ref=e41]:
+          - generic [ref=e42]: E
+          - text: 交互
+        - generic [ref=e43]:
+          - generic [ref=e44]: Esc
+          - text: 暂停
+        - button "结束同行" [ref=e45] [cursor=pointer]
+        - button "音效开" [pressed] [ref=e46] [cursor=pointer]
+    - complementary "旅人手记" [ref=e47]:
+      - generic [ref=e48]:
+        - generic [ref=e51]:
+          - paragraph [ref=e52]: 当前目标
+          - heading "修复雾灯旧桥" [level=2] [ref=e53]
+        - paragraph [ref=e54]: 向东走到河边，查看雾灯旧桥。
+        - generic [ref=e55]:
+          - generic [ref=e56]: 已交木材
+          - strong [ref=e57]: 0 / 6
+        - generic [ref=e58]:
+          - generic [ref=e59]: 已交石材
+          - strong [ref=e60]: 0 / 2
+        - generic [ref=e61]:
+          - generic [ref=e62]: 施工进度
+          - strong [ref=e63]: 0%
+        - progressbar "施工进度" [ref=e64]: 0%
+        - paragraph [ref=e65]: 旅人 · 木材 0 · 石材 0 · 施工 0.00 秒
+        - paragraph [ref=e66]: 岑砚 · 木材 0 · 石材 0 · 施工 0.00 秒
+      - generic [ref=e67]:
+        - heading "背包" [level=2] [ref=e68]
+        - list "物品栏" [ref=e69]:
+          - listitem [ref=e70]:
+            - generic [ref=e71]: 木材
+            - strong [ref=e72]: "4"
+          - listitem [ref=e73]:
+            - generic [ref=e74]: 石材
+            - strong [ref=e75]: "0"
+          - listitem [ref=e76]:
+            - generic [ref=e77]: 食物
+            - strong [ref=e78]: "0"
+          - listitem [ref=e79]:
+            - generic [ref=e80]: 工具箱
+            - strong [ref=e81]: "0"
+      - generic [ref=e82]:
+        - heading "谷中居民" [level=2] [ref=e83]
+        - list [ref=e84]:
+          - listitem [ref=e85]:
+            - strong [ref=e87]: 岑砚
+            - generic [ref=e88]: 木匠
+          - listitem [ref=e89]:
+            - strong [ref=e91]: 阿禾
+            - generic [ref=e92]: 采集者
+          - listitem [ref=e93]:
+            - strong [ref=e95]: 洛舟
+            - generic [ref=e96]: 探路人
+        - paragraph [ref=e97]: 岑砚 · 等待连接
+        - group [ref=e98]:
+          - generic "AI Debug" [ref=e99] [cursor=pointer]
+          - generic [ref=e100]:
+            - term [ref=e101]: 目标
+            - definition [ref=e102]: 跟旅人走到桥边
+            - term [ref=e103]: 行动
+            - definition [ref=e104]: 1. 跟随 旅人（当前）
+            - term [ref=e105]: 待执行
+            - definition [ref=e106]: 暂无
+            - term [ref=e107]: 最近决策
+            - definition [ref=e108]:
+              - generic [ref=e109]: "{ \"id\": \"61fa1cfe-0ede-4886-88d4-f5ff372b548b\", \"goal\": \"跟旅人走到桥边\", \"speech\": \"好，我跟你到桥边。\", \"policy\": \"replace\", \"steps\": [ { \"type\": \"follow\", \"target_id\": \"player\" } ], \"status\": \"accepted\" }"
+            - term [ref=e110]: 岑砚的背包
+            - definition [ref=e111]: 木材 2 · 石材 2
+            - term [ref=e112]: 规则回执
+            - definition [ref=e113]: 从河谷岩簇获得 石材 ×1，已放入背包。
+            - term [ref=e114]: 调用
+            - definition [ref=e115]: Mock 模拟 · 自主关闭 · 旅人请求 · ok · 96 ms · 计入 8185 Token · 累计 11 次 / 89250 Token
+          - paragraph [ref=e116]: ARRIVED · 抵达河谷岩簇附近。 COLLECTED · 从河谷岩簇获得 石材 ×1，已放入背包。
+          - heading "近期重要记忆" [level=3] [ref=e117]
+          - list [ref=e118]:
+            - listitem [ref=e119]: 规则事实 · 改为目标：跟旅人走到桥边
+            - listitem [ref=e120]: 岑砚观点 · 好，我跟你到桥边。
+            - listitem [ref=e121]: 旅人声称 · 我们一起去桥边吧。
+            - listitem [ref=e122]: 规则事实 · 从河谷岩簇获得 石材 ×1，已放入背包。
+            - listitem [ref=e123]: 规则事实 · 抵达河谷岩簇附近。
+            - listitem [ref=e124]: 规则事实 · 改为目标：采第二份石料
+      - generic [ref=e125]:
+        - generic [ref=e126]: 等待本地存档
+        - button "重开旅程" [disabled] [ref=e127]
+```
+
+# Test source
+
+```ts
+  1  | import { distance, isPassable, type Point } from "../src/shared/world.js";
+  2  | 
+  3  | type Stop = Point & { axis: "x" | "y" };
+  4  | const grid = 8;
+  5  | const cardinal = [
+  6  |   [1, 0],
+  7  |   [-1, 0],
+  8  |   [0, 1],
+  9  |   [0, -1],
+  10 | ];
+  11 | 
+  12 | export function route(
+  13 |   start: Point,
+  14 |   reached: (point: Point) => boolean,
+  15 |   repaired: boolean,
+  16 |   occupants: Point[] = [],
+  17 | ): Stop[] {
+  18 |   if (reached(start)) return [];
+  19 |   const queue = [{ point: start, parent: -1, axis: "x" as Stop["axis"] }];
+  20 |   const visited = new Set(["0,0"]);
+  21 |   let found = -1;
+  22 |   function clear(x: number, y: number) {
+  23 |     return (
+  24 |       occupants.every((other) => distance({ x, y }, other) >= 14) &&
+  25 |       isPassable(x - 3, y - 3, repaired) &&
+  26 |       isPassable(x + 3, y + 3, repaired) &&
+  27 |       isPassable(x + 3, y - 3, repaired) &&
+  28 |       isPassable(x - 3, y + 3, repaired)
+  29 |     );
+  30 |   }
+  31 |   for (let i = 0; i < queue.length; i++) {
+  32 |     const { point } = queue[i];
+  33 |     if (reached(point)) {
+  34 |       found = i;
+  35 |       break;
+  36 |     }
+  37 |     for (const [dx, dy] of cardinal) {
+  38 |       const next = { x: point.x + dx * grid, y: point.y + dy * grid };
+  39 |       // Lattice indices stay stable when the start is a fractional server position.
+  40 |       const key = `${Math.round((next.x - start.x) / grid)},${Math.round((next.y - start.y) / grid)}`;
+  41 |       if (
+  42 |         visited.has(key) ||
+  43 |         !clear(next.x, next.y) ||
+  44 |         !clear(point.x + dx * 4, point.y + dy * 4)
+  45 |       )
+  46 |         continue;
+  47 |       visited.add(key);
+  48 |       queue.push({ point: next, parent: i, axis: dx ? "x" : "y" });
+  49 |     }
+  50 |   }
+> 51 |   if (found < 0) throw Error("No walkable route from current position");
+     |                        ^ Error: No walkable route from current position
+  52 |   const steps: Stop[] = [];
+  53 |   for (let i = found; queue[i].parent >= 0; i = queue[i].parent) {
+  54 |     const { point, axis } = queue[i];
+  55 |     if (steps.at(-1)?.axis !== axis) steps.push({ ...point, axis });
+  56 |   }
+  57 |   return steps.reverse();
+  58 | }
+  59 | 
+```
+exec
+/bin/bash -lc 'cat package.json; ls -d node_modules; ls -ld evidence/phase3_1/verification-*' in /workspace/mistsea-phase3_1
+ succeeded in 0ms:
+{
+  "name": "mistsea-phase1",
+  "version": "0.3.0-phase3",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:client": "vite --host 127.0.0.1",
+    "dev:server": "node --import tsx src/server/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test --test-isolation=none tests/unit.test.ts tests/dialogue.test.ts tests/phase3.test.ts tests/phase3_1.test.ts",
+    "test:integration": "node --import tsx --test --test-isolation=none tests/dialogue.integration.ts tests/phase3_1.integration.ts",
+    "test:e2e": "playwright test",
+    "build": "vite build --outDir release/client && tsc -p tsconfig.server.json",
+    "start": "node release/server/src/server/index.js",
+    "assets:prepare": "python3 scripts/assets/prepare.py",
+    "assets:fetch": "python3 scripts/assets/fetch.py",
+    "world:generate": "python3 scripts/world/generate.py"
+  },
+  "dependencies": {
+    "@fastify/static": "10.1.12",
+    "fastify": "5.12.8",
+    "phaser": "4.2.1",
+    "ws": "8.23.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@types/node": "24.10.1",
+    "@types/ws": "8.18.1",
+    "prettier": "3.10.1",
+    "tsx": "4.20.6",
+    "typescript": "7.0.2",
+    "vite": "8.3.8"
+  }
+}
+node_modules
+drwxr-xr-x 3 box box 4096 Nov 25 21:55 evidence/phase3_1/verification-20261125-215538-462063
+drwxr-xr-x 3 box box 4096 Nov 25 22:00 evidence/phase3_1/verification-20261125-215951-099728
+drwxr-xr-x 4 box box 4096 Nov 25 22:23 evidence/phase3_1/verification-20261125-221918-478020
+drwxr-xr-x 4 box box 4096 Nov 25 22:28 evidence/phase3_1/verification-20261125-222436-838764
+
+exec
+/bin/bash -lc "rg -n 'isPassable|footRadius|tickMs|speed' src/shared/world.ts; sed -n '80,143p' src/shared/world.ts; cat src/server/path.ts; sed -n '516,585p;722,875p' src/server/world.ts; rg -n 'route\\(' tests --glob '*.ts'" in /workspace/mistsea-phase3_1
+ succeeded in 0ms:
+28:export const speed = 88;
+29:export const tickMs = 50;
+30:export const footRadius = 4;
+79:export function isPassable(x: number, y: number, repaired: boolean) {
+80:  const left = x - footRadius,
+81:    right = x + footRadius;
+82:  const top = y - footRadius,
+83:    bottom = y + footRadius;
+  const left = x - footRadius,
+    right = x + footRadius;
+  const top = y - footRadius,
+    bottom = y + footRadius;
+  if (left < 0 || top < 0 || right >= mapWidth || bottom >= mapHeight)
+    return false;
+  const tile = valley.tileSize;
+  const crossing = valley.bridge.crossing;
+  for (
+    let row = Math.floor(top / tile);
+    row <= Math.floor(bottom / tile);
+    row++
+  ) {
+    for (
+      let column = Math.floor(left / tile);
+      column <= Math.floor(right / tile);
+      column++
+    ) {
+      if (valley.river[row][column] < 0) continue;
+      const onBridge =
+        repaired &&
+        column >= crossing.column &&
+        column < crossing.column + crossing.width &&
+        row >= crossing.row &&
+        row < crossing.row + crossing.height;
+      if (!onBridge) return false;
+    }
+  }
+  return !solids.some(
+    (rect) =>
+      right > rect.x &&
+      left < rect.x + rect.w &&
+      bottom > rect.y &&
+      top < rect.y + rect.h,
+  );
+}
+import {
+  distance,
+  isPassable,
+  mapHeight,
+  mapWidth,
+  type Point,
+  type Target,
+} from "../shared/world.js";
+
+const stride = 8;
+const offsets = [
+  { x: stride, y: 0 },
+  { x: -stride, y: 0 },
+  { x: 0, y: stride },
+  { x: 0, y: -stride },
+];
+type Node = Point & { cost: number; score: number; previous?: Node };
+
+function push(queue: Node[], node: Node) {
+  let index = queue.length;
+  queue.push(node);
+  while (index > 0) {
+    const parent = (index - 1) >> 1;
+    if (queue[parent].score <= node.score) break;
+    queue[index] = queue[parent];
+    index = parent;
+  }
+  queue[index] = node;
+}
+
+function pop(queue: Node[]): Node {
+  const first = queue[0];
+  const tail = queue.pop()!;
+  if (!queue.length) return first;
+  let index = 0;
+  while (index * 2 + 1 < queue.length) {
+    let child = index * 2 + 1;
+    if (child + 1 < queue.length && queue[child + 1].score < queue[child].score)
+      child++;
+    if (queue[child].score >= tail.score) break;
+    queue[index] = queue[child];
+    index = child;
+  }
+  queue[index] = tail;
+  return first;
+}
+
+/** A* over eight-pixel cardinal edges, including their intermediate clearance. */
+export function findPath(
+  start: Point,
+  target: Target,
+  repaired: boolean,
+  occupants: Point[] = [],
+): Point[] | undefined {
+  const columns = Math.ceil(mapWidth / stride) + 1;
+  const rows = Math.ceil(mapHeight / stride) + 1;
+  const cost = new Float64Array(columns * rows).fill(Infinity);
+  const key = (p: Point) =>
+    Math.floor(p.x / stride) + Math.floor(p.y / stride) * columns;
+  const heuristic = (p: Point) =>
+    Math.max(0, distance(p, target) - target.range);
+  const clear = (p: Point, from: Point) =>
+    isPassable(p.x, p.y, repaired) &&
+    occupants.every((other) => canApproach(from, p, other));
+  const queue: Node[] = [
+    { x: start.x, y: start.y, cost: 0, score: heuristic(start) },
+  ];
+  cost[key(start)] = 0;
+  while (queue.length) {
+    const current = pop(queue);
+    if (current.cost !== cost[key(current)]) continue;
+    if (heuristic(current) === 0) {
+      const points: Point[] = [];
+      for (let path = current; path.previous; path = path.previous)
+        points.push({ x: path.x, y: path.y });
+      return points.reverse();
+    }
+    for (const { x: dx, y: dy } of offsets) {
+      const point = { x: current.x + dx, y: current.y + dy };
+      const nextCost = current.cost + stride;
+      const index = key(point);
+      if (!clear(point, current) || nextCost >= cost[index]) continue;
+      if (!clear({ x: current.x + dx / 2, y: current.y + dy / 2 }, current))
+        continue;
+      cost[index] = nextCost;
+      push(queue, {
+        ...point,
+        cost: nextCost,
+        score: nextCost + heuristic(point),
+        previous: current,
+      });
+    }
+  }
+}
+
+/** An overlapping actor can leave (including when a legacy save loads). */
+export function canApproach(from: Point, to: Point, other: Point) {
+  const gap = distance(to, other);
+  return gap >= 8 || gap > distance(from, other);
+}
+      [this.memory(`gift:${offer.id}`, bridge.id, outcome.text, now)],
+      outcome,
+    );
+    return outcome;
+  }
+
+  private cancelFollow(action: Action, now: number): Result {
+    const plan = this.state.cenyan.plan;
+    if (plan?.steps[plan.index].type !== "follow")
+      return {
+        type: "result",
+        id: action.id,
+        ok: false,
+        code: "NOT_FOLLOWING",
+        text: "岑砚现在没有在同行。",
+      };
+    const outcome: Result = {
+      type: "result",
+      id: action.id,
+      ok: true,
+      code: "FOLLOW_CANCELLED",
+      text: "旅人结束了同行。",
+    };
+    this.finishStep(
+      structuredClone(this.state),
+      false,
+      outcome.code,
+      outcome.text,
+      bridge.id,
+      now,
+      { receipt: action.id, result: outcome },
+    );
+    return outcome;
+  }
+
+  setMovement(
+    { dx, dy }: Extract<ClientMessage, { type: "move" }>,
+    clock: number,
+  ) {
+    this.intent = { dx, dy, expires: clock + leaseMs };
+    if (dx || dy) {
+      this.working = false;
+      this.playerWorkEvent = undefined;
+    }
+  }
+
+  tick(clock: number, elapsed: number, now = Date.now(), holdCenyan = false) {
+    const stepMs = Math.min(tickMs, Math.max(0, elapsed));
+    const { dx, dy } =
+      this.intent.expires > clock ? this.intent : { dx: 0, dy: 0 };
+    const player = this.state.player;
+    this.moving = false;
+    if (dx || dy) {
+      const step = (speed * stepMs) / 1000 / Math.hypot(dx, dy);
+      const clear = (from: Point, to: Point) =>
+        isPassable(to.x, to.y, this.state.bridge.repaired) &&
+        canApproach(from, to, this.state.cenyan);
+      const x = clear(player, { x: player.x + dx * step, y: player.y })
+        ? player.x + dx * step
+        : player.x;
+      const y = clear({ x, y: player.y }, { x, y: player.y + dy * step })
+        ? player.y + dy * step
+        : player.y;
+      const direction = facing(dx, dy);
+      this.moving = x !== player.x || y !== player.y;
+      if (this.moving || player.facing !== direction) {
+        this.state = { ...this.state, player: { x, y, facing: direction } };
+        this.dirty = true;
+      }
+    }
+      finish(
+        true,
+        "FOLLOW_ARRIVED",
+        plan.followed ? "岑砚和旅人同行抵达旧桥边。" : "岑砚和旅人已在旧桥边。",
+      );
+      return;
+    }
+    const remainingMs = (plan.remainingMs ?? followMs) - elapsed;
+    if (remainingMs <= 0) {
+      finish(false, "FOLLOW_TIMEOUT", "同行时间已到，岑砚停下了。");
+      return;
+    }
+    const target =
+      playerAtBridge &&
+      !actorAtBridge &&
+      distance(actor, player) <= bridge.range * 2
+        ? bridge
+        : {
+            id: "player",
+            name: "旅人",
+            x: player.x,
+            y: player.y,
+            range: followGap,
+          };
+    const followed = this.walk(target, clock, elapsed, now, true);
+    const current = this.state.cenyan;
+    if (current.plan?.id === plan.id && current.plan.index === plan.index) {
+      this.state = {
+        ...this.state,
+        cenyan: {
+          ...current,
+          plan: {
+            ...plan,
+            remainingMs,
+            followed: plan.followed || followed,
+          },
+        },
+      };
+      this.dirty = true;
+    }
+  }
+
+  private walkTo(target: Target, clock: number, elapsed: number, now: number) {
+    if (distance(this.state.cenyan, target) <= target.range) {
+      this.finishStep(
+        structuredClone(this.state),
+        true,
+        "ARRIVED",
+        `抵达${target.name}附近。`,
+        target.id,
+        now,
+      );
+      return;
+    }
+    this.walk(target, clock, elapsed, now);
+  }
+
+  private walk(
+    target: Target,
+    clock: number,
+    elapsed: number,
+    now: number,
+    following = false,
+  ) {
+    const actor = this.state.cenyan;
+    if (distance(actor, target) <= target.range) {
+      this.clearRoute();
+      this.actorActivity = "waiting";
+      return false;
+    }
+    if (clock < this.retryPathAt) return false;
+    if (
+      following &&
+      clock >= this.refreshPathAt &&
+      (!this.routeTarget ||
+        distance(this.routeTarget, target) >= 10 ||
+        !this.route?.length)
+    ) {
+      this.route = undefined;
+      this.refreshPathAt = clock + 275;
+    }
+    const occupants = [this.state.player, ...otherResidents];
+    if (!this.route) {
+      const destination =
+        following && target.id === "player" ? { ...target, range: 13 } : target;
+      this.route = findPath(
+        actor,
+        destination,
+        this.state.bridge.repaired,
+        occupants,
+      );
+      this.routeTarget = { x: target.x, y: target.y };
+    }
+    if (following && this.route?.length === 0) {
+      this.actorActivity = "waiting";
+      return false;
+    }
+    let current: Point = actor;
+    let direction = actor.facing;
+    let budget = (speed * elapsed) / 1000;
+    while (this.route?.length && budget > 0) {
+      const point = this.route[0];
+      const length = distance(current, point);
+      if (length < 0.001) {
+        this.route.shift();
+        continue;
+      }
+      const step = Math.min(length, budget);
+      const dx = point.x - current.x;
+      const dy = point.y - current.y;
+      const next = {
+        x: current.x + (dx / length) * step,
+        y: current.y + (dy / length) * step,
+      };
+      if (
+        !isPassable(next.x, next.y, this.state.bridge.repaired) ||
+        occupants.some((other) => !canApproach(current, next, other))
+      ) {
+        this.route = undefined;
+        this.retryPathAt = clock + (following ? 500 : 750);
+        break;
+      }
+      current = next;
+      direction = facing(dx, dy);
+      budget -= step;
+      if (step === length) this.route.shift();
+      if (following && distance(current, target) <= target.range) break;
+    }
+    if (current !== actor) {
+      this.state = {
+        ...this.state,
+        cenyan: { ...actor, ...current, facing: direction },
+      };
+      this.dirty = true;
+      this.actorActivity = "moving";
+      this.blockedSince = undefined;
+      return true;
+    }
+    if (this.blockedSince !== undefined && clock - this.blockedSince >= 3000) {
+      this.finishStep(
+        structuredClone(this.state),
+        false,
+        "NO_PATH",
+        `无法走到${target.name}，路线受阻。`,
+        following ? bridge.id : target.id,
+        now,
+      );
+      return false;
+    }
+    this.actorActivity = "waiting";
+    this.blockedSince ??= clock;
+    this.retryPathAt = clock + 750;
+    return false;
+  }
+tests/unit.test.ts:479:    for (const waypoint of route(
+tests/phase3_1.e2e.ts:62:    for (const step of route(
+tests/dialogue.e2e.ts:304:    const steps = route(
+tests/phase3_1.integration.ts:178:        for (const { axis, ...target } of route(player, goal, false, [
+tests/scene.e2e.ts:112:  const steps = route(await position(page), goal, repaired, [npc]);
+tests/scene.e2e.ts:407:  await page.route("**/assets/bridge-open.png", (request) =>
+tests/scene.e2e.ts:421:  await page.route("**/health", (request) =>
+tests/scene.e2e.ts:429:  await page.unroute("**/health");
+tests/paths.ts:12:export function route(
+
+exec
+/bin/bash -lc "node --import tsx --input-type=module <<'JS'
+import {readFileSync} from 'node:fs';
+import {route} from './tests/paths.ts';
+import {distance,isPassable} from './src/shared/world.ts';
+import {canApproach} from './src/server/path.ts';
+const destination={x:399,y:449};
+for (const label of ['221918-478020','222436-838764']){
+  const run=JSON.parse(readFileSync('evidence/phase3_1/verification-20261125-'+label+'/cooperation/trajectory.json'));
+  const {state:{player:p,cenyan:n}}=run.trajectory.find(r=>r.step==='B-accepted-and-closed');
+  for (const occupants of [[n],[]]) {
+    try { console.log(label,occupants.length,route(p,q=>distance(q,destination)<=14,false,occupants)); }
+    catch(e){ console.log(label,occupants.length,e.message); }
+  }
+  const candidates=[['south',0,1],['north',0,-1],['east',1,0],['west',-1,0]];
+  console.log(candidates.map(([key,dx,dy])=>[key,...[4,8,12,16].map(s=>{
+    const x=p.x+dx*s,y=p.y+dy*s;
+    return {s,server:isPassable(x,y,false)&&canApproach(p,{x,y},n),
+      padding:[-3,3].every(i=>[-3,3].every(j=>isPassable(x+i,y+j,false))),gap:+distance({x,y},n).toFixed(1)};
+  })]));
+}
+JS" in /workspace/mistsea-phase3_1
+ succeeded in 89ms:
+221918-478020 1 [
+  { x: 353.6083107679995, y: 475.684993927999, axis: 'x' },
+  { x: 353.6083107679995, y: 435.684993927999, axis: 'y' },
+  { x: 401.6083107679995, y: 435.684993927999, axis: 'x' }
+]
+221918-478020 0 [
+  { x: 353.6083107679995, y: 475.684993927999, axis: 'x' },
+  { x: 353.6083107679995, y: 435.684993927999, axis: 'y' },
+  { x: 401.6083107679995, y: 435.684993927999, axis: 'x' }
+]
+[
+  [
+    'south',
+    { s: 4, server: true, padding: false, gap: 14.6 },
+    { s: 8, server: true, padding: false, gap: 10.6 },
+    { s: 12, server: false, padding: true, gap: 6.6 },
+    { s: 16, server: false, padding: true, gap: 2.7 }
+  ],
+  [
+    'north',
+    { s: 4, server: true, padding: false, gap: 22.6 },
+    { s: 8, server: true, padding: false, gap: 26.6 },
+    { s: 12, server: true, padding: false, gap: 30.6 },
+    { s: 16, server: true, padding: false, gap: 34.6 }
+  ],
+  [
+    'east',
+    { s: 4, server: true, padding: true, gap: 18.9 },
+    { s: 8, server: true, padding: true, gap: 19.9 },
+    { s: 12, server: true, padding: true, gap: 21.7 },
+    { s: 16, server: true, padding: true, gap: 24 }
+  ],
+  [
+    'west',
+    { s: 4, server: false, padding: false, gap: 19.2 },
+    { s: 8, server: false, padding: false, gap: 20.5 },
+    { s: 12, server: false, padding: false, gap: 22.5 },
+    { s: 16, server: false, padding: false, gap: 25 }
+  ]
+]
+222436-838764 1 No walkable route from current position
+222436-838764 0 No walkable route from current position
+[
+  [
+    'south',
+    { s: 4, server: true, padding: false, gap: 18.4 },
+    { s: 8, server: true, padding: false, gap: 14.4 },
+    { s: 12, server: true, padding: false, gap: 10.4 },
+    { s: 16, server: false, padding: true, gap: 6.5 }
+  ],
+  [
+    'north',
+    { s: 4, server: true, padding: false, gap: 26.4 },
+    { s: 8, server: true, padding: false, gap: 30.4 },
+    { s: 12, server: true, padding: false, gap: 34.4 },
+    { s: 16, server: true, padding: true, gap: 38.4 }
+  ],
+  [
+    'east',
+    { s: 4, server: true, padding: true, gap: 22.6 },
+    { s: 8, server: true, padding: true, gap: 23.5 },
+    { s: 12, server: true, padding: true, gap: 25 },
+    { s: 16, server: true, padding: true, gap: 27.1 }
+  ],
+  [
+    'west',
+    { s: 4, server: false, padding: false, gap: 22.9 },
+    { s: 8, server: false, padding: false, gap: 24.1 },
+    { s: 12, server: false, padding: false, gap: 25.8 },
+    { s: 16, server: false, padding: false, gap: 28 }
+  ]
+]
+
+exec
+/bin/bash -lc "node --import tsx --input-type=module <<'JS'
+import {isPassable,distance,speed,tickMs} from './src/shared/world.ts';
+const p={x:337.4662169919999,y:471.6158417199991}, n={x:338.2776295520001,y:494.01815455200006}, dest={x:399,y:449};
+function search(grid, padding, gap) {
+ const q=[{x:0,y:0,parent:null}], seen=new Set(['0,0']);
+ function clear(x,y) {
+  return distance({x,y},n)>=gap && [-padding,padding].every(a=>[-padding,padding].every(b=>isPassable(x+a,y+b,false)));
+ }
+ for (let i=0;i<q.length;i++){
+  const a=q[i], pt={x:p.x+a.x*grid,y:p.y+a.y*grid};
+  if(distance(pt,dest)<=14){
+   const stops=[]; let b=a;
+   while(b.parent){if(stops.at(-1)?.axis"'!==b.axis) stops.push({x:p.x+b.x*grid,y:p.y+b.y*grid,axis:b.axis}); b=b.parent;}
+   return stops.reverse();
+  }
+  for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+   const x=a.x+dx, y=a.y+dy,k=x+'"','+y;
+   if(seen.has(k)||"'!clear(p.x+x*grid,p.y+y*grid)||!clear(pt.x+dx*grid/2,pt.y+dy*grid/2))continue;
+   seen.add(k); q.push({x,y,parent:a,axis:dx?'"'x':'y'});
+  }
+ }
+}
+for(const grid of [8, speed*tickMs/1000,4,2]) for(const padding of [3,2,1,0]) console.log(grid,padding, search(grid,padding,14));
+JS" in /workspace/mistsea-phase3_1
+ succeeded in 89ms:
+8 3 undefined
+8 2 [
+  { x: 353.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 353.4662169919999, y: 431.6158417199991, axis: 'y' },
+  { x: 409.4662169919999, y: 431.6158417199991, axis: 'x' },
+  { x: 409.4662169919999, y: 447.6158417199991, axis: 'y' }
+]
+8 1 [
+  { x: 361.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 361.4662169919999, y: 431.6158417199991, axis: 'y' },
+  { x: 409.4662169919999, y: 431.6158417199991, axis: 'x' },
+  { x: 409.4662169919999, y: 447.6158417199991, axis: 'y' }
+]
+8 0 [
+  { x: 361.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 361.4662169919999, y: 439.6158417199991, axis: 'y' },
+  { x: 393.4662169919999, y: 439.6158417199991, axis: 'x' }
+]
+4.4 3 [
+  { x: 359.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 359.4662169919999, y: 436.4158417199991, axis: 'y' },
+  { x: 394.6662169919999, y: 436.4158417199991, axis: 'x' }
+]
+4.4 2 [
+  { x: 359.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 359.4662169919999, y: 436.4158417199991, axis: 'y' },
+  { x: 394.6662169919999, y: 436.4158417199991, axis: 'x' }
+]
+4.4 1 [
+  { x: 359.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 359.4662169919999, y: 436.4158417199991, axis: 'y' },
+  { x: 394.6662169919999, y: 436.4158417199991, axis: 'x' }
+]
+4.4 0 [
+  { x: 359.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 359.4662169919999, y: 436.4158417199991, axis: 'y' },
+  { x: 394.6662169919999, y: 436.4158417199991, axis: 'x' }
+]
+4 3 [
+  { x: 357.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 357.4662169919999, y: 435.6158417199991, axis: 'y' },
+  { x: 397.4662169919999, y: 435.6158417199991, axis: 'x' }
+]
+4 2 [
+  { x: 357.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 357.4662169919999, y: 435.6158417199991, axis: 'y' },
+  { x: 397.4662169919999, y: 435.6158417199991, axis: 'x' }
+]
+4 1 [
+  { x: 361.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 361.4662169919999, y: 435.6158417199991, axis: 'y' },
+  { x: 397.4662169919999, y: 435.6158417199991, axis: 'x' }
+]
+4 0 [
+  { x: 361.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 361.4662169919999, y: 439.6158417199991, axis: 'y' },
+  { x: 389.4662169919999, y: 439.6158417199991, axis: 'x' }
+]
+2 3 [
+  { x: 359.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 359.4662169919999, y: 435.6158417199991, axis: 'y' },
+  { x: 395.4662169919999, y: 435.6158417199991, axis: 'x' }
+]
+2 2 [
+  { x: 359.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 359.4662169919999, y: 437.6158417199991, axis: 'y' },
+  { x: 391.4662169919999, y: 437.6158417199991, axis: 'x' }
+]
+2 1 [
+  { x: 361.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 361.4662169919999, y: 437.6158417199991, axis: 'y' },
+  { x: 391.4662169919999, y: 437.6158417199991, axis: 'x' }
+]
+2 0 [
+  { x: 361.4662169919999, y: 471.6158417199991, axis: 'x' },
+  { x: 361.4662169919999, y: 439.6158417199991, axis: 'y' },
+  { x: 389.4662169919999, y: 439.6158417199991, axis: 'x' }
+]
+
+codex
+已用失败轨迹的坐标复现：即使从路线计算中移除岑砚，8 像素网格仍然报无路。同一个位置用正常键盘一步约 4.4 像素的网格，保留原有地形余量和岑砚避让距离，就能找到路线。我会把这个回退加到合作测试的键盘助手，并区分后续失败是网格问题还是当前人物位置造成的阻挡。
+apply patch
+patch: completed
+/workspace/mistsea-phase3_1/tests/paths.ts
+diff --git a/tests/paths.ts b/tests/paths.ts
+index affb0ee08b9a337b5db38b36e0b4f854b981069f..7d433a394176e72adec2f7b075b1af7c41d95785
+--- a/tests/paths.ts
++++ b/tests/paths.ts
+@@ -1,7 +1,8 @@
+-import { distance, isPassable, type Point } from "../src/shared/world.js";
++import { distance, isPassable, speed, tickMs, type Point } from "../src/shared/world.js";
+ 
+ type Stop = Point & { axis: "x" | "y" };
+ const grid = 8;
++const keyboardStep = speed * tickMs / 1000;
+ const cardinal = [
+   [1, 0],
+   [-1, 0],
+@@ -15,6 +16,29 @@
+   repaired: boolean,
+   occupants: Point[] = [],
+ ): Stop[] {
++  const stops = search(start, reached, repaired, occupants, grid);
++  if (!stops) throw Error("No walkable route from current position");
++  return stops;
++}
++
++export function findKeyboardRoute(
++  start: Point,
++  reached: (point: Point) => boolean,
++  repaired: boolean,
++  occupants: Point[],
++): Stop[] | undefined {
++  // A fractional start can put every line of the coarse grid outside a passage.
++  return search(start, reached, repaired, occupants, grid) ??
++    search(start, reached, repaired, occupants, keyboardStep);
++}
++
++function search(
++  start: Point,
++  reached: (point: Point) => boolean,
++  repaired: boolean,
++  occupants: Point[],
++  stride: number,
++): Stop[] | undefined {
+   if (reached(start)) return [];
+   const queue = [{ point: start, parent: -1, axis: "x" as Stop["axis"] }];
+   const visited = new Set(["0,0"]);
+@@ -35,20 +59,20 @@
+       break;
+     }
+     for (const [dx, dy] of cardinal) {
+-      const next = { x: point.x + dx * grid, y: point.y + dy * grid };
++      const next = { x: point.x + dx * stride, y: point.y + dy * stride };
+       // Lattice indices stay stable when the start is a fractional server position.
+-      const key = `${Math.round((next.x - start.x) / grid)},${Math.round((next.y - start.y) / grid)}`;
++      const key = `${Math.round((next.x - start.x) / stride)},${Math.round((next.y - start.y) / stride)}`;
+       if (
+         visited.has(key) ||
+         !clear(next.x, next.y) ||
+-        !clear(point.x + dx * 4, point.y + dy * 4)
++        !clear(point.x + dx * stride / 2, point.y + dy * stride / 2)
+       )
+         continue;
+       visited.add(key);
+       queue.push({ point: next, parent: i, axis: dx ? "x" : "y" });
+     }
+   }
+-  if (found < 0) throw Error("No walkable route from current position");
++  if (found < 0) return;
+   const steps: Stop[] = [];
+   for (let i = found; queue[i].parent >= 0; i = queue[i].parent) {
+     const { point, axis } = queue[i];
+
+apply patch
+patch: completed
+/workspace/mistsea-phase3_1/tests/phase3_1.e2e.ts
+diff --git a/tests/paths.ts b/tests/paths.ts
+index affb0ee08b9a337b5db38b36e0b4f854b981069f..7d433a394176e72adec2f7b075b1af7c41d95785
+--- a/tests/paths.ts
++++ b/tests/paths.ts
+@@ -1,7 +1,8 @@
+-import { distance, isPassable, type Point } from "../src/shared/world.js";
++import { distance, isPassable, speed, tickMs, type Point } from "../src/shared/world.js";
+ 
+ type Stop = Point & { axis: "x" | "y" };
+ const grid = 8;
++const keyboardStep = speed * tickMs / 1000;
+ const cardinal = [
+   [1, 0],
+   [-1, 0],
+@@ -15,6 +16,29 @@
+   repaired: boolean,
+   occupants: Point[] = [],
+ ): Stop[] {
++  const stops = search(start, reached, repaired, occupants, grid);
++  if (!stops) throw Error("No walkable route from current position");
++  return stops;
++}
++
++export function findKeyboardRoute(
++  start: Point,
++  reached: (point: Point) => boolean,
++  repaired: boolean,
++  occupants: Point[],
++): Stop[] | undefined {
++  // A fractional start can put every line of the coarse grid outside a passage.
++  return search(start, reached, repaired, occupants, grid) ??
++    search(start, reached, repaired, occupants, keyboardStep);
++}
++
++function search(
++  start: Point,
++  reached: (point: Point) => boolean,
++  repaired: boolean,
++  occupants: Point[],
++  stride: number,
++): Stop[] | undefined {
+   if (reached(start)) return [];
+   const queue = [{ point: start, parent: -1, axis: "x" as Stop["axis"] }];
+   const visited = new Set(["0,0"]);
+@@ -35,20 +59,20 @@
+       break;
+     }
+     for (const [dx, dy] of cardinal) {
+-      const next = { x: point.x + dx * grid, y: point.y + dy * grid };
++      const next = { x: point.x + dx * stride, y: point.y + dy * stride };
+       // Lattice indices stay stable when the start is a fractional server position.
+-      const key = `${Math.round((next.x - start.x) / grid)},${Math.round((next.y - start.y) / grid)}`;
++      const key = `${Math.round((next.x - start.x) / stride)},${Math.round((next.y - start.y) / stride)}`;
+       if (
+         visited.has(key) ||
+         !clear(next.x, next.y) ||
+-        !clear(point.x + dx * 4, point.y + dy * 4)
++        !clear(point.x + dx * stride / 2, point.y + dy * stride / 2)
+       )
+         continue;
+       visited.add(key);
+       queue.push({ point: next, parent: i, axis: dx ? "x" : "y" });
+     }
+   }
+-  if (found < 0) throw Error("No walkable route from current position");
++  if (found < 0) return;
+   const steps: Stop[] = [];
+   for (let i = found; queue[i].parent >= 0; i = queue[i].parent) {
+     const { point, axis } = queue[i];
+diff --git a/tests/phase3_1.e2e.ts b/tests/phase3_1.e2e.ts
+index 3287933a96195184a7b923012f4d014e226abd04..421adece970606b13d2a8b123ae20b4fd1b01de0
+--- a/tests/phase3_1.e2e.ts
++++ b/tests/phase3_1.e2e.ts
+@@ -23,7 +23,7 @@
+   valley,
+   type Point,
+ } from "../src/shared/world.js";
+-import { route } from "./paths.js";
++import { findKeyboardRoute } from "./paths.js";
+ 
+ const evidence = resolve(
+   process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1",
+@@ -56,15 +56,26 @@
+   repaired = false,
+ ) {
+   await stage(page).focus();
++  const diagnostics: object[] = [];
+   for (let attempt = 0; attempt < 4; attempt++) {
+     const { player, cenyan } = await positions(page);
+     if (reached(player, cenyan)) return;
+-    for (const step of route(
+-      player,
+-      (point) => reached(point, cenyan),
+-      repaired,
+-      [cenyan],
+-    )) {
++    const goal = (point: Point) => reached(point, cenyan);
++    const steps = findKeyboardRoute(player, goal, repaired, [cenyan]);
++    if (!steps) {
++      // Diagnose the obstruction without using a route that ignores Cenyan.
++      const terrainRoute = findKeyboardRoute(player, goal, repaired, []);
++      diagnostics.push({
++        player, cenyan, repaired,
++        reason: terrainRoute
++          ? "terrain route exists, but blocked with current NPC clearance"
++          : "no terrain route on either grid, even without the NPC",
++      });
++      if (!terrainRoute) break;
++      await page.waitForTimeout(150);
++      continue;
++    }
++    for (const step of steps) {
+       const axis = step.axis;
+       const endpoint = step[axis];
+       const delta = endpoint - (await positions(page)).player[axis];
+@@ -85,6 +96,7 @@
+       } catch (error) {
+         if (!(error instanceof Error && error.name === "TimeoutError"))
+           throw error;
++        diagnostics.push({ ...(await positions(page)), step, reason: "key movement did not reach waypoint" });
+         break;
+       } finally {
+         await page.keyboard.up(key);
+@@ -95,7 +107,7 @@
+   const { player, cenyan } = await positions(page);
+   expect(
+     reached(player, cenyan),
+-    `keyboard route ended at ${JSON.stringify({ player, cenyan })}`,
++    `Keyboard route did not reach the requested location: ${JSON.stringify({ player, cenyan, repaired, diagnostics })}`,
+   ).toBe(true);
+ }
+ 
+
+apply patch
+patch: completed
+/workspace/mistsea-phase3_1/tests/phase3_1.e2e.ts
+diff --git a/tests/paths.ts b/tests/paths.ts
+index affb0ee08b9a337b5db38b36e0b4f854b981069f..7d433a394176e72adec2f7b075b1af7c41d95785
+--- a/tests/paths.ts
++++ b/tests/paths.ts
+@@ -1,7 +1,8 @@
+-import { distance, isPassable, type Point } from "../src/shared/world.js";
++import { distance, isPassable, speed, tickMs, type Point } from "../src/shared/world.js";
+ 
+ type Stop = Point & { axis: "x" | "y" };
+ const grid = 8;
++const keyboardStep = speed * tickMs / 1000;
+ const cardinal = [
+   [1, 0],
+   [-1, 0],
+@@ -15,6 +16,29 @@
+   repaired: boolean,
+   occupants: Point[] = [],
+ ): Stop[] {
++  const stops = search(start, reached, repaired, occupants, grid);
++  if (!stops) throw Error("No walkable route from current position");
++  return stops;
++}
++
++export function findKeyboardRoute(
++  start: Point,
++  reached: (point: Point) => boolean,
++  repaired: boolean,
++  occupants: Point[],
++): Stop[] | undefined {
++  // A fractional start can put every line of the coarse grid outside a passage.
++  return search(start, reached, repaired, occupants, grid) ??
++    search(start, reached, repaired, occupants, keyboardStep);
++}
++
++function search(
++  start: Point,
++  reached: (point: Point) => boolean,
++  repaired: boolean,
++  occupants: Point[],
++  stride: number,
++): Stop[] | undefined {
+   if (reached(start)) return [];
+   const queue = [{ point: start, parent: -1, axis: "x" as Stop["axis"] }];
+   const visited = new Set(["0,0"]);
+@@ -35,20 +59,20 @@
+       break;
+     }
+     for (const [dx, dy] of cardinal) {
+-      const next = { x: point.x + dx * grid, y: point.y + dy * grid };
++      const next = { x: point.x + dx * stride, y: point.y + dy * stride };
+       // Lattice indices stay stable when the start is a fractional server position.
+-      const key = `${Math.round((next.x - start.x) / grid)},${Math.round((next.y - start.y) / grid)}`;
++      const key = `${Math.round((next.x - start.x) / stride)},${Math.round((next.y - start.y) / stride)}`;
+       if (
+         visited.has(key) ||
+         !clear(next.x, next.y) ||
+-        !clear(point.x + dx * 4, point.y + dy * 4)
++        !clear(point.x + dx * stride / 2, point.y + dy * stride / 2)
+       )
+         continue;
+       visited.add(key);
+       queue.push({ point: next, parent: i, axis: dx ? "x" : "y" });
+     }
+   }
+-  if (found < 0) throw Error("No walkable route from current position");
++  if (found < 0) return;
+   const steps: Stop[] = [];
+   for (let i = found; queue[i].parent >= 0; i = queue[i].parent) {
+     const { point, axis } = queue[i];
+diff --git a/tests/phase3_1.e2e.ts b/tests/phase3_1.e2e.ts
+index 3287933a96195184a7b923012f4d014e226abd04..c642f36bfe1c9ac5748cb06f12ee89e6d04d17f4
+--- a/tests/phase3_1.e2e.ts
++++ b/tests/phase3_1.e2e.ts
+@@ -23,7 +23,7 @@
+   valley,
+   type Point,
+ } from "../src/shared/world.js";
+-import { route } from "./paths.js";
++import { findKeyboardRoute } from "./paths.js";
+ 
+ const evidence = resolve(
+   process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1",
+@@ -56,15 +56,26 @@
+   repaired = false,
+ ) {
+   await stage(page).focus();
++  const diagnostics: object[] = [];
+   for (let attempt = 0; attempt < 4; attempt++) {
+     const { player, cenyan } = await positions(page);
+     if (reached(player, cenyan)) return;
+-    for (const step of route(
+-      player,
+-      (point) => reached(point, cenyan),
+-      repaired,
+-      [cenyan],
+-    )) {
++    const goal = (point: Point) => reached(point, cenyan);
++    const steps = findKeyboardRoute(player, goal, repaired, [cenyan]);
++    if (!steps) {
++      // Diagnose the obstruction without using a route that ignores Cenyan.
++      const terrainRoute = findKeyboardRoute(player, goal, repaired, []);
++      diagnostics.push({
++        player, cenyan, repaired,
++        reason: terrainRoute
++          ? "terrain route exists, but blocked with current NPC clearance"
++          : "no terrain route on either grid, even without the NPC",
++      });
++      if (!terrainRoute) break;
++      await page.waitForTimeout(150);
++      continue;
++    }
++    for (const step of steps) {
+       const axis = step.axis;
+       const endpoint = step[axis];
+       const delta = endpoint - (await positions(page)).player[axis];
+@@ -72,6 +83,7 @@
+       const sign = Math.sign(delta);
+       const key = axis === "x" ? (sign > 0 ? "d" : "a") : sign > 0 ? "s" : "w";
+       await page.keyboard.down(key);
++      let blocked = false;
+       try {
+         await page.waitForFunction(
+           ({ axis, endpoint, sign }) =>
+@@ -85,17 +97,21 @@
+       } catch (error) {
+         if (!(error instanceof Error && error.name === "TimeoutError"))
+           throw error;
+-        break;
++        blocked = true;
+       } finally {
+         await page.keyboard.up(key);
+       }
++      if (blocked) {
++        diagnostics.push({ ...(await positions(page)), step, reason: "key movement did not reach waypoint" });
++        break;
++      }
+     }
+     await expect(stage(page)).toHaveAttribute("data-moving", "false");
+   }
+   const { player, cenyan } = await positions(page);
+   expect(
+     reached(player, cenyan),
+-    `keyboard route ended at ${JSON.stringify({ player, cenyan })}`,
++    `Keyboard route did not reach the requested location: ${JSON.stringify({ player, cenyan, repaired, diagnostics })}`,
+   ).toBe(true);
+ }
+ 
+
+apply patch
+patch: completed
+/workspace/mistsea-phase3_1/tests/phase3_1.test.ts
+diff --git a/tests/paths.ts b/tests/paths.ts
+index affb0ee08b9a337b5db38b36e0b4f854b981069f..7d433a394176e72adec2f7b075b1af7c41d95785
+--- a/tests/paths.ts
++++ b/tests/paths.ts
+@@ -1,7 +1,8 @@
+-import { distance, isPassable, type Point } from "../src/shared/world.js";
++import { distance, isPassable, speed, tickMs, type Point } from "../src/shared/world.js";
+ 
+ type Stop = Point & { axis: "x" | "y" };
+ const grid = 8;
++const keyboardStep = speed * tickMs / 1000;
+ const cardinal = [
+   [1, 0],
+   [-1, 0],
+@@ -15,6 +16,29 @@
+   repaired: boolean,
+   occupants: Point[] = [],
+ ): Stop[] {
++  const stops = search(start, reached, repaired, occupants, grid);
++  if (!stops) throw Error("No walkable route from current position");
++  return stops;
++}
++
++export function findKeyboardRoute(
++  start: Point,
++  reached: (point: Point) => boolean,
++  repaired: boolean,
++  occupants: Point[],
++): Stop[] | undefined {
++  // A fractional start can put every line of the coarse grid outside a passage.
++  return search(start, reached, repaired, occupants, grid) ??
++    search(start, reached, repaired, occupants, keyboardStep);
++}
++
++function search(
++  start: Point,
++  reached: (point: Point) => boolean,
++  repaired: boolean,
++  occupants: Point[],
++  stride: number,
++): Stop[] | undefined {
+   if (reached(start)) return [];
+   const queue = [{ point: start, parent: -1, axis: "x" as Stop["axis"] }];
+   const visited = new Set(["0,0"]);
+@@ -35,20 +59,20 @@
+       break;
+     }
+     for (const [dx, dy] of cardinal) {
+-      const next = { x: point.x + dx * grid, y: point.y + dy * grid };
++      const next = { x: point.x + dx * stride, y: point.y + dy * stride };
+       // Lattice indices stay stable when the start is a fractional server position.
+-      const key = `${Math.round((next.x - start.x) / grid)},${Math.round((next.y - start.y) / grid)}`;
++      const key = `${Math.round((next.x - start.x) / stride)},${Math.round((next.y - start.y) / stride)}`;
+       if (
+         visited.has(key) ||
+         !clear(next.x, next.y) ||
+-        !clear(point.x + dx * 4, point.y + dy * 4)
++        !clear(point.x + dx * stride / 2, point.y + dy * stride / 2)
+       )
+         continue;
+       visited.add(key);
+       queue.push({ point: next, parent: i, axis: dx ? "x" : "y" });
+     }
+   }
+-  if (found < 0) throw Error("No walkable route from current position");
++  if (found < 0) return;
+   const steps: Stop[] = [];
+   for (let i = found; queue[i].parent >= 0; i = queue[i].parent) {
+     const { point, axis } = queue[i];
+diff --git a/tests/phase3_1.e2e.ts b/tests/phase3_1.e2e.ts
+index 3287933a96195184a7b923012f4d014e226abd04..c642f36bfe1c9ac5748cb06f12ee89e6d04d17f4
+--- a/tests/phase3_1.e2e.ts
++++ b/tests/phase3_1.e2e.ts
+@@ -23,7 +23,7 @@
+   valley,
+   type Point,
+ } from "../src/shared/world.js";
+-import { route } from "./paths.js";
++import { findKeyboardRoute } from "./paths.js";
+ 
+ const evidence = resolve(
+   process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1",
+@@ -56,15 +56,26 @@
+   repaired = false,
+ ) {
+   await stage(page).focus();
++  const diagnostics: object[] = [];
+   for (let attempt = 0; attempt < 4; attempt++) {
+     const { player, cenyan } = await positions(page);
+     if (reached(player, cenyan)) return;
+-    for (const step of route(
+-      player,
+-      (point) => reached(point, cenyan),
+-      repaired,
+-      [cenyan],
+-    )) {
++    const goal = (point: Point) => reached(point, cenyan);
++    const steps = findKeyboardRoute(player, goal, repaired, [cenyan]);
++    if (!steps) {
++      // Diagnose the obstruction without using a route that ignores Cenyan.
++      const terrainRoute = findKeyboardRoute(player, goal, repaired, []);
++      diagnostics.push({
++        player, cenyan, repaired,
++        reason: terrainRoute
++          ? "terrain route exists, but blocked with current NPC clearance"
++          : "no terrain route on either grid, even without the NPC",
++      });
++      if (!terrainRoute) break;
++      await page.waitForTimeout(150);
++      continue;
++    }
++    for (const step of steps) {
+       const axis = step.axis;
+       const endpoint = step[axis];
+       const delta = endpoint - (await positions(page)).player[axis];
+@@ -72,6 +83,7 @@
+       const sign = Math.sign(delta);
+       const key = axis === "x" ? (sign > 0 ? "d" : "a") : sign > 0 ? "s" : "w";
+       await page.keyboard.down(key);
++      let blocked = false;
+       try {
+         await page.waitForFunction(
+           ({ axis, endpoint, sign }) =>
+@@ -85,17 +97,21 @@
+       } catch (error) {
+         if (!(error instanceof Error && error.name === "TimeoutError"))
+           throw error;
+-        break;
++        blocked = true;
+       } finally {
+         await page.keyboard.up(key);
+       }
++      if (blocked) {
++        diagnostics.push({ ...(await positions(page)), step, reason: "key movement did not reach waypoint" });
++        break;
++      }
+     }
+     await expect(stage(page)).toHaveAttribute("data-moving", "false");
+   }
+   const { player, cenyan } = await positions(page);
+   expect(
+     reached(player, cenyan),
+-    `keyboard route ended at ${JSON.stringify({ player, cenyan })}`,
++    `Keyboard route did not reach the requested location: ${JSON.stringify({ player, cenyan, repaired, diagnostics })}`,
+   ).toBe(true);
+ }
+ 
+diff --git a/tests/phase3_1.test.ts b/tests/phase3_1.test.ts
+index 4767ee27eca47a8bfd3629c159196fad3af9e49d..400721a0ae1068afc8b4e4ecd6a109d9e6f96933
+--- a/tests/phase3_1.test.ts
++++ b/tests/phase3_1.test.ts
+@@ -39,6 +39,7 @@
+   dialoguePlanInstructions,
+   perceptionText,
+ } from "../src/server/dialogue/planning.js";
++import { findKeyboardRoute, route } from "./paths.js";
+ 
+ const { bridge } = valley;
+ const action = (
+@@ -55,6 +56,45 @@
+   state.player = { x: 438, y: 368, facing: "right" };
+   Object.assign(state.cenyan, { x: 421, y: 370 });
+ };
++
++test("the B quarry approach has a legal keyboard route despite the coarse-grid miss", (t) => {
++  // Rounded to the precision exposed by the browser after accepting follow.
++  const player = { x: 337.4662, y: 471.6158 };
++  const cenyan = { x: 338.2776, y: 494.0182 };
++  const reached = (point: { x: number; y: number }) =>
++    distance(point, { x: 399, y: 449 }) <= 14;
++  assert.throws(() => route(player, reached, false), /No walkable route/);
++  const steps = findKeyboardRoute(player, reached, false, [cenyan]);
++  assert.ok(steps?.length);
++
++  const { world, state, tick } = setup(t, (s) => {
++    Object.assign(s.player, player);
++    Object.assign(s.cenyan, cenyan);
++  });
++  assert.ok(
++    world.accept(
++      randomUUID(), plan({ type: "follow", target_id: "player" }), 1_000_000,
++      "我们一起去桥边吧。",
++    ),
++  );
++  for (const step of steps) {
++    const { axis } = step;
++    const sign = step[axis] > state().player[axis] ? 1 : -1;
++    for (let i = 0; i < 40 && (step[axis] - state().player[axis]) * sign > 1.7; i++) {
++      tick(1, (clock) => world.setMovement({
++        type: "move", dx: axis === "x" ? sign : 0, dy: axis === "y" ? sign : 0,
++      }, clock));
++      const { player: current, cenyan: follower } = state();
++      assert.ok(isPassable(current.x, current.y, false));
++      assert.ok(isPassable(follower.x, follower.y, false));
++      assert.ok(distance(current, follower) >= 8);
++    }
++    tick(1, (clock) => world.setMovement({ type: "move", dx: 0, dy: 0 }, clock));
++  }
++  assert.ok(reached(state().player));
++  assert.ok(distance(state().cenyan, cenyan) > 10);
++  assert.equal(state().cenyan.plan?.steps[0].type, "follow");
++});
+ function disk(t: TestContext) {
+   const directory = mkdtempSync(join(tmpdir(), "mistsea-phase31-unit-"));
+   t.after(() => rmSync(directory, { recursive: true, force: true }));
+
+exec
+/bin/bash -lc "node node_modules/prettier/bin/prettier.cjs --write tests/paths.ts tests/phase3_1.e2e.ts tests/phase3_1.test.ts
+python3 - <<'PY'
+from datetime import datetime, timedelta, timezone
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+
+evidence = Path(\"evidence/phase3_1\")
+output = Path(tempfile.mkdtemp(prefix=\"keyboard-route-fix-\", dir=evidence))
+env = {name: os.environ[name] for name in (\"PATH\", \"HOME\", \"TMPDIR\", \"TMP\", \"TEMP\", \"LANG\", \"LC_ALL\") if name in os.environ}
+env.update(LLM_ENABLED=\"false\", LLM_AUTONOMY_ENABLED=\"false\", LLM_MOCK_AUTONOMY_ENABLED=\"false\", MISTSEA_EVIDENCE=str(output))
+commands = [
+    ([\"npm\", \"run\", \"typecheck\"], \"typecheck.log\"),
+    ([\"npm\", \"test\"], \"unit-test.log\"),
+    ([\"git\", \"diff\", \"--check\"], \"diff-check.log\"),
+]
+results = []
+for args, name in commands:
+    started = datetime.now(timezone(timedelta(hours=8))).isoformat()
+    path = output / name
+    with path.open(\"w\") as stream:
+        code = subprocess.run(args, env=env, stdout=stream, stderr=subprocess.STDOUT, check=False).returncode
+    entry = {\"command\": \" \".join(args), \"exitCode\": code, \"startedAt\": started, \"log\": str(path)}
+    results.append(entry)
+    print(entry, flush=True)
+(output / \"command-results.json\").write_text(json.dumps(results, indent=2) + \"\\n\")
+sys.exit(any(r[\"exitCode\"] "'!= 0 for r in results))
+PY' in /workspace/mistsea-phase3_1
+ succeeded in 3804ms:
+tests/paths.ts 87ms
+tests/phase3_1.e2e.ts 82ms
+tests/phase3_1.test.ts 113ms
+{'command': 'npm run typecheck', 'exitCode': 0, 'startedAt': '2026-11-25T22:32:21.284702+08:00', 'log': '/workspace/mistsea-phase3_1/evidence/phase3_1/keyboard-route-fix-row0t6hs/typecheck.log'}
+{'command': 'npm test', 'exitCode': 0, 'startedAt': '2026-11-25T22:32:21.821964+08:00', 'log': '/workspace/mistsea-phase3_1/evidence/phase3_1/keyboard-route-fix-row0t6hs/unit-test.log'}
+{'command': 'git diff --check', 'exitCode': 0, 'startedAt': '2026-11-25T22:32:24.739076+08:00', 'log': '/workspace/mistsea-phase3_1/evidence/phase3_1/keyboard-route-fix-row0t6hs/diff-check.log'}
+
+exec
+/bin/bash -lc "node --import tsx --input-type=module <<'JS'
+import { findKeyboardRoute } from './tests/paths.ts';
+import { isPassable, distance } from './src/shared/world.ts';
+const cenyan = {x:338.2776,y:494.0182};
+const target = {x:399,y:449};
+let checked = 0;
+const noPath = [];
+for (let x = 335.5; x <= 342; x += 0.65) for (let y = 468.05; y < 487; y += 0.75) {
+  const p = {x,y};
+  if ("'!isPassable(x, y, false) || distance(p, cenyan)>26 || distance(p, cenyan)<14)
+    continue;
+  checked++;
+  if (!findKeyboardRoute(p,q=>distance(q,target)<=14,false,[cenyan]))
+    noPath.push(p);
+}
+console.log({checked, noPathCount:noPath.length, firstFew:noPath.slice(0,8)});
+JS
+rg '"'"'^ℹ (tests|pass|fail|skipped)'"' evidence/phase3_1/keyboard-route-fix-row0t6hs/unit-test.log
+git diff --numstat -- tests/paths.ts tests/phase3_1.e2e.ts tests/phase3_1.test.ts" in /workspace/mistsea-phase3_1
+ succeeded in 1046ms:
+{
+  checked: 177,
+  noPathCount: 15,
+  firstFew: [
+    { x: 335.5, y: 469.55 },
+    { x: 335.5, y: 470.3 },
+    { x: 335.5, y: 471.05 },
+    { x: 335.5, y: 471.8 },
+    { x: 335.5, y: 472.55 },
+    { x: 335.5, y: 473.3 },
+    { x: 335.5, y: 474.05 },
+    { x: 335.5, y: 474.8 }
+  ]
+}
+ℹ tests 64
+ℹ pass 64
+ℹ fail 0
+ℹ skipped 0
+37	5	tests/paths.ts
+
+exec
+/bin/bash -lc "node --import tsx --input-type=module <<'JS'
+import { findKeyboardRoute } from './tests/paths.ts';
+import { isPassable, distance } from './src/shared/world.ts';
+const n={x:338.2776,y:494.0182},t={x:399,y:449};
+let misses=[];
+for(let x=335.5;x<=342;x+=.65)for(let y=468.05;y<487;y+=.75){
+ const p={x,y}; const gap=distance(p,n); if("'!isPassable(x,y,false)||gap>26||gap<14)continue;
+ const reached=q=>distance(q,t)<=14;
+ const a=findKeyboardRoute(p,reached,false,[n]);
+ if(!a)misses.push({x,y,withoutNpc:!!findKeyboardRoute(p,reached,false,[])});
+}
+console.log(misses);
+JS' in /workspace/mistsea-phase3_1
+ succeeded in 1196ms:
+[
+  { x: 335.5, y: 469.55, withoutNpc: false },
+  { x: 335.5, y: 470.3, withoutNpc: false },
+  { x: 335.5, y: 471.05, withoutNpc: false },
+  { x: 335.5, y: 471.8, withoutNpc: false },
+  { x: 335.5, y: 472.55, withoutNpc: false },
+  { x: 335.5, y: 473.3, withoutNpc: false },
+  { x: 335.5, y: 474.05, withoutNpc: false },
+  { x: 335.5, y: 474.8, withoutNpc: false },
+  { x: 335.5, y: 477.05, withoutNpc: false },
+  { x: 335.5, y: 477.8, withoutNpc: false },
+  { x: 335.5, y: 478.55, withoutNpc: false },
+  { x: 335.5, y: 479.3, withoutNpc: false },
+  { x: 335.5, y: 480.05, withoutNpc: false },
+  { x: 336.15, y: 480.05, withoutNpc: true },
+  { x: 336.79999999999995, y: 480.05, withoutNpc: true }
+]
+
+apply patch
+patch: completed
+/workspace/mistsea-phase3_1/tests/paths.ts
+diff --git a/tests/paths.ts b/tests/paths.ts
+index affb0ee08b9a337b5db38b36e0b4f854b981069f..7803e7807d0502d623ee7fe2a17f03b27cbc5bbc
+--- a/tests/paths.ts
++++ b/tests/paths.ts
+@@ -1,7 +1,15 @@
+-import { distance, isPassable, type Point } from "../src/shared/world.js";
++import {
++  distance,
++  isPassable,
++  speed,
++  tickMs,
++  type Point,
++} from "../src/shared/world.js";
++import { canApproach } from "../src/server/path.js";
+ 
+ type Stop = Point & { axis: "x" | "y" };
+ const grid = 8;
++const keyboardStep = (speed * tickMs) / 1000;
+ const cardinal = [
+   [1, 0],
+   [-1, 0],
+@@ -15,13 +23,47 @@
+   repaired: boolean,
+   occupants: Point[] = [],
+ ): Stop[] {
++  const stops = search(start, reached, repaired, occupants, grid);
++  if (!stops) throw Error("No walkable route from current position");
++  return stops;
++}
++
++export function findKeyboardRoute(
++  start: Point,
++  reached: (point: Point) => boolean,
++  repaired: boolean,
++  occupants: Point[],
++): Stop[] | undefined {
++  // Prefer room for keyboard release and turns. Near a wall even the finer
++  // grid can need to start with a step that uses the actual collision limits.
++  return (
++    search(start, reached, repaired, occupants, grid) ??
++    search(start, reached, repaired, occupants, keyboardStep) ??
++    search(start, reached, repaired, occupants, keyboardStep, false)
++  );
++}
++
++function search(
++  start: Point,
++  reached: (point: Point) => boolean,
++  repaired: boolean,
++  occupants: Point[],
++  stride: number,
++  padded = true,
++): Stop[] | undefined {
+   if (reached(start)) return [];
+   const queue = [{ point: start, parent: -1, axis: "x" as Stop["axis"] }];
+   const visited = new Set(["0,0"]);
+   let found = -1;
+-  function clear(x: number, y: number) {
++  function clear(point: Point, from: Point) {
++    const { x, y } = point;
++    if (!padded)
++      return (
++        isPassable(x, y, repaired) &&
++        occupants.every((other) => canApproach(from, point, other))
++      );
+     return (
+-      occupants.every((other) => distance({ x, y }, other) >= 14) &&
++      occupants.every((other) => distance(point, other) >= 14) &&
+       isPassable(x - 3, y - 3, repaired) &&
+       isPassable(x + 3, y + 3, repaired) &&
+       isPassable(x + 3, y - 3, repaired) &&
+@@ -35,20 +77,24 @@
+       break;
+     }
+     for (const [dx, dy] of cardinal) {
+-      const next = { x: point.x + dx * grid, y: point.y + dy * grid };
++      const next = { x: point.x + dx * stride, y: point.y + dy * stride };
++      const middle = {
++        x: point.x + (dx * stride) / 2,
++        y: point.y + (dy * stride) / 2,
++      };
+       // Lattice indices stay stable when the start is a fractional server position.
+-      const key = `${Math.round((next.x - start.x) / grid)},${Math.round((next.y - start.y) / grid)}`;
++      const key = `${Math.round((next.x - start.x) / stride)},${Math.round((next.y - start.y) / stride)}`;
+       if (
+         visited.has(key) ||
+-        !clear(next.x, next.y) ||
+-        !clear(point.x + dx * 4, point.y + dy * 4)
++        !clear(middle, point) ||
++        !clear(next, middle)
+       )
+         continue;
+       visited.add(key);
+       queue.push({ point: next, parent: i, axis: dx ? "x" : "y" });
+     }
+   }
+-  if (found < 0) throw Error("No walkable route from current position");
++  if (found < 0) return;
+   const steps: Stop[] = [];
+   for (let i = found; queue[i].parent >= 0; i = queue[i].parent) {
+     const { point, axis } = queue[i];
+diff --git a/tests/phase3_1.e2e.ts b/tests/phase3_1.e2e.ts
+index 3287933a96195184a7b923012f4d014e226abd04..c642f36bfe1c9ac5748cb06f12ee89e6d04d17f4
+--- a/tests/phase3_1.e2e.ts
++++ b/tests/phase3_1.e2e.ts
+@@ -23,7 +23,7 @@
+   valley,
+   type Point,
+ } from "../src/shared/world.js";
+-import { route } from "./paths.js";
++import { findKeyboardRoute } from "./paths.js";
+ 
+ const evidence = resolve(
+   process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1",
+@@ -56,15 +56,26 @@
+   repaired = false,
+ ) {
+   await stage(page).focus();
++  const diagnostics: object[] = [];
+   for (let attempt = 0; attempt < 4; attempt++) {
+     const { player, cenyan } = await positions(page);
+     if (reached(player, cenyan)) return;
+-    for (const step of route(
+-      player,
+-      (point) => reached(point, cenyan),
+-      repaired,
+-      [cenyan],
+-    )) {
++    const goal = (point: Point) => reached(point, cenyan);
++    const steps = findKeyboardRoute(player, goal, repaired, [cenyan]);
++    if (!steps) {
++      // Diagnose the obstruction without using a route that ignores Cenyan.
++      const terrainRoute = findKeyboardRoute(player, goal, repaired, []);
++      diagnostics.push({
++        player, cenyan, repaired,
++        reason: terrainRoute
++          ? "terrain route exists, but blocked with current NPC clearance"
++          : "no terrain route on either grid, even without the NPC",
++      });
++      if (!terrainRoute) break;
++      await page.waitForTimeout(150);
++      continue;
++    }
++    for (const step of steps) {
+       const axis = step.axis;
+       const endpoint = step[axis];
+       const delta = endpoint - (await positions(page)).player[axis];
+@@ -72,6 +83,7 @@
+       const sign = Math.sign(delta);
+       const key = axis === "x" ? (sign > 0 ? "d" : "a") : sign > 0 ? "s" : "w";
+       await page.keyboard.down(key);
++      let blocked = false;
+       try {
+         await page.waitForFunction(
+           ({ axis, endpoint, sign }) =>
+@@ -85,17 +97,21 @@
+       } catch (error) {
+         if (!(error instanceof Error && error.name === "TimeoutError"))
+           throw error;
+-        break;
++        blocked = true;
+       } finally {
+         await page.keyboard.up(key);
+       }
++      if (blocked) {
++        diagnostics.push({ ...(await positions(page)), step, reason: "key movement did not reach waypoint" });
++        break;
++      }
+     }
+     await expect(stage(page)).toHaveAttribute("data-moving", "false");
+   }
+   const { player, cenyan } = await positions(page);
+   expect(
+     reached(player, cenyan),
+-    `keyboard route ended at ${JSON.stringify({ player, cenyan })}`,
++    `Keyboard route did not reach the requested location: ${JSON.stringify({ player, cenyan, repaired, diagnostics })}`,
+   ).toBe(true);
+ }
+ 
+diff --git a/tests/phase3_1.test.ts b/tests/phase3_1.test.ts
+index 4767ee27eca47a8bfd3629c159196fad3af9e49d..400721a0ae1068afc8b4e4ecd6a109d9e6f96933
+--- a/tests/phase3_1.test.ts
++++ b/tests/phase3_1.test.ts
+@@ -39,6 +39,7 @@
+   dialoguePlanInstructions,
+   perceptionText,
+ } from "../src/server/dialogue/planning.js";
++import { findKeyboardRoute, route } from "./paths.js";
+ 
+ const { bridge } = valley;
+ const action = (
+@@ -55,6 +56,45 @@
+   state.player = { x: 438, y: 368, facing: "right" };
+   Object.assign(state.cenyan, { x: 421, y: 370 });
+ };
++
++test("the B quarry approach has a legal keyboard route despite the coarse-grid miss", (t) => {
++  // Rounded to the precision exposed by the browser after accepting follow.
++  const player = { x: 337.4662, y: 471.6158 };
++  const cenyan = { x: 338.2776, y: 494.0182 };
++  const reached = (point: { x: number; y: number }) =>
++    distance(point, { x: 399, y: 449 }) <= 14;
++  assert.throws(() => route(player, reached, false), /No walkable route/);
++  const steps = findKeyboardRoute(player, reached, false, [cenyan]);
++  assert.ok(steps?.length);
++
++  const { world, state, tick } = setup(t, (s) => {
++    Object.assign(s.player, player);
++    Object.assign(s.cenyan, cenyan);
++  });
++  assert.ok(
++    world.accept(
++      randomUUID(), plan({ type: "follow", target_id: "player" }), 1_000_000,
++      "我们一起去桥边吧。",
++    ),
++  );
++  for (const step of steps) {
++    const { axis } = step;
++    const sign = step[axis] > state().player[axis] ? 1 : -1;
++    for (let i = 0; i < 40 && (step[axis] - state().player[axis]) * sign > 1.7; i++) {
++      tick(1, (clock) => world.setMovement({
++        type: "move", dx: axis === "x" ? sign : 0, dy: axis === "y" ? sign : 0,
++      }, clock));
++      const { player: current, cenyan: follower } = state();
++      assert.ok(isPassable(current.x, current.y, false));
++      assert.ok(isPassable(follower.x, follower.y, false));
++      assert.ok(distance(current, follower) >= 8);
++    }
++    tick(1, (clock) => world.setMovement({ type: "move", dx: 0, dy: 0 }, clock));
++  }
++  assert.ok(reached(state().player));
++  assert.ok(distance(state().cenyan, cenyan) > 10);
++  assert.equal(state().cenyan.plan?.steps[0].type, "follow");
++});
+ function disk(t: TestContext) {
+   const directory = mkdtempSync(join(tmpdir(), "mistsea-phase31-unit-"));
+   t.after(() => rmSync(directory, { recursive: true, force: true }));
+
+exec
+/bin/bash -lc "sed -n '45,150p' tests/phase3_1.test.ts; sed -n '1,125p' tests/paths.ts; sed -n '50,112p' tests/phase3_1.e2e.ts" in /workspace/mistsea-phase3_1
+ succeeded in 0ms:
+const action = (
+  verb: Action["verb"],
+  target = bridge.id,
+  fields: Partial<Action> = {},
+): Action => ({ type: "action", id: randomUUID(), verb, target, ...fields });
+const plan = (...steps: Step[]) => ({
+  goal: "一道修桥",
+  speech: "我来帮忙。",
+  plan: steps,
+});
+const atBridge = (state: SaveState) => {
+  state.player = { x: 438, y: 368, facing: "right" };
+  Object.assign(state.cenyan, { x: 421, y: 370 });
+};
+
+test("the B quarry approach has a legal keyboard route despite the coarse-grid miss", (t) => {
+  // Rounded to the precision exposed by the browser after accepting follow.
+  const player = { x: 337.4662, y: 471.6158 };
+  const cenyan = { x: 338.2776, y: 494.0182 };
+  const reached = (point: { x: number; y: number }) =>
+    distance(point, { x: 399, y: 449 }) <= 14;
+  assert.throws(() => route(player, reached, false), /No walkable route/);
+  const steps = findKeyboardRoute(player, reached, false, [cenyan]);
+  assert.ok(steps?.length);
+
+  const { world, state, tick } = setup(t, (s) => {
+    Object.assign(s.player, player);
+    Object.assign(s.cenyan, cenyan);
+  });
+  assert.ok(
+    world.accept(
+      randomUUID(),
+      plan({ type: "follow", target_id: "player" }),
+      1_000_000,
+      "我们一起去桥边吧。",
+    ),
+  );
+  for (const step of steps) {
+    const { axis } = step;
+    const sign = step[axis] > state().player[axis] ? 1 : -1;
+    for (
+      let i = 0;
+      i < 40 && (step[axis] - state().player[axis]) * sign > 1.7;
+      i++
+    ) {
+      tick(1, (clock) =>
+        world.setMovement(
+          {
+            type: "move",
+            dx: axis === "x" ? sign : 0,
+            dy: axis === "y" ? sign : 0,
+          },
+          clock,
+        ),
+      );
+      const { player: current, cenyan: follower } = state();
+      assert.ok(isPassable(current.x, current.y, false));
+      assert.ok(isPassable(follower.x, follower.y, false));
+      assert.ok(distance(current, follower) >= 8);
+    }
+    tick(1, (clock) =>
+      world.setMovement({ type: "move", dx: 0, dy: 0 }, clock),
+    );
+  }
+  assert.ok(reached(state().player));
+  assert.ok(distance(state().cenyan, cenyan) > 10);
+  assert.equal(state().cenyan.plan?.steps[0].type, "follow");
+});
+function disk(t: TestContext) {
+  const directory = mkdtempSync(join(tmpdir(), "mistsea-phase31-unit-"));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  return join(directory, "valley.sqlite");
+}
+function setup(t: TestContext, edit: (state: SaveState) => void = () => {}) {
+  const path = disk(t);
+  const save = new SaveFile(path);
+  const fresh = structuredClone(save.initial);
+  edit(fresh);
+  save.write(fresh);
+  save.close();
+  const store = new SaveFile(path);
+  t.after(() => store.close());
+  const world = new World(store);
+  let clock = 0;
+  return {
+    path,
+    world,
+    store,
+    tick(count = 1, beforeTick?: (clock: number) => void) {
+      for (let index = 0; index < count; index++) {
+        clock += 50;
+        beforeTick?.(clock);
+        world.tick(clock, 50, 1_000_000 + clock);
+      }
+    },
+    state: () => world.snapshot().state,
+  };
+}
+
+test("Phase3.1 step and client schemas only admit material pairs, valid targets and coherent policies", () => {
+  assert.deepEqual(Object.keys(capabilities), [
+    "move_to",
+    "follow",
+    "collect",
+    "give_item",
+    "deliver",
+import {
+  distance,
+  isPassable,
+  speed,
+  tickMs,
+  type Point,
+} from "../src/shared/world.js";
+import { canApproach } from "../src/server/path.js";
+
+type Stop = Point & { axis: "x" | "y" };
+const grid = 8;
+const keyboardStep = (speed * tickMs) / 1000;
+const cardinal = [
+  [1, 0],
+  [-1, 0],
+  [0, 1],
+  [0, -1],
+];
+
+export function route(
+  start: Point,
+  reached: (point: Point) => boolean,
+  repaired: boolean,
+  occupants: Point[] = [],
+): Stop[] {
+  const stops = search(start, reached, repaired, occupants, grid);
+  if (!stops) throw Error("No walkable route from current position");
+  return stops;
+}
+
+export function findKeyboardRoute(
+  start: Point,
+  reached: (point: Point) => boolean,
+  repaired: boolean,
+  occupants: Point[],
+): Stop[] | undefined {
+  // Prefer room for keyboard release and turns. Near a wall even the finer
+  // grid can need to start with a step that uses the actual collision limits.
+  return (
+    search(start, reached, repaired, occupants, grid) ??
+    search(start, reached, repaired, occupants, keyboardStep) ??
+    search(start, reached, repaired, occupants, keyboardStep, false)
+  );
+}
+
+function search(
+  start: Point,
+  reached: (point: Point) => boolean,
+  repaired: boolean,
+  occupants: Point[],
+  stride: number,
+  padded = true,
+): Stop[] | undefined {
+  if (reached(start)) return [];
+  const queue = [{ point: start, parent: -1, axis: "x" as Stop["axis"] }];
+  const visited = new Set(["0,0"]);
+  let found = -1;
+  function clear(point: Point, from: Point) {
+    const { x, y } = point;
+    if (!padded)
+      return (
+        isPassable(x, y, repaired) &&
+        occupants.every((other) => canApproach(from, point, other))
+      );
+    return (
+      occupants.every((other) => distance(point, other) >= 14) &&
+      isPassable(x - 3, y - 3, repaired) &&
+      isPassable(x + 3, y + 3, repaired) &&
+      isPassable(x + 3, y - 3, repaired) &&
+      isPassable(x - 3, y + 3, repaired)
+    );
+  }
+  for (let i = 0; i < queue.length; i++) {
+    const { point } = queue[i];
+    if (reached(point)) {
+      found = i;
+      break;
+    }
+    for (const [dx, dy] of cardinal) {
+      const next = { x: point.x + dx * stride, y: point.y + dy * stride };
+      const middle = {
+        x: point.x + (dx * stride) / 2,
+        y: point.y + (dy * stride) / 2,
+      };
+      // Lattice indices stay stable when the start is a fractional server position.
+      const key = `${Math.round((next.x - start.x) / stride)},${Math.round((next.y - start.y) / stride)}`;
+      if (
+        visited.has(key) ||
+        !clear(middle, point) ||
+        !clear(next, middle)
+      )
+        continue;
+      visited.add(key);
+      queue.push({ point: next, parent: i, axis: dx ? "x" : "y" });
+    }
+  }
+  if (found < 0) return;
+  const steps: Stop[] = [];
+  for (let i = found; queue[i].parent >= 0; i = queue[i].parent) {
+    const { point, axis } = queue[i];
+    if (steps.at(-1)?.axis !== axis) steps.push({ ...point, axis });
+  }
+  return steps.reverse();
+}
+  }));
+}
+
+async function walk(
+  page: Page,
+  reached: (p: Point, npc: Point) => boolean,
+  repaired = false,
+) {
+  await stage(page).focus();
+  const diagnostics: object[] = [];
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const { player, cenyan } = await positions(page);
+    if (reached(player, cenyan)) return;
+    const goal = (point: Point) => reached(point, cenyan);
+    const steps = findKeyboardRoute(player, goal, repaired, [cenyan]);
+    if (!steps) {
+      // Diagnose the obstruction without using a route that ignores Cenyan.
+      const terrainRoute = findKeyboardRoute(player, goal, repaired, []);
+      diagnostics.push({
+        player,
+        cenyan,
+        repaired,
+        reason: terrainRoute
+          ? "terrain route exists, but blocked with current NPC clearance"
+          : "no terrain route on either grid, even without the NPC",
+      });
+      if (!terrainRoute) break;
+      await page.waitForTimeout(150);
+      continue;
+    }
+    for (const step of steps) {
+      const axis = step.axis;
+      const endpoint = step[axis];
+      const delta = endpoint - (await positions(page)).player[axis];
+      if (Math.abs(delta) <= 2) continue;
+      const sign = Math.sign(delta);
+      const key = axis === "x" ? (sign > 0 ? "d" : "a") : sign > 0 ? "s" : "w";
+      await page.keyboard.down(key);
+      let blocked = false;
+      try {
+        await page.waitForFunction(
+          ({ axis, endpoint, sign }) =>
+            (Number(document.getElementById("game")!.dataset[axis]) -
+              endpoint) *
+              sign >=
+            -1.7,
+          { axis, endpoint, sign },
+          { timeout: 1600 + (Math.abs(delta) * 1000) / speed },
+        );
+      } catch (error) {
+        if (!(error instanceof Error && error.name === "TimeoutError"))
+          throw error;
+        blocked = true;
+      } finally {
+        await page.keyboard.up(key);
+      }
+      if (blocked) {
+        diagnostics.push({
+          ...(await positions(page)),
+          step,
+          reason: "key movement did not reach waypoint",
+        });
+        break;
+
+exec
+/bin/bash -lc "node --import tsx --input-type=module <<'JS'
+import {findKeyboardRoute} from './tests/paths.ts';
+import {World} from './src/server/world.ts';
+import {SaveFile} from './src/server/save.ts';
+import {distance,isPassable,valley} from './src/shared/world.ts';
+import {randomUUID} from 'node:crypto';
+const cenyan={x:338.2776,y:494.0182}, target={x:399,y:449};
+const reached=q=>distance(q,target)<=14;
+for(const player of [{x:337.4662,y:471.6158},{x:335.5,y:471.8},{x:336.15,y:480.05}]){
+ const steps=findKeyboardRoute(player,reached,false,[cenyan]);
+ console.log({player,steps,forbiddenCrossing:"'!!findKeyboardRoute(player,q=>distance(q,valley.ruin)<20,false,[cenyan])});
+ if(!steps) continue;
+ const save=new SaveFile('"':memory:');
+ const state=structuredClone(save.initial);
+ Object.assign(state.player,player);
+ Object.assign(state.cenyan,cenyan);
+ // Start the simulation from the game positions under test.
+ save.write(state);
+ const world=new World({ ...save, initial:state, memories:save.memories.bind(save), hasReceipt:save.hasReceipt.bind(save), write:save.write.bind(save) });
+ let clock=0;
+ const movement=(dx,dy)=>{clock+=50;world.setMovement({type:'move',dx,dy},clock);world.tick(clock,50,1000000+clock);};
+ world.accept(randomUUID(),{goal:'一起去桥边',speech:'好',plan:[{type:'follow',target_id:'player'}]},1_000_000,'一起去桥边');
+ const pose=()=>world.snapshot().state;
+ for (const step of steps){
+   const sign=step[step.axis]>pose().player[step.axis]?1:-1;
+   for(let i=0;i<40&&(step[step.axis]-pose().player[step.axis])*sign>1.7;i++)movement(step.axis==='x'?sign:0,step.axis==='y'?sign:0);
+   movement(0,0);
+ }
+ console.log('simulated',reached(pose().player),pose().player,pose().cenyan.last?.code);
+ save.close();
+}
+JS" in /workspace/mistsea-phase3_1
+ succeeded in 1458ms:
+{
+  player: { x: 337.4662, y: 471.6158 },
+  steps: [
+    { x: 359.4661999999999, y: 471.6158, axis: 'x' },
+    { x: 359.4661999999999, y: 436.41580000000016, axis: 'y' },
+    { x: 394.6661999999997, y: 436.41580000000016, axis: 'x' }
+  ],
+  forbiddenCrossing: false
+}
+simulated true { x: 394.6661999999997, y: 436.41580000000016, facing: 'right' } undefined
+{
+  player: { x: 335.5, y: 471.8 },
+  steps: [
+    { x: 361.89999999999986, y: 471.8, axis: 'x' },
+    { x: 361.89999999999986, y: 436.6000000000002, axis: 'y' },
+    { x: 392.6999999999997, y: 436.6000000000002, axis: 'x' }
+  ],
+  forbiddenCrossing: false
+}
+simulated true { x: 392.6999999999997, y: 436.6000000000002, facing: 'right' } undefined
+{
+  player: { x: 336.15, y: 480.05 },
+  steps: [
+    { x: 362.54999999999984, y: 480.05, axis: 'x' },
+    { x: 362.54999999999984, y: 436.05000000000024, axis: 'y' },
+    { x: 397.74999999999966, y: 436.05000000000024, axis: 'x' }
+  ],
+  forbiddenCrossing: false
+}
+simulated true { x: 397.74999999999966, y: 436.05000000000024, facing: 'right' } undefined
+
+exec
+/bin/bash -lc "python3 - <<'PY'
+from pathlib import Path
+p=Path('tests/phase3_1.test.ts');s=p.read_text()
+a=s.index('test(\"the B quarry approach')
+b=s.index('function disk(',a)
+block=s[a:b]
+block=block.replace('  // Rounded to the precision exposed by the browser after accepting follow.\\n  const player = { x: 337.4662, y: 471.6158 };','''  // The first player position is from the native failure, rounded as in the DOM.
+  // The second is nearby but too close to a rock for the extra test clearance.
+  const players = [{ x: 337.4662, y: 471.6158 }, { x: 335.5, y: 471.8 }];''')
+start=block.index('  assert.throws(')
+suffix=block[start:].removesuffix('});\\n')
+block=block[:start]+'''  assert.equal(findKeyboardRoute(
+    players[0], point => distance(point, valley.ruin) < valley.ruin.range, false, [cenyan],
+  ), undefined);
+  for (const player of players) {
+'''+''.join('  '+line if line.strip() else line for line in suffix.splitlines(keepends=True))+'''  }
+});
+
+'''
+s=s[:a]+s[b:]
+at=s.index('test(\"Phase3.1 step')
+s=s[:at]+block+s[at:];p.write_text(s)
+PY
+node node_modules/prettier/bin/prettier.cjs --write tests/paths.ts tests/phase3_1.test.ts tests/phase3_1.e2e.ts
+python3 - <<'PY'
+from datetime import datetime, timedelta, timezone
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+
+output = Path(tempfile.mkdtemp(prefix=\"keyboard-route-final-\", dir=\"evidence/phase3_1\"))
+names = (\"PATH\", \"HOME\", \"TMPDIR\", \"TMP\", \"TEMP\", \"LANG\", \"LC_ALL\")
+env = {name: os.environ[name] for name in names if name in os.environ}
+env.update(LLM_ENABLED=\"false\", LLM_AUTONOMY_ENABLED=\"false\", LLM_MOCK_AUTONOMY_ENABLED=\"false\", MISTSEA_EVIDENCE=str(output))
+commands = [
+    ([\"npm\", \"run\", \"typecheck\"], \"typecheck.log\"),
+    ([\"npm\", \"test\"], \"unit-test.log\"),
+    ([\"git\", \"diff\", \"--check\"], \"diff-check.log\"),
+]
+results = []
+for args, name in commands:
+    started = datetime.now(timezone(timedelta(hours=8))).isoformat()
+    path = output / name
+    with path.open(\"w\") as stream:
+        code = subprocess.run(args, env=env, stdout=stream, stderr=subprocess.STDOUT, check=False).returncode
+    entry = {\"command\": \" \".join(args), \"exitCode\": code, \"startedAt\": started, \"log\": str(path.relative_to(Path.cwd()))}
+    results.append(entry)
+    print(entry, flush=True)
+(output / \"command-results.json\").write_text(json.dumps(results, indent=2) + \"\\n\")
+sys.exit(any(r[\"exitCode\"] "'!= 0 for r in results))
+PY' in /workspace/mistsea-phase3_1
+ succeeded in 4708ms:
+tests/paths.ts 90ms
+tests/phase3_1.test.ts 139ms
+tests/phase3_1.e2e.ts 63ms (unchanged)
+{'command': 'npm run typecheck', 'exitCode': 0, 'startedAt': '2026-11-25T22:34:18.317671+08:00', 'log': 'evidence/phase3_1/keyboard-route-final-2niq8fcc/typecheck.log'}
+{'command': 'npm test', 'exitCode': 0, 'startedAt': '2026-11-25T22:34:18.900359+08:00', 'log': 'evidence/phase3_1/keyboard-route-final-2niq8fcc/unit-test.log'}
+{'command': 'git diff --check', 'exitCode': 0, 'startedAt': '2026-11-25T22:34:22.620406+08:00', 'log': 'evidence/phase3_1/keyboard-route-final-2niq8fcc/diff-check.log'}
+
+exec
+/bin/bash -lc "rg -n 'quarry approach|"'^ℹ (tests|pass|fail|skipped)'"' evidence/phase3_1/keyboard-route-final-2niq8fcc/unit-test.log; rg -n '"'^export function findKeyboardRoute|''^async function walk'"\\(|the B quarry approach' tests/{paths.ts,phase3_1.e2e.ts,phase3_1.test.ts}; git rev-parse --short HEAD" in /workspace/mistsea-phase3_1
+ succeeded in 0ms:
+38:✔ the B quarry approach has a legal keyboard route despite the coarse-grid miss (740.471825ms)
+85:ℹ tests 64
+87:ℹ pass 64
+88:ℹ fail 0
+90:ℹ skipped 0
+tests/phase3_1.test.ts:91:test("the B quarry approach has a legal keyboard route despite the coarse-grid miss", (t) => {
+tests/paths.ts:31:export function findKeyboardRoute(
+tests/phase3_1.e2e.ts:53:async function walk(
+842342a
+
+codex
+已修复合作 E2E 的键盘路线助手。用第二批失败时的坐标复现后，确认旧 8 像素网格即使不计入岑砚，也会漏掉岩场出口。按正常键盘单 tick 的 4.4 像素步幅搜索，可以在保留避让余量的情况下找到路线。
+
+助手现在优先走有余量的路线，靠墙时回退到服务器实际碰撞规则。遇到临时人物阻挡会短暂停步，再按最新坐标重新规划。若仍无路，报错会记录双方坐标并区分地形与人物阻挡。游戏规则和 A–F 断言均未改动。 [路线搜索](/workspace/mistsea-phase3_1/tests/paths.ts:31) · [键盘助手](/workspace/mistsea-phase3_1/tests/phase3_1.e2e.ts:53)
+
+类型检查通过，**64/64 单元测试通过**。新增回归用失败坐标推进实际世界 tick，验证动态同行时能离开岩场，且断桥仍不可穿越。两批原生日志保留，修复后的原生合作 E2E 留给协调者复测。未提交或打包。 [检查记录](/workspace/mistsea-phase3_1/evidence/phase3_1/keyboard-route-final-2niq8fcc/command-results.json)
+tokens used
+443,147
+已修复合作 E2E 的键盘路线助手。用第二批失败时的坐标复现后，确认旧 8 像素网格即使不计入岑砚，也会漏掉岩场出口。按正常键盘单 tick 的 4.4 像素步幅搜索，可以在保留避让余量的情况下找到路线。
+
+助手现在优先走有余量的路线，靠墙时回退到服务器实际碰撞规则。遇到临时人物阻挡会短暂停步，再按最新坐标重新规划。若仍无路，报错会记录双方坐标并区分地形与人物阻挡。游戏规则和 A–F 断言均未改动。 [路线搜索](/workspace/mistsea-phase3_1/tests/paths.ts:31) · [键盘助手](/workspace/mistsea-phase3_1/tests/phase3_1.e2e.ts:53)
+
+类型检查通过，**64/64 单元测试通过**。新增回归用失败坐标推进实际世界 tick，验证动态同行时能离开岩场，且断桥仍不可穿越。两批原生日志保留，修复后的原生合作 E2E 留给协调者复测。未提交或打包。 [检查记录](/workspace/mistsea-phase3_1/evidence/phase3_1/keyboard-route-final-2niq8fcc/command-results.json)

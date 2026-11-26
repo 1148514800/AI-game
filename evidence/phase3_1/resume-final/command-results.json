@@ -1,0 +1,32 @@
+[
+  {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:17:10.041968+08:00",
+    "log": "evidence/phase3_1/resume-final/typecheck.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:17:10.628465+08:00",
+    "log": "evidence/phase3_1/resume-final/unit-test.log"
+  },
+  {
+    "command": "node --import tsx scripts/regress-phase3_1.ts",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:17:13.343519+08:00",
+    "log": "evidence/phase3_1/resume-final/follow-ticks.log"
+  },
+  {
+    "command": "git diff --check",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:17:20.207138+08:00",
+    "log": "evidence/phase3_1/resume-final/diff-check.log"
+  },
+  {
+    "command": "git diff --exit-code 842342a1021751d0e33ac7b2a3db27f0e0bca9f1 -- evidence :(exclude)evidence/phase3_1",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:17:20.218910+08:00",
+    "log": "evidence/phase3_1/resume-final/historical-evidence-diff.log"
+  }
+]

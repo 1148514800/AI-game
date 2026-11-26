@@ -24,6 +24,7 @@ if (
   );
 }
 Object.assign(state.bridge, bridge.required, { discovered: true });
+if (state.contributions) Object.assign(state.contributions.legacy, bridge.required);
 const save = new SaveFile(savePath);
 try {
   // Benchmark load only: the materials are already on site; the bag stays empty.

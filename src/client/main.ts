@@ -1,3 +1,4 @@
+import { materialAmount } from "../shared/cenyan.js";
 import Phaser from "phaser";
 import "./style.css";
 import { Connection, type ConnectionStatus } from "./connection.js";
@@ -223,9 +224,54 @@ const dialogue = bindDialogue({
 retry.addEventListener("click", () => void connection.connect());
 pause.addEventListener("click", () => setPaused(!paused));
 element("interact").addEventListener("click", interact);
+element("nearby-cenyan").addEventListener("click", () => {
+  if (canPlay()) dialogue.open();
+});
+element("bridge-work").addEventListener("click", () => {
+  if (canPlay() && snapshot)
+    request({
+      type: "action",
+      target: valley.bridge.id,
+      verb: snapshot.working ? "stop" : "work",
+    });
+});
 element("bridge-check").addEventListener("click", () => {
   if (canPlay() && selectedAction()?.target === valley.bridge.id)
     request({ type: "action", target: valley.bridge.id, verb: "inspect" });
+});
+element<HTMLFormElement>("bridge-delivery").addEventListener(
+  "submit",
+  (event) => {
+    event.preventDefault();
+    if (!canPlay()) return;
+    const parsed = materialAmount.safeParse({
+      item: element<HTMLSelectElement>("delivery-item").value,
+      qty: element<HTMLInputElement>("delivery-qty").valueAsNumber,
+    });
+    if (parsed.success)
+      request({
+        type: "action",
+        target: valley.bridge.id,
+        verb: "deliver",
+        ...parsed.data,
+      });
+  },
+);
+for (const choice of ["accept", "reject"] as const)
+  element(`gift-${choice}`).addEventListener("click", () => {
+    const offer = snapshot?.state.gift;
+    if (canPlay() && offer?.from === "cenyan")
+      request({
+        type: "action",
+        target: "cenyan",
+        verb: "gift-response",
+        offerId: offer.id,
+        choice,
+      });
+  });
+element("stop-follow").addEventListener("click", () => {
+  if (canPlay())
+    request({ type: "action", target: "cenyan", verb: "stop-follow" });
 });
 overview.addEventListener("click", () => {
   showingOverview = !showingOverview;

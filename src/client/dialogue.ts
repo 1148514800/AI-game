@@ -3,7 +3,8 @@ import {
   type ClientMessage,
   type DialogueEvent,
 } from "../shared/protocol.js";
-import { residents } from "../shared/world.js";
+import { materialAmount, type MaterialAmount } from "../shared/cenyan.js";
+import { items, residents } from "../shared/world.js";
 import { element } from "./ui.js";
 
 export function bindDialogue(callbacks: {
@@ -15,13 +16,14 @@ export function bindDialogue(callbacks: {
   const input = element<HTMLTextAreaElement>("dialogue-input");
   const send = element<HTMLButtonElement>("dialogue-send");
   const retry = element<HTMLButtonElement>("dialogue-retry");
+  const giftSend = element<HTMLButtonElement>("gift-send");
   const mode = element("dialogue-mode");
   const transcript = element("dialogue-transcript");
   const pending = element("dialogue-pending");
   const error = element("dialogue-error");
   let opening: string | undefined;
   let dialogId: string | undefined;
-  let request: { id: string; text: string } | undefined;
+  let request: { id: string; text: string; gift?: MaterialAmount } | undefined;
   let failedText: string | undefined;
   let composing = false;
   let composedAt = -Infinity;
@@ -42,6 +44,7 @@ export function bindDialogue(callbacks: {
   function progress(busy: boolean) {
     pending.hidden = !busy;
     send.disabled = busy;
+    giftSend.disabled = busy;
     retry.disabled = busy;
   }
 
@@ -76,7 +79,7 @@ export function bindDialogue(callbacks: {
     callbacks.changed();
   }
 
-  function submit(text: string, repeat = false) {
+  function submit(text: string, repeat = false, gift?: MaterialAmount) {
     if (!dialogId || request || composing) return;
     text = text.trim();
     if (!text || text.length > dialogueInputLimit) {
@@ -84,15 +87,18 @@ export function bindDialogue(callbacks: {
       return;
     }
     const id = crypto.randomUUID();
-    if (!callbacks.send({ type: "dialogue-send", id, dialogId, text })) {
+    const message = gift
+      ? { type: "dialogue-gift" as const, id, dialogId, gift }
+      : { type: "dialogue-send" as const, id, dialogId, text };
+    if (!callbacks.send(message)) {
       showError("连接暂不可用。可以再试一次。", repeat);
       return;
     }
     if (!repeat) {
       append("旅人", text);
-      input.value = "";
+      if (!gift) input.value = "";
     }
-    request = { id, text };
+    request = { id, text, gift };
     failedText = undefined;
     showError("");
     progress(true);
@@ -139,7 +145,7 @@ export function bindDialogue(callbacks: {
       message.event === "pending"
     )
       return;
-    const text = request.text;
+    const { text, gift } = request;
     request = undefined;
     progress(false);
     if (message.event === "reply") {
@@ -149,13 +155,15 @@ export function bindDialogue(callbacks: {
           "行动回执",
           {
             accepted: "计划已接受，等待规则执行。",
-            deferred: "岑砚有进行中的计划，这次请求暂缓。",
+            deferred: "已保存待执行计划，当前行动结束后执行。",
+            continued: "继续当前计划。",
             rejected: "这次没有接受行动计划。",
           }[message.action],
         );
+      if (message.gift) append("赠送回执", message.gift.text);
     } else {
-      failedText = text;
-      showError(message.text, true);
+      failedText = gift ? undefined : text;
+      showError(message.text, !gift);
     }
   }
 
@@ -187,6 +195,22 @@ export function bindDialogue(callbacks: {
     if (performance.now() - composedAt >= 70) submit(input.value);
   });
   send.addEventListener("click", () => submit(input.value));
+  element<HTMLFormElement>("dialogue-gift").addEventListener(
+    "submit",
+    (event) => {
+      event.preventDefault();
+      const parsed = materialAmount.safeParse({
+        item: element<HTMLSelectElement>("gift-item").value,
+        qty: element<HTMLInputElement>("gift-qty").valueAsNumber,
+      });
+      if (parsed.success)
+        submit(
+          `提议赠送${items[parsed.data.item]} ×${parsed.data.qty}`,
+          false,
+          parsed.data,
+        );
+    },
+  );
   retry.addEventListener("click", () => {
     if (failedText) submit(failedText, true);
   });

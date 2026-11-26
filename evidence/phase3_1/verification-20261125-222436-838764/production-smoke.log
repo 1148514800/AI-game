@@ -1,0 +1,1 @@
+PASS: compiled Fastify, SQLite, WebSocket, local assets and keyboard movement without API keys.

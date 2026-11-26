@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "verification": "evidence/phase3_1/verification-20261125-223512-151573",
+  "allCommandExitCodesZero": 13,
+  "unchangedValidationInputFiles": 109,
+  "unit": 64,
+  "integration": 5,
+  "browser": 13,
+  "trajectorySamples": 67,
+  "distinctServiceProcesses": [
+    385025,
+    385227,
+    385447
+  ],
+  "mockRequests": 14,
+  "followMovement": 172.00277765367207,
+  "followMinimumGap": 14.88513553880296,
+  "contributions": {
+    "player": {
+      "wood": 4,
+      "stone": 0,
+      "workMs": 6950.318787999999
+    },
+    "cenyan": {
+      "wood": 2,
+      "stone": 2,
+      "workMs": 7049.681212000001
+    },
+    "legacy": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    }
+  },
+  "sharedWorkMs": 6950.318787999999,
+  "memoryInNextModelContext": true,
+  "allSampledStockContributionInvariants": true,
+  "browserErrors": []
+}

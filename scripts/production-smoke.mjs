@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium, expect } from "@playwright/test";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1";
 mkdirSync(evidence, { recursive: true });
 const directory = mkdtempSync(join(tmpdir(), "mistsea-production-"));
 const output = openSync(join(evidence, "production-server.log"), "w");
@@ -15,6 +15,7 @@ const child = spawn(process.execPath, ["release/server/src/server/index.js"], {
     PATH: process.env.PATH,
     PORT: "3002",
     HOST: "127.0.0.1",
+    LLM_ENABLED: "false",
     MISTSEA_SAVE: join(directory, "valley.sqlite"),
   },
   stdio: ["ignore", output, output],
@@ -40,7 +41,7 @@ try {
     .toMatchObject({
       status: "ok",
       phase: 3,
-      schemaVersion: 2,
+      schemaVersion: 3,
       contentVersion: 1,
     });
   browser = await chromium.launch({

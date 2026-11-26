@@ -1,9 +1,17 @@
 import { z } from "zod";
 import { inventoryLimit, valley } from "./world.js";
 
-import { actorSchema, type CenyanStatus } from "./cenyan.js";
+import {
+  actorSchema,
+  giftChoice,
+  giftOffer,
+  materialAmount,
+  materialSchema,
+  quantitySchema,
+  type CenyanStatus,
+} from "./cenyan.js";
 
-export const schemaVersion = 2;
+export const schemaVersion = 3;
 const directions = z.enum(["down", "up", "left", "right"]);
 const axis = z.union([z.literal(-1), z.literal(0), z.literal(1)]);
 const id = z.string().regex(/^[a-z0-9-]{1,64}$/);
@@ -27,7 +35,8 @@ export type DialogueEvent =
       requestId: string;
       dialogId: string;
       text: string;
-      action?: "accepted" | "deferred" | "rejected";
+      action?: "accepted" | "deferred" | "rejected" | "continued";
+      gift?: Result;
     }
   | {
       type: "dialogue";
@@ -39,29 +48,65 @@ export type DialogueEvent =
     }
   | { type: "dialogue"; event: "closed"; dialogId: string; text: string };
 
-export const clientMessage = z.discriminatedUnion("type", [
-  z.strictObject({ type: z.literal("move"), dx: axis, dy: axis }),
-  z.strictObject({ type: z.literal("pause"), paused: z.boolean() }),
-  z.strictObject({ type: z.literal("dialogue-open"), id: actionId, npc: id }),
-  z.strictObject({
-    type: z.literal("dialogue-send"),
-    id: actionId,
-    dialogId: actionId,
-    text: z.string().max(4096),
-  }),
-  z.strictObject({ type: z.literal("dialogue-close"), dialogId: actionId }),
-  z.strictObject({
-    type: z.literal("action"),
-    id: actionId,
-    target: id,
-    verb: z.enum(["inspect", "collect", "deliver", "work", "stop"]),
-  }),
-  z.strictObject({
-    type: z.literal("reset"),
-    id: actionId,
-    confirm: z.literal(true),
-  }),
-]);
+export const clientMessage = z
+  .discriminatedUnion("type", [
+    z.strictObject({ type: z.literal("move"), dx: axis, dy: axis }),
+    z.strictObject({ type: z.literal("pause"), paused: z.boolean() }),
+    z.strictObject({ type: z.literal("dialogue-open"), id: actionId, npc: id }),
+    z.strictObject({
+      type: z.literal("dialogue-send"),
+      id: actionId,
+      dialogId: actionId,
+      text: z.string().max(4096),
+    }),
+    z.strictObject({
+      type: z.literal("dialogue-gift"),
+      id: actionId,
+      dialogId: actionId,
+      gift: materialAmount,
+    }),
+    z.strictObject({ type: z.literal("dialogue-close"), dialogId: actionId }),
+    z.strictObject({
+      type: z.literal("action"),
+      id: actionId,
+      target: id,
+      verb: z.enum([
+        "inspect",
+        "collect",
+        "deliver",
+        "work",
+        "stop",
+        "stop-follow",
+        "gift-response",
+      ]),
+      item: materialSchema.optional(),
+      qty: quantitySchema.optional(),
+      offerId: actionId.optional(),
+      choice: giftChoice.optional(),
+    }),
+    z.strictObject({
+      type: z.literal("reset"),
+      id: actionId,
+      confirm: z.literal(true),
+    }),
+  ])
+  .refine((msg) => {
+    if (msg.type !== "action") return true;
+    if (msg.verb === "gift-response")
+      return (
+        !!msg.offerId &&
+        !!msg.choice &&
+        msg.item === undefined &&
+        msg.qty === undefined
+      );
+    return (
+      msg.offerId === undefined &&
+      msg.choice === undefined &&
+      (msg.verb === "deliver"
+        ? (msg.item === undefined) === (msg.qty === undefined)
+        : msg.item === undefined && msg.qty === undefined)
+    );
+  });
 export type ClientMessage = z.infer<typeof clientMessage>;
 export type Action = Extract<ClientMessage, { type: "action" }>;
 
@@ -86,9 +131,28 @@ export const legacySaveSchema = z.strictObject({
   }),
   explored: z.boolean(),
 });
+const contribution = z.strictObject({
+  wood: z.int().min(0).max(material.wood),
+  stone: z.int().min(0).max(material.stone),
+  workMs: z.number().min(0).max(valley.bridge.workMs),
+});
+export const v2SaveSchema = legacySaveSchema.extend({
+  schemaVersion: z.literal(2),
+  cenyan: actorSchema,
+});
 export const saveSchema = legacySaveSchema.extend({
   schemaVersion: z.literal(schemaVersion),
   cenyan: actorSchema,
+  gift: giftOffer.nullable(),
+  contributions: z.strictObject({
+    player: contribution,
+    cenyan: contribution,
+    legacy: contribution,
+  }),
+  sharedWorkMs: z
+    .number()
+    .min(0)
+    .max(valley.bridge.workMs / 2),
 });
 export type SaveState = z.infer<typeof saveSchema>;
 
@@ -107,6 +171,9 @@ export type Result = {
   code: string;
   text: string;
   target?: string;
+  materials?: { wood: number; stone: number };
+  actor?: "player" | "cenyan";
+  offerId?: string;
 };
 export type ServerMessage =
   | Snapshot

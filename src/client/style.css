@@ -706,3 +706,24 @@ dialog form {
 .cenyan-debug h3 { font-size: inherit; }
 .cenyan-debug li { line-height: 1.45; }
 .dialogue-suggestions { flex-wrap: wrap; }
+
+.material-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.65rem;
+}
+.material-controls[hidden] { display: none; }
+.material-controls label { display: inline-flex; align-items: center; gap: 0.3rem; }
+.material-controls select, .material-controls input { font: inherit; }
+.material-controls input { width: 4.25rem; }
+.contribution { margin: 0.3rem 0 0; font-size: 0.82rem; }
+#cenyan-results { white-space: pre-line; overflow-wrap: anywhere; }
+
+#cenyan-decision {
+  margin: 0;
+  font-size: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

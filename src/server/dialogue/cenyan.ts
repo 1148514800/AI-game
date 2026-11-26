@@ -9,6 +9,9 @@ export type PublicBridge = {
   stoneRequired: number;
   progressPercent: number;
   repaired: boolean;
+  missing?: { wood: number; stone: number };
+  contributions?: import("../../shared/protocol.js").SaveState["contributions"];
+  sharedWorkMs?: number;
 };
 export type Turn = { player: string; reply: string };
 export type ChatMessage = {

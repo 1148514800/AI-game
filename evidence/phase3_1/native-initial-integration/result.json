@@ -1,0 +1,6 @@
+{
+  "command": "npm run test:integration",
+  "stage": "initial native diagnosis; final suite will rerun after code review",
+  "startedAt": "2026-11-25T22:09:14.111786+08:00",
+  "exitCode": 0
+}

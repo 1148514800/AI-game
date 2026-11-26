@@ -11,7 +11,7 @@ import {
 import { tickMs, valley } from "../shared/world.js";
 import { SaveFile } from "./save.js";
 import { World } from "./world.js";
-import type { MockDecision } from "./dialogue/planning.js";
+import type { MockDecision, MockDialogue } from "./dialogue/planning.js";
 import { DialogueSession } from "./dialogue/session.js";
 
 export function createApp(
@@ -20,6 +20,7 @@ export function createApp(
     staticRoot?: string;
     dialogueEnv?: NodeJS.ProcessEnv;
     mockDecision?: MockDecision;
+    mockDialogue?: MockDialogue;
     observeTick?: (sample: {
       elapsedMs: number;
       durationMs: number;
@@ -98,13 +99,14 @@ export function createApp(
     },
     send,
     options.dialogueEnv,
-    () => world?.haltPlayer(),
+    () => world?.standPlayer(),
     world
       ? {
           world,
           active: isActive,
           storageError,
           mockDecision: options.mockDecision,
+          mockDialogue: options.mockDialogue,
         }
       : undefined,
   );
@@ -255,6 +257,7 @@ export function createApp(
       if (
         message.type === "dialogue-open" ||
         message.type === "dialogue-send" ||
+        message.type === "dialogue-gift" ||
         message.type === "dialogue-close"
       ) {
         try {
@@ -267,7 +270,7 @@ export function createApp(
               event: "error",
               requestId: message.id,
               dialogId:
-                message.type === "dialogue-send" ? message.dialogId : undefined,
+                message.type === "dialogue-open" ? undefined : message.dialogId,
               code: "internal",
               text: "暂时无法处理对话，可手动重试。",
             });

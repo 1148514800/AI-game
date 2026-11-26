@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-25T22:44:04.101108+08:00",
+  "status": "PASS",
+  "candidateFiles": 1247,
+  "historicalEvidenceExact": 770,
+  "runtimeAssetsHashVerified": 45,
+  "pdfSha256": "8623390d64c8f0684e89749247cbf2d3206f3c859bd0c7e34f8567a5d252efc7",
+  "unchangedValidationInputFiles": 109,
+  "forbiddenPaths": [],
+  "baselineTests": {
+    "tests/unit.test.ts": 14,
+    "tests/dialogue.test.ts": 11,
+    "tests/phase3.test.ts": 20,
+    "tests/dialogue.integration.ts": 4,
+    "tests/scene.e2e.ts": 7,
+    "tests/dialogue.e2e.ts": 5
+  },
+  "noRemoteWrites": true
+}

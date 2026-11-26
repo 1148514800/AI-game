@@ -1,0 +1,178 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/lib/nodejs/node",
+      "/workspace/mistsea-phase3_1/node_modules/.bin/playwright",
+      "test",
+      "tests/phase3_1.e2e.ts"
+    ],
+    "configFile": "/workspace/mistsea-phase3_1/playwright.config.ts",
+    "rootDir": "/workspace/mistsea-phase3_1/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/mistsea-phase3_1/evidence/phase3_1/cooperation-repeat/run-2/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/workspace/mistsea-phase3_1/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "*.e2e.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/mistsea-phase3_1/evidence/phase3_1/cooperation-repeat/run-2/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/workspace/mistsea-phase3_1/tests",
+        "snapshotDir": "/workspace/mistsea-phase3_1/tests",
+        "testIgnore": [],
+        "testMatch": "*.e2e.ts",
+        "timeout": 150000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5174",
+          "viewport": {
+            "width": 1280,
+            "height": 960
+          },
+          "headless": true,
+          "launchOptions": {
+            "chromiumSandbox": true,
+            "ignoreDefaultArgs": [
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "trace": {
+            "mode": "retain-on-failure",
+            "screenshots": false,
+            "snapshots": false,
+            "sources": false
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/workspace/mistsea-phase3_1/evidence/phase3_1/cooperation-repeat/run-2/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev:client",
+      "env": {
+        "PORT": "3003",
+        "MISTSEA_VITE_PORT": "5174"
+      },
+      "url": "http://127.0.0.1:5174",
+      "reuseExistingServer": false,
+      "stdout": "pipe",
+      "stderr": "pipe",
+      "timeout": 15000
+    }
+  },
+  "suites": [
+    {
+      "title": "phase3_1.e2e.ts",
+      "file": "phase3_1.e2e.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Phase3.1 A–F normal UI: consent, persisted plan, following, shared bridge and restarted context",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 51375,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T14:41:14.049Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/mistsea-phase3_1/evidence/phase3_1/cooperation-repeat/run-2/playwright-artifacts/phase3_1.e2e.ts-Phase3-1-A-55be8-ridge-and-restarted-context/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dea93cec1897f4737200-e37d9c674c66ea51b433",
+          "file": "phase3_1.e2e.ts",
+          "line": 164,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-25T14:41:13.118Z",
+    "duration": 52562.723,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

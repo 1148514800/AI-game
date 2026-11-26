@@ -1,0 +1,61 @@
+
+> mistsea-phase1@0.3.0-phase3 test:e2e
+> playwright test
+
+2026-11-25T14:36:30.523Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:36:30.529Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-25T14:36:30.529Z pw:webserver Starting WebServer process npm run dev:client...
+2026-11-25T14:36:30.534Z pw:webserver Process started
+2026-11-25T14:36:30.534Z pw:webserver Waiting for availability...
+2026-11-25T14:36:30.534Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:36:30.540Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-25T14:36:30.540Z pw:webserver Waiting 100ms
+[WebServer] 
+[WebServer] > mistsea-phase1@0.3.0-phase3 dev:client
+[WebServer] > vite --host 127.0.0.1
+[WebServer] 
+2026-11-25T14:36:30.640Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:36:30.641Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-25T14:36:30.641Z pw:webserver Waiting 250ms
+[WebServer] 
+[WebServer]   VITE v8.3.8  ready in 160 ms
+[WebServer] 
+[WebServer]   ➜  Local:   http://127.0.0.1:5174/
+2026-11-25T14:36:30.892Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:36:31.041Z pw:webserver HTTP Status: 200
+2026-11-25T14:36:31.042Z pw:webserver WebServer available
+
+Running 13 tests using 1 worker
+
+  ✓   1 tests/dialogue.e2e.ts:103:1 › ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering (8.9s)
+  ✓   2 tests/dialogue.e2e.ts:180:3 › limited Mock › 390px dialogue fits and exposes budget failure with a manual retry (4.3s)
+  ✓   3 tests/dialogue.e2e.ts:222:3 › faulted Mock › timeout is visible and manual retry remains Mock (4.3s)
+  ✓   4 tests/dialogue.e2e.ts:240:3 › Phase 3 offline action request › natural request accepts a plan and the actor actually harvests after the dialogue closes (6.6s)
+[WebServer] 10:37:46 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   5 tests/dialogue.e2e.ts:275:3 › Phase 3 autonomous Mock journey › fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug (51.1s)
+[WebServer] 10:38:20 PM [vite] http proxy error: /health
+[WebServer] Error: connect ECONNREFUSED 127.0.0.1:3003
+[WebServer]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[WebServer] 10:38:39 PM [vite] http proxy error: /health
+[WebServer] Error: connect ECONNREFUSED 127.0.0.1:3003
+[WebServer]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+  ✓   6 tests/scene.e2e.ts:151:1 › fresh journey collects all materials, repairs, crosses, explores and restores (53.9s)
+  ✓   7 tests/scene.e2e.ts:309:1 › four-way walk frames, pause, a following camera and opt-in music (6.6s)
+  ✓   8 tests/scene.e2e.ts:376:1 › 390px narrow window renders the scene, residents and touch controls (1.9s)
+  ✓   9 tests/scene.e2e.ts:404:1 › missing bridge art blocks readiness with a clear error (1.9s)
+  ✓  10 tests/scene.e2e.ts:418:1 › HTTP failure stays unavailable and automatically recovers (2.3s)
+  ✓  11 tests/scene.e2e.ts:433:1 › WebSocket handshake failure remains visible and prevents input (1.5s)
+  ✓  12 tests/scene.e2e.ts:447:1 › the real server rejects augmented movement and out-of-range actions (1.2s)
+[WebServer] 10:39:13 PM [vite] http proxy error: /health
+[WebServer] Error: connect ECONNREFUSED 127.0.0.1:3003
+[WebServer]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[WebServer] 10:39:45 PM [vite] http proxy error: /health
+[WebServer] Error: connect ECONNREFUSED 127.0.0.1:3003
+[WebServer]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+  ✓  13 tests/phase3_1.e2e.ts:164:1 › Phase3.1 A–F normal UI: consent, persisted plan, following, shared bridge and restarted context (52.4s)
+2026-11-25T14:39:49.502Z pw:webserver Terminating the WebServer
+2026-11-25T14:39:49.550Z pw:webserver Terminated the WebServer
+
+  13 passed (3.3m)

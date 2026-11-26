@@ -51,6 +51,9 @@ const responseSchema = z.object({
   usage: z.unknown().optional(),
 });
 
+export const containsPrivateThought = (text: string) =>
+  /<\/?think(?:ing)?\b[^>]*>/i.test(text);
+
 export type Generation = { text: string; usage?: Usage };
 
 function statusFailure(status: number): Failure {
@@ -98,6 +101,7 @@ export async function generate(
   messages: ChatMessage[],
   mock: () => string,
   cancellation: AbortSignal,
+  jsonMode = false,
 ): Promise<Generation> {
   const timeout = AbortSignal.timeout(config.limits.LLM_TIMEOUT_MS);
   const signal = AbortSignal.any([cancellation, timeout]);
@@ -128,6 +132,7 @@ export async function generate(
         messages,
         [tokenField]: config.limits.LLM_MAX_OUTPUT_TOKENS,
         enable_thinking: enableThinking,
+        response_format: jsonMode ? { type: "json_object" } : undefined,
         stream: false,
       }),
     });
@@ -159,7 +164,7 @@ export async function generate(
     if (
       text.length > 1800 ||
       /[\u0000-\u0008\u000e-\u001f]/.test(text) ||
-      /<\/?think(?:ing)?\b[^>]*>/i.test(text)
+      containsPrivateThought(text)
     )
       throw new DialogueFailure("invalid", usage);
     return { text: text.replaceAll(key, "[已隐藏]"), usage };

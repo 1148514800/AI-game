@@ -11,5 +11,5 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["src", "tests", "*.ts"]
+  "include": ["src", "tests", "*.ts", "scripts/regress-phase3_1.ts"]
 }

@@ -1,4 +1,4 @@
-import { destinationNames, goals, type Step } from "../shared/cenyan.js";
+import { destinationNames, goalName, type Step } from "../shared/cenyan.js";
 import type { Action, Result, Snapshot } from "../shared/protocol.js";
 import {
   distance,
@@ -120,6 +120,8 @@ const activities = {
 };
 const steps = {
   move_to: "前往",
+  follow: "跟随",
+  give_item: "提议赠送给",
   collect: "采集",
   deliver: "交付给",
   work: "施工",
@@ -147,7 +149,11 @@ function stepText(step: Step) {
   return (
     steps[step.type] +
     ("target_id" in step
-      ? " " + (destinationNames.get(step.target_id) ?? step.target_id)
+      ? " " +
+        (step.target_id === "player"
+          ? "旅人"
+          : (destinationNames.get(step.target_id) ?? step.target_id)) +
+        ("item" in step && step.item ? ` ${items[step.item]} ×${step.qty}` : "")
       : ` ${step.seconds} 秒`)
   );
 }
@@ -165,7 +171,7 @@ function renderCenyan(snapshot: Snapshot) {
       ? " · Mock 模拟"
       : "";
   setText(element("cenyan-status"), "岑砚 · " + activityLabel + mode);
-  setText(element("cenyan-goal"), goals[actor.goal]);
+  setText(element("cenyan-goal"), goalName(actor.goal));
   setText(
     element("cenyan-plan"),
     actor.plan
@@ -182,6 +188,23 @@ function renderCenyan(snapshot: Snapshot) {
     `木材 ${actor.bag.wood} · 石材 ${actor.bag.stone}`,
   );
   setText(element("cenyan-result"), actor.last?.text ?? "暂无回执");
+  setText(
+    element("cenyan-pending"),
+    actor.pending
+      ? `${goalName(actor.pending.goal)} · ${actor.pending.steps.map(stepText).join(" → ")}`
+      : "暂无",
+  );
+  setText(
+    element("cenyan-decision"),
+    actor.decision ? JSON.stringify(actor.decision, undefined, 2) : "暂无",
+  );
+  setText(
+    element("cenyan-results"),
+    actor.results
+      .slice(1)
+      .map((result) => `${result.code} · ${result.text}`)
+      .join("\n"),
+  );
   const modelNames = {
     disabled: "自主关闭",
     idle: "等待",
@@ -203,6 +226,12 @@ function renderCenyan(snapshot: Snapshot) {
           model.result ?? "",
           model.elapsedMs === undefined ? "" : `${model.elapsedMs} ms`,
           model.tokens === undefined ? "" : `计入 ${model.tokens} Token`,
+          model.sharedUsage
+            ? `累计 ${model.sharedUsage.requests} 次 / ${model.sharedUsage.tokens} Token`
+            : "",
+          model.sharedUsage?.chargedUsd === undefined
+            ? ""
+            : `累计占用 $${model.sharedUsage.chargedUsd.toFixed(6)}`,
           model.estimatedUsd === undefined
             ? ""
             : `估算 $${model.estimatedUsd.toFixed(6)}`,
@@ -242,6 +271,40 @@ export function render(snapshot: Snapshot, enabled: boolean) {
   setText(percentLabel, `${percent}%`);
   setText(deliveredWood, `${built.wood} / ${bridge.required.wood}`);
   setText(deliveredStone, `${built.stone} / ${bridge.required.stone}`);
+  const names = { player: "旅人", cenyan: "岑砚", legacy: "旧档记录" };
+  for (const key of ["player", "cenyan", "legacy"] as const) {
+    const node = element(`bridge-${key}-contribution`);
+    const { wood, stone, workMs } = state.contributions[key];
+    if (key === "legacy") node.hidden = !wood && !stone && !workMs;
+    setText(
+      node,
+      `${names[key]} · 木材 ${wood} · 石材 ${stone} · 施工 ${(workMs / 1000).toFixed(2)} 秒`,
+    );
+  }
+  const shared = element("bridge-shared-work");
+  shared.hidden = !state.sharedWorkMs;
+  setText(shared, `同时施工 ${(state.sharedWorkMs / 1000).toFixed(2)} 秒`);
+  const atBridge = distance(state.player, bridge) <= bridge.range;
+  element("bridge-delivery").hidden = !atBridge || hasMaterials;
+  element<HTMLButtonElement>("delivery-send").disabled = !enabled;
+  const incoming =
+    state.gift?.from === "cenyan" && state.gift.expiresAt > now
+      ? state.gift
+      : undefined;
+  element("gift-incoming").hidden = !incoming;
+  if (incoming)
+    setText(
+      element("gift-description"),
+      `岑砚提议赠你${items[incoming.item]} ×${incoming.qty}`,
+    );
+  for (const choice of ["accept", "reject"])
+    element<HTMLButtonElement>(`gift-${choice}`).disabled =
+      !enabled ||
+      distance(state.player, state.cenyan) > residents.get("cenyan")!.range;
+  const follow = element<HTMLButtonElement>("stop-follow");
+  follow.hidden =
+    state.cenyan.plan?.steps[state.cenyan.plan.index].type !== "follow";
+  follow.disabled = !enabled;
   setText(
     objective,
     state.explored
@@ -257,7 +320,9 @@ export function render(snapshot: Snapshot, enabled: boolean) {
       : built.repaired
         ? "穿过旧桥，顺着东岸小路前往航标遗迹。"
         : working
-          ? "正在铺设桥板。留在渡口，直到施工完成。"
+          ? snapshot.cenyan.activity === "working"
+            ? "你和岑砚正在一起铺设桥板。"
+            : "正在铺设桥板。留在渡口，直到施工完成。"
           : snapshot.cenyan.activity === "working"
             ? "岑砚正在旧桥施工。"
             : hasMaterials
@@ -269,7 +334,17 @@ export function render(snapshot: Snapshot, enabled: boolean) {
   if (goal.hasAttribute("data-complete") !== built.repaired)
     goal.toggleAttribute("data-complete", built.repaired);
 
+  const alternateWork = element<HTMLButtonElement>("bridge-work");
+  const alternateChat = element<HTMLButtonElement>("nearby-cenyan");
   const target = nearbyTarget(state.player, state.cenyan);
+  alternateWork.hidden =
+    !atBridge || !hasMaterials || built.repaired || target?.id === bridge.id;
+  alternateWork.disabled = !enabled;
+  setText(alternateWork, working ? "暂停施工" : "开始施工");
+  alternateChat.hidden =
+    target?.id === "cenyan" ||
+    distance(state.player, state.cenyan) > residents.get("cenyan")!.range;
+  alternateChat.disabled = !enabled;
   let nextSelection: typeof selection;
   let hint = "沿小路探索，靠近居民或采集点后按 E。";
   let image = "player-face";
@@ -311,24 +386,20 @@ export function render(snapshot: Snapshot, enabled: boolean) {
           label: "查看旧桥",
         };
       } else if (!hasMaterials) {
-        hint = `交付木材 ×${bridge.required.wood - built.wood}、石材 ×${bridge.required.stone - built.stone}。`;
+        hint = `尚缺木材 ×${bridge.required.wood - built.wood}、石材 ×${bridge.required.stone - built.stone}。`;
         nextSelection = {
           target: bridge.id,
           verb: "deliver",
           label: "交付材料",
         };
-      } else if (snapshot.cenyan.activity === "working") {
-        hint = "岑砚正在施工，请给他腾出工地。";
-        nextSelection = {
-          target: bridge.id,
-          verb: "inspect",
-          label: "查看旧桥",
-        };
       } else if (working) {
         hint = "留在渡口完成施工，走动会暂停。";
         nextSelection = { target: bridge.id, verb: "stop", label: "暂停施工" };
       } else {
-        hint = "材料已就位，按 E 开始施工。";
+        hint =
+          snapshot.cenyan.activity === "working"
+            ? "岑砚正在施工，可以一起动手。"
+            : "材料已就位，按 E 开始施工。";
         nextSelection = { target: bridge.id, verb: "work", label: "开始施工" };
       }
     } else {

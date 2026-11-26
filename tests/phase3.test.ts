@@ -255,7 +255,7 @@ test("a player harvest wins atomically, and Cenyan collects only once after real
   assert.equal(world.snapshot().state.cenyan.bag.wood, 1);
 });
 
-test("NPC delivery, shared work lock and progress survive interruption without double spending", (t) => {
+test("NPC delivery, shared work and progress survive interruption without double spending", (t) => {
   const { world, tick, accept, path, now } = setup(t, (state) => {
     Object.assign(state.cenyan, { x: bridge.x - 15, y: bridge.y });
     state.player = { x: bridge.x - 24, y: bridge.y + 10, facing: "right" };
@@ -270,8 +270,12 @@ test("NPC delivery, shared work lock and progress survive interruption without d
   assert.ok(world.snapshot().state.bridge.progressMs > 0);
   assert.equal(
     world.perform(action("work", bridge.id), now()).code,
-    "WORK_OCCUPIED",
+    "WORK_STARTED",
   );
+  const beforeShared = world.snapshot().state.bridge.progressMs;
+  tick(1);
+  assert.equal(world.snapshot().state.bridge.progressMs - beforeShared, 100);
+  assert.equal(world.snapshot().state.sharedWorkMs, 50);
   world.halt();
   world.flush();
   const restored = new SaveFile(path);
@@ -292,7 +296,7 @@ test("NPC delivery, shared work lock and progress survive interruption without d
     assert.equal(
       restored
         .memories(bridge.id, 20)
-        .filter((m) => m.content.startsWith("材料已放")).length,
+        .filter((m) => m.content.startsWith("岑砚交付木材 ×6、石材 ×2")).length,
       1,
     );
   } finally {
@@ -388,7 +392,7 @@ test("factual failure persists beside claims and opinions, with stable reference
 
 test("v1 migration backs up the old SQLite schema and receipts before adding the actor", (t) => {
   const path = disk(t);
-  const { cenyan: _actor, ...state } = freshState();
+  const { cenyan: _actor, gift: _gift, sharedWorkMs: _shared, contributions: _contributions, ...state } = freshState();
   state.inventory.wood = 3;
   const db = new DatabaseSync(path);
   db.exec(
@@ -401,7 +405,7 @@ test("v1 migration backs up the old SQLite schema and receipts before adding the
   db.close();
   const migrated = new SaveFile(path);
   try {
-    assert.equal(migrated.initial.schemaVersion, 2);
+    assert.equal(migrated.initial.schemaVersion, 3);
     assert.equal(migrated.initial.inventory.wood, 3);
     assert.deepEqual(migrated.initial.cenyan.bag, { wood: 0, stone: 0 });
     assert.ok(migrated.hasReceipt("prior-receipt"));

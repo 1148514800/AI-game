@@ -1,0 +1,11 @@
+PASS 6544.467803 ms {
+  count: 129,
+  meanMs: 0.2722225426356908,
+  p95Ms: 0.4302210000000741,
+  maxMs: 18.27115000000049
+} {
+  requests: 1,
+  autonomy: 0,
+  movement: 150.4119176532796,
+  movementAfterStop: 63.28781778291719
+}

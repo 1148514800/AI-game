@@ -1,0 +1,171 @@
+
+> mistsea-phase1@0.3.0-phase3 test
+> node --import tsx --test --test-isolation=none tests/unit.test.ts tests/dialogue.test.ts tests/phase3.test.ts
+
+[dialogue] config
+✔ dialogue transport is strict and accepts full Chinese input (4.31082ms)
+✔ invalid Live configuration never silently changes to Mock or permits embedded credentials (6.487677ms)
+✔ Cenyan's standalone personality config is bound to the resident and assembled into the prompt (0.316987ms)
+✔ context contains public world facts, bounded recent turns, and unverified player text (0.640976ms)
+✔ ledger separates modes, retains cancelled and interrupted reservations, and survives restart (26.432878ms)
+✔ minute, durable one-hour window, and lifetime request limits apply without free resets (0.920242ms)
+✔ money reservation settles observed usage without double-counting reasoning and preserves unknown usage (7.247783ms)
+✔ nonempty provider text with zero usage keeps its reservation, and extra tokens are charged conservatively (35.893952ms)
+[dialogue] ledger
+✔ broken dialogue configuration or ledger leaves ordinary world health available (111.326113ms)
+✔ only successful recent turns survive close and world reset clears them (100.696431ms)
+✔ a reply that resolves despite Abort cannot reappear or enter the next dialogue history (39.64641ms)
+✔ planner schemas accept one through three steps and accept speech-only refusals (1.953679ms)
+✔ planner schemas reject arbitrary locations, unknown IDs, tools, extras and out-of-range waits (1.24688ms)
+✔ A* seeks a reachable interaction neighbor and routes to the east only after repairs (27.06015ms)
+✔ Cenyan cannot pass through the player and can recover after the player moves (11.44218ms)
+✔ runtime interaction range follows Cenyan and leaves the former workshop position (9.378432ms)
+✔ a player harvest wins atomically, and Cenyan collects only once after real rule cooldown (9.207861ms)
+✖ NPC delivery, shared work lock and progress survive interruption without double spending (14.500099ms)
+✔ isolated Mock choices repair a bridge from empty bags, then stock wood and rest at the workshop (265.707752ms)
+✔ perception excludes far people, unknown resource availability and the player's private bag (3.364682ms)
+✔ factual failure persists beside claims and opinions, with stable reference and no invented completion (6.728374ms)
+✖ v1 migration backs up the old SQLite schema and receipts before adding the actor (10.016298ms)
+✔ only explicitly enabled active Mock autonomy requests a plan without dialogue (21.408742ms)
+✔ invalid autonomous JSON backs off while ordinary simulation continues (19.431182ms)
+✔ unverified player action is cancelled on close, while an accepted action executes after close (31.348767ms)
+✔ pause, disconnect and reset invalidate pending autonomy without blocking the next active generation (42.962014ms)
+✔ generation changes invalidate late proposals even when the newer plan completes first (20.591448ms)
+✔ a late plan in Live dialogue for a natural request cannot cross a decision generation (14.938223ms)
+✔ Live dialogue holds a walking actor and accepts only complete valid plans (31.280391ms)
+✔ dialogue preempts in-flight autonomy with one queued request and both share the lock (23.878179ms)
+✔ autonomy sublimits reserve room for dialogue and use the same durable request and token pool (4.168257ms)
+✔ strict input accepts intent only and requires explicit reset confirmation (1.95942ms)
+✔ runtime assets exactly match the CC0 manifest and every map reference (8.590792ms)
+✔ map dimensions, terrain frames, unique stable IDs and spawn match data (0.67673ms)
+✔ west bank resources are reachable and the only route east is the repaired crossing (53.760613ms)
+✔ server ticks enforce normalized speed, expiring input and no message-driven movement (4.571883ms)
+✔ wall, tree, rock, closed river and bounds use the same foot collision (7.581122ms)
+✔ distant, wrong-target, unknown and insufficient actions do not touch storage (3.109611ms)
+✔ collection is durable, cooldown prevents rush and duplicate id remains rejected after restart (7.062627ms)
+✖ delivery is atomic and timed work can pause and resume without counting offline time (6.397487ms)
+✔ checked reset is durable and a repeated reset cannot wipe subsequent progress (7.462524ms)
+✔ conflicting save revision leaves the winning storage and losing world untouched (7.760607ms)
+存档无法打开，已保留原件。 Error: file is not a database
+    at new SaveFile (/workspace/mistsea-phase3_1/src/server/save.ts:146:10)
+    at createApp (/workspace/mistsea-phase3_1/src/server/app.ts:41:12)
+    at TestContext.<anonymous> (/workspace/mistsea-phase3_1/tests/unit.test.ts:435:15)
+    at Test.runInAsyncScope (node:async_hooks:227:14)
+    at Test.run (node:internal/test_runner/test:1402:25)
+    at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    at Test.postRun (node:internal/test_runner/test:1542:19)
+    at Test.run (node:internal/test_runner/test:1467:12)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+  code: 'ERR_SQLITE_ERROR',
+  errcode: 26,
+  errstr: 'file is not a database'
+}
+✔ bad SQLite and incompatible state produce a health error without replacing the original (11.561549ms)
+✖ healthy Fastify opens a versioned local save without API keys (4.221545ms)
+✔ fresh rules-only journey follows walkable paths, collects six wood and two stone, and reaches the beacon (270.867548ms)
+ℹ tests 45
+ℹ suites 0
+ℹ pass 41
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1876.699738
+
+✖ failing tests:
+
+test at tests/phase3.test.ts:1:6647
+✖ NPC delivery, shared work lock and progress survive interruption without double spending (14.500099ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'WORK_STARTED'
+  - 'WORK_OCCUPIED'
+          ^
+  
+      at TestContext.<anonymous> (/workspace/mistsea-phase3_1/tests/phase3.test.ts:271:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'WORK_STARTED',
+    expected: 'WORK_OCCUPIED',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/phase3.test.ts:1:10137
+✖ v1 migration backs up the old SQLite schema and receipts before adding the actor (10.016298ms)
+  ZodError: [
+    {
+      "code": "unrecognized_keys",
+      "keys": [
+        "gift",
+        "sharedWorkMs",
+        "contributions"
+      ],
+      "path": [],
+      "message": "Unrecognized keys: \"gift\", \"sharedWorkMs\", \"contributions\""
+    }
+  ]
+      at decode (/workspace/mistsea-phase3_1/src/server/save.ts:64:31)
+      at new SaveFile (/workspace/mistsea-phase3_1/src/server/save.ts:166:22)
+      at TestContext.<anonymous> (/workspace/mistsea-phase3_1/tests/phase3.test.ts:402:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/unit.test.ts:1:8356
+✖ delivery is atomic and timed work can pause and resume without counting offline time (6.397487ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'DELIVERED'
+  - 'DUPLICATE'
+  
+      at TestContext.<anonymous> (/workspace/mistsea-phase3_1/tests/unit.test.ts:348:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'DELIVERED',
+    expected: 'DUPLICATE',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit.test.ts:1:11869
+✖ healthy Fastify opens a versioned local save without API keys (4.221545ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      contentVersion: 1,
+      phase: 3,
+  +   schemaVersion: 3,
+  -   schemaVersion: 2,
+      status: 'ok'
+    }
+  
+      at TestContext.<anonymous> (/workspace/mistsea-phase3_1/tests/unit.test.ts:463:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [Object],
+    expected: [Object],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

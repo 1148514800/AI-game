@@ -7,7 +7,7 @@ import { closeSync, mkdirSync, mkdtempSync, openSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1";
 const url = "http://127.0.0.1:5174";
 const test = base.extend<{
   mockEnv: Record<string, string>;
@@ -66,8 +66,6 @@ const test = base.extend<{
   ],
 });
 
-// Persist the browser trace for the Phase 3 visual journey, including successful runs.
-test.use({ trace: "on" });
 
 const panel = (page: Page) => page.getByRole("dialog", { name: "岑砚" });
 const input = (page: Page) => page.getByRole("textbox", { name: "对岑砚说" });

@@ -1,3 +1,11 @@
+# AG-5 / Phase3.1 当前唯一授权（覆盖以下旧阶段限制）
+用户2026-11-25明确授权仅Phase3.1，在审核基线842342a1021751d0e33ac7b2a3db27f0e0bca9f1续作。完整范围和验收见 docs/PHASE3_1_TASK.md，必须先完整阅读。允许本机Codex CLI和本地commit；禁push/PR/部署/Live/私密配置/触碰Mac。所有新增证据只写evidence/phase3_1，不覆盖历史证据。新30min soak不强制但调用风暴/性能需本轮回归。只岑砚，完成停Phase3.1。
+
+本轮开发以本机 Codex CLI 续作。协调者使用 `python3 scripts/verify.py` 原生复核 A–F、视觉检查并提交打包。编码阶段保留授权添加的文件与历史证据，验收以本轮命令实际退出码为准。用户确认的 Phase3 Live 与本次 Phase3.1 Mock 验证分别记录。
+
+本轮最终原生验证：64单元、5集成、13浏览器及全部13项验证命令退出0，另2次完整A–F正常UI复测通过。证据 evidence/phase3_1/verification-20261125-223512-151573/。Live未调用/未验证。完成即停，仅等待验收，不据此开始Phase4。
+
+## 以下保留Phase3历史指令（被本轮覆盖的限制不再适用）
 # AG-4 / Phase3 当前授权（覆盖下文旧阶段限制）
 用户2026-11-25明确授权仅Phase3。Phase0/1验收、Phase2源码审核及用户本人真实AI接入验证已通过；这是用户验证，不是本代理的Live数据。仅岑砚自主思考/1–3步严格计划/受控真实行动/A*/持久记忆/轻量Debug/共享预算，保留Phase2对话、thinking兼容、全部原玩法和有效测试。禁止Phase4、其他NPC智能、社交经济战斗新地图、屋顶建造系统、大型框架。
 无本轮Phase3真实调用额度授权：默认LLM_AUTONOMY_ENABLED=false，不读取.env/开发工具密钥，不付费Live；Mock与HTTP桩不是真实AI规划。仅本地Codex CLI、最终本地commit，无push/PR/部署，不碰Mac/旧Phase2/同步快照。完整范围见docs/PHASE3_TASK.md。历史证据不删改；新证据仅evidence/phase3。必须真实30分钟elapsed、有实际动作资源循环的Mock自主soak（不能虚拟时钟代替），报告实际退出状态，不伪造通过。附件每件<25,000,000字节。

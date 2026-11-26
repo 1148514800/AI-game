@@ -17,7 +17,7 @@ import {
 } from "../src/shared/world.js";
 import { route } from "./paths.js";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1";
 const backendUrl = "http://127.0.0.1:3003";
 
 const test = base.extend<{

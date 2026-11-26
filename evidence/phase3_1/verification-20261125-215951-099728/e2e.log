@@ -1,0 +1,21 @@
+
+> mistsea-phase1@0.3.0-phase3 test:e2e
+> playwright test
+
+2026-11-25T14:00:07.648Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:00:07.654Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect EPERM 127.0.0.1:5174 - Local (undefined:undefined)
+2026-11-25T14:00:07.654Z pw:webserver Starting WebServer process npm run dev:client...
+2026-11-25T14:00:07.659Z pw:webserver Process started
+2026-11-25T14:00:07.659Z pw:webserver Waiting for availability...
+2026-11-25T14:00:07.659Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:00:07.660Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect EPERM 127.0.0.1:5174 - Local (undefined:undefined)
+2026-11-25T14:00:07.660Z pw:webserver Waiting 100ms
+2026-11-25T14:00:07.761Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-25T14:00:07.762Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect EPERM 127.0.0.1:5174 - Local (undefined:undefined)
+2026-11-25T14:00:07.762Z pw:webserver Waiting 250ms
+2026-11-25T14:00:07.932Z pw:webserver Terminating the WebServer
+2026-11-25T14:00:07.932Z pw:webserver Terminated the WebServer
+Error: Process from config.webServer was not able to start. Exit code: 1
+2026-11-25T14:00:07.951Z pw:webserver Terminating the WebServer
+2026-11-25T14:00:07.951Z pw:webserver Terminated the WebServer
+

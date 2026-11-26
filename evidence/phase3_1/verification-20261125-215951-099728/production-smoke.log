@@ -1,0 +1,13 @@
+file:///workspace/mistsea-phase3_1/scripts/production-smoke.mjs:30
+          throw Error(
+                ^
+
+Error: Compiled server exited 1; see production-server.log
+    at expect.poll.timeout (file:///workspace/mistsea-phase3_1/scripts/production-smoke.mjs:30:17)
+    at /workspace/mistsea-phase3_1/node_modules/playwright/lib/matchers/expect.js:13423:25
+    at async raceAgainstDeadline (/workspace/mistsea-phase3_1/node_modules/playwright-core/lib/coreBundle.js:4979:10)
+    at async pollAgainstDeadline (/workspace/mistsea-phase3_1/node_modules/playwright-core/lib/coreBundle.js:5000:22)
+    at async invokePollMatcher (/workspace/mistsea-phase3_1/node_modules/playwright/lib/matchers/expect.js:13420:18)
+    at async file:///workspace/mistsea-phase3_1/scripts/production-smoke.mjs:26:3
+
+Node.js v24.22.1

@@ -1,0 +1,26 @@
+[
+  {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:15:13.587953+08:00",
+    "log": "evidence/phase3_1/resume-review-SpAiMS/typecheck.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:15:14.144963+08:00",
+    "log": "evidence/phase3_1/resume-review-SpAiMS/unit-test.log"
+  },
+  {
+    "command": "node --import tsx scripts/regress-phase3_1.ts",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:15:16.696059+08:00",
+    "log": "evidence/phase3_1/resume-review-SpAiMS/follow-ticks.log"
+  },
+  {
+    "command": "git diff --check",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:15:23.544451+08:00",
+    "log": "evidence/phase3_1/resume-review-SpAiMS/diff-check.log"
+  }
+]

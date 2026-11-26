@@ -1,0 +1,32 @@
+[
+  {
+    "command": "npm ci",
+    "exitCode": 0,
+    "startedAt": "2026-11-26T12:38:09.784675+08:00",
+    "log": "evidence/phase3_1/verification-20261126-123809-784316/npm-ci.log"
+  },
+  {
+    "command": "node scripts/dev-smoke.mjs",
+    "exitCode": 0,
+    "startedAt": "2026-11-26T12:38:11.665664+08:00",
+    "log": "evidence/phase3_1/verification-20261126-123809-784316/dev.log"
+  },
+  {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "startedAt": "2026-11-26T12:38:12.154014+08:00",
+    "log": "evidence/phase3_1/verification-20261126-123809-784316/typecheck.log"
+  },
+  {
+    "command": "node node_modules/typescript/bin/tsc -p scripts/performance/tsconfig.json",
+    "exitCode": 0,
+    "startedAt": "2026-11-26T12:38:12.707169+08:00",
+    "log": "evidence/phase3_1/verification-20261126-123809-784316/performance-typecheck.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 1,
+    "startedAt": "2026-11-26T12:38:12.784793+08:00",
+    "log": "evidence/phase3_1/verification-20261126-123809-784316/unit-test.log"
+  }
+]

@@ -1,0 +1,66 @@
+{
+  "method": "Coordinator actually viewed these PNGs with Read, not metadata-only",
+  "status": "PASS",
+  "notes": [
+    "材料6/6、2/2与具名4木及2木2石贡献显示一致",
+    "共同施工文字、双方工时和重叠工时可见，完成后桥面与东岸通行一致",
+    "赠送接受/拒绝按钮与背包数量清楚，等待不表示已转移",
+    "当前/pending计划、拒绝policy、公开结构化决策与规则记忆可读",
+    "390px对话和赠送表单自动换行，Debug跨满宽；未见横向溢出",
+    "图中Mock与本地存档状态明确，无私有思考或凭据显示"
+  ],
+  "images": [
+    {
+      "path": "evidence/phase3_1/verification-20261125-223512-151573/cooperation/A-shared-materials.png",
+      "sha256": "dc710e00ede4db0c90ebf5eb9dcdfe4936bc88dff873a82af5cc372fb4f39724"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-223512-151573/cooperation/C-shared-work.png",
+      "sha256": "242583ef01916ccee86ed4e37f3fa73af2109adfe52f786e3b0b31e97224b5f9"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-223512-151573/cooperation/F-restarted-memory.png",
+      "sha256": "b4ae976b09ee6fa4ac56d00a2c7fec15ed20a100216d74f5316cad7ead70a442"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-223512-151573/cooperation/B-follow-stop.png",
+      "sha256": "5fe1f80f6ebd116814f2f29824bd70f906b82431a26985506e4b0951adfa30b8"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-221918-478020/cooperation/A-shared-materials.png",
+      "sha256": "f5e686d4b928fdf66c3159c2b901842b2c8549be4d4d332ff9e15a1469b7decb"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-221918-478020/cooperation/C-shared-work.png",
+      "sha256": "3f10c5c4cea221566ab04b5231850d55fb95194659f1832dba7dab726a7eb7a0"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-221918-478020/cooperation/D-persisted-pending.png",
+      "sha256": "de4cdffb69429a96c57ee14c7efe5da19693a2b2c75941dedf92bd6d2793b7c3"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-221918-478020/cooperation/E-explicit-consent.png",
+      "sha256": "5480efced98015804e6b3f1b80616c51f2ce201acd32d82620f32ecd69509f7a"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-221918-478020/cooperation/F-restarted-memory.png",
+      "sha256": "6664fa849224130aaac8945b62edd4f3c9c120ebb0a807ebf9f1ff28e723a6bd"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-221918-478020/cooperation/B-follow-arrived.png",
+      "sha256": "b1a101f71ad43cd408c18746fc447442a9ae48474c63052d64b6ff9469e23576"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-221918-478020/cooperation/C-crossed.png",
+      "sha256": "60818d2a81b6cd037cbd7928771c90962a450d25882c1c3ef41c1dac7c743528"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-221918-478020/dialogue-narrow.png",
+      "sha256": "0a7560978d15e707b0d145ba3eca3ea38a9ea93b1045f119e140a487b073ab22"
+    },
+    {
+      "path": "evidence/phase3_1/verification-20261125-221918-478020/phase3-npc-debug-narrow.png",
+      "sha256": "3a778e880657d5a9d275c9b1ef4af92460fd27d99c5e0cb035a99e9acbd69d02"
+    }
+  ]
+}

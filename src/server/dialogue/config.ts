@@ -42,6 +42,7 @@ export type DialogueConfig = {
     key: string;
     tokenField: (typeof tokenFields)[number];
     enableThinking?: boolean;
+    jsonMode?: boolean;
   };
 };
 
@@ -109,6 +110,9 @@ export function readDialogueConfig(
     .enum(["true", "false"])
     .optional()
     .parse(env.LLM_ENABLE_THINKING || undefined);
+  const jsonMode =
+    z.enum(["true", "false"]).default("false").parse(env.LLM_JSON_MODE) ===
+    "true";
   const input = env.LLM_INPUT_USD_PER_MILLION;
   const output = env.LLM_OUTPUT_USD_PER_MILLION;
   const rate = z
@@ -134,6 +138,7 @@ export function readDialogueConfig(
       key,
       tokenField,
       enableThinking: thinking === undefined ? undefined : thinking === "true",
+      jsonMode,
     },
   };
 }

@@ -1,0 +1,91 @@
+
+> mistsea-phase1@0.3.0-phase3 test
+> node --import tsx --test --test-isolation=none tests/unit.test.ts tests/dialogue.test.ts tests/phase3.test.ts tests/phase3_1.test.ts
+
+[dialogue] config
+✔ dialogue transport is strict and accepts full Chinese input (4.37689ms)
+✔ invalid Live configuration never silently changes to Mock or permits embedded credentials (6.6606ms)
+✔ Cenyan's standalone personality config is bound to the resident and assembled into the prompt (0.342898ms)
+✔ context contains public world facts, bounded recent turns, and unverified player text (0.573828ms)
+✔ ledger separates modes, retains cancelled and interrupted reservations, and survives restart (12.852887ms)
+✔ minute, durable one-hour window, and lifetime request limits apply without free resets (0.861731ms)
+✔ money reservation settles observed usage without double-counting reasoning and preserves unknown usage (5.224407ms)
+✔ nonempty provider text with zero usage keeps its reservation, and extra tokens are charged conservatively (29.00653ms)
+[dialogue] ledger
+✔ broken dialogue configuration or ledger leaves ordinary world health available (77.18323ms)
+✔ only successful recent turns survive close and world reset clears them (98.618715ms)
+✔ a reply that resolves despite Abort cannot reappear or enter the next dialogue history (39.041251ms)
+✔ planner schemas accept one through three steps and accept speech-only refusals (2.566513ms)
+✔ planner schemas reject arbitrary locations, unknown IDs, tools, extras and out-of-range waits (1.805612ms)
+✔ A* seeks a reachable interaction neighbor and routes to the east only after repairs (34.776934ms)
+✔ Cenyan cannot pass through the player and can recover after the player moves (13.577818ms)
+✔ runtime interaction range follows Cenyan and leaves the former workshop position (8.745375ms)
+✔ a player harvest wins atomically, and Cenyan collects only once after real rule cooldown (15.9334ms)
+✔ NPC delivery, shared work and progress survive interruption without double spending (146.371341ms)
+✔ isolated Mock choices repair a bridge from empty bags, then stock wood and rest at the workshop (256.251459ms)
+✔ perception excludes far people, unknown resource availability and the player's private bag (3.530492ms)
+✔ factual failure persists beside claims and opinions, with stable reference and no invented completion (4.304449ms)
+✔ v1 migration backs up the old SQLite schema and receipts before adding the actor (5.468732ms)
+✔ only explicitly enabled active Mock autonomy requests a plan without dialogue (21.733269ms)
+✔ invalid autonomous JSON backs off while ordinary simulation continues (19.659518ms)
+✔ unverified player action is cancelled on close, while an accepted action executes after close (27.531579ms)
+✔ pause, disconnect and reset invalidate pending autonomy without blocking the next active generation (38.74738ms)
+✔ generation changes invalidate late proposals even when the newer plan completes first (19.85508ms)
+✔ a late plan in Live dialogue for a natural request cannot cross a decision generation (17.846225ms)
+✔ Live dialogue holds a walking actor and accepts only complete valid plans (31.158769ms)
+✔ dialogue preempts in-flight autonomy with one queued request and both share the lock (24.472088ms)
+✔ autonomy sublimits reserve room for dialogue and use the same durable request and token pool (4.267428ms)
+✔ Phase3.1 step and client schemas only admit material pairs, valid targets and coherent policies (1.848849ms)
+✔ partial deliver, concurrent same-tick entrants and replay preserve each contributor and truncate (8.701122ms)
+✔ gifts are two-party, replayable and conserved in both directions (18.399267ms)
+✔ expiry, no stock, capacity and distance reject gifts atomically (6.275976ms)
+✔ pending survives restart, is promoted at step boundary and validates the world again (9.209764ms)
+✔ replace preserves completed material and cancels the current step and prior pending (6.448188ms)
+✔ shared work credits each tick once and the finished fact enters reopened model context (107.675225ms)
+✔ follow tracks motion with speed and spacing, idles in range, resumes and can be cancelled (8.321106ms)
+✔ continued absence of a route ends a restored follow without crossing a broken bridge (192.740154ms)
+✔ v2 backup and transactional migration preserve old activity, unidentified contributions, receipts and memories (9.660348ms)
+✔ an offered gift is unreserved and fails if the giver spends it first (9.072004ms)
+✔ replacing NPC work leaves the player working at the original rate (8.378529ms)
+✔ two save connections cannot both commit the last material (6.196119ms)
+✔ model-facing JSON examples match strict action, policy and gift schemas (1.069492ms)
+✔ bounded model context retains steps, replies and facts with long Chinese input (5.47555ms)
+✔ an accepting provider reply cannot transfer gifts across a closed session or a newer action generation (63.238288ms)
+✔ restart discards unconfirmed traveler consent and allows an explicit response to a saved Cenyan offer (9.743117ms)
+✔ JSON-escaped credentials and private thought markup do not reach the structured decision (37.263811ms)
+✔ strict input accepts intent only and requires explicit reset confirmation (3.749156ms)
+✔ runtime assets exactly match the CC0 manifest and every map reference (6.722014ms)
+✔ map dimensions, terrain frames, unique stable IDs and spawn match data (0.682125ms)
+✔ west bank resources are reachable and the only route east is the repaired crossing (43.350022ms)
+✔ server ticks enforce normalized speed, expiring input and no message-driven movement (3.075147ms)
+✔ wall, tree, rock, closed river and bounds use the same foot collision (3.611725ms)
+✔ distant, wrong-target, unknown and insufficient actions do not touch storage (5.324723ms)
+✔ collection is durable, cooldown prevents rush and duplicate id remains rejected after restart (4.716414ms)
+✔ delivery is atomic and timed work can pause and resume without counting offline time (106.328709ms)
+✔ checked reset is durable and a repeated reset cannot wipe subsequent progress (4.405352ms)
+✔ conflicting save revision leaves the winning storage and losing world untouched (4.146673ms)
+存档无法打开，已保留原件。 Error: file is not a database
+    at new SaveFile (/workspace/mistsea-phase3_1/src/server/save.ts:169:10)
+    at createApp (/workspace/mistsea-phase3_1/src/server/app.ts:41:12)
+    at TestContext.<anonymous> (/workspace/mistsea-phase3_1/tests/unit.test.ts:436:15)
+    at Test.runInAsyncScope (node:async_hooks:227:14)
+    at Test.run (node:internal/test_runner/test:1402:25)
+    at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    at Test.postRun (node:internal/test_runner/test:1542:19)
+    at Test.run (node:internal/test_runner/test:1467:12)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+  code: 'ERR_SQLITE_ERROR',
+  errcode: 26,
+  errstr: 'file is not a database'
+}
+✔ bad SQLite and incompatible state produce a health error without replacing the original (10.670426ms)
+✔ healthy Fastify opens a versioned local save without API keys (4.821518ms)
+✔ fresh rules-only journey follows walkable paths, collects six wood and two stone, and reaches the beacon (160.964298ms)
+ℹ tests 63
+ℹ suites 0
+ℹ pass 63
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2204.708172

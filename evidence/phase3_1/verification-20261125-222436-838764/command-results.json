@@ -1,0 +1,80 @@
+[
+  {
+    "command": "npm ci",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:24:36.838960+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/npm-ci.log"
+  },
+  {
+    "command": "node scripts/dev-smoke.mjs",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:24:39.786920+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/dev.log"
+  },
+  {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:24:40.393357+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/typecheck.log"
+  },
+  {
+    "command": "node node_modules/typescript/bin/tsc -p scripts/performance/tsconfig.json",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:24:40.934851+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/performance-typecheck.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:24:41.093491+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/unit-test.log"
+  },
+  {
+    "command": "npm run test:integration",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:24:43.304123+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/integration.log"
+  },
+  {
+    "command": "node --import tsx scripts/regress-phase3_1.ts",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:25:45.325631+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/follow-ticks.log"
+  },
+  {
+    "command": "npm run test:e2e -- --list",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:25:52.250716+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/e2e-list.log"
+  },
+  {
+    "command": "npm run test:e2e",
+    "exitCode": 1,
+    "startedAt": "2026-11-25T22:25:53.071270+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/e2e.log"
+  },
+  {
+    "command": "npm run build",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:28:54.051679+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/build.log"
+  },
+  {
+    "command": "node scripts/assert-client-no-secret.mjs",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:28:55.359035+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/client-key-sentinel.log"
+  },
+  {
+    "command": "node scripts/production-smoke.mjs",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:28:55.397699+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/production-smoke.log"
+  },
+  {
+    "command": "node --check scripts/soak-phase3.mjs",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:28:57.492651+08:00",
+    "log": "evidence/phase3_1/verification-20261125-222436-838764/soak-syntax.log"
+  }
+]

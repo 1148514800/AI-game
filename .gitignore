@@ -22,3 +22,5 @@ evidence/phase2/**/trace.zip
 evidence/phase3/**/trace.zip
 
 __pycache__/
+
+evidence/phase3_1/**/trace.zip

@@ -1,0 +1,84 @@
+
+> mistsea-phase1@0.3.0-phase3 test:integration
+> node --import tsx --test --test-isolation=none tests/dialogue.integration.ts tests/phase3_1.integration.ts
+
+✖ real local HTTP adapter supports both token fields, usage, sanitized errors, timeout and abort (7.561097ms)
+✖ real WS and HTTP fixture enforce distance, continuity, no world effects, cancellation and durable budget (2.02093ms)
+✖ local HTTP dialogue accepts a natural request, validates optional plans and holds a walking Cenyan until close (0.75679ms)
+✖ real WS clearly marked Mock starts without dialogue and walks, harvests, delivers and works a fresh bridge (77.492486ms)
+✖ Phase3.1 real local HTTP and WS authenticate each direction of consent, reject a wrong offer and replay one commit (0.931843ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 490.607357
+
+✖ failing tests:
+
+test at tests/dialogue.integration.ts:1:1908
+✖ real local HTTP adapter supports both token fields, usage, sanitized errors, timeout and abort (7.561097ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+      at listenInCluster (node:net:2499:12)
+      at node:net:2728:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/dialogue.integration.ts:1:6408
+✖ real WS and HTTP fixture enforce distance, continuity, no world effects, cancellation and durable budget (2.02093ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+      at listenInCluster (node:net:2499:12)
+      at node:net:2728:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/dialogue.integration.ts:1:12232
+✖ local HTTP dialogue accepts a natural request, validates optional plans and holds a walking Cenyan until close (0.75679ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+      at listenInCluster (node:net:2499:12)
+      at node:net:2728:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/dialogue.integration.ts:1:16424
+✖ real WS clearly marked Mock starts without dialogue and walks, harvests, delivers and works a fresh bridge (77.492486ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+      at listenInCluster (node:net:2499:12)
+      at node:net:2728:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/phase3_1.integration.ts:1:890
+✖ Phase3.1 real local HTTP and WS authenticate each direction of consent, reject a wrong offer and replay one commit (0.931843ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+      at listenInCluster (node:net:2499:12)
+      at node:net:2728:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }

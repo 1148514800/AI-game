@@ -95,6 +95,26 @@
                   发送
                 </button>
               </div>
+              <form id="dialogue-gift" class="material-controls">
+                <label
+                  >赠送材料
+                  <select id="gift-item">
+                    <option value="wood">木材</option>
+                    <option value="stone">石材</option>
+                  </select>
+                </label>
+                <label
+                  >数量
+                  <input
+                    id="gift-qty"
+                    type="number"
+                    min="1"
+                    max="999"
+                    value="1"
+                    required
+                /></label>
+                <button id="gift-send" type="submit">提议赠送</button>
+              </form>
             </dialog>
             <div id="screen-message" class="screen-message" role="status">
               <strong id="screen-title">正在进入雾灯谷</strong>
@@ -122,7 +142,36 @@
                 交互 <kbd>E</kbd>
               </button>
               <button id="bridge-check" type="button" hidden>查看旧桥</button>
+              <button id="bridge-work" type="button" hidden>开始施工</button>
+              <button id="nearby-cenyan" type="button" hidden>
+                与岑砚交谈
+              </button>
             </div>
+          </div>
+          <form id="bridge-delivery" class="material-controls" hidden>
+            <label
+              >分批交付
+              <select id="delivery-item">
+                <option value="wood">木材</option>
+                <option value="stone">石材</option>
+              </select>
+            </label>
+            <label
+              >数量
+              <input
+                id="delivery-qty"
+                type="number"
+                min="1"
+                max="999"
+                value="1"
+                required
+            /></label>
+            <button id="delivery-send" type="submit">交指定材料</button>
+          </form>
+          <div id="gift-incoming" class="material-controls" hidden>
+            <span id="gift-description" role="status"></span>
+            <button id="gift-accept" type="button">接受赠送</button>
+            <button id="gift-reject" type="button">拒绝赠送</button>
           </div>
           <div class="controls">
             <span
@@ -130,6 +179,7 @@
               ><span class="control-alt"> 或方向键</span> 移动</span
             >
             <span><kbd>E</kbd> 交互</span><span><kbd>Esc</kbd> 暂停</span>
+            <button id="stop-follow" type="button" hidden>结束同行</button>
             <button id="sound" type="button" aria-pressed="true">音效开</button>
           </div>
           <div class="touch-controls" aria-label="触屏移动">
@@ -163,6 +213,10 @@
               ><strong id="percent">0%</strong>
             </div>
             <progress id="progress" value="0" max="100">0%</progress>
+            <p id="bridge-player-contribution" class="contribution"></p>
+            <p id="bridge-cenyan-contribution" class="contribution"></p>
+            <p id="bridge-shared-work" class="contribution" hidden></p>
+            <p id="bridge-legacy-contribution" class="contribution" hidden></p>
           </section>
 
           <section class="panel inventory">
@@ -177,12 +231,22 @@
             <details id="cenyan-debug" class="cenyan-debug">
               <summary>AI Debug</summary>
               <dl>
-                <dt>目标</dt><dd id="cenyan-goal"></dd>
-                <dt>行动</dt><dd id="cenyan-plan"></dd>
-                <dt>岑砚的背包</dt><dd id="cenyan-bag"></dd>
-                <dt>规则回执</dt><dd id="cenyan-result"></dd>
-                <dt>调用</dt><dd id="cenyan-model"></dd>
+                <dt>目标</dt>
+                <dd id="cenyan-goal"></dd>
+                <dt>行动</dt>
+                <dd id="cenyan-plan"></dd>
+                <dt>待执行</dt>
+                <dd id="cenyan-pending"></dd>
+                <dt>最近决策</dt>
+                <dd><pre id="cenyan-decision"></pre></dd>
+                <dt>岑砚的背包</dt>
+                <dd id="cenyan-bag"></dd>
+                <dt>规则回执</dt>
+                <dd id="cenyan-result"></dd>
+                <dt>调用</dt>
+                <dd id="cenyan-model"></dd>
               </dl>
+              <p id="cenyan-results"></p>
               <h3>近期重要记忆</h3>
               <ul id="cenyan-memory"></ul>
             </details>

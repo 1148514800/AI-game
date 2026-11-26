@@ -1,0 +1,8 @@
+{
+  "verification": "verification-20261125-221918-478020",
+  "unit": 63,
+  "integrationPassed": 4,
+  "integrationTotal": 5,
+  "e2ePassed": 13,
+  "reason": "One preserved integration assertion expects the original phrase 根据旅人话语的含义. The rewritten prompt used a synonymous shorter phrase. Restore original phrase, not weaken or delete assertion. All 13 normal-browser tests, including full A–F, actually passed. Final full rerun required."
+}

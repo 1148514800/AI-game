@@ -1,0 +1,75 @@
+{
+  "tests/unit.test.ts": [
+    "strict input accepts intent only and requires explicit reset confirmation",
+    "runtime assets exactly match the CC0 manifest and every map reference",
+    "map dimensions, terrain frames, unique stable IDs and spawn match data",
+    "west bank resources are reachable and the only route east is the repaired crossing",
+    "server ticks enforce normalized speed, expiring input and no message-driven movement",
+    "wall, tree, rock, closed river and bounds use the same foot collision",
+    "distant, wrong-target, unknown and insufficient actions do not touch storage",
+    "collection is durable, cooldown prevents rush and duplicate id remains rejected after restart",
+    "delivery is atomic and timed work can pause and resume without counting offline time",
+    "checked reset is durable and a repeated reset cannot wipe subsequent progress",
+    "conflicting save revision leaves the winning storage and losing world untouched",
+    "bad SQLite and incompatible state produce a health error without replacing the original",
+    "healthy Fastify opens a versioned local save without API keys",
+    "fresh rules-only journey follows walkable paths, collects six wood and two stone, and reaches the beacon"
+  ],
+  "tests/dialogue.test.ts": [
+    "dialogue transport is strict and accepts full Chinese input",
+    "invalid Live configuration never silently changes to Mock or permits embedded credentials",
+    "Cenyan",
+    "context contains public world facts, bounded recent turns, and unverified player text",
+    "ledger separates modes, retains cancelled and interrupted reservations, and survives restart",
+    "minute, durable one-hour window, and lifetime request limits apply without free resets",
+    "money reservation settles observed usage without double-counting reasoning and preserves unknown usage",
+    "nonempty provider text with zero usage keeps its reservation, and extra tokens are charged conservatively",
+    "broken dialogue configuration or ledger leaves ordinary world health available",
+    "only successful recent turns survive close and world reset clears them",
+    "a reply that resolves despite Abort cannot reappear or enter the next dialogue history"
+  ],
+  "tests/phase3.test.ts": [
+    "planner schemas accept one through three steps and accept speech-only refusals",
+    "planner schemas reject arbitrary locations, unknown IDs, tools, extras and out-of-range waits",
+    "A* seeks a reachable interaction neighbor and routes to the east only after repairs",
+    "Cenyan cannot pass through the player and can recover after the player moves",
+    "runtime interaction range follows Cenyan and leaves the former workshop position",
+    "a player harvest wins atomically, and Cenyan collects only once after real rule cooldown",
+    "NPC delivery, shared work lock and progress survive interruption without double spending",
+    "isolated Mock choices repair a bridge from empty bags, then stock wood and rest at the workshop",
+    "perception excludes far people, unknown resource availability and the player",
+    "factual failure persists beside claims and opinions, with stable reference and no invented completion",
+    "v1 migration backs up the old SQLite schema and receipts before adding the actor",
+    "only explicitly enabled active Mock autonomy requests a plan without dialogue",
+    "invalid autonomous JSON backs off while ordinary simulation continues",
+    "unverified player action is cancelled on close, while an accepted action executes after close",
+    "pause, disconnect and reset invalidate pending autonomy without blocking the next active generation",
+    "generation changes invalidate late proposals even when the newer plan completes first",
+    "a late plan in Live dialogue for a natural request cannot cross a decision generation",
+    "Live dialogue holds a walking actor and accepts only complete valid plans",
+    "dialogue preempts in-flight autonomy with one queued request and both share the lock",
+    "autonomy sublimits reserve room for dialogue and use the same durable request and token pool"
+  ],
+  "tests/dialogue.integration.ts": [
+    "real local HTTP adapter supports both token fields, usage, sanitized errors, timeout and abort",
+    "real WS and HTTP fixture enforce distance, continuity, no world effects, cancellation and durable budget",
+    "local HTTP dialogue accepts a natural request, validates optional plans and holds a walking Cenyan until close",
+    "real WS clearly marked Mock starts without dialogue and walks, harvests, delivers and works a fresh bridge"
+  ],
+  "tests/scene.e2e.ts": [
+    "fresh journey collects all materials, repairs, crosses, explores and restores",
+    "four-way walk frames, pause, a following camera and opt-in music",
+    "390px narrow window renders the scene, residents and touch controls",
+    "missing bridge art blocks readiness with a clear error",
+    "HTTP failure stays unavailable and automatically recovers",
+    "WebSocket handshake failure remains visible and prevents input",
+    "the real server rejects augmented movement and out-of-range actions"
+  ],
+  "tests/dialogue.e2e.ts": [
+    "ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering",
+    "390px dialogue fits and exposes budget failure with a manual retry",
+    "timeout is visible and manual retry remains Mock",
+    "natural request accepts a plan and the actor actually harvests after the dialogue closes",
+    "fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug"
+  ]
+}

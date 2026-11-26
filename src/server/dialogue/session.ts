@@ -3,6 +3,7 @@ import type { WebSocket } from "ws";
 import {
   actionReplySchema,
   decisionSchema,
+  speechReplySchema,
   type ActionReply,
   type Decision,
   type ModelStatus,
@@ -31,13 +32,20 @@ import { DialogueLedger, type Purpose } from "./ledger.js";
 import {
   autonomyMessages,
   dialoguePlanInstructions,
+  jsonDialogueInstructions,
   mockAction,
   mockActionRequest,
   mockPlan,
   perceptionText,
   type MockDecision,
+  type MockDialogue,
 } from "./planning.js";
-import { DialogueFailure, generate, type Usage } from "./provider.js";
+import {
+  containsPrivateThought,
+  DialogueFailure,
+  generate,
+  type Usage,
+} from "./provider.js";
 
 const failures: Record<string, string> = {
   config: "对话配置有误，请检查服务端的模型设置。",
@@ -59,6 +67,7 @@ const failures: Record<string, string> = {
   empty: "对话服务返回了空回复，可手动重试。",
   invalid: "对话服务返回了无法使用的内容，可手动重试。",
   cancelled: "这次请求已取消。",
+  gift: "岑砚没有给出有效的赠送答复。请重新提议。",
   cooldown: "上一次行动计划有误，请稍后再请求。",
 };
 
@@ -82,6 +91,7 @@ type Options = {
   active: () => boolean;
   storageError: (error: unknown) => void;
   mockDecision?: MockDecision;
+  mockDialogue?: MockDialogue;
 };
 
 const periodMs = 120_000;
@@ -126,6 +136,7 @@ export class DialogueSession {
       this.model = {
         kind: this.config.autonomy ? "idle" : "disabled",
         mode: this.config.mode,
+        sharedUsage: this.ledger.summary(this.config.mode),
       };
     } catch {
       this.disable("ledger");
@@ -174,7 +185,7 @@ export class DialogueSession {
       return;
     }
     const state = this.state(owner);
-    const dialogId = msg.type === "dialogue-send" ? msg.dialogId : undefined;
+    const dialogId = msg.type === "dialogue-open" ? undefined : msg.dialogId;
     const fail = (code: string) => this.error(owner, msg.id, code, dialogId);
     if (!state) return fail("inactive");
     if (msg.type === "dialogue-open" && msg.npc !== npcId) return fail("npc");
@@ -205,7 +216,12 @@ export class DialogueSession {
       (this.pending?.job.purpose === "dialogue" ? this.pending.job : undefined);
     if (occupied?.id === msg.id && occupied.valid()) return;
     if (occupied) return fail("busy");
-    const text = msg.text.trim();
+    const world = this.options?.world;
+    const gift = msg.type === "dialogue-gift" ? msg.gift : undefined;
+    const text =
+      msg.type === "dialogue-gift"
+        ? "旅人的正式赠送提议，编号 " + msg.id
+        : msg.text.trim();
     if (
       !text ||
       text.length > dialogueInputLimit ||
@@ -215,42 +231,100 @@ export class DialogueSession {
     const player = config.live
       ? text.replaceAll(config.live.key, "[已隐藏]")
       : text;
-    const world = this.options?.world;
+    if (gift) {
+      if (!world) return fail("gift");
+      const proposed = world.proposePlayerGift(msg.id, gift);
+      if (!proposed.ok) {
+        this.send(owner, {
+          type: "dialogue",
+          event: "error",
+          requestId: msg.id,
+          dialogId,
+          code: proposed.code,
+          text: proposed.text,
+        });
+        return;
+      }
+    }
+    const abandon = () => {
+      if (!gift) return;
+      try {
+        world?.discardPlayerGift(msg.id);
+      } catch (error) {
+        this.options?.storageError(error);
+      }
+    };
     const history = this.history.slice();
     const mockActionRequested =
       !!world && config.mode === "mock" && mockActionRequest(player);
-    const canPlan = !!world && (config.mode === "live" || mockActionRequested);
-    if (mockActionRequested && performance.now() < this.actionRetryAt)
+    const canPlan =
+      !!world &&
+      (config.mode === "live" ||
+        mockActionRequested ||
+        !!gift ||
+        !!this.options?.mockDialogue);
+    if (mockActionRequested && performance.now() < this.actionRetryAt) {
+      abandon();
       return fail("cooldown");
+    }
     const view = world?.perceive(world.topic(player));
     const context = view ? perceptionText(view) : "";
     const epoch = this.epoch;
     const generation = world?.decisionState.generation;
+    let input: ReturnType<typeof buildMessages>;
+    try {
+      const instructions = config.live?.jsonMode
+        ? jsonDialogueInstructions + "\n" + dialoguePlanInstructions
+        : dialoguePlanInstructions;
+      input = buildMessages(
+        bridge,
+        history,
+        player,
+        canPlan ? instructions + "\n" + context : context,
+      );
+    } catch {
+      abandon();
+      fail("invalid");
+      return;
+    }
     const job: Job = {
       id: msg.id,
       purpose: "dialogue",
       trigger: mockActionRequested ? "player-action" : "dialogue",
-      ...buildMessages(
-        bridge,
-        history,
-        player,
-        canPlan ? dialoguePlanInstructions + "\n" + context : context,
-      ),
+      ...input,
       format: canPlan ? "optional-plan" : "text",
-      mock: () =>
-        mockActionRequested && view
+      mock: () => {
+        const fixture =
+          view && this.options?.mockDialogue?.(view, player, input.messages);
+        if (fixture !== undefined) return fixture;
+        if (gift && view)
+          return JSON.stringify({
+            goal: view.self.goal,
+            speech:
+              view.self.bag[gift.item] >= 8
+                ? "我已经备够了，这份你留着吧。"
+                : "那我收下，多谢。",
+            gift_response: {
+              offer_id: msg.id,
+              decision: view.self.bag[gift.item] >= 8 ? "reject" : "accept",
+            },
+          });
+        return mockActionRequested && view
           ? JSON.stringify(mockAction(view, player))
-          : mockReply(bridge, history, player),
+          : mockReply(bridge, history, player);
+      },
       valid: () =>
         this.dlg === dialog &&
         this.epoch === epoch &&
         !!this.state(owner)?.near &&
         (!canPlan || world?.decisionState.generation === generation),
       invalidated: () => {
+        abandon();
         if (this.dlg === dialog && this.epoch === epoch) fail("stale");
       },
       done: (status, speech, proposal) => {
         if (status !== "ok" || !speech) {
+          abandon();
           if (canPlan && ["empty", "invalid"].includes(status))
             this.actionRetryAt = performance.now() + 5000;
           fail(status);
@@ -258,10 +332,31 @@ export class DialogueSession {
         }
         if (proposal?.plan && performance.now() < this.actionRetryAt)
           return fail("cooldown");
-        const resolution = proposal
-          ? world?.recordActionReply(msg.id, player, proposal)
-          : undefined;
-        if (!proposal) world?.rememberExchange(msg.id, player, speech);
+        const response = proposal?.gift_response;
+        if (
+          (gift && (!response || response.offer_id !== msg.id)) ||
+          (!gift && response)
+        ) {
+          abandon();
+          fail(gift ? "gift" : "invalid");
+          return;
+        }
+        const giftResult =
+          response && proposal && world
+            ? world.resolveGift(
+                msg.id,
+                response.offer_id,
+                "cenyan",
+                response.decision,
+                Date.now(),
+                proposal,
+              )
+            : undefined;
+        const resolution =
+          proposal && !gift
+            ? world?.recordActionReply(msg.id, player, proposal)
+            : undefined;
+        if (!proposal && !gift) world?.rememberExchange(msg.id, player, speech);
         if (proposal && world) this.focusedTopic = world.topic(player);
         this.history.push({ player, reply: speech });
         if (this.history.length > historyTurns) this.history.shift();
@@ -272,6 +367,7 @@ export class DialogueSession {
           dialogId: dialog.id,
           text: speech,
           action: resolution,
+          gift: giftResult,
         });
       },
     };
@@ -401,13 +497,19 @@ export class DialogueSession {
         mode: config.mode,
         trigger: job.trigger,
         result: status,
+        sharedUsage: this.model.sharedUsage,
       };
       this.deliver(job, status);
       return;
     }
     const abort = new AbortController();
     this.pending = { job, abort };
-    this.model = { kind: "pending", mode: config.mode, trigger: job.trigger };
+    this.model = {
+      kind: "pending",
+      mode: config.mode,
+      trigger: job.trigger,
+      sharedUsage: this.model.sharedUsage,
+    };
     onStart?.();
     this.running = this.run(job, config, ledger, abort);
   }
@@ -423,12 +525,14 @@ export class DialogueSession {
     let usage: Usage | undefined;
     let speech: string | undefined;
     let plan: ActionReply | undefined;
+    const jsonMode = config.live?.jsonMode === true && job.format !== "text";
     try {
       const result = await generate(
         config,
         job.messages,
         job.mock,
         abort.signal,
+        jsonMode,
       );
       usage = result.usage;
       if (job.format === "text") speech = result.text;
@@ -438,17 +542,38 @@ export class DialogueSession {
           raw = JSON.parse(result.text);
         } catch {
           // A structured reply must parse as a whole before it can carry a plan.
-          if (job.format === "plan" || /^(?:\{|\[|```|~~~)/.test(result.text))
+          if (
+            jsonMode ||
+            job.format === "plan" ||
+            /^(?:\{|\[|```|~~~)/.test(result.text)
+          )
             throw new DialogueFailure("invalid", usage);
           speech = result.text;
         }
         if (speech === undefined) {
-          const parsed = (
-            job.format === "plan" ? decisionSchema : actionReplySchema
-          ).safeParse(raw);
-          if (!parsed.success) throw new DialogueFailure("invalid", usage);
-          plan = parsed.data;
-          speech = plan.speech;
+          const plain =
+            jsonMode && job.format === "optional-plan"
+              ? speechReplySchema.safeParse(raw).data
+              : undefined;
+          if (plain) {
+            speech = plain.speech;
+          } else {
+            const parsed = (
+              job.format === "plan" ? decisionSchema : actionReplySchema
+            ).safeParse(raw);
+            if (!parsed.success) throw new DialogueFailure("invalid", usage);
+            plan = parsed.data;
+            speech = plan.speech;
+          }
+          // JSON escapes can hide content from the transport-level text checks.
+          if (
+            [plan?.goal ?? "", speech].some(
+              (value) =>
+                containsPrivateThought(value) ||
+                (config.live && value.includes(config.live.key)),
+            )
+          )
+            throw new DialogueFailure("invalid", usage);
         }
       }
     } catch (error) {
@@ -458,8 +583,10 @@ export class DialogueSession {
     if (abort.signal.aborted || !job.valid()) status = "cancelled";
     const elapsedMs = Math.round(performance.now() - start);
     let account: ReturnType<DialogueLedger["finish"]>;
+    let sharedUsage = this.model.sharedUsage;
     try {
       account = ledger.finish(config, job.id, status, elapsedMs, usage);
+      sharedUsage = ledger.summary(config.mode);
     } catch {
       this.disable("ledger");
       status = "ledger";
@@ -477,6 +604,7 @@ export class DialogueSession {
       trigger: job.trigger,
       result: status,
       elapsedMs,
+      sharedUsage,
       tokens:
         typeof account?.charged_tokens === "number"
           ? account.charged_tokens
@@ -521,8 +649,12 @@ export class DialogueSession {
     const dialog = this.dlg;
     if (!dialog) return;
     this.dlg = undefined;
+    this.queued?.invalidated?.();
     this.queued = undefined;
-    if (this.pending?.job.purpose === "dialogue") this.pending.abort.abort();
+    if (this.pending?.job.purpose === "dialogue") {
+      this.pending.abort.abort();
+      this.pending.job.invalidated?.();
+    }
     if (notify)
       this.send(dialog.owner, {
         type: "dialogue",

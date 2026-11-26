@@ -555,7 +555,8 @@ test(
       const index = calls.push(body) - 1;
       const input = body.messages.at(-1)!.content;
       let content = JSON.stringify(decision);
-      if (input.endsWith(smallTalk)) content = "今天雾重，走路当心。";
+      if (input.endsWith(smallTalk))
+        content = JSON.stringify({ speech: "今天雾重，走路当心。" });
       if (input.endsWith(invalid))
         content = JSON.stringify({
           ...decision,
@@ -580,7 +581,11 @@ test(
     async function start() {
       app = createApp({
         savePath,
-        dialogueEnv: { ...env, LLM_AUTONOMY_ENABLED: "false" },
+        dialogueEnv: {
+          ...env,
+          LLM_AUTONOMY_ENABLED: "false",
+          LLM_JSON_MODE: "true",
+        },
       });
       return app.listen({ port: 0, host: "127.0.0.1" });
     }
@@ -656,6 +661,9 @@ test(
     assert.ok(calls[1].messages[0].content.includes(resource.id));
     assert.ok(calls[1].messages[0].content.includes("附近人物"));
     assert.match(calls[1].messages[0].content, /根据旅人话语的含义/);
+    assert.match(calls[1].messages[0].content, /普通问答只返回/);
+    for (const call of calls)
+      assert.deepEqual(call.response_format, { type: "json_object" });
     assert.equal(calls.length, 5, "one provider request per turn");
 
     await app!.close();

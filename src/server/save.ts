@@ -1,11 +1,18 @@
 import { existsSync, mkdirSync, statSync } from "node:fs";
 import { dirname } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { cenyanId, home, type Memory } from "../shared/cenyan.js";
+import {
+  cenyanId,
+  home,
+  legacyGoalTag,
+  type Memory,
+} from "../shared/cenyan.js";
 import {
   legacySaveSchema,
   saveSchema,
   schemaVersion,
+  v2SaveSchema,
+  type Result,
   type SaveState,
 } from "../shared/protocol.js";
 import { isPassable, resources, valley } from "../shared/world.js";
@@ -18,8 +25,12 @@ function freshActor(): SaveState["cenyan"] {
     facing: home.facing,
     bag: { wood: 0, stone: 0 },
     goal: "stock-wood",
+    goalTag: "stock-wood",
     generation: 0,
     plan: null,
+    pending: null,
+    decision: null,
+    results: [],
     last: null,
   };
 }
@@ -40,25 +51,69 @@ export function freshState(): SaveState {
       repaired: false,
     },
     explored: false,
+    gift: null,
+    sharedWorkMs: 0,
+    contributions: {
+      player: emptyContribution(),
+      cenyan: emptyContribution(),
+      legacy: emptyContribution(),
+    },
     cenyan: freshActor(),
   };
 }
 
+const emptyContribution = () => ({ wood: 0, stone: 0, workMs: 0 });
+
 function decode(payload: string, version: number): SaveState {
   const raw: unknown = JSON.parse(payload);
-  const save: SaveState =
-    version === 1
-      ? { ...legacySaveSchema.parse(raw), schemaVersion, cenyan: freshActor() }
-      : saveSchema.parse(raw);
+  let save: SaveState;
+  if (version === schemaVersion) {
+    save = saveSchema.parse(raw);
+  } else {
+    const old =
+      version === 1
+        ? { ...legacySaveSchema.parse(raw), cenyan: freshActor() }
+        : v2SaveSchema.parse(raw);
+    const goalTag = old.cenyan.goalTag ?? legacyGoalTag(old.cenyan.goal);
+    save = {
+      ...old,
+      cenyan: { ...old.cenyan, ...(goalTag && { goalTag }) },
+      schemaVersion,
+      gift: null,
+      sharedWorkMs: 0,
+      contributions: {
+        player: emptyContribution(),
+        cenyan: emptyContribution(),
+        legacy: {
+          wood: old.bridge.wood,
+          stone: old.bridge.stone,
+          workMs: old.bridge.progressMs,
+        },
+      },
+    };
+  }
   const bridge = save.bridge;
   const full =
     bridge.wood === valley.bridge.required.wood &&
     bridge.stone === valley.bridge.required.stone;
   const actor = save.cenyan;
+  const contributions = Object.values(save.contributions);
+  const total = (key: "wood" | "stone" | "workMs") =>
+    contributions.reduce((sum, entry) => sum + entry[key], 0);
   if (
     !isPassable(save.player.x, save.player.y, bridge.repaired) ||
     !isPassable(actor.x, actor.y, bridge.repaired) ||
     (actor.plan && actor.plan.index >= actor.plan.steps.length) ||
+    (actor.pending !== null && actor.plan === null) ||
+    total("wood") !== bridge.wood ||
+    total("stone") !== bridge.stone ||
+    Math.abs(total("workMs") - bridge.progressMs) > 0.001 ||
+    save.sharedWorkMs >
+      Math.min(
+        save.contributions.player.workMs,
+        save.contributions.cenyan.workMs,
+      ) +
+        0.001 ||
     Object.keys(save.cooldowns).some((id) => !resources.has(id)) ||
     (!bridge.discovered && (bridge.wood !== 0 || bridge.stone !== 0)) ||
     (!full && bridge.progressMs !== 0) ||
@@ -101,7 +156,7 @@ export class SaveFile {
             revision INTEGER NOT NULL,
             payload TEXT NOT NULL
           ) STRICT;
-          CREATE TABLE receipts (id TEXT PRIMARY KEY) STRICT;
+          CREATE TABLE receipts (id TEXT PRIMARY KEY, result TEXT) STRICT;
           ${memoryTable}
           PRAGMA user_version = ${schemaVersion};
           `);
@@ -117,7 +172,7 @@ export class SaveFile {
       const version = this.db
         .prepare("PRAGMA user_version")
         .get()?.user_version;
-      if (version !== 1 && version !== schemaVersion)
+      if (version !== 1 && version !== 2 && version !== schemaVersion)
         throw Error("SQLite 存档版本不受支持");
       const row = this.db
         .prepare("SELECT revision, payload FROM world WHERE slot = 1")
@@ -133,16 +188,19 @@ export class SaveFile {
       this.db.prepare("SELECT id FROM receipts LIMIT 1").get();
       this.initial = decode(row.payload, version);
       this.revision = row.revision;
-      if (version === 1) {
+      if (version !== schemaVersion) {
         // VACUUM INTO includes any committed WAL pages. A previous backup is
         // retained, including when a migration was interrupted after backup.
-        const base = path + ".pre-phase3.sqlite";
+        const base =
+          path +
+          (version === 1 ? ".pre-phase3.sqlite" : ".pre-phase3_1.sqlite");
         let backupPath = base;
         for (let suffix = 1; existsSync(backupPath); suffix++)
           backupPath = base + "." + suffix;
         this.db.prepare("VACUUM INTO ?").run(backupPath);
         this.transaction(() => {
-          this.db.exec(memoryTable);
+          if (version === 1) this.db.exec(memoryTable);
+          this.db.exec("ALTER TABLE receipts ADD COLUMN result TEXT");
           this.update(this.initial);
           this.db.exec(`PRAGMA user_version = ${schemaVersion}`);
         });
@@ -161,6 +219,15 @@ export class SaveFile {
     );
   }
 
+  receipt(id: string): Result | undefined {
+    const row = this.db
+      .prepare("SELECT result FROM receipts WHERE id = ?")
+      .get(id);
+    return typeof row?.result === "string"
+      ? (JSON.parse(row.result) as Result)
+      : undefined;
+  }
+
   memories(topic?: string, limit = 6): Memory[] {
     const latest = this.db
       .prepare(
@@ -168,14 +235,24 @@ export class SaveFile {
       )
       .all(cenyanId, limit) as Memory[];
     if (!topic) return latest;
+    const byEvent = this.db.prepare(
+      `SELECT * FROM cenyan_memory WHERE actor = ? AND kind = 'fact' AND event LIKE ?
+       ORDER BY at DESC, rowid DESC LIMIT ?`,
+    );
+    const cooperation = byEvent.all(cenyanId, "cooperation:%", 2) as Memory[];
+    const gifts = byEvent.all(cenyanId, "gift:%", 1) as Memory[];
     const related = this.db
       .prepare(
-        "SELECT * FROM cenyan_memory WHERE actor = ? AND topic = ? ORDER BY at DESC, rowid DESC LIMIT 3",
+        `SELECT * FROM cenyan_memory WHERE actor = ? AND kind = 'fact' AND topic = ?
+       ORDER BY at DESC, rowid DESC LIMIT 2`,
       )
       .all(cenyanId, topic) as Memory[];
     return [
       ...new Map(
-        [...related, ...latest].map((item) => [item.id, item]),
+        [...cooperation, ...related, ...gifts, ...latest].map((item) => [
+          item.id,
+          item,
+        ]),
       ).values(),
     ].slice(0, limit);
   }
@@ -185,11 +262,14 @@ export class SaveFile {
     receipt?: string,
     memories: Memory[] = [],
     reset = false,
+    result?: Result,
   ) {
     this.transaction(() => {
       this.update(state);
       if (receipt)
-        this.db.prepare("INSERT INTO receipts VALUES (?)").run(receipt);
+        this.db
+          .prepare("INSERT INTO receipts (id, result) VALUES (?, ?)")
+          .run(receipt, result ? JSON.stringify(result) : null);
       if (reset) this.db.exec("DELETE FROM cenyan_memory");
       if (memories.length) {
         const insert = this.db.prepare(

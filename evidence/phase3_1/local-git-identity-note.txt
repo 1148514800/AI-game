@@ -1,0 +1,1 @@
+Initial local git commit exited 128 because this fresh checkout has no author identity configured. No commit was created and no source was reset. Retried with per-command technical attribution user.name=Grok Bot and user.email=grok-bot@localhost, a local-only placeholder rather than the user's personal contact identity. No global Git configuration or credentials read/changed.

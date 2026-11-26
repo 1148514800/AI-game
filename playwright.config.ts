@@ -1,6 +1,6 @@
 import { defineConfig } from "@playwright/test";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1";
 export default defineConfig({
   testDir: "./tests",
   testMatch: "*.e2e.ts",
@@ -19,7 +19,12 @@ export default defineConfig({
       chromiumSandbox: true,
       ignoreDefaultArgs: ["--enable-unsafe-swiftshader"],
     },
-    trace: "retain-on-failure",
+    trace: {
+      mode: "retain-on-failure",
+      screenshots: false,
+      snapshots: false,
+      sources: false,
+    },
   },
   webServer: {
     command: "npm run dev:client",

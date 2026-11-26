@@ -1,0 +1,102 @@
+{
+  "phase": "3.1",
+  "status": "OFFLINE_COMPLETE_STOP_PHASE3_1_DELIVERY_RESULTS_IN_EXTERNAL_MANIFEST",
+  "updatedAt": "2026-11-25T22:45:01.863068+08:00",
+  "worktree": "/workspace/mistsea-phase3_1",
+  "baseline": "842342a1021751d0e33ac7b2a3db27f0e0bca9f1",
+  "head": "842342a1021751d0e33ac7b2a3db27f0e0bca9f1",
+  "gitState": "Intentional dirty implementation, NO engineering/final commit yet; do not reset or overwrite",
+  "codex": {
+    "session": "01a212ec-f679-7a21-9ba2-c3f6ebda1432",
+    "modelRequested": "gpt-6.2-sol",
+    "effort": "high",
+    "exitCode": 1,
+    "elapsedSeconds": 1460.173,
+    "log": "evidence/phase3_1/codex-implementation.log",
+    "lastError": "Your workspace is out of credits. Ask your workspace owner to refill in order to continue.",
+    "errorLines": [
+      16442,
+      16443
+    ],
+    "tokenCounterInCli": 295390,
+    "resetTime": "UNKNOWN; error says workspace refill, not a five-hour reset"
+  },
+  "implementedUnaccepted": [
+    "partial material delivery and per-actor contribution records, receipt replay",
+    "bidirectional model/player gift consent, expiry and revalidation",
+    "dynamic A* player following and cancellation",
+    "shared single-tick cooperative work with per-actor labor",
+    "free-text goal, continue/replace/defer/reject and persisted one-slot pending plan",
+    "unified eight-action capability/Zod/prompt definitions",
+    "expanded result/memory/debug/shared usage, v1/v2-to-v3 save migration",
+    "dedicated unit/integration/normal-UI A-F browser tests and short follow regression",
+    "README/AGENTS/ROADMAP/DECISIONS updates"
+  ],
+  "actualChecks": {
+    "npmCi": 0,
+    "typecheck": 0,
+    "unit": "64/64",
+    "integration": "5/5",
+    "e2e": "13/13",
+    "additionalAF": "2/2",
+    "build": 0,
+    "productionSmoke": 0,
+    "standaloneSource": "npm ci/build/browser production smoke all 0",
+    "noLive": true
+  },
+  "latestCommandResults": "evidence/phase3_1/resume-final/command-results.json",
+  "pending": [],
+  "allCurrentTaskProcessesEnded": true,
+  "priorHistoricalEvidenceDiffExitCode": 0,
+  "priorWorkspacesUntouched": true,
+  "noMacAccess": true,
+  "noPrivateEnvOrCredentialsRead": true,
+  "noLiveCalls": true,
+  "noPushPrDeployment": true,
+  "noPhase4": true,
+  "coordinatorHandoff": "/workspace/phase3_1-handoff",
+  "reviewNotes": "evidence/phase3_1/COORDINATOR_REVIEW_NOTES.txt",
+  "resumed": {
+    "authorization": "User t8u explicitly restored credits and continued same Phase3.1",
+    "codexSession": "01a212ec-f679-7a21-9ba2-c3f6ebda1432",
+    "codexWrapperPid": 364832,
+    "log": "evidence/phase3_1/codex-resumed-review.log",
+    "nativeNpmCiExit": 0,
+    "nativeInstall": "evidence/phase3_1/native-install/result.json",
+    "initialIntegrationWrapperPid": 365476,
+    "finalAllSuitePending": true
+  },
+  "previousStatus": "RESUMED_CODEX_REVIEW_AND_NATIVE_INITIAL_CHECKS_RUNNING",
+  "previousChecks": {
+    "typecheck": "PASS, including after final test import fix",
+    "unit": "58/58 PASS, zero skipped; evidence/phase3_1/work-unit-restarted-context.log",
+    "build": "PASS before final test-only additions",
+    "clientSecretSentinel": "PASS dummy-only",
+    "shortRealTimeRegression": "PASS 6.511s,129 ticks,1 model mock request,0 extra autonomy, max pending1 queue0; not browser/Live/30min",
+    "npmCi": "exit1 sandbox EPERM; --ignore-scripts exit0, not equivalent to required clean native npm ci",
+    "integration": "5 failed at listen EPERM, not verified",
+    "playwright": "13 discovered; command exits1 at local listener EPERM, no actual browser cooperation accepted",
+    "devAndProductionSmoke": "exit1 local listener EPERM, not verified"
+  },
+  "previousCommandResults": "evidence/phase3_1/verification-20261125-215951-099728/command-results.json",
+  "completedReview": [
+    "Strict JSON capability and reply examples are parsed by schema tests",
+    "Free text goal and optional lightweight tag persist together; legacy goal IDs normalize during v2 migration",
+    "Debug shows only validated structured plan or gift decision, with escape-aware disclosure guards",
+    "Traveler gifts cancel on stale generation, dialogue closure and restart; saved NPC offers still require explicit player consent",
+    "Pending plan retains its tag across restart and is promoted before the new rule check",
+    "Browser D asserts movement resumes between requests; native A–F has not been run",
+    "Report contains exact observed results, native reproduction and manual Live steps"
+  ],
+  "resumedCodexExitCode": 0,
+  "resumedCodexResult": "/workspace/phase3_1-handoff/codex-resumed-result.txt",
+  "finalVerification": "evidence/phase3_1/verification-20261125-223512-151573",
+  "engineeringCommit": "0f5505ae6331763cc25b2031f6bb6f470f8a6c42",
+  "finalHeadLocation": "Delivery ZIP DELIVERY_COMMIT.txt and external delivery-info.json",
+  "delivery": {
+    "directory": "/workspace/mistsea-phase3_1-AG-5-delivery-20261125",
+    "archiveVerification": "delivery-info.json",
+    "actualCoreReproduction": "core-restoration/result.json",
+    "note": "Packaging and actual archive restoration run after this metadata commit; final machine-readable outcomes live beside packages to avoid self-referential commit IDs."
+  }
+}

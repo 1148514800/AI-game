@@ -1,0 +1,20 @@
+[
+  {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:32:21.284702+08:00",
+    "log": "/workspace/mistsea-phase3_1/evidence/phase3_1/keyboard-route-fix-row0t6hs/typecheck.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:32:21.821964+08:00",
+    "log": "/workspace/mistsea-phase3_1/evidence/phase3_1/keyboard-route-fix-row0t6hs/unit-test.log"
+  },
+  {
+    "command": "git diff --check",
+    "exitCode": 0,
+    "startedAt": "2026-11-25T22:32:24.739076+08:00",
+    "log": "/workspace/mistsea-phase3_1/evidence/phase3_1/keyboard-route-fix-row0t6hs/diff-check.log"
+  }
+]

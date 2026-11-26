@@ -49,6 +49,10 @@ export function bindInput(callbacks: {
       event.ctrlKey ||
       event.altKey ||
       event.metaKey ||
+      (event.target instanceof HTMLElement &&
+        event.target.matches(
+          "input, select, textarea, [contenteditable=true]",
+        )) ||
       document.querySelector("dialog[open]")
     )
       return;

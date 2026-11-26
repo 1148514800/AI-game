@@ -1,0 +1,14 @@
+{
+  "model": "Qwen/Qwen3.5-35B-A3B",
+  "jsonMode": true,
+  "thinking": false,
+  "backgroundAutonomy": false,
+  "earlierInGameAttempt": "invalid",
+  "observations": [
+    {"kind": "action", "elapsedMs": 2264, "target": "fallen-wood-01", "steps": ["move_to", "collect"], "result": "COLLECTED", "woodAfter": 1},
+    {"kind": "restart", "woodAfter": 1},
+    {"kind": "ordinaryDialogue", "elapsedMs": 958, "result": "ok"},
+    {"kind": "action", "elapsedMs": 1981, "target": "fallen-wood-02", "steps": ["move_to", "collect"], "result": "COLLECTED", "woodAfter": 2}
+  ],
+  "source": "Live local game UI and AI Debug"
+}

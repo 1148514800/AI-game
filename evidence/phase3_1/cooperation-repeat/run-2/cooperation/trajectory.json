@@ -1,0 +1,3499 @@
+{
+  "starts": [
+    386789,
+    386927,
+    387241
+  ],
+  "errors": [],
+  "trajectory": [
+    {
+      "step": "service-started",
+      "at": 1795617675142,
+      "pid": 386789
+    },
+    {
+      "step": "A-fresh",
+      "at": 1795617676336,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 184,
+          "y": 384,
+          "facing": "down"
+        },
+        "inventory": {
+          "wood": 0,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {},
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 255,
+          "y": 299,
+          "facing": "down",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "stock-wood",
+          "goalTag": "stock-wood",
+          "generation": 0,
+          "plan": null,
+          "pending": null,
+          "decision": null,
+          "last": null,
+          "results": []
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "idle",
+      "working": false
+    },
+    {
+      "at": 1795617679115,
+      "message": {
+        "type": "result",
+        "id": "89f60506-cff5-48e4-bb72-6c66739709b7",
+        "target": "fallen-wood-01",
+        "ok": true,
+        "code": "COLLECTED",
+        "text": "从林间倒木获得 木材 ×1，已放入背包。"
+      }
+    },
+    {
+      "step": "A-player-harvested",
+      "at": 1795617679115,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 109.57396295199995,
+          "y": 230.41995932000023,
+          "facing": "up"
+        },
+        "inventory": {
+          "wood": 1,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 255,
+          "y": 299,
+          "facing": "down",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "stock-wood",
+          "goalTag": "stock-wood",
+          "generation": 0,
+          "plan": null,
+          "pending": null,
+          "decision": null,
+          "last": null,
+          "results": []
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "idle",
+      "working": false,
+      "target": "fallen-wood-01"
+    },
+    {
+      "step": "A-player-harvested",
+      "at": 1795617679862,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 149.0278526799999,
+          "y": 212.85462234400023,
+          "facing": "up"
+        },
+        "inventory": {
+          "wood": 2,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 255,
+          "y": 299,
+          "facing": "down",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "stock-wood",
+          "goalTag": "stock-wood",
+          "generation": 0,
+          "plan": null,
+          "pending": null,
+          "decision": null,
+          "last": null,
+          "results": []
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "idle",
+      "working": false,
+      "target": "fallen-wood-02"
+    },
+    {
+      "at": 1795617679863,
+      "message": {
+        "type": "result",
+        "id": "02a57ab1-6216-4b1a-bf8c-68adc21cf246",
+        "target": "fallen-wood-02",
+        "ok": true,
+        "code": "COLLECTED",
+        "text": "从林间倒木获得 木材 ×1，已放入背包。"
+      }
+    },
+    {
+      "step": "A-player-harvested",
+      "at": 1795617681228,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 206.10516747999995,
+          "y": 204.07794824000024,
+          "facing": "up"
+        },
+        "inventory": {
+          "wood": 3,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 255,
+          "y": 299,
+          "facing": "down",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "stock-wood",
+          "goalTag": "stock-wood",
+          "generation": 0,
+          "plan": null,
+          "pending": null,
+          "decision": null,
+          "last": null,
+          "results": []
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "idle",
+      "working": false,
+      "target": "fallen-wood-03"
+    },
+    {
+      "at": 1795617681229,
+      "message": {
+        "type": "result",
+        "id": "22b835d7-8a35-4dfa-a892-43c7fdc3b06a",
+        "target": "fallen-wood-03",
+        "ok": true,
+        "code": "COLLECTED",
+        "text": "从林间倒木获得 木材 ×1，已放入背包。"
+      }
+    },
+    {
+      "at": 1795617682227,
+      "message": {
+        "type": "result",
+        "id": "a7b256c4-0c47-48f3-83d4-e962358d4f64",
+        "target": "fallen-wood-04",
+        "ok": true,
+        "code": "COLLECTED",
+        "text": "从林间倒木获得 木材 ×1，已放入背包。"
+      }
+    },
+    {
+      "step": "A-player-harvested",
+      "at": 1795617682244,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 245.54775739199988,
+          "y": 173.39545833600016,
+          "facing": "right"
+        },
+        "inventory": {
+          "wood": 4,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 255,
+          "y": 299,
+          "facing": "down",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "stock-wood",
+          "goalTag": "stock-wood",
+          "generation": 0,
+          "plan": null,
+          "pending": null,
+          "decision": null,
+          "last": null,
+          "results": []
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "idle",
+      "working": false,
+      "target": "fallen-wood-04"
+    },
+    {
+      "at": 1795617684679,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "7906789e-72f3-4417-a749-3091fbd51451",
+        "dialogId": "04552500-c40f-4ddc-bd01-471f97842553",
+        "text": "两份就不用了，你留着吧。",
+        "gift": {
+          "type": "result",
+          "id": "7906789e-72f3-4417-a749-3091fbd51451",
+          "ok": true,
+          "code": "GIFT_REJECTED",
+          "text": "岑砚拒绝了旅人的赠送，材料留在原背包。",
+          "target": "cenyan",
+          "offerId": "7906789e-72f3-4417-a749-3091fbd51451",
+          "actor": "player"
+        }
+      }
+    },
+    {
+      "at": 1795617684908,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "e4ca51f3-6450-4bc7-82b8-a8674a00c757",
+        "dialogId": "04552500-c40f-4ddc-bd01-471f97842553",
+        "text": "我收下一份，多谢。",
+        "gift": {
+          "type": "result",
+          "id": "e4ca51f3-6450-4bc7-82b8-a8674a00c757",
+          "ok": true,
+          "code": "GIFT_TRANSFERRED",
+          "text": "旅人赠给岑砚木材 ×1。",
+          "target": "cenyan",
+          "offerId": "e4ca51f3-6450-4bc7-82b8-a8674a00c757",
+          "actor": "player",
+          "materials": {
+            "wood": 1,
+            "stone": 0
+          }
+        }
+      }
+    },
+    {
+      "at": 1795617685347,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "bed1d605-5796-44fe-b851-b3b0a45e27d2",
+        "dialogId": "04552500-c40f-4ddc-bd01-471f97842553",
+        "text": "我提议送你一份木材。",
+        "action": "accepted"
+      }
+    },
+    {
+      "at": 1795617687083,
+      "message": {
+        "type": "result",
+        "id": "686cbab2-810c-4c49-b4d7-749c84a6364d",
+        "ok": true,
+        "code": "GIFT_REJECTED",
+        "text": "旅人拒绝了岑砚的赠送，材料留在原背包。",
+        "target": "cenyan",
+        "offerId": "839a87c3-e5ab-4970-abf7-ba13b27c73aa",
+        "actor": "cenyan"
+      }
+    },
+    {
+      "at": 1795617687264,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "6f102ec5-afa2-48f7-9f3a-c82ad1d7c1bd",
+        "dialogId": "a7302fce-954a-4708-a658-8b71e479b260",
+        "text": "我提议送你一份木材。",
+        "action": "accepted"
+      }
+    },
+    {
+      "at": 1795617688845,
+      "message": {
+        "type": "result",
+        "id": "e51c8e2d-72e8-47d6-9b66-dd1ca0296891",
+        "ok": true,
+        "code": "GIFT_TRANSFERRED",
+        "text": "岑砚赠给旅人木材 ×1。",
+        "target": "cenyan",
+        "offerId": "94485a01-c287-4024-8383-bae05e9c7a11",
+        "actor": "cenyan",
+        "materials": {
+          "wood": 1,
+          "stone": 0
+        }
+      }
+    },
+    {
+      "step": "E-bidirectional-consent",
+      "at": 1795617688871,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 245.61744036799982,
+          "y": 278.635547928,
+          "facing": "right"
+        },
+        "inventory": {
+          "wood": 4,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 255,
+          "y": 299,
+          "facing": "down",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "赠木给旅人",
+          "generation": 4,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "6f102ec5-afa2-48f7-9f3a-c82ad1d7c1bd",
+            "policy": "replace",
+            "goal": "赠木给旅人",
+            "speech": "我提议送你一份木材。",
+            "status": "accepted",
+            "steps": [
+              {
+                "item": "wood",
+                "qty": 1,
+                "type": "give_item",
+                "target_id": "player"
+              }
+            ]
+          },
+          "last": {
+            "id": "e51c8e2d-72e8-47d6-9b66-dd1ca0296891",
+            "type": "give_item",
+            "status": "ok",
+            "code": "GIFT_TRANSFERRED",
+            "text": "岑砚赠给旅人木材 ×1。",
+            "change": {
+              "wood": 1,
+              "stone": 0,
+              "actor": "cenyan"
+            }
+          },
+          "results": [
+            {
+              "id": "e51c8e2d-72e8-47d6-9b66-dd1ca0296891",
+              "type": "give_item",
+              "status": "ok",
+              "code": "GIFT_TRANSFERRED",
+              "text": "岑砚赠给旅人木材 ×1。",
+              "change": {
+                "wood": 1,
+                "stone": 0,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:6f102ec5-afa2-48f7-9f3a-c82ad1d7c1bd:0",
+              "type": "give_item",
+              "status": "ok",
+              "code": "GIFT_OFFERED",
+              "text": "已提议赠送木材 ×1，等待对方决定。",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            },
+            {
+              "id": "686cbab2-810c-4c49-b4d7-749c84a6364d",
+              "type": "give_item",
+              "status": "ok",
+              "code": "GIFT_REJECTED",
+              "text": "旅人拒绝了岑砚的赠送，材料留在原背包。",
+              "change": {
+                "actor": "cenyan"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "idle",
+      "working": false
+    },
+    {
+      "at": 1795617689184,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "158a727e-3947-4fb0-9afd-c67027a577b3",
+        "dialogId": "dee688fe-95af-4520-8082-2e2e0c9c6a3f",
+        "text": "我先去林地。",
+        "action": "accepted"
+      }
+    },
+    {
+      "at": 1795617689599,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "d6812b07-bd43-46d4-b038-87bc427c9a4e",
+        "dialogId": "68e04ffb-22dc-48f7-929c-7ede433bfb34",
+        "text": "行，改走东侧。",
+        "action": "accepted"
+      }
+    },
+    {
+      "at": 1795617690027,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "eef81c24-8d71-410c-965c-0b0b97f79817",
+        "dialogId": "43e29faa-21ae-4e98-8c28-664faf3f3bdc",
+        "text": "路走完再采两处。",
+        "action": "deferred"
+      }
+    },
+    {
+      "at": 1795617690417,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "a150d559-5fe3-400a-bab1-1cc16de9c6b6",
+        "dialogId": "20292a4f-5be0-4991-93d3-c02a5ffa5e94",
+        "text": "先不回，我想把林地的活做完。",
+        "action": "rejected"
+      }
+    },
+    {
+      "step": "D-replace-defer-reject",
+      "at": 1795617690512,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 245.61744036799982,
+          "y": 287.4062385599999,
+          "facing": "down"
+        },
+        "inventory": {
+          "wood": 4,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 241.79999999999998,
+          "y": 277.0735088640002,
+          "facing": "left",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "改去靠东的倒木",
+          "generation": 7,
+          "plan": {
+            "id": "d6812b07-bd43-46d4-b038-87bc427c9a4e",
+            "steps": [
+              {
+                "type": "move_to",
+                "target_id": "fallen-wood-05"
+              }
+            ],
+            "index": 0
+          },
+          "pending": {
+            "id": "eef81c24-8d71-410c-965c-0b0b97f79817",
+            "goal": "抵达后采两处倒木",
+            "steps": [
+              {
+                "type": "collect",
+                "target_id": "fallen-wood-05"
+              },
+              {
+                "type": "move_to",
+                "target_id": "fallen-wood-06"
+              },
+              {
+                "type": "collect",
+                "target_id": "fallen-wood-06"
+              }
+            ]
+          },
+          "decision": {
+            "id": "a150d559-5fe3-400a-bab1-1cc16de9c6b6",
+            "policy": "reject",
+            "goal": "回工坊",
+            "speech": "先不回，我想把林地的活做完。",
+            "status": "rejected"
+          },
+          "last": {
+            "id": "npc:158a727e-3947-4fb0-9afd-c67027a577b3:0",
+            "type": "move_to",
+            "status": "cancelled",
+            "code": "PLAN_REPLACED",
+            "text": "当前行动已被新计划替换，已完成的成果保留。"
+          },
+          "results": [
+            {
+              "id": "npc:158a727e-3947-4fb0-9afd-c67027a577b3:0",
+              "type": "move_to",
+              "status": "cancelled",
+              "code": "PLAN_REPLACED",
+              "text": "当前行动已被新计划替换，已完成的成果保留。"
+            },
+            {
+              "id": "e51c8e2d-72e8-47d6-9b66-dd1ca0296891",
+              "type": "give_item",
+              "status": "ok",
+              "code": "GIFT_TRANSFERRED",
+              "text": "岑砚赠给旅人木材 ×1。",
+              "change": {
+                "wood": 1,
+                "stone": 0,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:6f102ec5-afa2-48f7-9f3a-c82ad1d7c1bd:0",
+              "type": "give_item",
+              "status": "ok",
+              "code": "GIFT_OFFERED",
+              "text": "已提议赠送木材 ×1，等待对方决定。",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "idle",
+      "working": false
+    },
+    {
+      "step": "service-stopped",
+      "at": 1795617690754,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 245.61744036799982,
+          "y": 287.4062385599999,
+          "facing": "down"
+        },
+        "inventory": {
+          "wood": 4,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 241.79999999999998,
+          "y": 277.0735088640002,
+          "facing": "left",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "改去靠东的倒木",
+          "generation": 7,
+          "plan": {
+            "id": "d6812b07-bd43-46d4-b038-87bc427c9a4e",
+            "steps": [
+              {
+                "type": "move_to",
+                "target_id": "fallen-wood-05"
+              }
+            ],
+            "index": 0
+          },
+          "pending": {
+            "id": "eef81c24-8d71-410c-965c-0b0b97f79817",
+            "goal": "抵达后采两处倒木",
+            "steps": [
+              {
+                "type": "collect",
+                "target_id": "fallen-wood-05"
+              },
+              {
+                "type": "move_to",
+                "target_id": "fallen-wood-06"
+              },
+              {
+                "type": "collect",
+                "target_id": "fallen-wood-06"
+              }
+            ]
+          },
+          "decision": {
+            "id": "a150d559-5fe3-400a-bab1-1cc16de9c6b6",
+            "policy": "reject",
+            "goal": "回工坊",
+            "speech": "先不回，我想把林地的活做完。",
+            "status": "rejected"
+          },
+          "last": {
+            "id": "npc:158a727e-3947-4fb0-9afd-c67027a577b3:0",
+            "type": "move_to",
+            "status": "cancelled",
+            "code": "PLAN_REPLACED",
+            "text": "当前行动已被新计划替换，已完成的成果保留。"
+          },
+          "results": [
+            {
+              "id": "npc:158a727e-3947-4fb0-9afd-c67027a577b3:0",
+              "type": "move_to",
+              "status": "cancelled",
+              "code": "PLAN_REPLACED",
+              "text": "当前行动已被新计划替换，已完成的成果保留。"
+            },
+            {
+              "id": "e51c8e2d-72e8-47d6-9b66-dd1ca0296891",
+              "type": "give_item",
+              "status": "ok",
+              "code": "GIFT_TRANSFERRED",
+              "text": "岑砚赠给旅人木材 ×1。",
+              "change": {
+                "wood": 1,
+                "stone": 0,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:6f102ec5-afa2-48f7-9f3a-c82ad1d7c1bd:0",
+              "type": "give_item",
+              "status": "ok",
+              "code": "GIFT_OFFERED",
+              "text": "已提议赠送木材 ×1，等待对方决定。",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "idle",
+      "working": false,
+      "pid": 386789,
+      "exit": [
+        0,
+        null
+      ]
+    },
+    {
+      "step": "service-started",
+      "at": 1795617691630,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 245.61744036799982,
+          "y": 287.4062385599999,
+          "facing": "down"
+        },
+        "inventory": {
+          "wood": 4,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 209.79999999999998,
+          "y": 273.9309822800002,
+          "facing": "up",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "改去靠东的倒木",
+          "generation": 7,
+          "plan": {
+            "id": "d6812b07-bd43-46d4-b038-87bc427c9a4e",
+            "steps": [
+              {
+                "type": "move_to",
+                "target_id": "fallen-wood-05"
+              }
+            ],
+            "index": 0
+          },
+          "pending": {
+            "id": "eef81c24-8d71-410c-965c-0b0b97f79817",
+            "goal": "抵达后采两处倒木",
+            "steps": [
+              {
+                "type": "collect",
+                "target_id": "fallen-wood-05"
+              },
+              {
+                "type": "move_to",
+                "target_id": "fallen-wood-06"
+              },
+              {
+                "type": "collect",
+                "target_id": "fallen-wood-06"
+              }
+            ]
+          },
+          "decision": {
+            "id": "a150d559-5fe3-400a-bab1-1cc16de9c6b6",
+            "goal": "回工坊",
+            "speech": "先不回，我想把林地的活做完。",
+            "policy": "reject",
+            "status": "rejected"
+          },
+          "last": {
+            "code": "PLAN_REPLACED",
+            "text": "当前行动已被新计划替换，已完成的成果保留。",
+            "type": "move_to",
+            "status": "cancelled",
+            "id": "npc:158a727e-3947-4fb0-9afd-c67027a577b3:0"
+          },
+          "results": [
+            {
+              "code": "PLAN_REPLACED",
+              "text": "当前行动已被新计划替换，已完成的成果保留。",
+              "type": "move_to",
+              "status": "cancelled",
+              "id": "npc:158a727e-3947-4fb0-9afd-c67027a577b3:0"
+            },
+            {
+              "code": "GIFT_TRANSFERRED",
+              "text": "岑砚赠给旅人木材 ×1。",
+              "type": "give_item",
+              "status": "ok",
+              "id": "e51c8e2d-72e8-47d6-9b66-dd1ca0296891",
+              "change": {
+                "wood": 1,
+                "stone": 0,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "code": "GIFT_OFFERED",
+              "text": "已提议赠送木材 ×1，等待对方决定。",
+              "type": "give_item",
+              "status": "ok",
+              "id": "npc:6f102ec5-afa2-48f7-9f3a-c82ad1d7c1bd:0",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "moving",
+      "working": false,
+      "pid": 386927
+    },
+    {
+      "step": "D-promoted-and-harvested",
+      "at": 1795617694217,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 245.61744036799982,
+          "y": 287.4062385599999,
+          "facing": "down"
+        },
+        "inventory": {
+          "wood": 4,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 185.79999999999998,
+          "y": 145.78328760800017,
+          "facing": "left",
+          "bag": {
+            "wood": 2,
+            "stone": 0
+          },
+          "goal": "抵达后采两处倒木",
+          "generation": 11,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "a150d559-5fe3-400a-bab1-1cc16de9c6b6",
+            "goal": "回工坊",
+            "speech": "先不回，我想把林地的活做完。",
+            "policy": "reject",
+            "status": "rejected"
+          },
+          "last": {
+            "id": "npc:eef81c24-8d71-410c-965c-0b0b97f79817:2",
+            "type": "collect",
+            "status": "ok",
+            "code": "COLLECTED",
+            "text": "从林间倒木获得 木材 ×1，已放入背包。",
+            "change": {
+              "target": "fallen-wood-06",
+              "wood": 1,
+              "stone": 0,
+              "actor": "cenyan"
+            }
+          },
+          "results": [
+            {
+              "id": "npc:eef81c24-8d71-410c-965c-0b0b97f79817:2",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从林间倒木获得 木材 ×1，已放入背包。",
+              "change": {
+                "target": "fallen-wood-06",
+                "wood": 1,
+                "stone": 0,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:eef81c24-8d71-410c-965c-0b0b97f79817:1",
+              "type": "move_to",
+              "status": "ok",
+              "code": "ARRIVED",
+              "text": "抵达林间倒木附近。",
+              "change": {
+                "target": "fallen-wood-06"
+              }
+            },
+            {
+              "id": "npc:eef81c24-8d71-410c-965c-0b0b97f79817:0",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从林间倒木获得 木材 ×1，已放入背包。",
+              "change": {
+                "target": "fallen-wood-05",
+                "wood": 1,
+                "stone": 0,
+                "actor": "cenyan"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "collecting",
+      "working": false
+    },
+    {
+      "at": 1795617696597,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "183dfb43-e560-43fe-8f88-04cd4313b991",
+        "dialogId": "17ec1582-be88-4318-a117-cdf9d6a1ab66",
+        "text": "我去南坡。",
+        "action": "accepted"
+      }
+    },
+    {
+      "step": "A-cenyan-harvested",
+      "at": 1795617702032,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 179.7825655039998,
+          "y": 168.91523903199987,
+          "facing": "up"
+        },
+        "inventory": {
+          "wood": 4,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 281.79999999999995,
+          "y": 449.78328760800014,
+          "facing": "down",
+          "bag": {
+            "wood": 2,
+            "stone": 1
+          },
+          "goal": "采第一份石料",
+          "generation": 14,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "183dfb43-e560-43fe-8f88-04cd4313b991",
+            "policy": "replace",
+            "goal": "采第一份石料",
+            "speech": "我去南坡。",
+            "status": "accepted",
+            "steps": [
+              {
+                "type": "move_to",
+                "target_id": "quarry-stone-01"
+              },
+              {
+                "type": "collect",
+                "target_id": "quarry-stone-01"
+              }
+            ]
+          },
+          "last": {
+            "id": "npc:183dfb43-e560-43fe-8f88-04cd4313b991:1",
+            "type": "collect",
+            "status": "ok",
+            "code": "COLLECTED",
+            "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+            "change": {
+              "target": "quarry-stone-01",
+              "wood": 0,
+              "stone": 1,
+              "actor": "cenyan"
+            }
+          },
+          "results": [
+            {
+              "id": "npc:183dfb43-e560-43fe-8f88-04cd4313b991:1",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+              "change": {
+                "target": "quarry-stone-01",
+                "wood": 0,
+                "stone": 1,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:183dfb43-e560-43fe-8f88-04cd4313b991:0",
+              "type": "move_to",
+              "status": "ok",
+              "code": "ARRIVED",
+              "text": "抵达河谷岩簇附近。",
+              "change": {
+                "target": "quarry-stone-01"
+              }
+            },
+            {
+              "id": "npc:eef81c24-8d71-410c-965c-0b0b97f79817:2",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从林间倒木获得 木材 ×1，已放入背包。",
+              "change": {
+                "target": "fallen-wood-06",
+                "wood": 1,
+                "stone": 0,
+                "actor": "cenyan"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "idle",
+      "working": false,
+      "count": 1
+    },
+    {
+      "at": 1795617706315,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "6a836132-1daa-407d-af9e-1a1a427681f3",
+        "dialogId": "850b8fcf-236a-430e-9065-1f4071e7e465",
+        "text": "我换个岩簇再采一份。",
+        "action": "accepted"
+      }
+    },
+    {
+      "step": "A-cenyan-harvested",
+      "at": 1795617707721,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 258.7422888079997,
+          "y": 441.1465953519988,
+          "facing": "right"
+        },
+        "inventory": {
+          "wood": 4,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 342.75498239199965,
+          "y": 489.78328760800014,
+          "facing": "right",
+          "bag": {
+            "wood": 2,
+            "stone": 2
+          },
+          "goal": "采第二份石料",
+          "generation": 17,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "6a836132-1daa-407d-af9e-1a1a427681f3",
+            "policy": "replace",
+            "goal": "采第二份石料",
+            "speech": "我换个岩簇再采一份。",
+            "status": "accepted",
+            "steps": [
+              {
+                "type": "move_to",
+                "target_id": "quarry-stone-02"
+              },
+              {
+                "type": "collect",
+                "target_id": "quarry-stone-02"
+              }
+            ]
+          },
+          "last": {
+            "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:1",
+            "type": "collect",
+            "status": "ok",
+            "code": "COLLECTED",
+            "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+            "change": {
+              "target": "quarry-stone-02",
+              "wood": 0,
+              "stone": 1,
+              "actor": "cenyan"
+            }
+          },
+          "results": [
+            {
+              "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:1",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+              "change": {
+                "target": "quarry-stone-02",
+                "wood": 0,
+                "stone": 1,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:0",
+              "type": "move_to",
+              "status": "ok",
+              "code": "ARRIVED",
+              "text": "抵达河谷岩簇附近。",
+              "change": {
+                "target": "quarry-stone-02"
+              }
+            },
+            {
+              "id": "npc:183dfb43-e560-43fe-8f88-04cd4313b991:1",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+              "change": {
+                "target": "quarry-stone-01",
+                "wood": 0,
+                "stone": 1,
+                "actor": "cenyan"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "collecting",
+      "working": false,
+      "count": 2
+    },
+    {
+      "at": 1795617709185,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "82187c29-5644-432a-8ed8-a90eef22cb02",
+        "dialogId": "38462289-8406-4198-9b7e-e03faf68c670",
+        "text": "好，我跟你到桥边。",
+        "action": "accepted"
+      }
+    },
+    {
+      "step": "B-accepted-and-closed",
+      "at": 1795617709315,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 337.70241796799905,
+          "y": 467.48837323199865,
+          "facing": "down"
+        },
+        "inventory": {
+          "wood": 4,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 342.75498239199965,
+          "y": 489.78328760800014,
+          "facing": "right",
+          "bag": {
+            "wood": 2,
+            "stone": 2
+          },
+          "goal": "跟旅人走到桥边",
+          "generation": 18,
+          "plan": {
+            "id": "82187c29-5644-432a-8ed8-a90eef22cb02",
+            "steps": [
+              {
+                "type": "follow",
+                "target_id": "player"
+              }
+            ],
+            "index": 0
+          },
+          "pending": null,
+          "decision": {
+            "id": "82187c29-5644-432a-8ed8-a90eef22cb02",
+            "policy": "replace",
+            "goal": "跟旅人走到桥边",
+            "speech": "好，我跟你到桥边。",
+            "status": "accepted",
+            "steps": [
+              {
+                "type": "follow",
+                "target_id": "player"
+              }
+            ]
+          },
+          "last": {
+            "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:1",
+            "type": "collect",
+            "status": "ok",
+            "code": "COLLECTED",
+            "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+            "change": {
+              "target": "quarry-stone-02",
+              "wood": 0,
+              "stone": 1,
+              "actor": "cenyan"
+            }
+          },
+          "results": [
+            {
+              "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:1",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+              "change": {
+                "target": "quarry-stone-02",
+                "wood": 0,
+                "stone": 1,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:0",
+              "type": "move_to",
+              "status": "ok",
+              "code": "ARRIVED",
+              "text": "抵达河谷岩簇附近。",
+              "change": {
+                "target": "quarry-stone-02"
+              }
+            },
+            {
+              "id": "npc:183dfb43-e560-43fe-8f88-04cd4313b991:1",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+              "change": {
+                "target": "quarry-stone-01",
+                "wood": 0,
+                "stone": 1,
+                "actor": "cenyan"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "idle",
+      "working": false
+    },
+    {
+      "at": 1795617709340,
+      "player": {
+        "x": 342.0735370719993,
+        "y": 467.48837323199865,
+        "facing": "right"
+      },
+      "cenyan": {
+        "x": 342.75498239199965,
+        "y": 485.4121685039999
+      },
+      "progressMs": 0,
+      "sharedWorkMs": 0,
+      "activity": "moving",
+      "playerWorking": false
+    },
+    {
+      "at": 1795617709841,
+      "player": {
+        "x": 355.2735370719992,
+        "y": 436.8154425039987,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 342.75498239199965,
+        "y": 457.03658207999996
+      },
+      "progressMs": 0,
+      "sharedWorkMs": 0,
+      "activity": "moving",
+      "playerWorking": false
+    },
+    {
+      "at": 1795617710343,
+      "player": {
+        "x": 399.2017215039994,
+        "y": 436.8154425039987,
+        "facing": "right"
+      },
+      "cenyan": {
+        "x": 364.7343962879996,
+        "y": 437.4121685039999
+      },
+      "progressMs": 0,
+      "sharedWorkMs": 0,
+      "activity": "moving",
+      "playerWorking": false
+    },
+    {
+      "step": "B-player-stops-cenyan-waits",
+      "at": 1795617710678,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 403.6017215039994,
+          "y": 436.8154425039987,
+          "facing": "right"
+        },
+        "inventory": {
+          "wood": 4,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 382.75498239199965,
+          "y": 435.032754608,
+          "facing": "right",
+          "bag": {
+            "wood": 2,
+            "stone": 2
+          },
+          "goal": "跟旅人走到桥边",
+          "generation": 18,
+          "plan": {
+            "id": "82187c29-5644-432a-8ed8-a90eef22cb02",
+            "steps": [
+              {
+                "type": "follow",
+                "target_id": "player"
+              }
+            ],
+            "index": 0,
+            "remainingMs": 58653.60793899998,
+            "followed": true
+          },
+          "pending": null,
+          "decision": {
+            "id": "82187c29-5644-432a-8ed8-a90eef22cb02",
+            "policy": "replace",
+            "goal": "跟旅人走到桥边",
+            "speech": "好，我跟你到桥边。",
+            "status": "accepted",
+            "steps": [
+              {
+                "type": "follow",
+                "target_id": "player"
+              }
+            ]
+          },
+          "last": {
+            "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:1",
+            "type": "collect",
+            "status": "ok",
+            "code": "COLLECTED",
+            "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+            "change": {
+              "target": "quarry-stone-02",
+              "wood": 0,
+              "stone": 1,
+              "actor": "cenyan"
+            }
+          },
+          "results": [
+            {
+              "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:1",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+              "change": {
+                "target": "quarry-stone-02",
+                "wood": 0,
+                "stone": 1,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:0",
+              "type": "move_to",
+              "status": "ok",
+              "code": "ARRIVED",
+              "text": "抵达河谷岩簇附近。",
+              "change": {
+                "target": "quarry-stone-02"
+              }
+            },
+            {
+              "id": "npc:183dfb43-e560-43fe-8f88-04cd4313b991:1",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+              "change": {
+                "target": "quarry-stone-01",
+                "wood": 0,
+                "stone": 1,
+                "actor": "cenyan"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "waiting",
+      "working": false
+    },
+    {
+      "at": 1795617710945,
+      "player": {
+        "x": 407.9965452559995,
+        "y": 436.8154425039987,
+        "facing": "right"
+      },
+      "cenyan": {
+        "x": 387.14980614399974,
+        "y": 435.032754608
+      },
+      "progressMs": 0,
+      "sharedWorkMs": 0,
+      "activity": "moving",
+      "playerWorking": false
+    },
+    {
+      "at": 1795617711449,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 419.25268463199876,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 420.7177402639996,
+        "y": 435.032754608
+      },
+      "progressMs": 0,
+      "sharedWorkMs": 0,
+      "activity": "moving",
+      "playerWorking": false
+    },
+    {
+      "at": 1795617711950,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 397.87485592000013
+      },
+      "progressMs": 0,
+      "sharedWorkMs": 0,
+      "activity": "moving",
+      "playerWorking": false
+    },
+    {
+      "step": "B-follow-arrived",
+      "at": 1795617712180,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 434.37489760799957,
+          "y": 379.78464573599916,
+          "facing": "up"
+        },
+        "inventory": {
+          "wood": 4,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": false,
+          "wood": 0,
+          "stone": 0,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 422.75498239199965,
+          "y": 389.12336108000017,
+          "facing": "up",
+          "bag": {
+            "wood": 2,
+            "stone": 2
+          },
+          "goal": "跟旅人走到桥边",
+          "generation": 19,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "82187c29-5644-432a-8ed8-a90eef22cb02",
+            "policy": "replace",
+            "goal": "跟旅人走到桥边",
+            "speech": "好，我跟你到桥边。",
+            "status": "accepted",
+            "steps": [
+              {
+                "type": "follow",
+                "target_id": "player"
+              }
+            ]
+          },
+          "last": {
+            "id": "npc:82187c29-5644-432a-8ed8-a90eef22cb02:0",
+            "type": "follow",
+            "status": "ok",
+            "code": "FOLLOW_ARRIVED",
+            "text": "岑砚和旅人同行抵达旧桥边。",
+            "change": {
+              "target": "old-river-bridge"
+            }
+          },
+          "results": [
+            {
+              "id": "npc:82187c29-5644-432a-8ed8-a90eef22cb02:0",
+              "type": "follow",
+              "status": "ok",
+              "code": "FOLLOW_ARRIVED",
+              "text": "岑砚和旅人同行抵达旧桥边。",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            },
+            {
+              "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:1",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+              "change": {
+                "target": "quarry-stone-02",
+                "wood": 0,
+                "stone": 1,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:0",
+              "type": "move_to",
+              "status": "ok",
+              "code": "ARRIVED",
+              "text": "抵达河谷岩簇附近。",
+              "change": {
+                "target": "quarry-stone-02"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "idle",
+      "working": false,
+      "followMovement": 171.98481339551114,
+      "followMinGap": 14.907516020561786,
+      "callsBeforeFollowing": 11
+    },
+    {
+      "at": 1795617712477,
+      "message": {
+        "type": "result",
+        "id": "6be4af4b-a9d2-4c0e-95df-c920223cff11",
+        "target": "old-river-bridge",
+        "ok": true,
+        "code": "DELIVERED",
+        "text": "旅人交付木材 ×2。尚缺木材 ×4、石材 ×2。",
+        "materials": {
+          "wood": 2,
+          "stone": 0
+        },
+        "actor": "player"
+      }
+    },
+    {
+      "at": 1795617712543,
+      "message": {
+        "type": "result",
+        "id": "c59440d6-1ffe-46bd-a14e-1d6699b62f86",
+        "target": "old-river-bridge",
+        "ok": true,
+        "code": "DELIVERED",
+        "text": "旅人交付木材 ×2。尚缺木材 ×2、石材 ×2。",
+        "materials": {
+          "wood": 2,
+          "stone": 0
+        },
+        "actor": "player"
+      }
+    },
+    {
+      "at": 1795617712754,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "83afcf80-5197-4741-8bf5-e8bb627ffc70",
+        "dialogId": "6c8d641e-abe2-4e05-a04d-f7c8dd2ab6f2",
+        "text": "我把手里的木石交到工地。",
+        "action": "accepted"
+      }
+    },
+    {
+      "step": "A-shared-materials",
+      "at": 1795617712952,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 434.37489760799957,
+          "y": 379.78464573599916,
+          "facing": "up"
+        },
+        "inventory": {
+          "wood": 0,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": true,
+          "wood": 6,
+          "stone": 2,
+          "progressMs": 0,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 422.75498239199965,
+          "y": 389.12336108000017,
+          "facing": "up",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "交自己的木石",
+          "generation": 21,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "83afcf80-5197-4741-8bf5-e8bb627ffc70",
+            "policy": "replace",
+            "goal": "交自己的木石",
+            "speech": "我把手里的木石交到工地。",
+            "status": "accepted",
+            "steps": [
+              {
+                "type": "deliver",
+                "target_id": "old-river-bridge"
+              }
+            ]
+          },
+          "last": {
+            "id": "npc:83afcf80-5197-4741-8bf5-e8bb627ffc70:0",
+            "type": "deliver",
+            "status": "ok",
+            "code": "DELIVERED",
+            "text": "岑砚交付木材 ×2、石材 ×2。材料已交齐，可以施工。",
+            "change": {
+              "target": "old-river-bridge",
+              "wood": 2,
+              "stone": 2,
+              "actor": "cenyan"
+            }
+          },
+          "results": [
+            {
+              "id": "npc:83afcf80-5197-4741-8bf5-e8bb627ffc70:0",
+              "type": "deliver",
+              "status": "ok",
+              "code": "DELIVERED",
+              "text": "岑砚交付木材 ×2、石材 ×2。材料已交齐，可以施工。",
+              "change": {
+                "target": "old-river-bridge",
+                "wood": 2,
+                "stone": 2,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:82187c29-5644-432a-8ed8-a90eef22cb02:0",
+              "type": "follow",
+              "status": "ok",
+              "code": "FOLLOW_ARRIVED",
+              "text": "岑砚和旅人同行抵达旧桥边。",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            },
+            {
+              "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:1",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+              "change": {
+                "target": "quarry-stone-02",
+                "wood": 0,
+                "stone": 1,
+                "actor": "cenyan"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 4,
+            "stone": 0,
+            "workMs": 0
+          },
+          "cenyan": {
+            "wood": 2,
+            "stone": 2,
+            "workMs": 0
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 0
+      },
+      "activity": "delivering",
+      "working": false
+    },
+    {
+      "at": 1795617713396,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "b13e7032-b0a7-42f2-8c13-35cfead64043",
+        "dialogId": "74455b4d-ee8e-45fd-99d4-0714a9d1e87a",
+        "text": "好，我来铺另一边。",
+        "action": "accepted"
+      }
+    },
+    {
+      "at": 1795617713642,
+      "message": {
+        "type": "result",
+        "id": "e0db2de4-42ed-4d86-83a1-038b7e1d56b7",
+        "target": "old-river-bridge",
+        "ok": true,
+        "code": "WORK_STARTED",
+        "text": "正在铺设桥板。移动会暂停施工，已完成的进度会保留。"
+      }
+    },
+    {
+      "at": 1795617713654,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 198.4097780000011,
+      "sharedWorkMs": 49.20488900000055,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617714156,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 1196.988228000002,
+      "sharedWorkMs": 548.494114000001,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "step": "C-simultaneous-work",
+      "at": 1795617714292,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 434.37489760799957,
+          "y": 379.78464573599916,
+          "facing": "up"
+        },
+        "inventory": {
+          "wood": 0,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": true,
+          "wood": 6,
+          "stone": 2,
+          "progressMs": 1396.988228000002,
+          "repaired": false
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 422.75498239199965,
+          "y": 389.12336108000017,
+          "facing": "up",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "和旅人一起铺桥板",
+          "generation": 22,
+          "plan": {
+            "id": "b13e7032-b0a7-42f2-8c13-35cfead64043",
+            "steps": [
+              {
+                "type": "work",
+                "target_id": "old-river-bridge"
+              }
+            ],
+            "index": 0
+          },
+          "pending": null,
+          "decision": {
+            "id": "b13e7032-b0a7-42f2-8c13-35cfead64043",
+            "policy": "replace",
+            "goal": "和旅人一起铺桥板",
+            "speech": "好，我来铺另一边。",
+            "status": "accepted",
+            "steps": [
+              {
+                "type": "work",
+                "target_id": "old-river-bridge"
+              }
+            ]
+          },
+          "last": {
+            "id": "npc:83afcf80-5197-4741-8bf5-e8bb627ffc70:0",
+            "type": "deliver",
+            "status": "ok",
+            "code": "DELIVERED",
+            "text": "岑砚交付木材 ×2、石材 ×2。材料已交齐，可以施工。",
+            "change": {
+              "target": "old-river-bridge",
+              "wood": 2,
+              "stone": 2,
+              "actor": "cenyan"
+            }
+          },
+          "results": [
+            {
+              "id": "npc:83afcf80-5197-4741-8bf5-e8bb627ffc70:0",
+              "type": "deliver",
+              "status": "ok",
+              "code": "DELIVERED",
+              "text": "岑砚交付木材 ×2、石材 ×2。材料已交齐，可以施工。",
+              "change": {
+                "target": "old-river-bridge",
+                "wood": 2,
+                "stone": 2,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:82187c29-5644-432a-8ed8-a90eef22cb02:0",
+              "type": "follow",
+              "status": "ok",
+              "code": "FOLLOW_ARRIVED",
+              "text": "岑砚和旅人同行抵达旧桥边。",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            },
+            {
+              "id": "npc:6a836132-1daa-407d-af9e-1a1a427681f3:1",
+              "type": "collect",
+              "status": "ok",
+              "code": "COLLECTED",
+              "text": "从河谷岩簇获得 石材 ×1，已放入背包。",
+              "change": {
+                "target": "quarry-stone-02",
+                "wood": 0,
+                "stone": 1,
+                "actor": "cenyan"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 4,
+            "stone": 0,
+            "workMs": 648.494114000001
+          },
+          "cenyan": {
+            "wood": 2,
+            "stone": 2,
+            "workMs": 748.494114000001
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 648.494114000001
+      },
+      "activity": "working",
+      "working": true
+    },
+    {
+      "at": 1795617714657,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 2195.642982000005,
+      "sharedWorkMs": 1047.8214910000024,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617715160,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 3192.951212000007,
+      "sharedWorkMs": 1546.4756060000036,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617715669,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 4190.800288000006,
+      "sharedWorkMs": 2045.400144000003,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617716225,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 5288.557246000011,
+      "sharedWorkMs": 2594.2786230000056,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617716761,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 6386.0679160000145,
+      "sharedWorkMs": 3143.0339580000073,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617717263,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 7382.481122000012,
+      "sharedWorkMs": 3641.240561000006,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617717764,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 8379.28843800001,
+      "sharedWorkMs": 4139.644219000005,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617718314,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 9476.607480000013,
+      "sharedWorkMs": 4688.303740000007,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617718816,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 10474.49768800001,
+      "sharedWorkMs": 5187.248844000005,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617719316,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 11471.088222000013,
+      "sharedWorkMs": 5685.5441110000065,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617719820,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 12469.120140000014,
+      "sharedWorkMs": 6184.560070000007,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "at": 1795617720320,
+      "player": {
+        "x": 434.37489760799957,
+        "y": 379.78464573599916,
+        "facing": "up"
+      },
+      "cenyan": {
+        "x": 422.75498239199965,
+        "y": 389.12336108000017
+      },
+      "progressMs": 13467.297230000018,
+      "sharedWorkMs": 6683.648615000009,
+      "activity": "working",
+      "playerWorking": true
+    },
+    {
+      "step": "C-repaired",
+      "at": 1795617721125,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 434.37489760799957,
+          "y": 379.78464573599916,
+          "facing": "up"
+        },
+        "inventory": {
+          "wood": 0,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": true,
+          "wood": 6,
+          "stone": 2,
+          "progressMs": 14000,
+          "repaired": true
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 422.75498239199965,
+          "y": 389.12336108000017,
+          "facing": "up",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "和旅人一起铺桥板",
+          "generation": 23,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "b13e7032-b0a7-42f2-8c13-35cfead64043",
+            "policy": "replace",
+            "goal": "和旅人一起铺桥板",
+            "speech": "好，我来铺另一边。",
+            "status": "accepted",
+            "steps": [
+              {
+                "type": "work",
+                "target_id": "old-river-bridge"
+              }
+            ]
+          },
+          "last": {
+            "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+            "type": "work",
+            "status": "ok",
+            "code": "BRIDGE_REPAIRED",
+            "text": "岑砚完成施工，旧桥已修通。",
+            "change": {
+              "target": "old-river-bridge",
+              "actor": "cenyan",
+              "workMs": 7050,
+              "sharedWorkMs": 6950
+            }
+          },
+          "results": [
+            {
+              "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+              "type": "work",
+              "status": "ok",
+              "code": "BRIDGE_REPAIRED",
+              "text": "岑砚完成施工，旧桥已修通。",
+              "change": {
+                "target": "old-river-bridge",
+                "actor": "cenyan",
+                "workMs": 7050,
+                "sharedWorkMs": 6950
+              }
+            },
+            {
+              "id": "npc:83afcf80-5197-4741-8bf5-e8bb627ffc70:0",
+              "type": "deliver",
+              "status": "ok",
+              "code": "DELIVERED",
+              "text": "岑砚交付木材 ×2、石材 ×2。材料已交齐，可以施工。",
+              "change": {
+                "target": "old-river-bridge",
+                "wood": 2,
+                "stone": 2,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:82187c29-5644-432a-8ed8-a90eef22cb02:0",
+              "type": "follow",
+              "status": "ok",
+              "code": "FOLLOW_ARRIVED",
+              "text": "岑砚和旅人同行抵达旧桥边。",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 4,
+            "stone": 0,
+            "workMs": 6950
+          },
+          "cenyan": {
+            "wood": 2,
+            "stone": 2,
+            "workMs": 7050
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 6950
+      },
+      "activity": "idle",
+      "working": false
+    },
+    {
+      "step": "service-stopped",
+      "at": 1795617721384,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 434.37489760799957,
+          "y": 379.78464573599916,
+          "facing": "up"
+        },
+        "inventory": {
+          "wood": 0,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": true,
+          "wood": 6,
+          "stone": 2,
+          "progressMs": 14000,
+          "repaired": true
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 422.75498239199965,
+          "y": 389.12336108000017,
+          "facing": "up",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "和旅人一起铺桥板",
+          "generation": 23,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "b13e7032-b0a7-42f2-8c13-35cfead64043",
+            "policy": "replace",
+            "goal": "和旅人一起铺桥板",
+            "speech": "好，我来铺另一边。",
+            "status": "accepted",
+            "steps": [
+              {
+                "type": "work",
+                "target_id": "old-river-bridge"
+              }
+            ]
+          },
+          "last": {
+            "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+            "type": "work",
+            "status": "ok",
+            "code": "BRIDGE_REPAIRED",
+            "text": "岑砚完成施工，旧桥已修通。",
+            "change": {
+              "target": "old-river-bridge",
+              "actor": "cenyan",
+              "workMs": 7050,
+              "sharedWorkMs": 6950
+            }
+          },
+          "results": [
+            {
+              "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+              "type": "work",
+              "status": "ok",
+              "code": "BRIDGE_REPAIRED",
+              "text": "岑砚完成施工，旧桥已修通。",
+              "change": {
+                "target": "old-river-bridge",
+                "actor": "cenyan",
+                "workMs": 7050,
+                "sharedWorkMs": 6950
+              }
+            },
+            {
+              "id": "npc:83afcf80-5197-4741-8bf5-e8bb627ffc70:0",
+              "type": "deliver",
+              "status": "ok",
+              "code": "DELIVERED",
+              "text": "岑砚交付木材 ×2、石材 ×2。材料已交齐，可以施工。",
+              "change": {
+                "target": "old-river-bridge",
+                "wood": 2,
+                "stone": 2,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:82187c29-5644-432a-8ed8-a90eef22cb02:0",
+              "type": "follow",
+              "status": "ok",
+              "code": "FOLLOW_ARRIVED",
+              "text": "岑砚和旅人同行抵达旧桥边。",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 4,
+            "stone": 0,
+            "workMs": 6950
+          },
+          "cenyan": {
+            "wood": 2,
+            "stone": 2,
+            "workMs": 7050
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 6950
+      },
+      "activity": "idle",
+      "working": false,
+      "pid": 386927,
+      "exit": [
+        0,
+        null
+      ]
+    },
+    {
+      "step": "service-started",
+      "at": 1795617722261,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 434.37489760799957,
+          "y": 379.78464573599916,
+          "facing": "up"
+        },
+        "inventory": {
+          "wood": 0,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": true,
+          "wood": 6,
+          "stone": 2,
+          "progressMs": 14000,
+          "repaired": true
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 422.75498239199965,
+          "y": 389.12336108000017,
+          "facing": "up",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "和旅人一起铺桥板",
+          "generation": 23,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "b13e7032-b0a7-42f2-8c13-35cfead64043",
+            "policy": "replace",
+            "goal": "和旅人一起铺桥板",
+            "speech": "好，我来铺另一边。",
+            "status": "accepted",
+            "steps": [
+              {
+                "type": "work",
+                "target_id": "old-river-bridge"
+              }
+            ]
+          },
+          "last": {
+            "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+            "type": "work",
+            "status": "ok",
+            "code": "BRIDGE_REPAIRED",
+            "text": "岑砚完成施工，旧桥已修通。",
+            "change": {
+              "target": "old-river-bridge",
+              "actor": "cenyan",
+              "workMs": 7050,
+              "sharedWorkMs": 6950
+            }
+          },
+          "results": [
+            {
+              "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+              "type": "work",
+              "status": "ok",
+              "code": "BRIDGE_REPAIRED",
+              "text": "岑砚完成施工，旧桥已修通。",
+              "change": {
+                "target": "old-river-bridge",
+                "actor": "cenyan",
+                "workMs": 7050,
+                "sharedWorkMs": 6950
+              }
+            },
+            {
+              "id": "npc:83afcf80-5197-4741-8bf5-e8bb627ffc70:0",
+              "type": "deliver",
+              "status": "ok",
+              "code": "DELIVERED",
+              "text": "岑砚交付木材 ×2、石材 ×2。材料已交齐，可以施工。",
+              "change": {
+                "target": "old-river-bridge",
+                "wood": 2,
+                "stone": 2,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "id": "npc:82187c29-5644-432a-8ed8-a90eef22cb02:0",
+              "type": "follow",
+              "status": "ok",
+              "code": "FOLLOW_ARRIVED",
+              "text": "岑砚和旅人同行抵达旧桥边。",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 4,
+            "stone": 0,
+            "workMs": 6950
+          },
+          "cenyan": {
+            "wood": 2,
+            "stone": 2,
+            "workMs": 7050
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 6950
+      },
+      "activity": "idle",
+      "working": false,
+      "pid": 387241
+    },
+    {
+      "at": 1795617723251,
+      "message": {
+        "type": "dialogue",
+        "event": "reply",
+        "requestId": "317655df-029b-4111-b582-2f1ad3233b42",
+        "dialogId": "720b77f9-0120-464d-98b8-25376c4ab8e4",
+        "text": "旅人与岑砚合力修通旧桥。实际施工：旅人 6.95 秒，岑砚 7.05 秒。"
+      }
+    },
+    {
+      "step": "F-restarted-model-context",
+      "at": 1795617723332,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 434.37489760799957,
+          "y": 379.78464573599916,
+          "facing": "up"
+        },
+        "inventory": {
+          "wood": 0,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": true,
+          "wood": 6,
+          "stone": 2,
+          "progressMs": 14000,
+          "repaired": true
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 422.75498239199965,
+          "y": 389.12336108000017,
+          "facing": "up",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "和旅人一起铺桥板",
+          "generation": 23,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "b13e7032-b0a7-42f2-8c13-35cfead64043",
+            "goal": "和旅人一起铺桥板",
+            "speech": "好，我来铺另一边。",
+            "policy": "replace",
+            "steps": [
+              {
+                "type": "work",
+                "target_id": "old-river-bridge"
+              }
+            ],
+            "status": "accepted"
+          },
+          "last": {
+            "code": "BRIDGE_REPAIRED",
+            "text": "岑砚完成施工，旧桥已修通。",
+            "type": "work",
+            "status": "ok",
+            "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+            "change": {
+              "target": "old-river-bridge",
+              "workMs": 7050,
+              "sharedWorkMs": 6950,
+              "actor": "cenyan"
+            }
+          },
+          "results": [
+            {
+              "code": "BRIDGE_REPAIRED",
+              "text": "岑砚完成施工，旧桥已修通。",
+              "type": "work",
+              "status": "ok",
+              "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+              "change": {
+                "target": "old-river-bridge",
+                "workMs": 7050,
+                "sharedWorkMs": 6950,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "code": "DELIVERED",
+              "text": "岑砚交付木材 ×2、石材 ×2。材料已交齐，可以施工。",
+              "type": "deliver",
+              "status": "ok",
+              "id": "npc:83afcf80-5197-4741-8bf5-e8bb627ffc70:0",
+              "change": {
+                "wood": 2,
+                "stone": 2,
+                "target": "old-river-bridge",
+                "actor": "cenyan"
+              }
+            },
+            {
+              "code": "FOLLOW_ARRIVED",
+              "text": "岑砚和旅人同行抵达旧桥边。",
+              "type": "follow",
+              "status": "ok",
+              "id": "npc:82187c29-5644-432a-8ed8-a90eef22cb02:0",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 4,
+            "stone": 0,
+            "workMs": 6950
+          },
+          "cenyan": {
+            "wood": 2,
+            "stone": 2,
+            "workMs": 7050
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 6950
+      },
+      "activity": "idle",
+      "working": false,
+      "pid": 387241,
+      "calls": 14
+    },
+    {
+      "step": "C-crossed-under-keyboard-control",
+      "at": 1795617725302,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 561.7718437679991,
+          "y": 371.0270109599992,
+          "facing": "right"
+        },
+        "inventory": {
+          "wood": 0,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": true,
+          "wood": 6,
+          "stone": 2,
+          "progressMs": 14000,
+          "repaired": true
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 422.75498239199965,
+          "y": 389.12336108000017,
+          "facing": "up",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "和旅人一起铺桥板",
+          "generation": 23,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "b13e7032-b0a7-42f2-8c13-35cfead64043",
+            "goal": "和旅人一起铺桥板",
+            "speech": "好，我来铺另一边。",
+            "policy": "replace",
+            "steps": [
+              {
+                "type": "work",
+                "target_id": "old-river-bridge"
+              }
+            ],
+            "status": "accepted"
+          },
+          "last": {
+            "code": "BRIDGE_REPAIRED",
+            "text": "岑砚完成施工，旧桥已修通。",
+            "type": "work",
+            "status": "ok",
+            "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+            "change": {
+              "target": "old-river-bridge",
+              "workMs": 7050,
+              "sharedWorkMs": 6950,
+              "actor": "cenyan"
+            }
+          },
+          "results": [
+            {
+              "code": "BRIDGE_REPAIRED",
+              "text": "岑砚完成施工，旧桥已修通。",
+              "type": "work",
+              "status": "ok",
+              "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+              "change": {
+                "target": "old-river-bridge",
+                "workMs": 7050,
+                "sharedWorkMs": 6950,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "code": "DELIVERED",
+              "text": "岑砚交付木材 ×2、石材 ×2。材料已交齐，可以施工。",
+              "type": "deliver",
+              "status": "ok",
+              "id": "npc:83afcf80-5197-4741-8bf5-e8bb627ffc70:0",
+              "change": {
+                "wood": 2,
+                "stone": 2,
+                "target": "old-river-bridge",
+                "actor": "cenyan"
+              }
+            },
+            {
+              "code": "FOLLOW_ARRIVED",
+              "text": "岑砚和旅人同行抵达旧桥边。",
+              "type": "follow",
+              "status": "ok",
+              "id": "npc:82187c29-5644-432a-8ed8-a90eef22cb02:0",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 4,
+            "stone": 0,
+            "workMs": 6950
+          },
+          "cenyan": {
+            "wood": 2,
+            "stone": 2,
+            "workMs": 7050
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 6950
+      },
+      "activity": "idle",
+      "working": false
+    },
+    {
+      "step": "service-stopped",
+      "at": 1795617725556,
+      "state": {
+        "schemaVersion": 3,
+        "contentVersion": 1,
+        "worldId": "foglamp-valley",
+        "player": {
+          "x": 561.7718437679991,
+          "y": 371.0270109599992,
+          "facing": "right"
+        },
+        "inventory": {
+          "wood": 0,
+          "stone": 0,
+          "food": 0,
+          "toolbox": 0
+        },
+        "cooldowns": {
+          "fallen-wood-01": 1795617701109,
+          "fallen-wood-02": 1795617701855,
+          "fallen-wood-03": 1795617703220,
+          "fallen-wood-04": 1795617704216,
+          "fallen-wood-05": 1795617715274,
+          "fallen-wood-06": 1795617716181,
+          "quarry-stone-01": 1795617727559,
+          "quarry-stone-02": 1795617733684
+        },
+        "bridge": {
+          "discovered": true,
+          "wood": 6,
+          "stone": 2,
+          "progressMs": 14000,
+          "repaired": true
+        },
+        "explored": false,
+        "cenyan": {
+          "id": "cenyan",
+          "x": 422.75498239199965,
+          "y": 389.12336108000017,
+          "facing": "up",
+          "bag": {
+            "wood": 0,
+            "stone": 0
+          },
+          "goal": "和旅人一起铺桥板",
+          "generation": 23,
+          "plan": null,
+          "pending": null,
+          "decision": {
+            "id": "b13e7032-b0a7-42f2-8c13-35cfead64043",
+            "goal": "和旅人一起铺桥板",
+            "speech": "好，我来铺另一边。",
+            "policy": "replace",
+            "steps": [
+              {
+                "type": "work",
+                "target_id": "old-river-bridge"
+              }
+            ],
+            "status": "accepted"
+          },
+          "last": {
+            "code": "BRIDGE_REPAIRED",
+            "text": "岑砚完成施工，旧桥已修通。",
+            "type": "work",
+            "status": "ok",
+            "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+            "change": {
+              "target": "old-river-bridge",
+              "workMs": 7050,
+              "sharedWorkMs": 6950,
+              "actor": "cenyan"
+            }
+          },
+          "results": [
+            {
+              "code": "BRIDGE_REPAIRED",
+              "text": "岑砚完成施工，旧桥已修通。",
+              "type": "work",
+              "status": "ok",
+              "id": "npc:b13e7032-b0a7-42f2-8c13-35cfead64043:0",
+              "change": {
+                "target": "old-river-bridge",
+                "workMs": 7050,
+                "sharedWorkMs": 6950,
+                "actor": "cenyan"
+              }
+            },
+            {
+              "code": "DELIVERED",
+              "text": "岑砚交付木材 ×2、石材 ×2。材料已交齐，可以施工。",
+              "type": "deliver",
+              "status": "ok",
+              "id": "npc:83afcf80-5197-4741-8bf5-e8bb627ffc70:0",
+              "change": {
+                "wood": 2,
+                "stone": 2,
+                "target": "old-river-bridge",
+                "actor": "cenyan"
+              }
+            },
+            {
+              "code": "FOLLOW_ARRIVED",
+              "text": "岑砚和旅人同行抵达旧桥边。",
+              "type": "follow",
+              "status": "ok",
+              "id": "npc:82187c29-5644-432a-8ed8-a90eef22cb02:0",
+              "change": {
+                "target": "old-river-bridge"
+              }
+            }
+          ]
+        },
+        "gift": null,
+        "contributions": {
+          "player": {
+            "wood": 4,
+            "stone": 0,
+            "workMs": 6950
+          },
+          "cenyan": {
+            "wood": 2,
+            "stone": 2,
+            "workMs": 7050
+          },
+          "legacy": {
+            "wood": 0,
+            "stone": 0,
+            "workMs": 0
+          }
+        },
+        "sharedWorkMs": 6950
+      },
+      "activity": "idle",
+      "working": false,
+      "pid": 387241,
+      "exit": [
+        0,
+        null
+      ]
+    }
+  ]
+}

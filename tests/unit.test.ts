@@ -344,8 +344,9 @@ test("delivery is atomic and timed work can pause and resume without counting of
     state.inventory.stone = 2;
   });
   const deliver = action("deliver", valley.bridge.id);
-  assert.equal(world.perform(deliver).code, "DELIVERED");
-  assert.equal(world.perform(deliver).code, "DUPLICATE");
+  const delivered = world.perform(deliver);
+  assert.equal(delivered.code, "DELIVERED");
+  assert.deepEqual(world.perform(deliver), delivered);
   assert.equal(
     world.perform(action("deliver", valley.bridge.id)).code,
     "MATERIALS_READY",
@@ -462,7 +463,7 @@ test("healthy Fastify opens a versioned local save without API keys", async () =
     assert.equal(response.statusCode, 200);
     assert.deepEqual(response.json(), {
       phase: 3,
-      schemaVersion: 2,
+      schemaVersion: 3,
       contentVersion: valley.contentVersion,
       status: "ok",
     });

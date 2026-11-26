@@ -158,6 +158,26 @@ export class DialogueLedger {
     });
   }
 
+  summary(mode: DialogueConfig["mode"]) {
+    const row = this.db
+      .prepare(
+        `
+      SELECT count(*) AS requests, coalesce(sum(charged_tokens), 0) AS tokens,
+        CASE WHEN count(charged_nano) = count(*) THEN coalesce(sum(charged_nano), 0) END AS nano
+      FROM calls WHERE mode = ?
+    `,
+      )
+      .get(mode) as { requests: number; tokens: number; nano: number | null };
+    return {
+      requests: row.requests,
+      tokens: row.tokens,
+      chargedUsd:
+        mode === "live" && row.nano !== null
+          ? row.nano / nanoPerUsd
+          : undefined,
+    };
+  }
+
   finish(
     config: DialogueConfig,
     id: string,
