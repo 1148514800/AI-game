@@ -1,0 +1,16 @@
+[
+  {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "startedAt": "2026-11-27T23:15:31.883256+08:00",
+    "finishedAt": "2026-11-27T23:15:32.267527+08:00",
+    "log": "evidence/phase5/verification-20261127-231328-365376/typecheck-rerun.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "startedAt": "2026-11-27T23:15:32.267844+08:00",
+    "finishedAt": "2026-11-27T23:16:23.814393+08:00",
+    "log": "evidence/phase5/verification-20261127-231328-365376/unit-test-rerun.log"
+  }
+]

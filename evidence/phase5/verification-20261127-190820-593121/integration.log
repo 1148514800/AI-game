@@ -1,0 +1,21 @@
+
+> mistsea-phase1@0.3.0-phase3 test:integration
+> node --import tsx --test --test-isolation=none tests/dialogue.integration.ts tests/phase3_1.integration.ts tests/phase4.integration.ts
+
+(node:26788) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ real local HTTP adapter supports both token fields, usage, sanitized errors, timeout and abort (127.727375ms)
+✔ real WS and HTTP fixture enforce distance, continuity, no world effects, cancellation and durable budget (4141.616541ms)
+✔ local HTTP dialogue accepts a natural request, validates optional plans and holds a walking Cenyan until close (4683.646458ms)
+✔ real WS clearly marked Mock starts without dialogue and walks, harvests, delivers and works a fresh bridge (46905.166958ms)
+✔ Phase3.1 real local HTTP and WS authenticate each direction of consent, reject a wrong offer and replay one commit (4102.039708ms)
+✔ Phase 4 WS binds foreground consent to the selected NPC and keeps the ledger and loan across restart (282.266291ms)
+✔ Phase 5 local model fixture accepts a roof invitation and declines a separate request (6666.562125ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 69064.037417

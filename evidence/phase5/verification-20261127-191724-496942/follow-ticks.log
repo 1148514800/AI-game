@@ -1,0 +1,13 @@
+(node:28334) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS 6502.331833 ms {
+  count: 127,
+  meanMs: 0.11066277952759032,
+  p95Ms: 0.3689170000000104,
+  maxMs: 1.1534160000001066
+} {
+  requests: 1,
+  autonomy: 0,
+  movement: 150.4119176532796,
+  movementAfterStop: 63.28781778291719
+}

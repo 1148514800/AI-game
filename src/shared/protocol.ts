@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { inventoryLimit, valley } from "./world.js";
+import { inventoryLimit, localProjects, valley, type Stock } from "./world.js";
 
 import {
   actorSchema,
@@ -21,7 +21,7 @@ import {
   type SpeechBubble,
 } from "./social.js";
 
-export const schemaVersion = 4;
+export const schemaVersion = 5;
 const directions = z.enum(["down", "up", "left", "right"]);
 const axis = z.union([z.literal(-1), z.literal(0), z.literal(1)]);
 const id = z.string().regex(/^[a-z0-9-]{1,64}$/);
@@ -95,6 +95,7 @@ export const clientMessage = z
       target: id,
       verb: z.enum([
         "inspect",
+        "explore",
         "collect",
         "deliver",
         "work",
@@ -178,8 +179,8 @@ export const v3SaveSchema = legacySaveSchema.extend({
     .min(0)
     .max(valley.bridge.workMs / 2),
 });
-export const saveSchema = v3SaveSchema.omit({ cenyan: true }).extend({
-  schemaVersion: z.literal(schemaVersion),
+export const v4SaveSchema = v3SaveSchema.omit({ cenyan: true }).extend({
+  schemaVersion: z.literal(4),
   actors: z.strictObject({
     cenyan: actorSchema,
     ahe: actorSchema,
@@ -195,6 +196,25 @@ export const saveSchema = v3SaveSchema.omit({ cenyan: true }).extend({
   pledges: z.array(pledgeSchema).max(48),
   events: z.array(publicEventSchema).max(12),
 });
+const projectContribution = z.strictObject({
+  wood: count,
+  food: count,
+  workMs: z.number().nonnegative(),
+});
+const projectState = z.strictObject({
+  wood: count,
+  food: count,
+  progressMs: z.number().nonnegative(),
+  complete: z.boolean(),
+  contributions: z.partialRecord(actorIdSchema, projectContribution),
+});
+export type ProjectState = z.infer<typeof projectState>;
+export const saveSchema = v4SaveSchema.extend({
+  schemaVersion: z.literal(schemaVersion),
+  gameSeconds: z.int().nonnegative(),
+  projects: z.record(z.enum(localProjects.map(({ id }) => id)), projectState),
+  discoveries: z.partialRecord(actorIdSchema, z.array(id).max(3)),
+});
 export type StoredState = z.infer<typeof saveSchema>;
 // Transitional projection used by existing clients and Phase 0–3.1 regression fixtures.
 export type SaveState = StoredState & {
@@ -207,6 +227,7 @@ export type Snapshot = {
   state: SaveState;
   moving: boolean;
   working: boolean;
+  workTarget?: string;
   cenyan: ActorStatus;
   actors: Record<NpcId, ActorStatus>;
   bubbles: SpeechBubble[];
@@ -218,7 +239,7 @@ export type Result = {
   code: string;
   text: string;
   target?: string;
-  materials?: { wood: number; stone: number };
+  materials?: Stock;
   actor?: z.infer<typeof actorIdSchema>;
   offerId?: string;
 };

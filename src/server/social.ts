@@ -9,7 +9,8 @@ import {
   type Pledge,
   type SocialCommand,
 } from "../shared/social.js";
-import { inventoryLimit, items } from "../shared/world.js";
+import { projects, valley, inventoryLimit, items } from "../shared/world.js";
+import { projectMissing } from "./projects.js";
 
 const offerMs = 90_000;
 const pledgeMs = 300_000;
@@ -33,6 +34,22 @@ export function adjustTrust(
 
 function bag(state: SaveState, id: ActorId) {
   return id === "player" ? state.inventory : state.actors[id].bag;
+}
+
+export function projectPledgeCanFinish(
+  state: SaveState,
+  condition: Pledge["condition"],
+  progress = 0,
+) {
+  if (condition.kind !== "deliver" && condition.kind !== "work") return true;
+  const id = condition.project ?? valley.bridge.id;
+  const project = projects.get(id)!;
+  const row = id === valley.bridge.id ? state.bridge : state.projects[id];
+  if (condition.kind === "work")
+    return project.workMs > 0 && row.progressMs < project.workMs;
+  const { item, qty } = condition;
+  const room = projectMissing(project, row, project.capacity)[item] ?? 0;
+  return qty - progress <= room;
 }
 
 type Effect = {
@@ -76,6 +93,12 @@ export function socialAction(
       expiresAt: now + offerMs,
     };
     if (command.kind === "pledge") {
+      if (!projectPledgeCanFinish(state, command.condition))
+        return result(
+          false,
+          "PLEDGE_INFEASIBLE",
+          "工程已完成或无法接收约定的材料数量。",
+        );
       if (pending(actor))
         return result(false, "PLEDGE_BUSY", "请先处理自己尚未完成的承诺。");
       state.pledges = appendAgreement(state.pledges, {
@@ -95,7 +118,8 @@ export function socialAction(
         return result(false, "OFFER_BUSY", "请先处理自己尚未结束的交接提议。");
       if (
         "give" in command.terms &&
-        bag(state, actor)[command.terms.give.item] < command.terms.give.qty
+        (bag(state, actor)[command.terms.give.item] ?? 0) <
+          command.terms.give.qty
       )
         return result(false, "NO_STOCK", "提议超过自己持有的材料。");
       state.deals = appendAgreement(state.deals, {
@@ -133,7 +157,13 @@ export function socialAction(
       (pledge?.condition.kind === "return" && pledge.status === "accepted")
     )
       return result(false, "OFFER_FORBIDDEN", "这项约定不能由你单方面取消。");
-    const cancelled = cancelAgreement(state, entry, false);
+    const cancelled = cancelAgreement(
+      state,
+      entry,
+      false,
+      !!pledge &&
+        !projectPledgeCanFinish(state, pledge.condition, pledge.progress),
+    );
     return result(true, "OFFER_CANCELLED", cancelled.text, cancelled);
   }
   if (command.kind === "return") {
@@ -167,6 +197,10 @@ export function socialAction(
   if (!near(entry.from, entry.to))
     return result(false, "TOO_FAR", "确认前需要走近对方。");
   if (pledge) {
+    if (!projectPledgeCanFinish(state, pledge.condition, pledge.progress)) {
+      const cancelled = cancelAgreement(state, pledge, false, true);
+      return result(false, "PLEDGE_INFEASIBLE", cancelled.text, cancelled);
+    }
     pledge.status = "accepted";
     pledge.expiresAt = now + pledgeMs;
     return result(
@@ -224,11 +258,12 @@ export function cancelAgreement(
   state: SaveState,
   entry: Deal | Pledge,
   expired: boolean,
+  noFault = false,
 ): Effect {
   const breach = entry.status === "accepted";
   entry.status = "cancelled";
   if ("terms" in entry) entry.cancellation = expired ? "expired" : "cancelled";
-  if (breach)
+  if (breach && !noFault)
     adjustTrust(
       state,
       entry.to,
@@ -238,7 +273,7 @@ export function cancelAgreement(
     );
   return {
     people: [entry.from, entry.to],
-    text: `${actorName(entry.from)}与${actorName(entry.to)}的${agreementText(entry)}${expired ? "已过期" : "已取消"}。`,
+    text: `${actorName(entry.from)}与${actorName(entry.to)}的${agreementText(entry)}${noFault ? "因工程状态变化无责取消" : expired ? "已过期" : "已取消"}。`,
   };
 }
 
@@ -261,26 +296,26 @@ function transfer(
   const source = bag(state, from);
   const target = bag(state, to);
   if (
-    (give && source[give.item] < give.qty) ||
-    (take && target[take.item] < take.qty)
+    (give && (source[give.item] ?? 0) < give.qty) ||
+    (take && (target[take.item] ?? 0) < take.qty)
   )
     return "NO_STOCK";
-  for (const item of ["wood", "stone"] as const) {
+  for (const item of ["wood", "stone", "food", "toolbox"] as const) {
     const change =
       (give?.item === item ? give.qty : 0) -
       (take?.item === item ? take.qty : 0);
     if (
-      source[item] - change > inventoryLimit ||
-      target[item] + change > inventoryLimit
+      (source[item] ?? 0) - change > inventoryLimit ||
+      (target[item] ?? 0) + change > inventoryLimit
     )
       return "CAPACITY";
   }
   if (give) {
-    source[give.item] -= give.qty;
-    target[give.item] += give.qty;
+    source[give.item] = (source[give.item] ?? 0) - give.qty;
+    target[give.item] = (target[give.item] ?? 0) + give.qty;
   }
   if (take) {
-    target[take.item] -= take.qty;
-    source[take.item] += take.qty;
+    target[take.item] = (target[take.item] ?? 0) - take.qty;
+    source[take.item] = (source[take.item] ?? 0) + take.qty;
   }
 }

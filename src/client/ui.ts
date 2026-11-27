@@ -10,6 +10,10 @@ import {
 } from "../shared/social.js";
 import type { Action, Result, Snapshot } from "../shared/protocol.js";
 import {
+  clueTargets,
+  gameTime,
+  localProjects,
+  projects,
   distance,
   items,
   nearbyTarget,
@@ -140,6 +144,8 @@ const steps = {
   follow: "跟随",
   give_item: "提议赠送给",
   collect: "采集",
+  explore: "探索",
+  share_clue: "分享线索给",
   deliver: "交付给",
   work: "施工",
   wait: "等待",
@@ -232,7 +238,18 @@ function renderResidents(snapshot: Snapshot) {
   );
   setText(
     element("cenyan-bag"),
-    `木材 ${actor.bag.wood} · 石材 ${actor.bag.stone}`,
+    Object.entries(items)
+      .filter(
+        ([item]) =>
+          item === "wood" ||
+          item === "stone" ||
+          (actor.bag[item as keyof typeof items] ?? 0) > 0,
+      )
+      .map(
+        ([item, name]) =>
+          `${name} ${actor.bag[item as keyof typeof items] ?? 0}`,
+      )
+      .join(" · "),
   );
   setText(element("cenyan-result"), actor.last?.text ?? "暂无回执");
   setText(
@@ -243,7 +260,13 @@ function renderResidents(snapshot: Snapshot) {
   );
   setText(
     element("cenyan-decision"),
-    actor.decision ? JSON.stringify(actor.decision, undefined, 2) : "暂无",
+    actor.decision
+      ? ("source" in actor.decision && actor.decision.source === "continuation"
+          ? "规则衔接 · "
+          : model?.mode === "live"
+            ? "Live 模型 · "
+            : "角色决策 · ") + JSON.stringify(actor.decision, undefined, 2)
+      : "暂无",
   );
   setText(
     element("cenyan-results"),
@@ -325,6 +348,44 @@ export function render(snapshot: Snapshot, enabled: boolean) {
       (region) => distance(region, state.player) < region.radius,
     )?.name ?? "雾灯谷小径",
   );
+  const time = gameTime(state.gameSeconds);
+  setText(
+    element("valley-time"),
+    `第 ${time.day} 天 · ${time.period} ${String(time.hour).padStart(2, "0")}:${String(time.minute).padStart(2, "0")}`,
+  );
+  for (const project of localProjects) {
+    const row = state.projects[project.id];
+    const material = project.id === "valley-camp" ? "food" : "wood";
+    const capacity = project.capacity?.[material] ?? project.required[material];
+    const status = row.complete
+      ? "已完成"
+      : project.workMs
+        ? `施工 ${Math.floor((100 * row.progressMs) / project.workMs)}%`
+        : `达标需 ${project.required[material]} 份`;
+    setText(
+      element(project.id + "-status"),
+      `${project.name} · ${items[material]} ${row[material]} / ${capacity} · ${status}`,
+    );
+  }
+  const found = state.discoveries.player ?? [];
+  const clueList = element("expedition-clues");
+  const clueKey = found.join(",");
+  if (clueList.dataset.found !== clueKey) {
+    clueList.dataset.found = clueKey;
+    clueList.hidden = !found.length;
+    clueList.replaceChildren(
+      ...found.map((id) => {
+        const clue = clueTargets.get(id)!;
+        const row = document.createElement("li");
+        row.textContent = `${clue.name} · ${clue.text}`;
+        return row;
+      }),
+    );
+  }
+  setText(
+    element("expedition-status"),
+    `东岸线索 ${found.length} / ${clueTargets.size}`,
+  );
   const built = state.bridge;
   const hasMaterials =
     built.wood === bridge.required.wood &&
@@ -394,7 +455,10 @@ export function render(snapshot: Snapshot, enabled: boolean) {
   setText(
     objective,
     state.explored
-      ? "旅程完成"
+      ? found.length === clueTargets.size &&
+        localProjects.every(({ id }) => state.projects[id].complete)
+        ? "雾灯谷阶段成果"
+        : "已找到航标"
       : built.repaired
         ? "查看航标遗迹"
         : "修复雾灯旧桥",
@@ -402,7 +466,7 @@ export function render(snapshot: Snapshot, enabled: boolean) {
   setText(
     nextStep,
     state.explored
-      ? "你已在东岸找到航标线索，可以继续探索雾灯谷。"
+      ? "航标线索已收入手记。你可以继续探索、建设或观察居民的生活。"
       : built.repaired
         ? "穿过旧桥，顺着东岸小路前往航标遗迹。"
         : working
@@ -426,7 +490,10 @@ export function render(snapshot: Snapshot, enabled: boolean) {
   alternateWork.hidden =
     !atBridge || !hasMaterials || built.repaired || target?.id === bridge.id;
   alternateWork.disabled = !enabled;
-  setText(alternateWork, working ? "暂停施工" : "开始施工");
+  setText(
+    alternateWork,
+    working && snapshot.workTarget === bridge.id ? "暂停施工" : "开始施工",
+  );
   const nearby = npcIds.find(
     (id) => id !== target?.id && nearPlayer(snapshot, id),
   );
@@ -453,7 +520,9 @@ export function render(snapshot: Snapshot, enabled: boolean) {
       const wait = Math.ceil(((state.cooldowns[target.id] ?? 0) - now) / 1000);
       hint =
         wait > 0
-          ? `约 ${wait} 秒后可再次采集。`
+          ? resource.item === "toolbox"
+            ? "备用工具已领用，可向持有者借用。"
+            : `约 ${wait} 秒后可再次采集。`
           : `可采集${items[resource.item]} ×${resource.yieldCount}。`;
       nextSelection = {
         target: target.id,
@@ -478,7 +547,7 @@ export function render(snapshot: Snapshot, enabled: boolean) {
           verb: "deliver",
           label: "交付材料",
         };
-      } else if (working) {
+      } else if (working && snapshot.workTarget === bridge.id) {
         hint = "留在渡口完成施工，走动会暂停。";
         nextSelection = { target: bridge.id, verb: "stop", label: "暂停施工" };
       } else {
@@ -487,10 +556,51 @@ export function render(snapshot: Snapshot, enabled: boolean) {
           : "材料已就位，按 E 开始施工。";
         nextSelection = { target: bridge.id, verb: "work", label: "开始施工" };
       }
+    } else if (projects.has(target.id)) {
+      const project = projects.get(target.id)!;
+      const row = state.projects[target.id];
+      const material = target.id === "valley-camp" ? "food" : "wood";
+      const ready = row[material] >= project.required[material]!;
+      image = target.id === "valley-camp" ? "food" : "toolbox";
+      hint = row.complete
+        ? project.done
+        : ready
+          ? "材料已齐，可开始施工。"
+          : `可交付${items[material]}，支持分批交付。`;
+      const isWorking = snapshot.working && snapshot.workTarget === target.id;
+      nextSelection = row.complete
+        ? {
+            target: target.id,
+            verb:
+              material === "food" &&
+              row.food < (project.capacity?.food ?? project.required.food ?? 0)
+                ? "deliver"
+                : "inspect",
+            label:
+              material === "food" &&
+              row.food < (project.capacity?.food ?? project.required.food ?? 0)
+                ? "补充营地食物"
+                : "查看工程",
+          }
+        : ready
+          ? {
+              target: target.id,
+              verb: isWorking ? "stop" : "work",
+              label: isWorking ? "暂停屋顶施工" : "开始修缮屋顶",
+            }
+          : {
+              target: target.id,
+              verb: "deliver",
+              label: `向${target.name}交付${items[material]}`,
+            };
     } else {
       image = "letter";
-      hint = "石面刻着磨损的星纹。";
-      nextSelection = { target: target.id, verb: "inspect", label: "查看航标" };
+      hint = "靠近后探索，发现的线索会收入手记。";
+      nextSelection = {
+        target: target.id,
+        verb: "explore",
+        label: target.id === valley.ruin.id ? "查看航标" : `探索${target.name}`,
+      };
     }
   }
   const changed = target?.id !== lastTarget;

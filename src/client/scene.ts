@@ -4,6 +4,9 @@ import manifest from "../../assets/manifest.json";
 import { npcIds, npcSchema, actorName, type NpcId } from "../shared/social.js";
 import type { Snapshot } from "../shared/protocol.js";
 import {
+  clues,
+  gameTime,
+  resourceNodes,
   distance,
   mapHeight,
   mapWidth,
@@ -18,7 +21,7 @@ const spritesheets = new Set([
   "npc-walk",
   ...valley.residents.map((actor) => `${actor.asset}-idle`),
 ]);
-const variants = new Map(valley.resources.map((entry) => [entry.id, entry]));
+const variants = new Map(resourceNodes.map((entry) => [entry.id, entry]));
 
 export class ValleyScene extends Phaser.Scene {
   private player?: Phaser.GameObjects.Sprite;
@@ -34,6 +37,8 @@ export class ValleyScene extends Phaser.Scene {
   private shadow?: Phaser.GameObjects.Ellipse;
   private marker?: Phaser.GameObjects.Image;
   private bridge?: Phaser.GameObjects.Image;
+  private roof?: Phaser.GameObjects.Image;
+  private camp?: Phaser.GameObjects.Image;
   private nodeSprites = new Map<string, Phaser.GameObjects.Image>();
   private failed: string[] = [];
   private current?: Snapshot;
@@ -68,10 +73,7 @@ export class ValleyScene extends Phaser.Scene {
       ...spritesheets,
       ...valley.props.map((object) => object.asset),
       ...valley.residents.map((resident) => `${resident.asset}-face`),
-      ...valley.resources.flatMap((resource) => [
-        resource.asset,
-        resource.spent,
-      ]),
+      ...resourceNodes.flatMap((resource) => [resource.asset, resource.spent]),
     ]);
     for (const { assetId } of manifest.assets) {
       const key = assetId.replace(/\.[^.]+$/, "");
@@ -109,12 +111,23 @@ export class ValleyScene extends Phaser.Scene {
       .setOrigin(0)
       .setDepth(-500);
     for (const prop of valley.props) {
-      this.add
+      const sprite = this.add
         .image(prop.x, prop.y, prop.asset)
         .setOrigin(0.5, 1)
         .setDepth(prop.ground ? -800 : prop.y);
+      if (prop.id === "house-carpenter") this.roof = sprite;
+      if (prop.id === "camp-supplies")
+        this.camp = this.add
+          .image(prop.x + 8, prop.y - 8, "food")
+          .setDepth(prop.y + 1)
+          .setVisible(false);
     }
-    for (const resource of valley.resources) {
+    for (const clue of clues.slice(1))
+      this.add
+        .image(clue.x, clue.y, clue.asset)
+        .setOrigin(0.5, 1)
+        .setDepth(clue.y);
+    for (const resource of resourceNodes) {
       this.nodeSprites.set(
         resource.id,
         this.add
@@ -122,7 +135,7 @@ export class ValleyScene extends Phaser.Scene {
           .setOrigin(0.5, 1)
           .setDepth(resource.y),
       );
-      const label = resource.item === "wood" ? "wood" : "stone";
+      const label = resource.item;
       this.add
         .image(resource.x, resource.y - 21, label)
         .setOrigin(0.5)
@@ -237,6 +250,13 @@ export class ValleyScene extends Phaser.Scene {
       snapshot.state.player,
       snapshot.state.actors,
     );
+    const period = gameTime(snapshot.state.gameSeconds).period;
+    if (this.view && this.view.dataset.period !== period)
+      this.view.dataset.period = period;
+    this.roof?.setTint(
+      snapshot.state.projects["carpenter-roof"].complete ? 0xffffff : 0xa7a8ad,
+    );
+    this.camp?.setVisible(snapshot.state.projects["valley-camp"].food > 0);
     const bridgeTexture = snapshot.state.bridge.repaired
       ? "bridge-open"
       : "bridge-broken";
@@ -247,8 +267,7 @@ export class ValleyScene extends Phaser.Scene {
       const spent = (snapshot.state.cooldowns[id] ?? 0) > snapshot.now;
       const alpha = spent ? 0.61 : 1;
       if (node.alpha !== alpha) node.setAlpha(alpha);
-      const texture =
-        spent && resource.item === "wood" ? resource.spent : resource.asset;
+      const texture = spent ? resource.spent : resource.asset;
       if (node.texture.key !== texture) node.setTexture(texture);
     }
   }
@@ -272,7 +291,7 @@ export class ValleyScene extends Phaser.Scene {
     return true;
   }
 
-  update(_time: number, elapsed: number) {
+  update(time: number, elapsed: number) {
     if (
       !this.player ||
       !this.shadow ||
@@ -292,6 +311,8 @@ export class ValleyScene extends Phaser.Scene {
       moving,
       elapsed,
     );
+    const effort = this.halted ? 0 : Math.sin(time / 85) * 0.12;
+    sprite.setRotation(working ? effort : 0);
     for (const [id, { sprite: npc, shadow, name, bubble }] of this.residents) {
       const activity = this.current.actors[id].activity;
       const actor = state.actors[id];
@@ -305,6 +326,9 @@ export class ValleyScene extends Phaser.Scene {
         texture,
         activity === "moving",
         elapsed,
+      );
+      npc.setRotation(
+        activity === "working" || activity === "collecting" ? effort : 0,
       );
       if (name.x !== npc.x || name.y !== npc.y - 19)
         name.setPosition(npc.x, npc.y - 19);

@@ -392,8 +392,24 @@ test("factual failure persists beside claims and opinions, with stable reference
 
 test("v1 migration backs up the old SQLite schema and receipts before adding the actor", (t) => {
   const path = disk(t);
-  const { player, inventory, cooldowns, bridge, explored, contentVersion, worldId } = freshState();
-  const state = { player, inventory, cooldowns, bridge, explored, contentVersion, worldId };
+  const {
+    player,
+    inventory,
+    cooldowns,
+    bridge,
+    explored,
+    contentVersion,
+    worldId,
+  } = freshState();
+  const state = {
+    player,
+    inventory,
+    cooldowns,
+    bridge,
+    explored,
+    contentVersion,
+    worldId,
+  };
   state.inventory.wood = 3;
   const db = new DatabaseSync(path);
   db.exec(
@@ -406,7 +422,7 @@ test("v1 migration backs up the old SQLite schema and receipts before adding the
   db.close();
   const migrated = new SaveFile(path);
   try {
-    assert.equal(migrated.initial.schemaVersion, 4);
+    assert.equal(migrated.initial.schemaVersion, 5);
     assert.equal(migrated.initial.inventory.wood, 3);
     assert.deepEqual(migrated.initial.cenyan.bag, { wood: 0, stone: 0 });
     assert.ok(migrated.hasReceipt("prior-receipt"));

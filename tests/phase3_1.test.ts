@@ -167,6 +167,8 @@ test("Phase3.1 step and client schemas only admit material pairs, valid targets 
     "give_item",
     "deliver",
     "work",
+    "explore",
+    "share_clue",
     "wait",
     "wait_until",
     "talk",
@@ -186,7 +188,7 @@ test("Phase3.1 step and client schemas only admit material pairs, valid targets 
   );
   for (const step of [
     { type: "follow", target_id: "unknown" },
-    { type: "give_item", target_id: "player", item: "food", qty: 1 },
+    { type: "give_item", target_id: "player", item: "water", qty: 1 },
     { type: "give_item", target_id: "player", item: "wood", qty: -1 },
     { type: "deliver", target_id: bridge.id, qty: 1 },
     { type: "deliver", target_id: bridge.id, item: "wood", qty: 0 },
@@ -648,8 +650,15 @@ test("v2 backup and transactional migration preserve old activity, unidentified 
     gift: _gift,
     contributions: _contribution,
     sharedWorkMs: _shared,
-    actors: _actors, workPairs: _workPairs, talkCooldowns: _talkCooldowns, deals: _deals,
-    pledges: _pledges, events: _events,
+    actors: _actors,
+    workPairs: _workPairs,
+    talkCooldowns: _talkCooldowns,
+    deals: _deals,
+    pledges: _pledges,
+    events: _events,
+    gameSeconds: _gameSeconds,
+    projects: _projects,
+    discoveries: _discoveries,
     cenyan,
     ...previous
   } = freshState();
@@ -693,7 +702,7 @@ test("v2 backup and transactional migration preserve old activity, unidentified 
       stone: 2,
       workMs: 150,
     });
-    assert.equal(save.initial.schemaVersion, 4);
+    assert.equal(save.initial.schemaVersion, 5);
     assert.deepEqual(save.initial.cenyan.plan, actor.plan);
     assert.equal(save.initial.cenyan.pending, null);
     assert.equal(save.initial.cenyan.goal, "repair-bridge");

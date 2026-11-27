@@ -1,0 +1,7 @@
+
+> mistsea-phase1@0.3.0-phase3 soak:phase4
+> node --import tsx scripts/soak-phase4.mjs --duration 1800
+
+(node:25553) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS 1800012 ms · /Users/godblack/Desktop/AI game/mistsea-phase5/evidence/phase5/soak-9010hN

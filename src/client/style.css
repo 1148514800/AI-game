@@ -707,13 +707,27 @@ dialog form {
   overflow-wrap: anywhere;
 }
 
-.cenyan-debug summary { cursor: pointer; }
-.cenyan-debug dl { margin: 0.65rem 0; }
-.cenyan-debug dt { font-weight: bold; }
-.cenyan-debug dd { margin: 0 0 0.45rem; }
-.cenyan-debug h3 { font-size: inherit; }
-.cenyan-debug li { line-height: 1.45; }
-.dialogue-suggestions { flex-wrap: wrap; }
+.cenyan-debug summary {
+  cursor: pointer;
+}
+.cenyan-debug dl {
+  margin: 0.65rem 0;
+}
+.cenyan-debug dt {
+  font-weight: bold;
+}
+.cenyan-debug dd {
+  margin: 0 0 0.45rem;
+}
+.cenyan-debug h3 {
+  font-size: inherit;
+}
+.cenyan-debug li {
+  line-height: 1.45;
+}
+.dialogue-suggestions {
+  flex-wrap: wrap;
+}
 
 .material-controls {
   display: flex;
@@ -722,12 +736,29 @@ dialog form {
   gap: 0.5rem;
   padding: 0.4rem 0.65rem;
 }
-.material-controls[hidden] { display: none; }
-.material-controls label { display: inline-flex; align-items: center; gap: 0.3rem; }
-.material-controls select, .material-controls input { font: inherit; }
-.material-controls input { width: 4.25rem; }
-.contribution { margin: 0.3rem 0 0; font-size: 0.82rem; }
-#cenyan-results { white-space: pre-line; overflow-wrap: anywhere; }
+.material-controls[hidden] {
+  display: none;
+}
+.material-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.material-controls select,
+.material-controls input {
+  font: inherit;
+}
+.material-controls input {
+  width: 4.25rem;
+}
+.contribution {
+  margin: 0.3rem 0 0;
+  font-size: 0.82rem;
+}
+#cenyan-results {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
 
 #cenyan-decision {
   margin: 0;
@@ -736,14 +767,58 @@ dialog form {
   overflow-wrap: anywhere;
 }
 
-.dialogue-agreements { margin-top: 0.65rem; }
-.dialogue-agreements summary { cursor: pointer; }
-#dialogue-agreements, #player-agreements, #valley-events {
+.dialogue-agreements {
+  margin-top: 0.65rem;
+}
+.dialogue-agreements summary {
+  cursor: pointer;
+}
+#dialogue-agreements,
+#player-agreements,
+#valley-events {
   margin: 0.5rem 0 0;
   padding-inline-start: 1.2rem;
   font-size: 0.85rem;
 }
-#dialogue-agreements li, #player-agreements li, #valley-events li { margin-block: 0.35rem; }
-#dialogue-agreements button, #player-agreements button { margin-inline-start: 0.4rem; }
-#social-proposal input { width: 4rem; }
-#social-proposal [hidden] { display: none; }
+#dialogue-agreements li,
+#player-agreements li,
+#valley-events li {
+  margin-block: 0.35rem;
+}
+#dialogue-agreements button,
+#player-agreements button {
+  margin-inline-start: 0.4rem;
+}
+#social-proposal input {
+  width: 4rem;
+}
+#social-proposal [hidden] {
+  display: none;
+}
+
+#valley-time {
+  margin-left: 0.65rem;
+  color: #aebfbc;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+#game canvas {
+  transition: filter 800ms ease;
+}
+
+#game[data-period="早晨"] canvas {
+  filter: sepia(0.08) brightness(0.96);
+}
+#game[data-period="傍晚"] canvas {
+  filter: sepia(0.23) brightness(0.85);
+}
+#game[data-period="夜晚"] canvas {
+  filter: brightness(0.67) saturate(0.8) hue-rotate(10deg);
+}
+#expedition-clues {
+  padding-left: 1.1rem;
+}
+#expedition-clues li {
+  margin-block: 0.45rem;
+}

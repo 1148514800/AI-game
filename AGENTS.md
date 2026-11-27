@@ -1,3 +1,14 @@
+# Phase 5 当前授权
+
+在审核基线 `9a1290e9dfcff86ecf6600183cf446948e653c59` 上继续开发《雾海行纪》。本轮范围与验收见 [Phase 5 执行规格](docs/PHASE5_TASK.md)。以下历史阶段的范围限制由本节覆盖，兼容性、事务和合规素材要求继续有效。
+
+- 保留雾灯谷地图、三名居民及既有回归。新工程、时间与遗迹通过正常动作和版本化 SQLite 存档运行。
+- 规则校验贡献数量、权限、位置与施工。自动衔接依赖明确授权，玩家对话优先，模型调度与游戏时间独立。
+- 本轮以 Mock 与本地 HTTP 桩执行验收。付费 Live、远程推送及公网部署需另行授权。
+- 原生验收证据写入 `evidence/phase5/`，保留历史记录。完成本地提交后停止在 Phase 5。
+
+## 历史阶段
+
 # AG-6 / Phase4 当前唯一授权（覆盖以下旧阶段限制）
 用户2026-11-26明确授权仅Phase4《建立小型 AI 社会》，审核基线 8e4cb58e3f5d137d1b77934ad576ae8082d5c3c1（GitHub `Add Phase 3.1 collaboration and fix model action requests`，已包含 LLM_JSON_MODE / speechReplySchema / D026 与 LLM_ENABLE_THINKING 三态）。完整范围和验收见 docs/PHASE4_TASK.md，必须先完整阅读。本机 Codex CLI 与本地 commit 已授权；禁 push/PR/部署/Live/私密配置/触碰 Mac，禁进入 Phase5。所有新增证据只写 evidence/phase4，不覆盖历史证据。必须保留 Phase0–3.1 有效回归（基线 64 单元 / 5 集成 / 13 浏览器），不得无理由删除断言。无明确 Live 额度授权则不调用，不得把未验证的真实模型完整协作标为通过，不虚构 Live 分数。
 

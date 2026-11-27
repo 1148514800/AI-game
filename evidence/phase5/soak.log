@@ -1,0 +1,12 @@
+
+> mistsea-phase1@0.3.0-phase3 soak:phase4
+> node --import tsx scripts/soak-phase4.mjs --duration 1800
+
+(node:24644) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Error: Expected values to be strictly equal:
+
+NaN !== undefined
+
+    at file:///Users/godblack/Desktop/AI%20game/mistsea-phase5/scripts/soak-phase4.mjs:286:33
+FAIL 15001 ms · /Users/godblack/Desktop/AI game/mistsea-phase5/evidence/phase5/soak-lRSgim

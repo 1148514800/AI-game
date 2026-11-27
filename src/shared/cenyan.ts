@@ -1,13 +1,16 @@
 import { z } from "zod";
-import { inventoryLimit, valley } from "./world.js";
+import { inventoryLimit, valley, resourceNodes, projects } from "./world.js";
 
 import {
   actorIdSchema,
+  projectId,
+  clueId,
   npcSchema,
   homes,
   destinations,
   destinationId,
   materialAmount,
+  materialSchema,
   waitCondition,
   socialCommand,
   conversationSchema,
@@ -62,8 +65,9 @@ const giftResponse = z.strictObject({
   offer_id: z.uuid(),
   decision: giftChoice,
 });
-const resourceId = z.enum(valley.resources.map(({ id }) => id));
+const resourceId = z.enum(resourceNodes.map(({ id }) => id));
 const moveId = destinationId;
+const itemOptions = materialSchema.options.join("、");
 export const capabilities = {
   move_to: {
     description: "走到地点的交互范围",
@@ -93,7 +97,7 @@ export const capabilities = {
     description: "采集材料",
     params: "必填 target_id，取下列资源 ID",
     examples: [{ type: "collect", target_id: valley.resources[0].id }],
-    targets: valley.resources.map((r) => r.id),
+    targets: resourceId.options,
     preconditions: "在采集范围且资源已恢复、背包有空间",
     execution: "材料入自己的背包",
     results: "实际材料或失败原因",
@@ -104,7 +108,7 @@ export const capabilities = {
   },
   give_item: {
     description: "提议把自己的材料赠给对方",
-    params: `必填 target_id（角色 ID）、item（"wood" 或 "stone"）、qty（1–${inventoryLimit} 整数）`,
+    params: `必填 target_id（角色 ID）、item（${itemOptions}）、qty（1–${inventoryLimit} 整数）`,
     examples: [
       { type: "give_item", target_id: "player", item: "stone", qty: 1 },
     ],
@@ -119,34 +123,60 @@ export const capabilities = {
   },
   deliver: {
     description: "分批交付自己的工程材料",
-    params: `必填 target_id（旧桥 ID）。item（"wood" 或 "stone"）和 qty（1–${inventoryLimit} 整数）必须成对给出；全部省略则交当前全部有效材料`,
+    params: `必填 target_id（工程 ID）。item 取工程所需物品，和 qty（1–${inventoryLimit} 整数）成对给出；全部省略则交当前全部有效材料`,
     examples: [
       { type: "deliver", target_id: valley.bridge.id, item: "wood", qty: 2 },
       { type: "deliver", target_id: valley.bridge.id },
     ],
-    targets: [valley.bridge.id],
-    preconditions: "在桥边，有工程尚缺的材料",
+    targets: [...projects.keys()],
+    preconditions: "在工程旁，有工程尚缺的材料",
     execution: "按拥有数量与工程缺口截断",
     results: "实际交付数量与缺口或失败原因",
     schema: z
       .strictObject({
         type: z.literal("deliver"),
-        target_id: z.literal(valley.bridge.id),
+        target_id: projectId,
         ...materialAmount.partial().shape,
       })
       .refine((step) => (step.item === undefined) === (step.qty === undefined)),
   },
   work: {
-    description: "参加旧桥施工",
-    params: "必填 target_id，固定为旧桥 ID",
+    description: "参加工程施工",
+    params: "必填 target_id，选择工程 ID",
     examples: [{ type: "work", target_id: valley.bridge.id }],
-    targets: [valley.bridge.id],
-    preconditions: "在桥边且材料齐备",
+    targets: [...projects.keys()],
+    preconditions: "在工程旁且材料齐备",
     execution: "自己主动施工可与其他角色叠加",
     results: "工时和完工或失败原因",
     schema: z.strictObject({
       type: z.literal("work"),
-      target_id: z.literal(valley.bridge.id),
+      target_id: projectId,
+    }),
+  },
+  explore: {
+    description: "探索东岸遗迹对象",
+    params: "target_id 为已知遗迹对象 ID",
+    examples: [{ type: "explore", target_id: valley.ruin.id }],
+    targets: clueId.options,
+    preconditions: "旧桥已修通并抵达对象附近",
+    execution: "记录该角色实际发现的线索",
+    results: "规则确认的发现",
+    schema: z.strictObject({ type: z.literal("explore"), target_id: clueId }),
+  },
+  share_clue: {
+    description: "当面分享自己已发现的遗迹线索",
+    params: "target_id 为附近角色，clue_id 为自己实际发现的线索 ID",
+    examples: [
+      { type: "share_clue", target_id: "player", clue_id: valley.ruin.id },
+    ],
+    targets: ["player", "cenyan", "ahe", "luozhou"],
+    preconditions: "双方在交谈范围",
+    execution: "按规则记录线索原文与告知来源",
+    results: "可核实的分享经历",
+    schema: z.strictObject({
+      type: z.literal("share_clue"),
+      target_id: actorIdSchema,
+      clue_id: clueId,
     }),
   },
   wait: {
@@ -230,6 +260,8 @@ export const stepSchema = z.discriminatedUnion("type", [
   move_to.schema,
   follow.schema,
   collect.schema,
+  capabilities.explore.schema,
+  capabilities.share_clue.schema,
   give_item.schema,
   deliver.schema,
   work.schema,
@@ -287,6 +319,8 @@ export const actionOutcome = z.strictObject({
   id: z.string().max(90).optional(),
   change: z
     .strictObject({
+      food: z.int().optional(),
+      toolbox: z.int().optional(),
       wood: z.int().optional(),
       stone: z.int().optional(),
       target: z.string().optional(),
@@ -308,6 +342,7 @@ const planDecision = z.strictObject({
   ...decisionRecord,
   speech: speech.optional(),
   policy,
+  source: z.literal("continuation").optional(),
   steps: planSteps.optional(),
   status: z.enum(["accepted", "deferred", "rejected", "continued"]),
 });
@@ -336,9 +371,12 @@ export const actorSchema = z.strictObject({
   bag: z.strictObject({
     wood: z.int().min(0).max(inventoryLimit),
     stone: z.int().min(0).max(inventoryLimit),
+    food: z.int().min(0).max(inventoryLimit).optional(),
+    toolbox: z.int().min(0).max(inventoryLimit).optional(),
   }),
   goal: goalSchema,
   goalTag: goalTag.optional(),
+  interruptedPledge: z.uuid().optional(),
   generation: z.int().min(0),
   plan: z
     .strictObject({
@@ -347,6 +385,8 @@ export const actorSchema = z.strictObject({
       index: z.int().min(0).max(2),
       remainingMs: z.number().min(0).max(60_000).optional(),
       followed: z.boolean().optional(),
+      authorization: z.uuid().optional(),
+      autonomous: z.literal(true).optional(),
       traveled: z.boolean().optional(),
     })
     .nullable(),
@@ -355,6 +395,8 @@ export const actorSchema = z.strictObject({
       id: z.uuid(),
       goal: goalSchema,
       goalTag: goalTag.optional(),
+      authorization: z.uuid().optional(),
+      autonomous: z.literal(true).optional(),
       steps: planSteps,
     })
     .nullable()

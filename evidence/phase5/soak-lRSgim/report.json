@@ -1,0 +1,263 @@
+{
+  "status": "FAIL",
+  "commandError": "Error: Expected values to be strictly equal:\n\nNaN !== undefined\n\n    at file:///Users/godblack/Desktop/AI%20game/mistsea-phase5/scripts/soak-phase4.mjs:286:33",
+  "requestedSeconds": 1800,
+  "elapsedMs": 15001.498333,
+  "mockOnly": true,
+  "mockLimits": {
+    "LLM_ENABLED": "false",
+    "LLM_MOCK_AUTONOMY_ENABLED": "true",
+    "LLM_MOCK_DELAY_MS": "200",
+    "LLM_MAX_REQUESTS_PER_MINUTE": "60",
+    "LLM_AUTONOMY_REQUESTS_PER_MINUTE": "40",
+    "LLM_MAX_REQUESTS_PER_SESSION": "300",
+    "LLM_AUTONOMY_REQUESTS_PER_SESSION": "260",
+    "LLM_MAX_TOTAL_REQUESTS": "300",
+    "LLM_AUTONOMY_MAX_TOTAL_REQUESTS": "260",
+    "LLM_MAX_TOTAL_TOKENS": "2500000"
+  },
+  "snapshotCount": 289,
+  "persistedRevisions": 0,
+  "peakPending": 2,
+  "peakQueued": 0,
+  "finishedTalks": {
+    "ok": 2,
+    "failed": 0
+  },
+  "speech": {
+    "cenyan": 1,
+    "ahe": 1,
+    "luozhou": 2
+  },
+  "actions": {
+    "cenyan": {
+      "ok": 4,
+      "failed": 0,
+      "codes": {
+        "ARRIVED": 2,
+        "COLLECTED": 1,
+        "DELIVERED": 1
+      }
+    },
+    "ahe": {
+      "ok": 6,
+      "failed": 0,
+      "codes": {
+        "ARRIVED": 3,
+        "COLLECTED": 2,
+        "DELIVERED": 1
+      }
+    },
+    "luozhou": {
+      "ok": 6,
+      "failed": 0,
+      "codes": {
+        "TALK_ENDED": 2,
+        "ARRIVED": 2,
+        "COLLECTED": 1,
+        "DELIVERED": 1
+      }
+    }
+  },
+  "accounts": [
+    {
+      "npc": "ahe",
+      "purpose": "autonomy",
+      "intent": "first-active",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 5869
+    },
+    {
+      "npc": "ahe",
+      "purpose": "autonomy",
+      "intent": "plan-complete",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 3,
+      "tokens": 19702
+    },
+    {
+      "npc": "ahe",
+      "purpose": "autonomy",
+      "intent": "social-reply",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 6531
+    },
+    {
+      "npc": "cenyan",
+      "purpose": "autonomy",
+      "intent": "bridge-materials",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 7455
+    },
+    {
+      "npc": "cenyan",
+      "purpose": "autonomy",
+      "intent": "first-active",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 6183
+    },
+    {
+      "npc": "cenyan",
+      "purpose": "autonomy",
+      "intent": "plan-complete",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "cancelled",
+      "calls": 1,
+      "tokens": 7254
+    },
+    {
+      "npc": "cenyan",
+      "purpose": "autonomy",
+      "intent": "plan-complete",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 7253
+    },
+    {
+      "npc": "cenyan",
+      "purpose": "autonomy",
+      "intent": "social-reply",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 6639
+    },
+    {
+      "npc": "luozhou",
+      "purpose": "autonomy",
+      "intent": "first-active",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 5209
+    },
+    {
+      "npc": "luozhou",
+      "purpose": "autonomy",
+      "intent": "plan-complete",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 3,
+      "tokens": 20538
+    },
+    {
+      "npc": "luozhou",
+      "purpose": "autonomy",
+      "intent": "social-invite",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 2,
+      "tokens": 7345
+    }
+  ],
+  "collected": {
+    "wood": 3,
+    "stone": 1,
+    "food": 0,
+    "toolbox": 0
+  },
+  "project": {
+    "discovered": true,
+    "wood": 2,
+    "stone": 1,
+    "progressMs": 0,
+    "repaired": false
+  },
+  "localProjects": {
+    "carpenter-roof": {
+      "wood": 0,
+      "food": 0,
+      "progressMs": 0,
+      "complete": false,
+      "contributions": {}
+    },
+    "valley-camp": {
+      "wood": 0,
+      "food": 0,
+      "progressMs": 0,
+      "complete": false,
+      "contributions": {}
+    }
+  },
+  "discoveries": {},
+  "gameSeconds": 14,
+  "contributions": {
+    "player": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "cenyan": {
+      "wood": 1,
+      "stone": 0,
+      "workMs": 0
+    },
+    "legacy": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "ahe": {
+      "wood": 1,
+      "stone": 0,
+      "workMs": 0
+    },
+    "luozhou": {
+      "wood": 0,
+      "stone": 1,
+      "workMs": 0
+    }
+  },
+  "tickMs": {
+    "count": 295,
+    "mean": 0.6281163966101719,
+    "p95": 1.9850409999999101,
+    "max": 4.2031660000002375
+  },
+  "tickIntervalMs": {
+    "count": 295,
+    "mean": 51.01685974576271,
+    "p95": 51.875,
+    "max": 54.26262499999939
+  },
+  "clientFrameIntervalMs": null,
+  "clientRafCallbackMs": null,
+  "clientFps": null,
+  "startMemory": {
+    "rss": 222150656,
+    "heapTotal": 72138752,
+    "heapUsed": 51420264,
+    "external": 24253942,
+    "arrayBuffers": 12690228
+  },
+  "endMemory": {
+    "rss": 200032256,
+    "heapTotal": 91357184,
+    "heapUsed": 56326320,
+    "external": 22934653,
+    "arrayBuffers": 11366823
+  },
+  "samples": 0,
+  "errors": []
+}

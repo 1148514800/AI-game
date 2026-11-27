@@ -1,0 +1,301 @@
+{
+  "status": "PASS",
+  "requestedSeconds": 1800,
+  "elapsedMs": 1800009.405397,
+  "mockOnly": true,
+  "mockLimits": {
+    "LLM_ENABLED": "false",
+    "LLM_MOCK_AUTONOMY_ENABLED": "true",
+    "LLM_MOCK_DELAY_MS": "200",
+    "LLM_MAX_REQUESTS_PER_MINUTE": "60",
+    "LLM_AUTONOMY_REQUESTS_PER_MINUTE": "40",
+    "LLM_MAX_REQUESTS_PER_SESSION": "300",
+    "LLM_AUTONOMY_REQUESTS_PER_SESSION": "260",
+    "LLM_MAX_TOTAL_REQUESTS": "300",
+    "LLM_AUTONOMY_MAX_TOTAL_REQUESTS": "260",
+    "LLM_MAX_TOTAL_TOKENS": "2500000"
+  },
+  "snapshotCount": 7558,
+  "persistedRevisions": 1083,
+  "peakPending": 2,
+  "peakQueued": 0,
+  "finishedTalks": {
+    "ok": 2,
+    "failed": 0
+  },
+  "speech": {
+    "cenyan": 1,
+    "ahe": 1,
+    "luozhou": 2
+  },
+  "actions": {
+    "cenyan": {
+      "ok": 145,
+      "failed": 2,
+      "codes": {
+        "ARRIVED": 74,
+        "COLLECTED": 8,
+        "DELIVERED": 4,
+        "COOLDOWN": 2,
+        "BRIDGE_REPAIRED": 1,
+        "RESTED": 58
+      }
+    },
+    "ahe": {
+      "ok": 136,
+      "failed": 0,
+      "codes": {
+        "ARRIVED": 68,
+        "COLLECTED": 6,
+        "DELIVERED": 2,
+        "WAIT_READY": 1,
+        "BRIDGE_REPAIRED": 1,
+        "RESTED": 58
+      }
+    },
+    "luozhou": {
+      "ok": 137,
+      "failed": 0,
+      "codes": {
+        "TALK_ENDED": 2,
+        "ARRIVED": 67,
+        "COLLECTED": 2,
+        "DELIVERED": 2,
+        "WAIT_READY": 1,
+        "BRIDGE_REPAIRED": 1,
+        "RESTED": 62
+      }
+    }
+  },
+  "accounts": [
+    {
+      "npc": "ahe",
+      "purpose": "autonomy",
+      "intent": "bridge-repaired",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 4936
+    },
+    {
+      "npc": "ahe",
+      "purpose": "autonomy",
+      "intent": "first-active",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 4087
+    },
+    {
+      "npc": "ahe",
+      "purpose": "autonomy",
+      "intent": "plan-complete",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 66,
+      "tokens": 315617
+    },
+    {
+      "npc": "ahe",
+      "purpose": "autonomy",
+      "intent": "social-reply",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 5403
+    },
+    {
+      "npc": "cenyan",
+      "purpose": "autonomy",
+      "intent": "bridge-materials",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 5017
+    },
+    {
+      "npc": "cenyan",
+      "purpose": "autonomy",
+      "intent": "bridge-repaired",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 5325
+    },
+    {
+      "npc": "cenyan",
+      "purpose": "autonomy",
+      "intent": "first-active",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 4401
+    },
+    {
+      "npc": "cenyan",
+      "purpose": "autonomy",
+      "intent": "plan-complete",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 69,
+      "tokens": 355670
+    },
+    {
+      "npc": "cenyan",
+      "purpose": "autonomy",
+      "intent": "social-reply",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 5527
+    },
+    {
+      "npc": "cenyan",
+      "purpose": "autonomy",
+      "intent": "step-retry",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 2,
+      "tokens": 10034
+    },
+    {
+      "npc": "luozhou",
+      "purpose": "autonomy",
+      "intent": "bridge-repaired",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 4822
+    },
+    {
+      "npc": "luozhou",
+      "purpose": "autonomy",
+      "intent": "first-active",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 3427
+    },
+    {
+      "npc": "luozhou",
+      "purpose": "autonomy",
+      "intent": "plan-complete",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "cancelled",
+      "calls": 1,
+      "tokens": 4039
+    },
+    {
+      "npc": "luozhou",
+      "purpose": "autonomy",
+      "intent": "plan-complete",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 67,
+      "tokens": 274511
+    },
+    {
+      "npc": "luozhou",
+      "purpose": "autonomy",
+      "intent": "social-invite",
+      "model": "cenyan-scripted-mock",
+      "mode": "mock",
+      "status": "ok",
+      "calls": 2,
+      "tokens": 5059
+    }
+  ],
+  "collected": {
+    "wood": 14,
+    "stone": 2
+  },
+  "project": {
+    "discovered": true,
+    "wood": 6,
+    "stone": 2,
+    "progressMs": 14000,
+    "repaired": true
+  },
+  "contributions": {
+    "player": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "cenyan": {
+      "wood": 4,
+      "stone": 0,
+      "workMs": 4500.049394666668
+    },
+    "legacy": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "ahe": {
+      "wood": 2,
+      "stone": 0,
+      "workMs": 4749.975302666666
+    },
+    "luozhou": {
+      "wood": 0,
+      "stone": 2,
+      "workMs": 4749.975302666666
+    }
+  },
+  "tickMs": {
+    "count": 34440,
+    "mean": 0.4415952055169171,
+    "p95": 0.7519500000053085,
+    "max": 1089.5275399999227
+  },
+  "tickIntervalMs": {
+    "count": 34440,
+    "mean": 52.19488788983769,
+    "p95": 50.612642000080086,
+    "max": 13012.28764699999
+  },
+  "clientFrameIntervalMs": {
+    "count": 103672,
+    "mean": 17.36255980399596,
+    "p95": 16.700000000186265,
+    "max": 12982.799999999988
+  },
+  "clientRafCallbackMs": {
+    "count": 103672,
+    "mean": 0.6898400725277797,
+    "p95": 1,
+    "max": 346.69999999552965
+  },
+  "clientFps": 57.59519398573083,
+  "startMemory": {
+    "rss": 206483456,
+    "heapTotal": 125976576,
+    "heapUsed": 71565920,
+    "external": 18905251,
+    "arrayBuffers": 14550633
+  },
+  "endMemory": {
+    "rss": 212635648,
+    "heapTotal": 88993792,
+    "heapUsed": 70743888,
+    "external": 13552059,
+    "arrayBuffers": 9202535
+  },
+  "samples": 119,
+  "errors": []
+}

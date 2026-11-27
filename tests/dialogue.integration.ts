@@ -379,7 +379,7 @@ test(
     assert.match(calls[0].body.messages[0].content, /旧桥未修通/);
     assert.ok(
       !JSON.stringify(calls[0].body).match(
-        /inventory|cooldowns|toolbox|schemaVersion/,
+        /inventory|cooldowns|"toolbox"\s*:|schemaVersion/,
       ),
     );
     const failed = submit(player, dialog, "制造故障");

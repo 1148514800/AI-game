@@ -82,3 +82,13 @@ A–H 场景中：自主三居民采集/协商/修桥、玩家前景对话、出
 ## 阶段结论
 
 Phase 4 工程与 Mock 原生验收（类型检查、74 单元、6 集成、15 e2e、生产冒烟、两次真实 1800 秒三 NPC Mock 长测、A–H 截图与视觉审查）已完成。Live 未跑。完成即停 Phase 4，禁止进入 Phase 5。
+
+
+## 后续 Mac 真实模型记录
+
+以下是 Phase 4 原生验收之后的补测，独立于上文的 Mock 批次。Phase 5 开发从远端审核基线 `9a1290e` 继续。
+
+- [默认额度三组](../evidence/phase5/phase4-history/default-budget)在 481 秒内收到的木材及石材分别为 0/0、6/2、3/2，三组均未开始施工。
+- [D032 衔接三组](../evidence/phase5/phase4-history/continuation)在默认额度下分别于 337、266、272 秒修通。三人均交付了材料，玩家贡献为零。JSON 是当时测试所写的事件及账本摘要。
+- 另一次临时提高请求频率的测试在约 117 秒完工。原始输出保留在对话记录中，未找到同批次独立的完整事件 JSON。Phase 5 新增授权限制后仍需复测 Live 居民的自主意愿和合作结果。
+- Phase 5 归档了原有两轮 Mock 长测的[首轮摘要](../evidence/phase4/verification-20261126-154335-643457/soak-ZqB0WI/report.json)和[第二轮摘要](../evidence/phase4/verification-20261126-172149-373584/soak-flmxXy/report.json)、采样与截图，以及[第二轮命令结果](../evidence/phase4/verification-20261126-172149-373584/command-results.json)和 UI 轨迹。首轮完整 Playwright 输出和命令索引未在可读原目录中找到。

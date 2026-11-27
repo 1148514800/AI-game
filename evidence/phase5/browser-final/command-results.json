@@ -1,0 +1,16 @@
+[
+  {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "startedAt": "2026-11-27T19:24:49.690140+08:00",
+    "finishedAt": "2026-11-27T19:24:50.061875+08:00",
+    "log": "evidence/phase5/browser-final/typecheck.log"
+  },
+  {
+    "command": "npm run test:e2e",
+    "exitCode": 1,
+    "startedAt": "2026-11-27T19:24:50.062214+08:00",
+    "finishedAt": "2026-11-27T19:30:21.556715+08:00",
+    "log": "evidence/phase5/browser-final/e2e.log"
+  }
+]

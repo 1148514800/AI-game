@@ -1,5 +1,7 @@
 import data from "../../data/foglamp-valley.json" with { type: "json" };
 
+import development from "../../data/valley-development.json" with { type: "json" };
+
 export type Direction = "down" | "up" | "left" | "right";
 export type Point = { x: number; y: number };
 export type Rect = Point & { w: number; h: number };
@@ -23,6 +25,60 @@ export const valley = {
     solid: Rect;
   })[],
 };
+export type Item = Material | "food" | "toolbox";
+export type Stock = Record<Material, number> &
+  Partial<Record<"food" | "toolbox", number>>;
+export type Resource = Target & {
+  item: Item;
+  asset: string;
+  spent: string;
+  yieldCount: number;
+  cooldownMs: number;
+};
+export type Project = Target & {
+  required: Partial<Record<Item, number>>;
+  workMs: number;
+  done: string;
+  capacity?: Partial<Record<Item, number>>;
+};
+export const localProjects = development.projects as Project[];
+export const projects = new Map(
+  [
+    {
+      ...valley.bridge,
+      done: "旧桥已修通。",
+    },
+    ...localProjects,
+  ].map((project): [string, Project] => [project.id, project]),
+);
+export const clues = [
+  { ...valley.ruin, asset: "ruin-stone", text: valley.ruin.clue },
+  ...development.clues,
+];
+export const clueTargets = new Map(clues.map((clue) => [clue.id, clue]));
+export const resourceNodes: Resource[] = [
+  ...valley.resources,
+  ...(development.resources as Resource[]),
+];
+
+export function gameTime(seconds: number) {
+  const minute = (360 + Math.floor(seconds * 2)) % 1440;
+  const hour = Math.floor(minute / 60);
+  return {
+    day: 1 + Math.floor((360 + seconds * 2) / 1440),
+    hour,
+    minute: minute % 60,
+    period:
+      hour < 6 || hour >= 20
+        ? "夜晚"
+        : hour < 9
+          ? "早晨"
+          : hour < 17
+            ? "白天"
+            : "傍晚",
+  };
+}
+
 export const mapWidth = valley.width * valley.tileSize;
 export const mapHeight = valley.height * valley.tileSize;
 export const speed = 88;
@@ -33,7 +89,7 @@ export const residents = new Map(
   valley.residents.map((entry) => [entry.id, entry]),
 );
 export const resources = new Map(
-  valley.resources.map((entry) => [entry.id, entry]),
+  resourceNodes.map((entry) => [entry.id, entry]),
 );
 export const items = {
   wood: "木材",
@@ -50,9 +106,9 @@ const solids = [
 ];
 const targets: Target[] = [
   ...valley.residents,
-  ...valley.resources,
-  valley.bridge,
-  valley.ruin,
+  ...resourceNodes,
+  ...projects.values(),
+  ...clues,
 ];
 
 export function distance(a: Point, b: Point) {

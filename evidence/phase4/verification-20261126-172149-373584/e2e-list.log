@@ -1,0 +1,21 @@
+
+> mistsea-phase1@0.3.0-phase3 test:e2e
+> playwright test --list
+
+Listing tests:
+  dialogue.e2e.ts:99:1 › ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering
+  dialogue.e2e.ts:176:3 › limited Mock › 390px dialogue fits and exposes budget failure with a manual retry
+  dialogue.e2e.ts:218:3 › faulted Mock › timeout is visible and manual retry remains Mock
+  dialogue.e2e.ts:236:3 › Phase 3 offline action request › natural request accepts a plan and the actor actually harvests after the dialogue closes
+  dialogue.e2e.ts:273:3 › Phase 3 autonomous Mock journey › fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug
+  phase3_1.e2e.ts:165:1 › Phase3.1 A–F normal UI: consent, persisted plan, following, shared bridge and restarted context
+  phase4.e2e.ts:198:1 › Phase 4 A–C/E/G: autonomous residents gather, negotiate and repair without traveler resources
+  phase4.e2e.ts:311:1 › Phase 4 D–H: UI opens each actor, lends and returns real wood, restarts, and joins bridge work
+  scene.e2e.ts:149:1 › fresh journey collects all materials, repairs, crosses, explores and restores
+  scene.e2e.ts:307:1 › four-way walk frames, pause, a following camera and opt-in music
+  scene.e2e.ts:374:1 › 390px narrow window renders the scene, residents and touch controls
+  scene.e2e.ts:402:1 › missing bridge art blocks readiness with a clear error
+  scene.e2e.ts:416:1 › HTTP failure stays unavailable and automatically recovers
+  scene.e2e.ts:431:1 › WebSocket handshake failure remains visible and prevents input
+  scene.e2e.ts:445:1 › the real server rejects augmented movement and out-of-range actions
+Total: 15 tests in 4 files

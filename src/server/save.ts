@@ -8,11 +8,19 @@ import {
   schemaVersion,
   v2SaveSchema,
   v3SaveSchema,
+  v4SaveSchema,
   type Result,
   type SaveState,
 } from "../shared/protocol.js";
 import { npcIds, type NpcId } from "../shared/social.js";
-import { isPassable, residents, resources, valley } from "../shared/world.js";
+import {
+  clueTargets,
+  isPassable,
+  localProjects,
+  residents,
+  resources,
+  valley,
+} from "../shared/world.js";
 
 function freshActor(id: NpcId): SaveState["cenyan"] {
   const home = residents.get(id)!;
@@ -56,6 +64,20 @@ export function freshState(): SaveState {
       repaired: false,
     },
     explored: false,
+    gameSeconds: 0,
+    projects: Object.fromEntries(
+      localProjects.map(({ id }) => [
+        id,
+        {
+          wood: 0,
+          food: 0,
+          progressMs: 0,
+          complete: false,
+          contributions: {},
+        },
+      ]),
+    ),
+    discoveries: {},
     gift: null,
     sharedWorkMs: 0,
     contributions: {
@@ -83,6 +105,15 @@ function decode(payload: string, version: number): SaveState {
   if (version === schemaVersion) {
     const current = saveSchema.parse(raw);
     save = { ...current, cenyan: current.actors.cenyan };
+  } else if (version === 4) {
+    const old = v4SaveSchema.parse(raw);
+    save = {
+      ...freshState(),
+      ...old,
+      cenyan: old.actors.cenyan,
+      schemaVersion,
+      discoveries: old.explored ? { player: [valley.ruin.id] } : {},
+    };
   } else {
     const fresh = freshState();
     const v3 = version === 3 ? v3SaveSchema.parse(raw) : undefined;
@@ -109,6 +140,7 @@ function decode(payload: string, version: number): SaveState {
       ...fresh,
       ...old,
       schemaVersion,
+      discoveries: old.explored ? { player: [valley.ruin.id] } : {},
       cenyan,
       actors: { ...fresh.actors, cenyan },
       gift: v3?.gift ?? null,
@@ -157,7 +189,34 @@ function decode(payload: string, version: number): SaveState {
     (!bridge.discovered && (bridge.wood !== 0 || bridge.stone !== 0)) ||
     (!full && bridge.progressMs !== 0) ||
     bridge.repaired !== (bridge.progressMs === valley.bridge.workMs) ||
-    (save.explored && !bridge.repaired)
+    (save.explored && !bridge.repaired) ||
+    Object.values(save.discoveries).some(
+      (found) =>
+        !bridge.repaired ||
+        new Set(found).size !== found.length ||
+        found.some((id) => !clueTargets.has(id)),
+    ) ||
+    localProjects.some((project) => {
+      const row = save.projects[project.id];
+      const contributions = Object.values(row.contributions);
+      const wood = project.required.wood ?? 0;
+      const food = project.required.food ?? 0;
+      return (
+        row.wood > (project.capacity?.wood ?? wood) ||
+        row.food > (project.capacity?.food ?? food) ||
+        row.progressMs > project.workMs ||
+        (row.progressMs > 0 && (row.wood !== wood || row.food !== food)) ||
+        row.complete !==
+          (row.wood >= wood &&
+            row.food >= food &&
+            row.progressMs === project.workMs) ||
+        contributions.reduce((sum, c) => sum + c.wood, 0) !== row.wood ||
+        contributions.reduce((sum, c) => sum + c.food, 0) !== row.food ||
+        Math.abs(
+          contributions.reduce((sum, c) => sum + c.workMs, 0) - row.progressMs,
+        ) > 0.001
+      );
+    })
   ) {
     throw Error("存档内容与地图或工程规则不一致");
   }
@@ -220,6 +279,7 @@ export class SaveFile {
         version !== 1 &&
         version !== 2 &&
         version !== 3 &&
+        version !== 4 &&
         version !== schemaVersion
       )
         throw Error("SQLite 存档版本不受支持");
@@ -240,7 +300,8 @@ export class SaveFile {
       if (version !== schemaVersion) {
         // VACUUM INTO includes any committed WAL pages. A previous backup is
         // retained, including when a migration was interrupted after backup.
-        const base = path + ".pre-phase4.sqlite";
+        const base =
+          path + (version === 4 ? ".pre-phase5.sqlite" : ".pre-phase4.sqlite");
         let backupPath = base;
         for (let suffix = 1; existsSync(backupPath); suffix++)
           backupPath = base + "." + suffix;

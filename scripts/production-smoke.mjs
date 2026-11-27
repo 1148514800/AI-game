@@ -40,8 +40,8 @@ try {
     )
     .toMatchObject({
       status: "ok",
-      phase: 4,
-      schemaVersion: 4,
+      phase: 5,
+      schemaVersion: 5,
       contentVersion: 1,
     });
   browser = await chromium.launch({

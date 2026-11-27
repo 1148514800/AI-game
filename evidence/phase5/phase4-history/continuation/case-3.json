@@ -1,0 +1,540 @@
+{
+  "case": 3,
+  "elapsedSeconds": 272,
+  "repaired": true,
+  "bridge": {
+    "discovered": true,
+    "wood": 6,
+    "stone": 2,
+    "progressMs": 14000,
+    "repaired": true
+  },
+  "contributions": {
+    "player": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "cenyan": {
+      "wood": 3,
+      "stone": 0,
+      "workMs": 14000
+    },
+    "legacy": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "ahe": {
+      "wood": 2,
+      "stone": 2,
+      "workMs": 0
+    },
+    "luozhou": {
+      "wood": 1,
+      "stone": 0,
+      "workMs": 0
+    }
+  },
+  "bags": {
+    "cenyan": {
+      "wood": 0,
+      "stone": 0
+    },
+    "ahe": {
+      "wood": 0,
+      "stone": 0
+    },
+    "luozhou": {
+      "wood": 0,
+      "stone": 0
+    }
+  },
+  "events": [
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774631486
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "COLLECTED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774631537
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774634870
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "COOLDOWN",
+      "ok": false,
+      "materials": {},
+      "at": 1795774634922
+    },
+    {
+      "kind": "speech",
+      "actor": "luozhou",
+      "session": "b36004d4-ea71-451c-935d-14d96afdacda",
+      "at": 1795774637959
+    },
+    {
+      "kind": "conversation",
+      "session": "b36004d4-ea71-451c-935d-14d96afdacda",
+      "ok": false,
+      "at": 1795774637992
+    },
+    {
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "TALK_INTERRUPTED",
+      "ok": false,
+      "materials": {},
+      "at": 1795774637993
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774639415
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774639466
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "DELIVERED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774639515
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "COLLECTED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774700076
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774705325
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "DELIVERED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774705375
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774712529
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "COLLECTED",
+      "ok": true,
+      "materials": {
+        "wood": 0,
+        "stone": 1
+      },
+      "at": 1795774712580
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "TOO_FAR",
+      "ok": false,
+      "materials": {},
+      "at": 1795774713041
+    },
+    {
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774713346
+    },
+    {
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "TALK_UNAVAILABLE",
+      "ok": false,
+      "materials": {},
+      "at": 1795774713396
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774719678
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "COOLDOWN",
+      "ok": false,
+      "materials": {},
+      "at": 1795774719729
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774719934
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "DELIVERED",
+      "ok": true,
+      "materials": {
+        "wood": 0,
+        "stone": 1
+      },
+      "at": 1795774719984
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774788742
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "COLLECTED",
+      "ok": true,
+      "materials": {
+        "wood": 0,
+        "stone": 1
+      },
+      "at": 1795774788792
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "WAITED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774790827
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "COLLECTED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774790877
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774791030
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774791081
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "DELIVERED",
+      "ok": true,
+      "materials": {
+        "wood": 0,
+        "stone": 1
+      },
+      "at": 1795774791131
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774796117
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774796168
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "DELIVERED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774796218
+    },
+    {
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774800756
+    },
+    {
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "COOLDOWN",
+      "ok": false,
+      "materials": {},
+      "at": 1795774800807
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774861443
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774864075
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "COLLECTED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774864125
+    },
+    {
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774866154
+    },
+    {
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "COLLECTED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774866205
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774869737
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "COOLDOWN",
+      "ok": false,
+      "materials": {},
+      "at": 1795774869789
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774870398
+    },
+    {
+      "kind": "action",
+      "actor": "ahe",
+      "code": "DELIVERED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774870448
+    },
+    {
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774871571
+    },
+    {
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774871621
+    },
+    {
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "DELIVERED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774871672
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774874530
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "COLLECTED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774874581
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774879723
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774879773
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "DELIVERED",
+      "ok": true,
+      "materials": {
+        "wood": 1,
+        "stone": 0
+      },
+      "at": 1795774879824
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "ARRIVED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774883287
+    },
+    {
+      "kind": "action",
+      "actor": "cenyan",
+      "code": "BRIDGE_REPAIRED",
+      "ok": true,
+      "materials": {},
+      "at": 1795774897582
+    }
+  ],
+  "ledger": [
+    {
+      "npc": "ahe",
+      "status": "ok",
+      "calls": 4
+    },
+    {
+      "npc": "cenyan",
+      "status": "ok",
+      "calls": 6
+    },
+    {
+      "npc": "luozhou",
+      "status": "ok",
+      "calls": 6
+    }
+  ]
+}

@@ -58,7 +58,7 @@ export class Connection {
       if (attempt !== this.attempt) return;
       if (
         health.status !== "ok" ||
-        health.phase !== 4 ||
+        health.phase !== 5 ||
         health.schemaVersion !== schemaVersion ||
         health.contentVersion !== valley.contentVersion
       ) {

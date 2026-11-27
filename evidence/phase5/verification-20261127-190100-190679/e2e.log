@@ -1,0 +1,179 @@
+
+> mistsea-phase1@0.3.0-phase3 test:e2e
+> playwright test
+
+2026-11-27T11:03:03.285Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-27T11:03:03.290Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-27T11:03:03.290Z pw:webserver Starting WebServer process npm run dev:client...
+2026-11-27T11:03:03.292Z pw:webserver Process started
+2026-11-27T11:03:03.292Z pw:webserver Waiting for availability...
+2026-11-27T11:03:03.292Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-27T11:03:03.294Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-27T11:03:03.294Z pw:webserver Waiting 100ms
+[WebServer] 
+[WebServer] > mistsea-phase1@0.3.0-phase3 dev:client
+[WebServer] > vite --host 127.0.0.1
+[WebServer] 
+2026-11-27T11:03:03.396Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-27T11:03:03.396Z pw:webserver Error while checking if http://127.0.0.1:5174/ is available: connect ECONNREFUSED 127.0.0.1:5174
+2026-11-27T11:03:03.396Z pw:webserver Waiting 250ms
+[WebServer] 
+[WebServer]   VITE v8.3.8  ready in 99 ms
+[WebServer] 
+[WebServer]   ➜  Local:   http://127.0.0.1:5174/
+2026-11-27T11:03:03.648Z pw:webserver HTTP GET: http://127.0.0.1:5174/
+2026-11-27T11:03:03.664Z pw:webserver HTTP Status: 200
+2026-11-27T11:03:03.665Z pw:webserver WebServer available
+
+Running 15 tests using 1 worker
+
+[WebServer] 7:03:11 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   1 tests/dialogue.e2e.ts:99:1 › ordinary E opens offline dialogue, handles candidate Enter, exchanges safe Chinese text and keeps rendering (7.4s)
+  ✓   2 tests/dialogue.e2e.ts:176:3 › limited Mock › 390px dialogue fits and exposes budget failure with a manual retry (3.0s)
+  ✓   3 tests/dialogue.e2e.ts:218:3 › faulted Mock › timeout is visible and manual retry remains Mock (3.2s)
+  ✘   4 tests/dialogue.e2e.ts:236:3 › Phase 3 offline action request › natural request accepts a plan and the actor actually harvests after the dialogue closes (18.5s)
+  ✘   5 tests/dialogue.e2e.ts:273:3 › Phase 3 autonomous Mock journey › fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug (6.3s)
+[WebServer] 7:04:20 PM [vite] (client) page reload src/client/ui.ts
+[WebServer] 7:04:20 PM [vite] ws proxy error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1093:24)
+[WebServer]     at Socket.emit (node:events:514:20)
+[WebServer]     at addChunk (node:internal/streams/readable:605:12)
+[WebServer] 7:04:20 PM [vite] ws proxy socket error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1093:24)
+[WebServer]     at Socket.emit (node:events:514:20)
+[WebServer]     at addChunk (node:internal/streams/readable:605:12)
+[WebServer] 7:04:20 PM [vite] (client) page reload src/client/ui.ts
+  ✓   6 tests/phase4.e2e.ts:198:1 › Phase 4 A–C/E/G: autonomous residents gather, negotiate and repair without traveler resources (57.8s)
+  ✓   7 tests/phase4.e2e.ts:311:1 › Phase 4 D–H: UI opens each actor, lends and returns real wood, restarts, and joins bridge work (59.6s)
+[WebServer] 7:05:56 PM [vite] ws proxy error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1093:24)
+[WebServer]     at Socket.emit (node:events:514:20)
+[WebServer]     at addChunk (node:internal/streams/readable:605:12)
+[WebServer] 7:05:56 PM [vite] ws proxy socket error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1093:24)
+[WebServer]     at Socket.emit (node:events:514:20)
+[WebServer]     at addChunk (node:internal/streams/readable:605:12)
+  ✓   8 tests/scene.e2e.ts:155:1 › fresh journey collects all materials, repairs, crosses, explores and restores (1.3m)
+  ✓   9 tests/scene.e2e.ts:372:1 › four-way walk frames, pause, a following camera and opt-in music (5.6s)
+  ✓  10 tests/scene.e2e.ts:439:1 › 390px narrow window renders the scene, residents and touch controls (840ms)
+  ✓  11 tests/scene.e2e.ts:467:1 › missing bridge art blocks readiness with a clear error (880ms)
+  ✓  12 tests/scene.e2e.ts:481:1 › HTTP failure stays unavailable and automatically recovers (1.4s)
+  ✓  13 tests/scene.e2e.ts:496:1 › WebSocket handshake failure remains visible and prevents input (592ms)
+  ✓  14 tests/scene.e2e.ts:510:1 › the real server rejects augmented movement and out-of-range actions (682ms)
+  ✓  15 tests/phase3_1.e2e.ts:165:1 › Phase3.1 A–F normal UI: consent, persisted plan, following, shared bridge and restarted context (48.7s)
+2026-11-27T11:07:54.731Z pw:webserver Terminating the WebServer
+2026-11-27T11:07:54.745Z pw:webserver Terminated the WebServer
+
+
+  1) tests/dialogue.e2e.ts:236:3 › Phase 3 offline action request › natural request accepts a plan and the actor actually harvests after the dialogue closes 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('#cenyan-bag')
+    Expected: "木材 1 · 石材 0"
+    Received: "木材 1 · 石材 0 · 食物 0 · 工具箱 0"
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveText" locator('#cenyan-bag') with timeout 15000ms
+      - waiting for locator('#cenyan-bag')
+        7 × locator resolved to <dd id="cenyan-bag">木材 0 · 石材 0 · 食物 0 · 工具箱 0</dd>
+          - unexpected value "木材 0 · 石材 0 · 食物 0 · 工具箱 0"
+        27 × locator resolved to <dd id="cenyan-bag">木材 1 · 石材 0 · 食物 0 · 工具箱 0</dd>
+           - unexpected value "木材 1 · 石材 0 · 食物 0 · 工具箱 0"
+
+
+      249 |     if (await close.isVisible()) await close.click();
+      250 |     await page.locator("#cenyan-debug summary").click();
+    > 251 |     await expect(page.locator("#cenyan-bag")).toHaveText("木材 1 · 石材 0", {
+          |                                               ^
+      252 |       timeout: 15000,
+      253 |     });
+      254 |     await expect(page.locator("[data-item=wood]")).toHaveText("0");
+        at /Users/godblack/Desktop/AI game/mistsea-phase5/tests/dialogue.e2e.ts:251:47
+
+    Error Context: evidence/phase5/verification-20261127-190100-190679/playwright-artifacts/dialogue.e2e.ts-Phase-3-of-ce2fb-s-after-the-dialogue-closes/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    evidence/phase5/verification-20261127-190100-190679/playwright-artifacts/dialogue.e2e.ts-Phase-3-of-ce2fb-s-after-the-dialogue-closes/trace.zip
+    Usage:
+
+        npx playwright show-trace evidence/phase5/verification-20261127-190100-190679/playwright-artifacts/dialogue.e2e.ts-Phase-3-of-ce2fb-s-after-the-dialogue-closes/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/dialogue.e2e.ts:273:3 › Phase 3 autonomous Mock journey › fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('#cenyan-bag')
+    Expected: "木材 1 · 石材 0"
+    Received: "木材 1 · 石材 0 · 食物 0 · 工具箱 0"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" locator('#cenyan-bag') with timeout 5000ms
+      - waiting for locator('#cenyan-bag')
+        6 × locator resolved to <dd id="cenyan-bag">木材 0 · 石材 0 · 食物 0 · 工具箱 0</dd>
+          - unexpected value "木材 0 · 石材 0 · 食物 0 · 工具箱 0"
+        8 × locator resolved to <dd id="cenyan-bag">木材 1 · 石材 0 · 食物 0 · 工具箱 0</dd>
+          - unexpected value "木材 1 · 石材 0 · 食物 0 · 工具箱 0"
+
+
+      289 |     await shoot(page, "phase3-npc-moving");
+      290 |     await page.getByRole("button", { name: "全谷地图", exact: true }).click();
+    > 291 |     await expect(page.locator("#cenyan-bag")).toHaveText("木材 1 · 石材 0");
+          |                                               ^
+      292 |     await expect(page.locator("#cenyan-memory")).toContainText("获得 木材");
+      293 |     await shoot(page, "phase3-npc-collected");
+      294 |     await page.getByRole("button", { name: "返回场景", exact: true }).click();
+        at /Users/godblack/Desktop/AI game/mistsea-phase5/tests/dialogue.e2e.ts:291:47
+
+    Error Context: evidence/phase5/verification-20261127-190100-190679/playwright-artifacts/dialogue.e2e.ts-Phase-3-au-beaf2-ith-folded-responsive-debug/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    evidence/phase5/verification-20261127-190100-190679/playwright-artifacts/dialogue.e2e.ts-Phase-3-au-beaf2-ith-folded-responsive-debug/trace.zip
+    Usage:
+
+        npx playwright show-trace evidence/phase5/verification-20261127-190100-190679/playwright-artifacts/dialogue.e2e.ts-Phase-3-au-beaf2-ith-folded-responsive-debug/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests/dialogue.e2e.ts:236:3 › Phase 3 offline action request › natural request accepts a plan and the actor actually harvests after the dialogue closes 
+    tests/dialogue.e2e.ts:273:3 › Phase 3 autonomous Mock journey › fresh actor walks and visibly supplies and repairs the bridge, with folded responsive debug 
+  13 passed (4.9m)

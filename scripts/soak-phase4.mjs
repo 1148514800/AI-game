@@ -1,3 +1,4 @@
+import { monitorEventLoopDelay } from "node:perf_hooks";
 import assert from "node:assert/strict";
 import {
   existsSync,
@@ -13,7 +14,14 @@ import { setTimeout as delay } from "node:timers/promises";
 import { chromium, expect } from "@playwright/test";
 import { createApp } from "../src/server/app.ts";
 import { npcIds } from "../src/shared/social.ts";
-import { inventoryLimit, isPassable, valley } from "../src/shared/world.ts";
+import {
+  clues,
+  gameTime,
+  inventoryLimit,
+  isPassable,
+  localProjects,
+  valley,
+} from "../src/shared/world.ts";
 
 const option = process.argv.indexOf("--duration");
 const seconds = option === -1 ? 1800 : Number(process.argv[option + 1]);
@@ -21,22 +29,24 @@ assert.ok(
   Number.isFinite(seconds) && seconds >= 1800,
   "--duration must be at least 1800 seconds.",
 );
-const outputRoot = resolve(process.env.MISTSEA_EVIDENCE ?? "evidence/phase4");
+const outputRoot = resolve(process.env.MISTSEA_EVIDENCE ?? "evidence/phase5");
 mkdirSync(outputRoot, { recursive: true });
 const output = mkdtempSync(join(outputRoot, "soak-"));
 const store = mkdtempSync(join(tmpdir(), "mistsea-phase4-soak-"));
 const savePath = join(store, "valley.sqlite");
+const eventLoopDelay = monitorEventLoopDelay({ resolution: 20 });
 const tickTimes = [];
 const tickIntervals = [];
 const frameIntervals = [];
 const frameWork = [];
 const samples = [];
+const developments = [];
 const errors = [];
 const actions = Object.fromEntries(
   npcIds.map((id) => [id, { ok: 0, failed: 0, codes: {} }]),
 );
 const speech = Object.fromEntries(npcIds.map((id) => [id, 0]));
-const collected = { wood: 0, stone: 0 };
+const collected = { wood: 0, stone: 0, food: 0, toolbox: 0 };
 const talks = new Map();
 const finishedTalks = { ok: 0, failed: 0 };
 let peakPending = 0;
@@ -53,6 +63,7 @@ let page;
 let startMemory;
 let accounts = [];
 let invariantFailure;
+let picturedNight = false;
 let status = "FAIL";
 let commandError;
 const endSignal = new AbortController();
@@ -122,6 +133,26 @@ function checkState({ state }) {
     workMs: 0,
   });
   assert.deepEqual(state.inventory, { wood: 0, stone: 0, food: 0, toolbox: 0 });
+  for (const definition of localProjects) {
+    const project = state.projects[definition.id];
+    const credits = Object.values(project.contributions);
+    for (const [item, required] of Object.entries(definition.required)) {
+      assert.equal(
+        credits.reduce((sum, entry) => sum + (entry[item] ?? 0), 0),
+        project[item],
+      );
+      assert.ok(project[item] <= (definition.capacity?.[item] ?? required));
+    }
+    assert.ok(
+      Math.abs(credits.reduce((sum, entry) => sum + entry.workMs, 0) -
+        project.progressMs) < 0.001,
+    );
+    assert.equal(
+      project.complete,
+      project.progressMs === definition.workMs &&
+        Object.entries(definition.required).every(([item, required]) => project[item] >= required),
+    );
+  }
 }
 
 function observeWorld(event) {
@@ -130,8 +161,18 @@ function observeWorld(event) {
     counts[event.ok ? "ok" : "failed"]++;
     counts.codes[event.code] = (counts.codes[event.code] ?? 0) + 1;
     if (event.code === "COLLECTED" && event.ok)
-      for (const item of ["wood", "stone"])
+      for (const item of Object.keys(collected))
         collected[item] += event.materials?.[item] ?? 0;
+    if (
+      started !== undefined && event.ok &&
+      ["DELIVERED", "PROJECT_COMPLETED", "BRIDGE_REPAIRED", "DISCOVERED", "CLUE_SHARED"].includes(event.code)
+    )
+      developments.push({
+        elapsedMs: performance.now() - started,
+        actor: event.actor,
+        code: event.code,
+        materials: event.materials,
+      });
   }
   if (event.kind === "speech") {
     speech[event.actor]++;
@@ -153,6 +194,17 @@ async function sample() {
     };
   });
   assert.equal(frame.visible, "visible");
+  if (
+    !picturedNight &&
+    latest &&
+    gameTime(latest.state.gameSeconds).period === "夜晚"
+  ) {
+    await page.screenshot({
+      path: join(output, "soak-night.png"),
+      fullPage: true,
+    });
+    picturedNight = true;
+  }
   frameIntervals.push(...frame.intervals);
   frameWork.push(...frame.work);
   const heap = await cdp.send("Runtime.getHeapUsage");
@@ -169,6 +221,8 @@ async function sample() {
     browserNodes: counters.nodes,
     browserListeners: counters.jsEventListeners,
     snapshots: snapshotCount,
+    gameSeconds: latest.state.gameSeconds,
+    goals: Object.fromEntries(npcIds.map((id) => [id, latest.state.actors[id].goal])),
     activePlans: npcIds.filter((id) => latest?.state.actors[id].plan).length,
   });
   writeFileSync(
@@ -273,6 +327,7 @@ try {
     window.__mistseaPhase4Frames.work.length = 0;
   });
   startMemory = process.memoryUsage();
+  eventLoopDelay.enable();
   started = performance.now();
   while (performance.now() - started < seconds * 1000) {
     await delay(
@@ -299,10 +354,24 @@ try {
   );
   assert.deepEqual(errors, []);
   assert.ok(latest.state.bridge.repaired && latest.state.sharedWorkMs > 0);
+  assert.ok(latest.state.projects["carpenter-roof"].complete);
+  assert.ok(latest.state.projects["carpenter-roof"].contributions.cenyan.workMs > 0);
+  assert.ok(latest.state.projects["valley-camp"].complete);
+  assert.ok(latest.state.projects["valley-camp"].contributions.ahe.food >= 2);
+  assert.equal(latest.state.discoveries.luozhou.length, clues.length);
+  assert.ok(
+    developments.some(({ actor, code }) => actor === "cenyan" && code === "PROJECT_COMPLETED"),
+  );
+  assert.equal(
+    developments.filter(({ actor, code }) => actor === "luozhou" && code === "DISCOVERED").length,
+    clues.length,
+  );
   assert.ok(finishedTalks.ok >= 2);
   assert.ok(
     [...talks.values()].every(
-      (actors) => actors.length <= 4 && actors.length === new Set(actors).size,
+      (actors) =>
+        actors.length <= 4 &&
+        actors.every((id, index) => index === 0 || id !== actors[index - 1]),
     ),
   );
   for (const npc of npcIds) {
@@ -314,12 +383,19 @@ try {
         0,
     );
   }
-  for (const material of ["wood", "stone"]) {
+  for (const material of Object.keys(collected)) {
     const bags = npcIds.reduce(
-      (sum, id) => sum + latest.state.actors[id].bag[material],
+      (sum, id) => sum + (latest.state.actors[id].bag[material] ?? 0),
       0,
     );
-    assert.equal(bags + latest.state.bridge[material], collected[material]);
+    const delivered = Object.values(latest.state.projects).reduce(
+      (sum, project) => sum + (project[material] ?? 0),
+      0,
+    );
+    assert.equal(
+      bags + delivered + (latest.state.bridge[material] ?? 0),
+      collected[material],
+    );
   }
   await page.screenshot({
     path: join(output, "soak-final.png"),
@@ -348,6 +424,8 @@ try {
     );
     checkState({ state });
     assert.deepEqual(state.contributions, latest.state.contributions);
+    assert.deepEqual(state.projects, latest.state.projects);
+    assert.deepEqual(state.discoveries, latest.state.discoveries);
     persistedSnapshots = db
       .prepare("SELECT revision FROM world")
       .get().revision;
@@ -365,6 +443,7 @@ try {
   if (browser) await browser.close().catch(() => {});
   if (app) await app.close().catch(() => {});
   if (!accounts.length) accounts = ledgerReport();
+  eventLoopDelay.disable();
   const frame = distribution(frameIntervals);
   const report = {
     status,
@@ -383,7 +462,15 @@ try {
     accounts,
     collected,
     project: latest?.state.bridge,
+    localProjects: latest?.state.projects,
+    discoveries: latest?.state.discoveries,
+    developments,
+    gameSeconds: latest?.state.gameSeconds,
     contributions: latest?.state.contributions,
+    eventLoopDelayMs: {
+      p95: eventLoopDelay.percentile(95) / 1e6,
+      max: eventLoopDelay.max / 1e6,
+    },
     tickMs: distribution(tickTimes),
     tickIntervalMs: distribution(tickIntervals),
     clientFrameIntervalMs: frame,

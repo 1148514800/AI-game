@@ -1,0 +1,136 @@
+
+> mistsea-phase1@0.3.0-phase3 test
+> node --import tsx --test --test-isolation=none tests/unit.test.ts tests/dialogue.test.ts tests/phase3.test.ts tests/phase3_1.test.ts tests/phase4.test.ts
+
+[dialogue] config
+✔ dialogue transport is strict and accepts full Chinese input (1.808208ms)
+✔ invalid Live configuration never silently changes to Mock or permits embedded credentials (1.982167ms)
+✔ Cenyan's standalone personality config is bound to the resident and assembled into the prompt (0.110583ms)
+✔ context contains public world facts, bounded recent turns, and unverified player text (0.2105ms)
+✔ ledger separates modes, retains cancelled and interrupted reservations, and survives restart (3.240375ms)
+✔ minute, durable one-hour window, and lifetime request limits apply without free resets (0.357333ms)
+✔ money reservation settles observed usage without double-counting reasoning and preserves unknown usage (1.886583ms)
+✔ nonempty provider text with zero usage keeps its reservation, and extra tokens are charged conservatively (8.784042ms)
+(node:32095) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[dialogue] ledger
+✔ broken dialogue configuration or ledger leaves ordinary world health available (36.803625ms)
+✔ only successful recent turns survive close and world reset clears them (102.058958ms)
+✔ a reply that resolves despite Abort cannot reappear or enter the next dialogue history (38.252709ms)
+✔ planner schemas accept one through three steps and accept speech-only refusals (1.2025ms)
+✔ planner schemas reject arbitrary locations, unknown IDs, tools, extras and out-of-range waits (0.591833ms)
+✔ A* seeks a reachable interaction neighbor and routes to the east only after repairs (23.875708ms)
+✔ Cenyan cannot pass through the player and can recover after the player moves (6.885125ms)
+✔ runtime interaction range follows Cenyan and leaves the former workshop position (4.19225ms)
+✔ a player harvest wins atomically, and Cenyan collects only once after real rule cooldown (4.789583ms)
+✔ NPC delivery, shared work and progress survive interruption without double spending (66.613208ms)
+✔ isolated Mock choices repair a bridge from empty bags, then stock wood and rest at the workshop (98.551209ms)
+✔ perception excludes far people, unknown resource availability and the player's private bag (1.453833ms)
+✔ factual failure persists beside claims and opinions, with stable reference and no invented completion (2.199542ms)
+✔ v1 migration backs up the old SQLite schema and receipts before adding the actor (2.800375ms)
+✔ only explicitly enabled active Mock autonomy requests a plan without dialogue (18.369416ms)
+✔ invalid autonomous JSON backs off while ordinary simulation continues (18.198042ms)
+✔ unverified player action is cancelled on close, while an accepted action executes after close (25.84ms)
+✔ pause, disconnect and reset invalidate pending autonomy without blocking the next active generation (36.907833ms)
+✔ generation changes invalidate late proposals even when the newer plan completes first (20.561167ms)
+✔ a late plan in Live dialogue for a natural request cannot cross a decision generation (9.083084ms)
+✔ Live dialogue holds a walking actor and accepts only complete valid plans (27.297875ms)
+✔ dialogue preempts in-flight autonomy with one queued request and both share the lock (20.143708ms)
+✔ autonomy sublimits reserve room for dialogue and use the same durable request and token pool (2.956833ms)
+✖ the B quarry approach has a legal keyboard route despite the coarse-grid miss (221.31025ms)
+✔ Phase3.1 step and client schemas only admit material pairs, valid targets and coherent policies (0.862209ms)
+✔ partial deliver, concurrent same-tick entrants and replay preserve each contributor and truncate (4.918667ms)
+✔ gifts are two-party, replayable and conserved in both directions (5.115417ms)
+✔ expiry, no stock, capacity and distance reject gifts atomically (2.793416ms)
+✔ pending survives restart, is promoted at step boundary and validates the world again (5.592875ms)
+✔ replace preserves completed material and cancels the current step and prior pending (2.4985ms)
+✔ shared work credits each tick once and the finished fact enters reopened model context (68.17675ms)
+✔ follow tracks motion with speed and spacing, idles in range, resumes and can be cancelled (3.323333ms)
+✔ continued absence of a route ends a restored follow without crossing a broken bridge (107.356125ms)
+✔ v2 backup and transactional migration preserve old activity, unidentified contributions, receipts and memories (3.116375ms)
+✔ an offered gift is unreserved and fails if the giver spends it first (2.5155ms)
+✔ replacing NPC work leaves the player working at the original rate (3.649042ms)
+✔ two save connections cannot both commit the last material (2.422042ms)
+✔ model-facing JSON examples match strict action, policy and gift schemas (0.898375ms)
+✔ bounded model context retains steps, replies and facts with long Chinese input (1.3585ms)
+✔ an accepting provider reply cannot transfer gifts across a closed session or a newer action generation (50.090792ms)
+✔ restart discards unconfirmed traveler consent and allows an explicit response to a saved Cenyan offer (5.226584ms)
+✔ JSON-escaped credentials and private thought markup do not reach the structured decision (36.667ms)
+✔ Phase 4 schema has finite conditions, legal actors and strictly scoped consent (0.620375ms)
+✔ three actors compete for a resource once and keep their bags and private context separate (4.174875ms)
+✔ material waits resume committed work; shared progress and each contribution commit once (23.799334ms)
+✔ waiting cancels or expires without running the next step; follow cannot form a cycle (3.26575ms)
+✔ exchange and loan require the right actor and preserve inventory across replay, expiry and restart (6.360541ms)
+✔ v3 migration backs up before preserving pending work, receipts, memory, and ledger (4.924667ms)
+✔ Round-robin limits in-flight requests, prioritizes player requests and preserves the world when budget is empty (62.331792ms)
+✔ active Mock society gathers from empty bags, holds separate conversations and repairs the bridge (50225.18675ms)
+✔ same-plan gift wait binds its own offer and continues after an explicit response (8.320333ms)
+✔ a delivery pledge is fulfilled only after its accepted amount reaches the actual project (9.989083ms)
+✔ Phase 5 roof supports partial delivery and shared construction with a carried tool (26.716417ms)
+✔ Phase 5 food is collected once per cooldown and camp contributions are capped by real stock (3.91825ms)
+✔ Phase 5 facts distinguish exploring an object from sharing its verified clue (3.241167ms)
+✔ Phase 5 v4 migration preserves the old bridge and makes a backup before adding time and projects (2.74625ms)
+✔ Phase 5 a resident can extend an NPC conversation to four alternating lines (2.305125ms)
+✔ Phase 5 accepted delivery continuation spends only the pledged amount and respects cancellation (5.565584ms)
+✔ Phase 5 a bridge filled by another resident releases a delivery pledge without penalizing trust (2.846166ms)
+✔ Phase 5 an accepted camp refill uses storage capacity after the goal is complete (3.969208ms)
+✔ Phase 5 a nearby Live-plan invitation can be displayed without moving the player (1.57625ms)
+✔ Phase 5 a local provider can repair one NPC exchange and return four alternating lines (60.3545ms)
+✔ Phase 5 toolbox loans conserve the item and game time survives reopening (3.421125ms)
+✔ strict input accepts intent only and requires explicit reset confirmation (0.514125ms)
+✔ runtime assets exactly match the CC0 manifest and every map reference (7.501334ms)
+✔ map dimensions, terrain frames, unique stable IDs and spawn match data (0.456292ms)
+✔ west bank resources are reachable and the only route east is the repaired crossing (75.493708ms)
+✔ server ticks enforce normalized speed, expiring input and no message-driven movement (1.62125ms)
+✔ wall, tree, rock, closed river and bounds use the same foot collision (1.723542ms)
+✔ distant, wrong-target, unknown and insufficient actions do not touch storage (1.37225ms)
+✔ collection is durable, cooldown prevents rush and duplicate id remains rejected after restart (2.013833ms)
+✔ delivery is atomic and timed work can pause and resume without counting offline time (56.724125ms)
+✔ checked reset is durable and a repeated reset cannot wipe subsequent progress (2.082542ms)
+✔ conflicting save revision leaves the winning storage and losing world untouched (1.811125ms)
+存档无法打开，已保留原件。 Error: file is not a database
+    at new SaveFile (/Users/godblack/Desktop/AI game/mistsea-phase5/src/server/save.ts:272:10)
+    at createApp (/Users/godblack/Desktop/AI game/mistsea-phase5/src/server/app.ts:44:12)
+    at TestContext.<anonymous> (/Users/godblack/Desktop/AI game/mistsea-phase5/tests/unit.test.ts:436:15)
+    at Test.runInAsyncScope (node:async_hooks:226:14)
+    at Test.run (node:internal/test_runner/test:1402:25)
+    at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    at Test.postRun (node:internal/test_runner/test:1542:19)
+    at Test.run (node:internal/test_runner/test:1467:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+  code: 'ERR_SQLITE_ERROR',
+  errcode: 26,
+  errstr: 'file is not a database'
+}
+✔ bad SQLite and incompatible state produce a health error without replacing the original (4.765959ms)
+✔ healthy Fastify opens a versioned local save without API keys (1.05325ms)
+✔ fresh rules-only journey follows walkable paths, collects six wood and two stone, and reaches the beacon (92.628292ms)
+ℹ tests 85
+ℹ suites 0
+ℹ pass 84
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 53900.650083
+
+✖ failing tests:
+
+test at tests/phase3_1.test.ts:1:2228
+✖ the B quarry approach has a legal keyboard route despite the coarse-grid miss (221.31025ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (/Users/godblack/Desktop/AI game/mistsea-phase5/tests/phase3_1.test.ts:113:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /No walkable route/,
+    operator: 'throws',
+    diff: 'simple'
+  }

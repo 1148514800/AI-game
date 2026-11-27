@@ -1,0 +1,39 @@
+
+> mistsea-phase1@0.3.0-phase3 test:integration
+> node --import tsx --test --test-isolation=none tests/dialogue.integration.ts tests/phase3_1.integration.ts tests/phase4.integration.ts
+
+(node:25528) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ real local HTTP adapter supports both token fields, usage, sanitized errors, timeout and abort (128.619708ms)
+✖ real WS and HTTP fixture enforce distance, continuity, no world effects, cancellation and durable budget (1765.349541ms)
+✔ local HTTP dialogue accepts a natural request, validates optional plans and holds a walking Cenyan until close (4733.747208ms)
+✔ real WS clearly marked Mock starts without dialogue and walks, harvests, delivers and works a fresh bridge (47211.719333ms)
+✔ Phase3.1 real local HTTP and WS authenticate each direction of consent, reject a wrong offer and replay one commit (4161.128791ms)
+✔ Phase 4 WS binds foreground consent to the selected NPC and keeps the ledger and loan across restart (1268.482541ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 61453.536959
+
+✖ failing tests:
+
+test at tests/dialogue.integration.ts:1:6598
+✖ real WS and HTTP fixture enforce distance, continuity, no world effects, cancellation and durable budget (1765.349541ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(
+  
+      at TestContext.<anonymous> (/Users/godblack/Desktop/AI game/mistsea-phase5/tests/dialogue.integration.ts:380:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -1,0 +1,75 @@
+{
+  "contributions": {
+    "player": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "cenyan": {
+      "wood": 4,
+      "stone": 0,
+      "workMs": 4533.333333333333
+    },
+    "legacy": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "ahe": {
+      "wood": 2,
+      "stone": 0,
+      "workMs": 4733.333333333333
+    },
+    "luozhou": {
+      "wood": 0,
+      "stone": 2,
+      "workMs": 4733.333333333333
+    }
+  },
+  "bridge": {
+    "discovered": true,
+    "wood": 6,
+    "stone": 2,
+    "progressMs": 14000,
+    "repaired": true
+  },
+  "sharedWorkMs": 4733.333333333333,
+  "activities": {
+    "cenyan": [
+      "idle",
+      "moving",
+      "collecting",
+      "talking",
+      "delivering",
+      "waiting",
+      "working",
+      "resting"
+    ],
+    "ahe": [
+      "idle",
+      "moving",
+      "collecting",
+      "talking",
+      "delivering",
+      "waiting",
+      "working",
+      "resting"
+    ],
+    "luozhou": [
+      "idle",
+      "moving",
+      "talking",
+      "collecting",
+      "delivering",
+      "waiting",
+      "working",
+      "resting"
+    ]
+  },
+  "nearbySpeech": [
+    "我想先去找石料。你愿意分几趟把木料交到桥边，再一起动工吗？",
+    "可以。我分批送木料，料齐了就在桥边一起动手。",
+    "能多备些木料给桥上用吗？咱们交齐再一起施工。",
+    "我得留一些给聚落，不能把存货都交出去。我可以另备两份新木料。"
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "status": "PASS",
+  "pid": 26815,
+  "elapsedMs": 6550.050792,
+  "totalMs": 6616.548125,
+  "requests": 1,
+  "autonomy": 0,
+  "maximumPending": 1,
+  "maximumQueue": 0,
+  "movement": 150.4119176532796,
+  "movementAfterStop": 63.28781778291719,
+  "stopped": true,
+  "minGap": 19.104973174542586,
+  "tick": {
+    "count": 128,
+    "meanMs": 0.09463900000001879,
+    "p95Ms": 0.36416700000017954,
+    "maxMs": 1.1321660000003249
+  },
+  "trajectory": [
+    {
+      "elapsedMs": 51.20908299999999,
+      "player": {
+        "x": 241.4,
+        "y": 354,
+        "facing": "right"
+      },
+      "cenyan": {
+        "x": 220,
+        "y": 354
+      },
+      "activity": "waiting",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 513.071958,
+      "player": {
+        "x": 280.9999999999999,
+        "y": 354,
+        "facing": "right"
+      },
+      "cenyan": {
+        "x": 249.20000000000002,
+        "y": 354
+      },
+      "activity": "moving",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 1025.147333,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 354,
+        "facing": "right"
+      },
+      "cenyan": {
+        "x": 288.4,
+        "y": 356.39999999999986
+      },
+      "activity": "moving",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 1538.041583,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 354,
+        "facing": "right"
+      },
+      "cenyan": {
+        "x": 305.9999999999999,
+        "y": 356.39999999999986
+      },
+      "activity": "waiting",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 2049.362333,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 354,
+        "facing": "right"
+      },
+      "cenyan": {
+        "x": 305.9999999999999,
+        "y": 356.39999999999986
+      },
+      "activity": "waiting",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 2510.271458,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 371.5999999999999,
+        "facing": "down"
+      },
+      "cenyan": {
+        "x": 310.39999999999986,
+        "y": 356.39999999999986
+      },
+      "activity": "moving",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 3022.279417,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 415.5999999999997,
+        "facing": "down"
+      },
+      "cenyan": {
+        "x": 313.9999999999999,
+        "y": 394.39999999999975
+      },
+      "activity": "moving",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 3533.916333,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 428.7999999999996,
+        "facing": "down"
+      },
+      "cenyan": {
+        "x": 313.9999999999999,
+        "y": 412.39999999999986
+      },
+      "activity": "waiting",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 4044.7975,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 428.7999999999996,
+        "facing": "down"
+      },
+      "cenyan": {
+        "x": 313.9999999999999,
+        "y": 412.39999999999986
+      },
+      "activity": "waiting",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 4504.299,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 428.7999999999996,
+        "facing": "down"
+      },
+      "cenyan": {
+        "x": 313.9999999999999,
+        "y": 412.39999999999986
+      },
+      "activity": "waiting",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 5017.022708,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 428.7999999999996,
+        "facing": "down"
+      },
+      "cenyan": {
+        "x": 313.9999999999999,
+        "y": 412.39999999999986
+      },
+      "activity": "waiting",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 5527.72325,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 428.7999999999996,
+        "facing": "down"
+      },
+      "cenyan": {
+        "x": 313.9999999999999,
+        "y": 412.39999999999986
+      },
+      "activity": "waiting",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 6037.333042,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 428.7999999999996,
+        "facing": "down"
+      },
+      "cenyan": {
+        "x": 313.9999999999999,
+        "y": 412.39999999999986
+      },
+      "activity": "waiting",
+      "calls": 1
+    },
+    {
+      "elapsedMs": 6550.050792,
+      "player": {
+        "x": 324.99999999999966,
+        "y": 428.7999999999996,
+        "facing": "down"
+      },
+      "cenyan": {
+        "x": 313.9999999999999,
+        "y": 412.39999999999986
+      },
+      "activity": "waiting",
+      "calls": 1
+    }
+  ]
+}

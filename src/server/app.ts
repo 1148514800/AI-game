@@ -50,7 +50,7 @@ export function createApp(
 
   app.get("/health", (_request, reply) => {
     const info = {
-      phase: 4,
+      phase: 5,
       schemaVersion,
       contentVersion: valley.contentVersion,
     };
@@ -170,7 +170,13 @@ export function createApp(
         }
       }
       if (isActive()) {
-        world.tick(clock, elapsed, Date.now(), dialogue.heldActor);
+        world.tick(
+          clock,
+          elapsed,
+          Date.now(),
+          dialogue.heldActor,
+          dialogue.autonomyEnabled,
+        );
         dialogue.checkDistance();
         dialogue.tick(clock);
       }

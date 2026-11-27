@@ -1,3 +1,11 @@
+import {
+  contribution,
+  deliveryAmounts,
+  distributeWork,
+  materialText,
+  projectMissing,
+  transferToProject,
+} from "./projects.js";
 import { randomUUID } from "node:crypto";
 import {
   cenyanId,
@@ -35,11 +43,19 @@ import type {
   Snapshot,
 } from "../shared/protocol.js";
 import {
+  clueTargets,
+  localProjects,
+  projects,
+  gameTime,
+  type Item,
+  type Stock,
+  type Project,
   distance,
   inventoryLimit,
   isPassable,
   items,
   residents,
+  resourceNodes,
   resources,
   speed,
   tickMs,
@@ -56,6 +72,7 @@ import {
   adjustTrust,
   cancelAgreement,
   fulfillPledge,
+  projectPledgeCanFinish,
   socialAction,
 } from "./social.js";
 
@@ -85,7 +102,7 @@ export type WorldObservation =
       actor: ActorId;
       code: string;
       ok: boolean;
-      materials?: { wood?: number; stone?: number };
+      materials?: Partial<Stock>;
     }
   | { kind: "speech"; actor: NpcId; session: string }
   | { kind: "conversation"; session: string; ok: boolean };
@@ -133,6 +150,8 @@ export class World {
   private intent = { dx: 0, dy: 0, expires: 0 };
   private working = false;
   private playerWorkEvent?: string;
+  private playerProject = bridge.id;
+  private gameRemainder = 0;
   private moving = false;
   private dirty = false;
   private positionSavedAt = 0;
@@ -235,6 +254,9 @@ export class World {
     for (const pledge of this.state.pledges) {
       if (
         pledge.condition.kind === "deliver" &&
+        (pledge.condition.item === "wood" ||
+          pledge.condition.item === "stone") &&
+        (pledge.condition.project ?? bridge.id) === bridge.id &&
         pledge.status === "accepted" &&
         pledge.expiresAt > now
       )
@@ -281,6 +303,7 @@ export class World {
         bag: { ...cenyan.bag },
         goal: cenyan.goal,
         goalTag: cenyan.goalTag,
+        interruptedPledge: cenyan.interruptedPledge,
         active: cenyan.plan,
         pending: cenyan.pending,
         decision: cenyan.decision,
@@ -308,7 +331,7 @@ export class World {
           x: Math.round(x),
           y: Math.round(y),
         })),
-      resources: valley.resources.filter(near).map(({ id, item, x, y }) => ({
+      resources: resourceNodes.filter(near).map(({ id, item, x, y }) => ({
         id,
         item,
         x,
@@ -316,6 +339,23 @@ export class World {
         available: (cooldowns[id] ?? 0) <= now,
       })),
       bridge: this.publicBridge(now),
+      time: gameTime(this.state.gameSeconds),
+      projects: localProjects.map((project) => {
+        const row = this.state.projects[project.id];
+        return {
+          id: project.id,
+          name: project.name,
+          complete: row.complete,
+          missing: projectMissing(project, row),
+          space: projectMissing(project, row, project.capacity),
+          progressMs: row.progressMs,
+          workMs: project.workMs,
+        };
+      }),
+      discoveries: (this.state.discoveries[id] ?? []).map((key) => ({
+        id: key,
+        text: clueTargets.get(key)!.text,
+      })),
       gift:
         this.state.gift &&
         this.state.gift.expiresAt > now &&
@@ -323,7 +363,7 @@ export class World {
           ? this.state.gift
           : null,
       invites: npcIds.filter((other) => this.canInvite(id, other, now)),
-      relations: peer ? cenyan.relations[peer] : undefined,
+      relations: peer ? cenyan.relations[peer] : cenyan.relations,
       social: this.socialInbox(id, now, peer),
       memory: this.save.memories(
         topic ?? goalTopic(cenyan.goal, cenyan.goalTag),
@@ -347,6 +387,7 @@ export class World {
       }),
       moving: this.moving,
       working: this.working,
+      ...(this.working && { workTarget: this.playerProject }),
       cenyan: status(cenyanId),
       actors: {
         cenyan: status(cenyanId),
@@ -367,9 +408,20 @@ export class World {
     now = Date.now(),
     claim?: string,
     npc: NpcId = cenyanId,
+    autonomous = false,
   ): boolean {
     if (this.state.actors[npc].plan) return false;
-    return this.recordActionReply(id, claim, decision, now, npc) === "accepted";
+    return (
+      this.recordActionReply(
+        id,
+        claim,
+        decision,
+        now,
+        npc,
+        undefined,
+        autonomous ? "model" : undefined,
+      ) === "accepted"
+    );
   }
 
   private activatePlan(
@@ -395,7 +447,14 @@ export class World {
     actor.goal = plan.goal;
     if (plan.goalTag) actor.goalTag = plan.goalTag;
     else delete actor.goalTag;
-    actor.plan = { id: plan.id, steps: plan.steps, index: 0 };
+    const { id, steps, authorization, autonomous } = plan;
+    actor.plan = {
+      id,
+      steps,
+      index: 0,
+      ...(authorization && { authorization }),
+      ...(autonomous && { autonomous }),
+    };
   }
 
   private updateResult(
@@ -484,6 +543,8 @@ export class World {
     now = Date.now(),
     npc: NpcId = cenyanId,
     peer?: ActorId,
+    source?: "model" | "continuation",
+    authorization?: string,
   ) {
     const receipt = `plan:${id}`;
     if (this.save.hasReceipt(receipt)) return "rejected";
@@ -519,6 +580,8 @@ export class World {
         goal: reply.goal,
         ...(goalTag && { goalTag }),
         steps: reply.plan,
+        ...(authorization && { authorization }),
+        ...(source === "model" && { autonomous: true as const }),
       };
       if (policy === "defer" && actor.plan) {
         if (!actor.pending) {
@@ -528,6 +591,8 @@ export class World {
         }
       } else {
         const previous = actor.plan;
+        if (previous?.authorization)
+          actor.interruptedPledge = previous.authorization;
         if (previous)
           this.updateResult(actor, {
             id: `npc:${previous.id}:${previous.index}`,
@@ -548,12 +613,15 @@ export class World {
       goal: reply.goal,
       speech: reply.speech,
       status,
+      ...(source === "continuation" && { source }),
       ...(goalTag && { goalTag }),
       ...(reply.plan && { steps: reply.plan }),
     };
     this.commit(next, receipt, records);
     if (status === "accepted") {
       this.haltActor(npc);
+      if (source === "model" && reply.speech && this.near(npc, "player"))
+        this.showSpeech(id, npc, reply.speech, now);
       this.trigger("goal-changed", undefined, [npc]);
     }
     return status;
@@ -634,7 +702,7 @@ export class World {
     if (next.gift && next.gift.expiresAt > now)
       return result(false, "GIFT_BUSY", "请先处理现有的赠送提议。");
     const source = this.bag(next, from);
-    if (source[amount.item] < amount.qty)
+    if ((source[amount.item] ?? 0) < amount.qty)
       return result(
         false,
         "GIFT_NO_STOCK",
@@ -706,17 +774,17 @@ export class World {
         "GIFT_REJECTED",
         `${receiverName}拒绝了${giverName}的赠送，材料留在原背包。`,
       );
-    else if (source[item] < qty)
+    else if ((source[item] ?? 0) < qty)
       outcome = result(false, "GIFT_NO_STOCK", "赠送者现在没有足够的材料。");
-    else if (destination[item] + qty > inventoryLimit)
+    else if ((destination[item] ?? 0) + qty > inventoryLimit)
       outcome = result(
         false,
         "GIFT_CAPACITY",
         "接收方背包空间不足，材料留在原背包。",
       );
     else {
-      source[item] -= qty;
-      destination[item] += qty;
+      source[item] = (source[item] ?? 0) - qty;
+      destination[item] = (destination[item] ?? 0) + qty;
       outcome = result(
         true,
         "GIFT_TRANSFERRED",
@@ -725,6 +793,7 @@ export class World {
       outcome.materials = {
         wood: item === "wood" ? qty : 0,
         stone: item === "stone" ? qty : 0,
+        ...(item !== "wood" && item !== "stone" && { [item]: qty }),
       };
     }
     next.gift = null;
@@ -834,8 +903,15 @@ export class World {
     elapsed: number,
     now = Date.now(),
     hold: boolean | NpcId = false,
+    allowContinuations = true,
   ) {
     const stepMs = Math.min(tickMs, Math.max(0, elapsed));
+    this.gameRemainder += stepMs;
+    if (this.gameRemainder >= 1000) {
+      this.gameRemainder -= 1000;
+      this.state = { ...this.state, gameSeconds: this.state.gameSeconds + 1 };
+      this.dirty = true;
+    }
     const { dx, dy } =
       this.intent.expires > clock ? this.intent : { dx: 0, dy: 0 };
     const player = this.state.player;
@@ -869,9 +945,14 @@ export class World {
       else if (this.conversationFor(npc)) {
         this.runtime[npc].working = false;
         this.runtime[npc].activity = "talking";
-      } else if (stepMs > 0) this.tickActor(npc, clock, stepMs, now);
+      } else if (stepMs > 0)
+        this.tickActor(npc, clock, stepMs, now, allowContinuations);
     }
-    if (stepMs > 0 && this.activity.working) this.advanceWork(stepMs, now);
+    if (stepMs > 0 && this.activity.working) {
+      this.advanceWork(stepMs, now);
+      for (const project of localProjects)
+        if (project.workMs) this.advanceLocalProject(project, stepMs, now);
+    }
     if (this.dirty && clock - this.positionSavedAt >= 5000) {
       this.flush();
       this.positionSavedAt = clock;
@@ -1085,10 +1166,16 @@ export class World {
   socialTurn(id: string) {
     const turn = this.conversations.get(id);
     if (!turn) return;
-    return { ...turn, actor: turn.lines === 0 ? turn.from : turn.to };
+    return { ...turn, actor: turn.lines % 2 === 0 ? turn.from : turn.to };
   }
 
-  speak(id: string, actor: NpcId, speech: string, now = Date.now()) {
+  speak(
+    id: string,
+    actor: NpcId,
+    speech: string,
+    now = Date.now(),
+    keepTalking?: boolean,
+  ) {
     const turn = this.socialTurn(id);
     if (
       !turn ||
@@ -1102,14 +1189,21 @@ export class World {
     current.lines++;
     this.observe?.({ kind: "speech", actor, session: id });
     current.last = speech;
-    this.bubbles = [
-      ...this.bubbles.filter(
-        (line) => line.actor !== actor && line.until > now,
-      ),
-      { id: `${id}:${current.lines}`, actor, text: speech, until: now + 7000 },
-    ];
-    if (current.lines === 2) this.endConversation(id, true, now);
+    this.showSpeech(`${id}:${current.lines}`, actor, speech, now);
+    if (
+      current.lines === 4 ||
+      keepTalking === false ||
+      (keepTalking !== true && current.lines >= 2)
+    )
+      this.endConversation(id, true, now);
     return true;
+  }
+
+  private showSpeech(id: string, actor: NpcId, text: string, now: number) {
+    this.bubbles = [
+      ...this.bubbles.filter((line) => line.actor !== actor && line.until > now),
+      { id, actor, text, until: now + 7000 },
+    ];
   }
 
   endConversation(id: string, ok: boolean, now = Date.now()) {
@@ -1211,8 +1305,16 @@ export class World {
 
   private expireSocial(now: number) {
     this.nextSocialExpiry = now + 1000;
+    const impossible = (
+      state: SaveState,
+      entry: SaveState["deals"][number] | SaveState["pledges"][number],
+    ) =>
+      "condition" in entry &&
+      !projectPledgeCanFinish(state, entry.condition, entry.progress);
     const expired = [...this.state.deals, ...this.state.pledges].some(
-      (entry) => activeAgreement(entry) && entry.expiresAt <= now,
+      (entry) =>
+        activeAgreement(entry) &&
+        (entry.expiresAt <= now || impossible(this.state, entry)),
     );
     const gift = this.state.gift;
     if (gift && gift.expiresAt <= now)
@@ -1221,8 +1323,10 @@ export class World {
     const next = structuredClone(this.state);
     const records: Memory[] = [];
     for (const entry of [...next.deals, ...next.pledges]) {
-      if (!activeAgreement(entry) || entry.expiresAt > now) continue;
-      const effect = cancelAgreement(next, entry, true);
+      const noFault = impossible(next, entry);
+      if (!activeAgreement(entry) || (entry.expiresAt > now && !noFault))
+        continue;
+      const effect = cancelAgreement(next, entry, !noFault, noFault);
       for (const id of effect.people)
         if (id !== "player")
           records.push(
@@ -1255,8 +1359,7 @@ export class World {
     from: ActorId,
     code: string,
     target: string,
-    materials:
-      Result["materials"] | undefined | { wood?: number; stone?: number },
+    materials: Partial<Stock> | undefined,
     now: number,
     records: Memory[],
   ) {
@@ -1273,10 +1376,15 @@ export class World {
         condition.kind === "arrive" &&
         condition.destination === target;
       const worked =
-        code === "BRIDGE_REPAIRED" &&
+        (code === "BRIDGE_REPAIRED" || code === "PROJECT_COMPLETED") &&
         condition.kind === "work" &&
+        (condition.project ?? bridge.id) === target &&
         pledge.progress > 0;
-      if (code === "DELIVERED" && condition.kind === "deliver")
+      if (
+        code === "DELIVERED" &&
+        condition.kind === "deliver" &&
+        (condition.project ?? bridge.id) === target
+      )
         pledge.progress = Math.min(
           condition.qty,
           pledge.progress + (materials?.[condition.item] ?? 0),
@@ -1304,7 +1412,13 @@ export class World {
     }
   }
 
-  private tickActor(npc: NpcId, clock: number, elapsed: number, now: number) {
+  private tickActor(
+    npc: NpcId,
+    clock: number,
+    elapsed: number,
+    now: number,
+    allowContinuations: boolean,
+  ) {
     const runtime = this.runtime[npc];
     if (clock < runtime.displayUntil) return;
     runtime.displayUntil = 0;
@@ -1314,6 +1428,29 @@ export class World {
     if (!plan || !step) {
       runtime.activity = "idle";
       return;
+    }
+    if (plan.authorization) {
+      const pledge = this.state.pledges.find(
+        (entry) => entry.id === plan.authorization,
+      );
+      if (
+        !allowContinuations ||
+        pledge?.from !== npc ||
+        pledge.status !== "accepted" ||
+        pledge.expiresAt <= now ||
+        (step.type === "deliver" &&
+          pledge.condition.kind === "deliver" &&
+          (step.qty ?? Infinity) > pledge.condition.qty - pledge.progress)
+      ) {
+        this.finishCondition(
+          npc,
+          false,
+          "AUTHORIZATION_CANCELLED",
+          "贡献约定已失效，停止后续行动。",
+          now,
+        );
+        return;
+      }
     }
     if (step.type === "wait" || step.type === "rest") {
       runtime.activity = step.type === "wait" ? "waiting" : "resting";
@@ -1346,6 +1483,44 @@ export class World {
     }
     if (step.type === "wait_until") {
       this.tickCondition(npc, step, elapsed, now);
+      return;
+    }
+    if (step.type === "share_clue") {
+      const next = structuredClone(this.state);
+      const known = this.state.discoveries[npc]?.includes(step.clue_id);
+      const shared =
+        this.near(npc, step.target_id) && step.target_id !== npc && known;
+      const clue = clueTargets.get(step.clue_id)!;
+      const text = shared
+        ? `${actorName(npc)}分享${clue.name}的发现。${clue.text}`
+        : "只能向附近的其他角色分享亲自发现的线索。";
+      const event = `clue:${plan.id}:${plan.index}`;
+      const records =
+        shared && step.target_id !== "player"
+          ? [
+              this.memory(
+                event,
+                clue.id,
+                text,
+                now,
+                "fact",
+                npc,
+                step.target_id,
+              ),
+            ]
+          : [];
+      if (shared && step.target_id === "player")
+        this.publicEvent(next, event, "cooperation", text, now);
+      this.finishStep(
+        next,
+        !!shared,
+        shared ? "CLUE_SHARED" : "CLUE_UNAVAILABLE",
+        text,
+        clue.id,
+        now,
+        { memories: records },
+        npc,
+      );
       return;
     }
     if (step.type === "talk") {
@@ -1426,6 +1601,15 @@ export class World {
     }
     const target = known.get(step.target_id)!;
     if (distance(actor, target) > target.range) {
+      if (
+        plan.autonomous &&
+        (step.type === "deliver" ||
+          step.type === "work" ||
+          step.type === "explore")
+      ) {
+        this.walk(npc, target, clock, elapsed, now);
+        return;
+      }
       this.finishStep(
         structuredClone(this.state),
         false,
@@ -1438,8 +1622,24 @@ export class World {
       );
       return;
     }
+    if (step.type === "explore") {
+      const next = structuredClone(this.state);
+      const found = this.discover(next, npc, target.id);
+      this.finishStep(
+        next,
+        found.ok,
+        found.code,
+        found.text,
+        target.id,
+        now,
+        undefined,
+        npc,
+      );
+      return;
+    }
+    const project = projects.get(target.id);
     if (step.type === "work") {
-      const failure = this.checkWork(this.state);
+      const failure = this.checkWork(this.state, project);
       if (failure) {
         this.finishStep(
           structuredClone(this.state),
@@ -1461,7 +1661,7 @@ export class World {
     const result =
       step.type === "collect"
         ? this.collect(next, next.actors[npc].bag, step.target_id, now)
-        : this.deliver(next, npc, step.item, step.qty);
+        : this.deliver(next, npc, step.item, step.qty, project);
     if (result.ok) {
       runtime.activity = step.type === "collect" ? "collecting" : "delivering";
       runtime.displayUntil = clock + 450;
@@ -1801,16 +2001,37 @@ export class World {
     ];
     actor.generation++;
     if (actor.pending) {
+      if (plan.authorization) actor.interruptedPledge = plan.authorization;
       const pending = actor.pending;
       actor.pending = null;
       this.activatePlan(next, pending, now, records, npc);
     } else {
       actor.plan =
         ok && plan.index + 1 < plan.steps.length
-          ? { id: plan.id, steps: plan.steps, index: plan.index + 1 }
+          ? {
+              id: plan.id,
+              steps: plan.steps,
+              index: plan.index + 1,
+              ...(plan.authorization && { authorization: plan.authorization }),
+              ...(plan.autonomous && { autonomous: plan.autonomous }),
+            }
           : null;
     }
     if (ok) {
+      if (
+        code === "DELIVERED" &&
+        topic === "valley-camp" &&
+        next.projects[topic].complete &&
+        !this.state.projects[topic].complete
+      ) {
+        const project = projects.get(topic)!;
+        for (const id of npcIds.filter(
+          (id) => id === "ahe" || next.projects[topic].contributions[id],
+        ))
+          records.push(
+            this.memory(event, topic, project.done, now, "fact", "rules", id),
+          );
+      }
       this.fulfillAction(
         next,
         npc,
@@ -1823,7 +2044,7 @@ export class World {
         now,
         records,
       );
-      if (code === "DELIVERED")
+      if (code === "DELIVERED" || code === "DISCOVERED")
         this.publicEvent(next, event, "project", text, now);
     }
     return { event, records };
@@ -1837,7 +2058,12 @@ export class World {
       actor: npc,
       code,
       ok,
-      materials: change && { wood: change.wood, stone: change.stone },
+      materials: change && {
+        wood: change.wood,
+        stone: change.stone,
+        food: change.food,
+        toolbox: change.toolbox,
+      },
     });
     this.clearRoute(npc);
     runtime.working = false;
@@ -1852,7 +2078,7 @@ export class World {
         topic,
         [npc],
       );
-    if (ok && code === "DELIVERED")
+    if (ok && code === "DELIVERED" && topic === bridge.id)
       this.trigger(
         "bridge-materials",
         bridge.id,
@@ -1863,32 +2089,46 @@ export class World {
   private advanceWork(elapsed: number, now: number) {
     const next = structuredClone(this.state);
     const workers: ActorId[] = [];
-    if (this.working && distance(next.player, bridge) <= bridge.range)
+    if (
+      this.working &&
+      this.playerProject === bridge.id &&
+      distance(next.player, bridge) <= bridge.range
+    )
       workers.push("player");
-    else this.working = false;
     for (const id of npcIds) {
       if (
         this.runtime[id].working &&
+        this.currentStep(id)?.type === "work" &&
+        this.workTarget(id) === bridge.id &&
         distance(next.actors[id], bridge) <= bridge.range
       )
         workers.push(id);
-      else this.runtime[id].working = false;
     }
     if (!workers.length || next.bridge.repaired) return;
     const remaining = bridge.workMs - next.bridge.progressMs;
-    const applied = Math.min(remaining, workers.length * elapsed);
-    const share = applied / workers.length;
-    for (const id of workers) next.contributions[id].workMs += share;
+    const { applied, shares } = distributeWork(
+      remaining,
+      elapsed,
+      workers.map((id) => ({
+        id,
+        toolbox: this.bag(next, id).toolbox,
+      })),
+    );
+    for (const [id, share] of shares) next.contributions[id].workMs += share;
     for (const pledge of next.pledges)
       if (
         pledge.condition.kind === "work" &&
+        (pledge.condition.project ?? bridge.id) === bridge.id &&
         pledge.status === "accepted" &&
         pledge.expiresAt > now &&
         workers.includes(pledge.from)
       )
         pledge.progress = 1;
     if (workers.length > 1) {
-      next.sharedWorkMs += share;
+      next.sharedWorkMs += Math.min(
+        ...shares.map(([, share]) => share),
+        elapsed,
+      );
       for (let index = 0; index < workers.length; index++)
         for (const other of workers.slice(index + 1)) {
           const pair = pairKey(workers[index], other);
@@ -1970,9 +2210,283 @@ export class World {
     this.commit(next, event, records);
     for (const id of finished)
       this.afterStep(id, true, "BRIDGE_REPAIRED", bridge.id);
-    this.working = false;
-    this.playerWorkEvent = undefined;
+    if (this.playerProject === bridge.id) {
+      this.working = false;
+      this.playerWorkEvent = undefined;
+    }
     this.trigger("bridge-repaired", bridge.id);
+  }
+
+  private discover(next: SaveState, actor: ActorId, target: string) {
+    if (!next.bridge.repaired)
+      return this.outcome(false, "BRIDGE_CLOSED", "先修好旧桥。");
+    const clue = clueTargets.get(target)!;
+    const found = (next.discoveries[actor] ??= []);
+    if (found.includes(target))
+      return this.outcome(true, "CLUE_KNOWN", clue.text);
+    found.push(target);
+    if (actor === "player" && target === valley.ruin.id) next.explored = true;
+    return this.outcome(true, "DISCOVERED", clue.text);
+  }
+
+  private deliverLocal(
+    next: SaveState,
+    who: ActorId,
+    project: Project,
+    item?: Item,
+    quantity?: number,
+  ) {
+    const row = next.projects[project.id];
+    const bag = this.bag(next, who);
+    const amounts = deliveryAmounts(project, row, bag, item, quantity);
+    const text = materialText(amounts);
+    if (!text)
+      return this.outcome(
+        false,
+        "PROJECT_NO_DELIVERY",
+        "当前没有可交付的物资。",
+      );
+    const wasComplete = row.complete;
+    transferToProject(bag, amounts);
+    const credit = contribution(row, who);
+    for (const kind of ["wood", "food"] as const) {
+      row[kind] += amounts[kind] ?? 0;
+      credit[kind] += amounts[kind] ?? 0;
+    }
+    if (!project.workMs)
+      row.complete = !Object.values(projectMissing(project, row)).some(Boolean);
+    return {
+      ...this.outcome(
+        true,
+        "DELIVERED",
+        `${actorName(who)}向${project.name}交付${text}。${!wasComplete && row.complete ? project.done : ""}`,
+      ),
+      materials: amounts,
+    };
+  }
+
+  private workTarget(npc: NpcId) {
+    const step = this.currentStep(npc);
+    return step?.type === "work" ? step.target_id : undefined;
+  }
+
+  private advanceLocalProject(project: Project, elapsed: number, now: number) {
+    const workers: ActorId[] = npcIds.filter(
+      (id) =>
+        this.runtime[id].working &&
+        this.workTarget(id) === project.id &&
+        distance(this.position(id), project) <= project.range,
+    );
+    if (
+      this.working &&
+      this.playerProject === project.id &&
+      distance(this.state.player, project) <= project.range
+    )
+      workers.push("player");
+    if (!workers.length) return;
+    const next = structuredClone(this.state);
+    const row = next.projects[project.id];
+    if (row.complete) return;
+    const remaining = project.workMs - row.progressMs;
+    const { applied, shares } = distributeWork(
+      remaining,
+      elapsed,
+      workers.map((id) => ({
+        id,
+        toolbox: this.bag(next, id).toolbox,
+      })),
+    );
+    for (const [id, share] of shares) contribution(row, id).workMs += share;
+    for (const pledge of next.pledges)
+      if (
+        pledge.status === "accepted" &&
+        pledge.expiresAt > now &&
+        pledge.condition.kind === "work" &&
+        pledge.condition.project === project.id &&
+        workers.includes(pledge.from)
+      )
+        pledge.progress = 1;
+    row.progressMs += applied;
+    if (applied < remaining) {
+      this.commit(next);
+      return;
+    }
+    row.progressMs = project.workMs;
+    row.complete = true;
+    const event = `project:${project.id}`;
+    const records: Memory[] = [];
+    const participants = Object.keys(row.contributions) as ActorId[];
+    const name = `${project.name}完工`;
+    this.publicEvent(
+      next,
+      event,
+      participants.length > 1 ? "cooperation" : "project",
+      project.done,
+      now,
+    );
+    for (const id of participants) {
+      if (id !== "player")
+        records.push(
+          this.memory(
+            event,
+            project.id,
+            project.done,
+            now,
+            "fact",
+            "rules",
+            id,
+          ),
+        );
+      this.fulfillAction(
+        next,
+        id,
+        "PROJECT_COMPLETED",
+        project.id,
+        undefined,
+        now,
+        records,
+      );
+    }
+    if (project.id === "carpenter-roof" && !participants.includes("cenyan"))
+      records.push(
+        this.memory(
+          event,
+          project.id,
+          project.done,
+          now,
+          "fact",
+          "rules",
+          "cenyan",
+        ),
+      );
+    for (const id of workers) {
+      if (id === "player") continue;
+      records.push(
+        ...this.prepareStep(
+          next,
+          id,
+          true,
+          "PROJECT_COMPLETED",
+          name,
+          project.id,
+          now,
+        ).records,
+      );
+    }
+    this.commit(next, undefined, records);
+    for (const id of workers) {
+      if (id !== "player")
+        this.afterStep(id, true, "PROJECT_COMPLETED", project.id);
+    }
+    if (this.playerProject === project.id) {
+      this.working = false;
+      this.playerWorkEvent = undefined;
+    }
+    this.trigger("project-completed", project.id);
+  }
+
+  private performLocalProject(
+    action: Action,
+    next: SaveState,
+    project: Project,
+    now: number,
+  ): Result {
+    const reply = (ok: boolean, code: string, text: string) => ({
+      type: "result" as const,
+      id: action.id,
+      target: project.id,
+      ok,
+      code,
+      text,
+    });
+    const row = next.projects[project.id];
+    if (action.verb === "inspect")
+      return reply(
+        true,
+        "PROJECT",
+        row.complete
+          ? project.done
+          : `尚缺${materialText(projectMissing(project, row)) || "施工"}。`,
+      );
+    if (action.verb === "deliver") {
+      const result = this.deliver(
+        next,
+        "player",
+        action.item,
+        action.qty,
+        project,
+      );
+      const outcome = {
+        ...reply(result.ok, result.code, result.text),
+        materials: result.materials,
+      };
+      if (result.ok) {
+        const records: Memory[] = [];
+        this.fulfillAction(
+          next,
+          "player",
+          result.code,
+          project.id,
+          result.materials,
+          now,
+          records,
+        );
+        this.publicEvent(next, action.id, "project", result.text, now);
+        if (
+          row.complete &&
+          !this.state.projects[project.id].complete &&
+          project.id === "valley-camp"
+        )
+          for (const id of npcIds.filter(
+            (id) => id === "ahe" || row.contributions[id],
+          ))
+            records.push(
+              this.memory(
+                action.id,
+                project.id,
+                project.done,
+                now,
+                "fact",
+                "rules",
+                id,
+              ),
+            );
+        this.commit(next, action.id, records, outcome);
+        this.trigger(
+          row.complete ? "project-completed" : "project-materials",
+          project.id,
+        );
+      }
+      return outcome;
+    }
+    if (action.verb === "work") {
+      const failure = this.checkWork(next, project);
+      if (failure) return reply(false, failure.code, failure.text);
+      if (this.working || this.moving)
+        return reply(false, "MOVING", "站稳并结束当前施工后再开始。");
+      this.haltPlayer();
+      this.working = true;
+      this.playerProject = project.id;
+      this.playerWorkEvent = action.id;
+      const outcome = reply(
+        true,
+        "WORK_STARTED",
+        `开始在${project.name}施工。`,
+      );
+      this.commit(next, action.id, [], outcome);
+      return outcome;
+    }
+    if (
+      action.verb === "stop" &&
+      this.working &&
+      this.playerProject === project.id
+    ) {
+      this.haltPlayer();
+      const outcome = reply(true, "WORK_STOPPED", "已暂停施工，进度已保存。");
+      this.commit(next, action.id, [], outcome);
+      return outcome;
+    }
+    return reply(false, "INVALID_ACTION", "这里无法执行该行动。");
   }
 
   private outcome(ok: boolean, code: string, text: string) {
@@ -1991,12 +2505,17 @@ export class World {
       return this.outcome(
         false,
         "COOLDOWN",
-        `采集点还需 ${Math.ceil(remaining / 1000)} 秒恢复。`,
+        resource.item === "toolbox"
+          ? "备用工具已领用，可向持有者借用。"
+          : `采集点还需 ${Math.ceil(remaining / 1000)} 秒恢复。`,
       );
-    if (bag[resource.item] + resource.yieldCount > inventoryLimit)
+    if ((bag[resource.item] ?? 0) + resource.yieldCount > inventoryLimit)
       return this.outcome(false, "BAG_FULL", "背包里这一类材料已满。");
-    bag[resource.item] += resource.yieldCount;
-    next.cooldowns[id] = now + resource.cooldownMs;
+    bag[resource.item] = (bag[resource.item] ?? 0) + resource.yieldCount;
+    next.cooldowns[id] = Math.min(
+      Number.MAX_SAFE_INTEGER,
+      now + resource.cooldownMs,
+    );
     return {
       ...this.outcome(
         true,
@@ -2006,6 +2525,10 @@ export class World {
       materials: {
         wood: resource.item === "wood" ? resource.yieldCount : 0,
         stone: resource.item === "stone" ? resource.yieldCount : 0,
+        ...(resource.item !== "wood" &&
+          resource.item !== "stone" && {
+            [resource.item]: resource.yieldCount,
+          }),
       },
     };
   }
@@ -2013,30 +2536,27 @@ export class World {
   private deliver(
     next: SaveState,
     who: Contributor,
-    item?: Material,
+    item?: Item,
     qty?: number,
+    project = projects.get(bridge.id)!,
   ): Pick<Result, "ok" | "code" | "text" | "materials"> {
+    if (project.id !== bridge.id)
+      return this.deliverLocal(next, who, project, item, qty);
     if (next.bridge.repaired)
       return this.outcome(false, "BRIDGE_DONE", "旧桥已经修好。");
     const { missing, materialsReady } = bridgeMaterialStatus(next.bridge);
     if (materialsReady)
       return this.outcome(false, "MATERIALS_READY", "材料已交齐，可以施工。");
     const bag = this.bag(next, who);
-    const delivered = { wood: 0, stone: 0 };
-    for (const material of item ? [item] : materials)
-      delivered[material] = Math.min(
-        missing[material],
-        bag[material],
-        qty ?? inventoryLimit,
-      );
+    const delivered = deliveryAmounts(project, next.bridge, bag, item, qty);
     if (!delivered.wood && !delivered.stone)
       return this.outcome(
         false,
         "MATERIALS_MISSING",
         `材料不足，没有可交付项。工程尚缺木材 ×${missing.wood}、石材 ×${missing.stone}。`,
       );
+    transferToProject(bag, delivered);
     for (const material of materials) {
-      bag[material] -= delivered[material];
       next.bridge[material] += delivered[material];
       next.contributions[who][material] += delivered[material];
       missing[material] -= delivered[material];
@@ -2051,7 +2571,7 @@ export class World {
         ? `尚缺木材 ×${missing.wood}、石材 ×${missing.stone}。`
         : "材料已交齐，可以施工。";
     const clipped =
-      qty !== undefined && item && delivered[item] < qty
+      qty !== undefined && item && (delivered[item] ?? 0) < qty
         ? "超出的数量留在背包或未持有。"
         : "";
     return {
@@ -2064,7 +2584,19 @@ export class World {
     };
   }
 
-  private checkWork(next: SaveState) {
+  private checkWork(next: SaveState, project = projects.get(bridge.id)!) {
+    if (project.id !== bridge.id) {
+      const row = next.projects[project.id];
+      if (!project.workMs || row.complete)
+        return this.outcome(false, "PROJECT_DONE", "此工程当前无需施工。");
+      if (Object.values(projectMissing(project, row)).some(Boolean))
+        return this.outcome(
+          false,
+          "MATERIALS_MISSING",
+          "先把材料交到工程现场。",
+        );
+      return;
+    }
     if (next.bridge.repaired)
       return this.outcome(false, "BRIDGE_DONE", "旧桥已经修好。");
     if (!bridgeMaterialStatus(next.bridge).materialsReady)
@@ -2118,7 +2650,8 @@ export class World {
       ? { ...other!, ...this.state.actors[npc] }
       : (other ??
         resource ??
-        [bridge, valley.ruin].find((entry) => entry.id === action.target));
+        projects.get(action.target) ??
+        clueTargets.get(action.target));
     if (!target) return reply(false, "UNKNOWN_TARGET", "找不到这个交互对象。");
     if (distance(this.state.player, target) > target.range)
       return reply(false, "TOO_FAR", "再走近一些就能交互。");
@@ -2191,6 +2724,7 @@ export class World {
         this.commit(next, action.id);
         this.haltPlayer();
         this.working = true;
+        this.playerProject = bridge.id;
         this.playerWorkEvent = action.id;
         return reply(
           true,
@@ -2207,14 +2741,33 @@ export class World {
         return reply(true, "WORK_STOPPED", "已暂停施工，进度已保存。");
       }
     }
-    if (target.id === valley.ruin.id && action.verb === "inspect") {
+    const project = projects.get(target.id);
+    if (project && project.id !== bridge.id)
+      return this.performLocalProject(action, next, project, now);
+    if (
+      clueTargets.has(target.id) &&
+      (action.verb === "explore" || action.verb === "inspect")
+    ) {
       if (!next.bridge.repaired)
         return reply(false, "BRIDGE_CLOSED", "先修好旧桥。");
-      if (!next.explored) {
-        next.explored = true;
-        this.commit(next, action.id);
+      const found = this.discover(next, "player", target.id);
+      const result = reply(
+        found.ok,
+        target.id === valley.ruin.id ? "RUIN" : found.code,
+        found.text,
+      );
+      if (found.code === "DISCOVERED") {
+        this.publicEvent(
+          next,
+          action.id,
+          "project",
+          `旅人发现了${target.name}的线索。`,
+          now,
+        );
+        this.commit(next, action.id, [], result);
+        this.trigger("clue-discovered", target.id);
       }
-      return reply(true, "RUIN", valley.ruin.clue);
+      return result;
     }
     return reply(false, "INVALID_ACTION", "这里无法执行该行动。");
   }
@@ -2229,6 +2782,7 @@ export class World {
         text: "这次重开已处理。",
       };
     const next = freshState();
+    this.gameRemainder = 0;
     this.save.write(next, action.id, [], true);
     this.state = next;
     for (const id of npcIds) {

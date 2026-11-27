@@ -1,5 +1,13 @@
 import { z } from "zod";
-import { inventoryLimit, items, residents, valley } from "./world.js";
+import {
+  inventoryLimit,
+  items,
+  residents,
+  projects,
+  clues,
+  resourceNodes,
+  valley,
+} from "./world.js";
 
 export const npcIds = ["cenyan", "ahe", "luozhou"] as const;
 export const npcSchema = z.enum(npcIds);
@@ -17,12 +25,14 @@ export const homes = npcIds.map((id) => ({
 }));
 export const destinations = [
   ...homes,
-  valley.bridge,
-  valley.ruin,
-  ...valley.resources,
+  ...projects.values(),
+  ...clues,
+  ...resourceNodes,
 ];
 export const destinationId = z.enum(destinations.map(({ id }) => id));
-export const materialSchema = z.enum(["wood", "stone"]);
+export const materialSchema = z.enum(["wood", "stone", "food", "toolbox"]);
+export const projectId = z.enum([...projects.keys()]);
+export const clueId = z.enum(clues.map(({ id }) => id));
 export const quantitySchema = z.int().min(1).max(inventoryLimit);
 export const materialAmount = z.strictObject({
   item: materialSchema,
@@ -43,9 +53,13 @@ export const waitCondition = z.discriminatedUnion("kind", [
   }),
 ]);
 export const commitmentCondition = z.discriminatedUnion("kind", [
-  z.strictObject({ kind: z.literal("deliver"), ...materialAmount.shape }),
+  z.strictObject({
+    kind: z.literal("deliver"),
+    project: projectId.optional(),
+    ...materialAmount.shape,
+  }),
   z.strictObject({ kind: z.literal("arrive"), destination: destinationId }),
-  z.strictObject({ kind: z.literal("work") }),
+  z.strictObject({ kind: z.literal("work"), project: projectId.optional() }),
 ]);
 const terms = z.discriminatedUnion("kind", [
   z.strictObject({ kind: z.literal("gift"), give: materialAmount }),
@@ -150,11 +164,23 @@ export function agreementText(entry: Deal | Pledge) {
   }
   switch (entry.condition.kind) {
     case "deliver":
-      return "交付 " + amountText(entry.condition);
+      return (
+        "交付 " +
+        amountText(entry.condition) +
+        (entry.condition.project
+          ? " 到" + projects.get(entry.condition.project)?.name
+          : "")
+      );
     case "arrive":
       return "抵达 " + entry.condition.destination;
     case "work":
-      return "参加旧桥完工";
+      return (
+        "参加" +
+        (entry.condition.project
+          ? projects.get(entry.condition.project)?.name
+          : "旧桥") +
+        "施工"
+      );
     case "return":
       return "归还 " + amountText(entry.condition);
   }

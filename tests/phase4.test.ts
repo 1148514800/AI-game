@@ -1,3 +1,4 @@
+import { once } from "node:events";
 import { randomUUID } from "node:crypto";
 import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -18,7 +19,14 @@ import {
   type NpcId,
   type SocialCommand,
 } from "../src/shared/social.js";
-import { distance, isPassable, valley } from "../src/shared/world.js";
+import {
+  clues,
+  distance,
+  isPassable,
+  projects,
+  resources,
+  valley,
+} from "../src/shared/world.js";
 import { DialogueSession } from "../src/server/dialogue/session.js";
 import {
   autonomyMessages,
@@ -480,7 +488,7 @@ test("v3 migration backs up before preserving pending work, receipts, memory, an
   const ledger = new DialogueLedger(ledgerPath);
   try {
     assert.ok(existsSync(path + ".pre-phase4.sqlite"));
-    assert.equal(migrated.initial.schemaVersion, 4);
+    assert.equal(migrated.initial.schemaVersion, 5);
     assert.deepEqual(migrated.initial.cenyan.plan, state.cenyan.plan);
     assert.deepEqual(
       migrated.initial.actors.cenyan.pending,
@@ -786,4 +794,523 @@ test("a delivery pledge is fulfilled only after its accepted amount reaches the 
   assert.equal(world.snapshot().state.inventory.wood, 1);
 });
 
+test("Phase 5 roof supports partial delivery and shared construction with a carried tool", (t) => {
+  const roof = projects.get("carpenter-roof")!;
+  const { world, tick, save, path } = worldFixture(t, (state) => {
+    Object.assign(state.player, { x: 246, y: 281 });
+    Object.assign(state.actors.cenyan, { x: 257, y: 282 });
+    state.inventory.wood = 1;
+    state.inventory.toolbox = 1;
+    state.actors.cenyan.bag.wood = 1;
+  });
+  assert.equal(act(world, "work", roof.id).code, "MATERIALS_MISSING");
+  assert.equal(act(world, "deliver", roof.id).code, "DELIVERED");
+  task(
+    world,
+    "cenyan",
+    { type: "deliver", target_id: roof.id, item: "wood", qty: 1 },
+    { type: "work", target_id: roof.id },
+  );
+  tick();
+  assert.equal(act(world, "work", roof.id).code, "WORK_STARTED");
+  tick(50);
+  const roofState = world.snapshot().state.projects[roof.id];
+  assert.equal(roofState.complete, false);
+  assert.ok(
+    roofState.contributions.player!.workMs >
+      roofState.contributions.cenyan!.workMs,
+  );
+  tick(10);
+  const finished = world.snapshot().state;
+  assert.equal(finished.projects[roof.id].complete, true);
+  assert.equal(finished.projects[roof.id].progressMs, roof.workMs);
+  assert.equal(finished.inventory.toolbox, 1);
+  assert.equal(finished.bridge.wood, 0);
+  assert.match(
+    save
+      .memories(roof.id, 6, "cenyan")
+      .map((m) => m.content)
+      .join(" "),
+    /屋顶修好了/,
+  );
+  const reopened = new SaveFile(path);
+  try {
+    assert.deepEqual(reopened.initial.projects, finished.projects);
+  } finally {
+    reopened.close();
+  }
+});
 
+test("Phase 5 food is collected once per cooldown and camp contributions are capped by real stock", (t) => {
+  const food = resources.get("berry-west")!;
+  const camp = projects.get("valley-camp")!;
+  const { world, tick } = worldFixture(t, (state) => {
+    Object.assign(state.player, { x: food.x, y: food.y });
+    Object.assign(state.actors.ahe, { x: camp.x + 12, y: camp.y });
+    state.actors.ahe.bag.food = 3;
+  });
+  const id = randomUUID();
+  const collect = {
+    type: "action",
+    id,
+    verb: "collect",
+    target: food.id,
+  } as const;
+  const now = Date.now();
+  const berryAvailable = () =>
+    world.perceive(undefined, now, "ahe").resources.find(
+      (node) => node.id === food.id,
+    )?.available;
+  assert.equal(berryAvailable(), true);
+  assert.equal(world.perform(collect, now).code, "COLLECTED");
+  assert.equal(berryAvailable(), false);
+  assert.equal(world.perform(collect, now + food.cooldownMs + 10).ok, false);
+  assert.equal(act(world, "collect", food.id).code, "COOLDOWN");
+  assert.equal(world.snapshot().state.inventory.food, 1);
+  task(world, "ahe", {
+    type: "deliver",
+    target_id: camp.id,
+    item: "food",
+    qty: 2,
+  });
+  tick();
+  assert.equal(world.snapshot().state.projects[camp.id].complete, true);
+  assert.equal(world.snapshot().state.actors.ahe.bag.food, 1);
+  task(world, "ahe", {
+    type: "deliver",
+    target_id: camp.id,
+    item: "food",
+    qty: 20,
+  });
+  tick(12);
+  const state = world.snapshot().state;
+  assert.equal(state.projects[camp.id].food, 3);
+  assert.equal(state.projects[camp.id].contributions.ahe?.food, 3);
+  assert.equal(state.actors.ahe.bag.food, 0);
+});
+
+test("Phase 5 facts distinguish exploring an object from sharing its verified clue", (t) => {
+  const clue = clues[1];
+  const { world, tick, save } = worldFixture(t, (state) => {
+    state.bridge = {
+      discovered: true,
+      repaired: true,
+      wood: 6,
+      stone: 2,
+      progressMs: bridge.workMs,
+    };
+    state.contributions.legacy = { wood: 6, stone: 2, workMs: bridge.workMs };
+    Object.assign(state.actors.luozhou, { x: clue.x, y: clue.y + 6 });
+    Object.assign(state.actors.ahe, { x: clue.x + 11, y: clue.y + 6 });
+  });
+  const share = {
+    type: "share_clue",
+    target_id: "ahe",
+    clue_id: clue.id,
+  } as const;
+  task(world, "luozhou", share);
+  tick();
+  assert.equal(
+    world.snapshot().state.actors.luozhou.last?.code,
+    "CLUE_UNAVAILABLE",
+  );
+  task(world, "luozhou", { type: "explore", target_id: clue.id }, share);
+  tick(3);
+  assert.deepEqual(world.snapshot().state.discoveries.luozhou, [clue.id]);
+  assert.equal(world.snapshot().state.discoveries.player, undefined);
+  const learned = save
+    .memories(clue.id, 6, "ahe")
+    .find((m) => m.source === "luozhou");
+  assert.ok(learned?.content.includes(clue.text));
+});
+
+test("Phase 5 v4 migration preserves the old bridge and makes a backup before adding time and projects", (t) => {
+  const path = join(directory(t), "v4.sqlite");
+  const seed = new SaveFile(path);
+  const {
+    cenyan: _cenyan,
+    gameSeconds: _time,
+    projects: _projects,
+    discoveries: _discoveries,
+    ...state
+  } = seed.initial;
+  state.actors.ahe.bag.wood = 2;
+  seed.close();
+  const db = new DatabaseSync(path);
+  db.exec("PRAGMA user_version = 4");
+  db.prepare("UPDATE world SET payload = ?").run(
+    JSON.stringify({ ...state, schemaVersion: 4 }),
+  );
+  db.close();
+  const migrated = new SaveFile(path);
+  try {
+    assert.ok(existsSync(path + ".pre-phase5.sqlite"));
+    assert.equal(migrated.initial.schemaVersion, 5);
+    assert.equal(migrated.initial.actors.ahe.bag.wood, 2);
+    assert.deepEqual(migrated.initial.bridge, state.bridge);
+    assert.equal(migrated.initial.gameSeconds, 0);
+    assert.equal(migrated.initial.projects["carpenter-roof"].complete, false);
+  } finally {
+    migrated.close();
+  }
+});
+
+test("Phase 5 a resident can extend an NPC conversation to four alternating lines", (t) => {
+  const { world, tick } = worldFixture(t, closePositions);
+  task(world, "cenyan", { type: "talk", target_id: "ahe", topic: "营地分工" });
+  tick();
+  const conversation = world.conversationFor("cenyan")!;
+  for (const id of ["cenyan", "ahe", "cenyan", "ahe"] as const) {
+    assert.equal(world.socialTurn(conversation.id)?.actor, id);
+    assert.equal(
+      world.speak(conversation.id, id, "再商量一下分工。", Date.now(), true),
+      true,
+    );
+  }
+  assert.equal(world.conversationFor("cenyan"), undefined);
+  assert.equal(world.snapshot().state.actors.cenyan.last?.code, "TALK_ENDED");
+});
+
+test("Phase 5 accepted delivery continuation spends only the pledged amount and respects cancellation", async (t) => {
+  const { world, tick } = worldFixture(t, (state) => {
+    closePositions(state);
+    state.actors.cenyan.goal = "stock-wood";
+    state.actors.cenyan.bag.wood = 3;
+  });
+  const session = new DialogueSession(
+    ":memory:",
+    () => undefined,
+    () => undefined,
+    {
+      LLM_ENABLED: "true",
+      LLM_AUTONOMY_ENABLED: "true",
+      LLM_API_KEY: "test-only",
+      LLM_BASE_URL: "http://127.0.0.1:1/v1",
+      LLM_MODEL: "test",
+      LLM_MAX_TOTAL_USD: "1",
+      LLM_INPUT_USD_PER_MILLION: "0",
+      LLM_OUTPUT_USD_PER_MILLION: "0",
+    },
+    undefined,
+    {
+      world,
+      active: () => true,
+      actors: ["cenyan"],
+      storageError: (e) => {
+        throw e;
+      },
+    },
+  );
+  const authorize = () => {
+    const proposed = world.applySocial(randomUUID(), "cenyan", {
+      kind: "pledge",
+      target: "ahe",
+      condition: { kind: "deliver", item: "wood", qty: 1 },
+    });
+    assert.equal(proposed.code, "PLEDGE_PROPOSED");
+    assert.equal(
+      world.applySocial(randomUUID(), "ahe", {
+        kind: "respond",
+        choice: "accept",
+        offerId: proposed.offerId!,
+      }).code,
+      "PLEDGE_ACCEPTED",
+    );
+    return proposed.offerId!;
+  };
+  try {
+    authorize();
+    session.tick(performance.now());
+    tick(5);
+    assert.equal(world.snapshot().state.bridge.wood, 1);
+    const pledged = authorize();
+    session.tick(performance.now() + 4000);
+    assert.equal(world.snapshot().state.cenyan.plan?.authorization, pledged);
+    world.applySocial(randomUUID(), "cenyan", {
+      kind: "cancel",
+      offerId: pledged,
+    });
+    tick(5);
+    const state = world.snapshot().state;
+    assert.equal(state.bridge.wood, 1);
+    assert.equal(state.actors.cenyan.bag.wood, 2);
+    assert.equal(state.actors.cenyan.goal, "stock-wood");
+    assert.equal(state.actors.cenyan.last?.code, "AUTHORIZATION_CANCELLED");
+    assert.equal(session.statusFor("cenyan").sharedUsage?.requests, 0);
+  } finally {
+    await session.close();
+  }
+});
+
+test("Phase 5 a bridge filled by another resident releases a delivery pledge without penalizing trust", (t) => {
+  const { world, tick } = worldFixture(t, (state) => {
+    closePositions(state);
+    state.inventory.wood = 6;
+    state.inventory.stone = 2;
+  });
+  const proposal = world.applySocial(randomUUID(), "cenyan", {
+    kind: "pledge",
+    target: "ahe",
+    condition: { kind: "deliver", item: "wood", qty: 1 },
+  });
+  assert.equal(
+    world.applySocial(randomUUID(), "ahe", {
+      kind: "respond",
+      offerId: proposal.offerId!,
+      choice: "accept",
+    }).code,
+    "PLEDGE_ACCEPTED",
+  );
+  assert.equal(act(world, "deliver", bridge.id).code, "DELIVERED");
+  tick(25);
+  const current = world.snapshot().state;
+  assert.equal(current.pledges.at(-1)?.status, "cancelled");
+  assert.equal(current.actors.ahe.relations.cenyan, undefined);
+  assert.equal(
+    world.applySocial(randomUUID(), "cenyan", {
+      kind: "pledge",
+      target: "ahe",
+      condition: { kind: "deliver", item: "wood", qty: 1 },
+    }).code,
+    "PLEDGE_INFEASIBLE",
+  );
+});
+
+test("Phase 5 an accepted camp refill uses storage capacity after the goal is complete", async (t) => {
+  const camp = projects.get("valley-camp")!;
+  const { world, tick } = worldFixture(t, (state) => {
+    Object.assign(state.actors.ahe, { x: camp.x + 12, y: camp.y });
+    Object.assign(state.actors.luozhou, { x: camp.x + 22, y: camp.y + 8 });
+    state.actors.ahe.bag.food = 4;
+  });
+  task(world, "ahe", {
+    type: "deliver",
+    target_id: camp.id,
+    item: "food",
+    qty: 2,
+  });
+  tick(15);
+  assert.equal(world.snapshot().state.projects[camp.id].complete, true);
+  const proposed = world.applySocial(randomUUID(), "ahe", {
+    kind: "pledge",
+    target: "luozhou",
+    condition: { kind: "deliver", project: camp.id, item: "food", qty: 1 },
+  });
+  assert.equal(proposed.code, "PLEDGE_PROPOSED");
+  assert.equal(
+    world.applySocial(randomUUID(), "luozhou", {
+      kind: "respond",
+      offerId: proposed.offerId!,
+      choice: "accept",
+    }).code,
+    "PLEDGE_ACCEPTED",
+  );
+  const session = new DialogueSession(
+    ":memory:",
+    () => undefined,
+    () => undefined,
+    {
+      LLM_ENABLED: "true",
+      LLM_AUTONOMY_ENABLED: "true",
+      LLM_API_KEY: "test-only",
+      LLM_BASE_URL: "http://127.0.0.1:1/v1",
+      LLM_MODEL: "test",
+      LLM_MAX_TOTAL_USD: "1",
+      LLM_INPUT_USD_PER_MILLION: "0",
+      LLM_OUTPUT_USD_PER_MILLION: "0",
+    },
+    undefined,
+    {
+      world,
+      active: () => true,
+      actors: ["ahe"],
+      storageError: (error) => {
+        throw error;
+      },
+    },
+  );
+  try {
+    session.tick(performance.now());
+    tick(15);
+    const { state } = world.snapshot();
+    assert.equal(state.projects[camp.id].food, 3);
+    assert.equal(state.actors.ahe.bag.food, 1);
+    assert.equal(state.pledges.at(-1)?.status, "fulfilled");
+    assert.equal(session.statusFor("ahe").sharedUsage?.requests, 0);
+  } finally {
+    await session.close();
+  }
+});
+
+test("Phase 5 a nearby Live-plan invitation can be displayed without moving the player", (t) => {
+  const { world } = worldFixture(t, closePositions);
+  const now = Date.now();
+  const before = world.snapshot().state.player;
+  assert.equal(
+    world.accept(
+      randomUUID(),
+      {
+        goal: "去渡口看看",
+        speech: "旅人，愿意一起去渡口看看吗？",
+        plan: [{ type: "move_to", target_id: bridge.id }],
+      },
+      now,
+      undefined,
+      "luozhou",
+      true,
+    ),
+    true,
+  );
+  const snapshot = world.snapshot(now);
+  assert.deepEqual(snapshot.state.player, before);
+  assert.equal(snapshot.bubbles[0]?.actor, "luozhou");
+  assert.match(snapshot.bubbles[0]?.text ?? "", /愿意一起去渡口/);
+});
+
+test("Phase 5 a local provider can repair one NPC exchange and return four alternating lines", async (t) => {
+  const spoken: NpcId[] = [];
+  const { world, tick } = worldFixture(t, closePositions, (event) => {
+    if (event.kind === "speech") spoken.push(event.actor);
+  });
+  const { createServer } = await import("node:http");
+  const prompts: string[] = [];
+  const provider = createServer(async (request, response) => {
+    let payload = "";
+    for await (const chunk of request) payload += chunk.toString();
+    prompts.push(JSON.parse(payload).messages[0].content);
+    const count = prompts.length;
+    const content =
+      count === 1
+        ? { speech: 5 }
+        : {
+            speech: [
+              "",
+              "",
+              "想谈谈营地分工吗？",
+              "愿意，先说谁能采食物。",
+              "我先看手上的木料。",
+              "好，各自安排。",
+            ][count],
+            ...(count > 2 && { continue_conversation: count < 5 }),
+          };
+    response.setHeader("content-type", "application/json");
+    response.end(
+      JSON.stringify({
+        choices: [
+          {
+            message: { content: JSON.stringify(content) },
+            finish_reason: "stop",
+          },
+        ],
+        usage: { prompt_tokens: 100, completion_tokens: 20 },
+      }),
+    );
+  });
+  provider.listen(0, "127.0.0.1");
+  await once(provider, "listening");
+  const address = provider.address();
+  assert.ok(address && typeof address !== "string");
+  const session = new DialogueSession(
+    ":memory:",
+    () => undefined,
+    () => undefined,
+    {
+      LLM_ENABLED: "true",
+      LLM_AUTONOMY_ENABLED: "true",
+      LLM_JSON_MODE: "true",
+      LLM_API_KEY: "local-test",
+      LLM_BASE_URL: `http://127.0.0.1:${address.port}/v1`,
+      LLM_MODEL: "fixture",
+      LLM_MAX_TOTAL_USD: "1",
+      LLM_INPUT_USD_PER_MILLION: "0",
+      LLM_OUTPUT_USD_PER_MILLION: "0",
+      LLM_AUTONOMY_REQUESTS_PER_MINUTE: "12",
+    },
+    undefined,
+    {
+      world,
+      active: () => true,
+      actors: ["cenyan", "ahe"],
+      storageError: (e) => {
+        throw e;
+      },
+    },
+  );
+  try {
+    task(world, "cenyan", {
+      type: "talk",
+      target_id: "ahe",
+      topic: "营地分工",
+    });
+    tick();
+    assert.ok(world.conversationFor("cenyan"));
+    for (
+      let tries = 0;
+      world.conversationFor("cenyan") && tries < 100;
+      tries++
+    ) {
+      session.tick(performance.now());
+      await delay(12);
+    }
+    assert.deepEqual(spoken, ["cenyan", "ahe", "cenyan", "ahe"]);
+    assert.equal(
+      prompts.filter((prompt) =>
+        prompt.includes("只返回合法 JSON。对白使用 speech"),
+      ).length,
+      1,
+    );
+    assert.equal(world.snapshot().state.cenyan.last?.code, "TALK_ENDED");
+  } finally {
+    await session.close();
+    provider.closeAllConnections();
+    await new Promise<void>((resolve) => provider.close(() => resolve()));
+  }
+});
+
+test("Phase 5 toolbox loans conserve the item and game time survives reopening", (t) => {
+  const { world, path } = worldFixture(t, (state) => {
+    closePositions(state);
+    state.inventory.toolbox = 1;
+  });
+  const tryLoan = world.applySocial(randomUUID(), "player", {
+    kind: "offer",
+    target: "ahe",
+    terms: { kind: "loan", give: { item: "toolbox", qty: 1 } },
+  });
+  assert.equal(
+    world.applySocial(randomUUID(), "ahe", {
+      kind: "respond",
+      offerId: tryLoan.offerId!,
+      choice: "accept",
+    }).code,
+    "HANDOFF_DONE",
+  );
+  assert.equal(world.snapshot().state.actors.ahe.bag.toolbox, 1);
+  assert.equal(world.snapshot().state.inventory.toolbox, 0);
+  for (let tick = 1; tick <= 40; tick++) world.tick(tick * 50, 50);
+  const earlier = world.snapshot().state.gameSeconds;
+  assert.equal(earlier, 2);
+  for (let tick = 41; tick <= 120; tick++) world.tick(tick * 50, 0);
+  assert.equal(world.snapshot().state.gameSeconds, earlier);
+  world.flush();
+  const reopened = new SaveFile(path);
+  try {
+    assert.equal(reopened.initial.gameSeconds, earlier);
+    assert.equal(reopened.initial.actors.ahe.bag.toolbox, 1);
+    const restarted = new World(reopened);
+    const loan = restarted
+      .snapshot()
+      .state.pledges.find(({ condition }) => condition.kind === "return")!;
+    assert.equal(
+      restarted.applySocial(randomUUID(), "ahe", {
+        kind: "return",
+        offerId: loan.id,
+      }).code,
+      "LOAN_RETURNED",
+    );
+    assert.equal(restarted.snapshot().state.inventory.toolbox, 1);
+    assert.equal(restarted.snapshot().state.actors.ahe.bag.toolbox, 0);
+  } finally {
+    reopened.close();
+  }
+});

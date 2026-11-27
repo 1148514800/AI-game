@@ -3,11 +3,21 @@ import { spawn, type ChildProcess } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { once } from "node:events";
 import { freeBackendPort, stopBackend } from "./backend-process.js";
-import { closeSync, mkdirSync, mkdtempSync, openSync, rmSync } from "node:fs";
+import {
+  closeSync,
+  mkdirSync,
+  mkdtempSync,
+  openSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { WebSocket } from "ws";
 import {
+  clues,
+  projects,
+  resources,
   distance,
   nearbyTarget,
   mapWidth,
@@ -16,9 +26,9 @@ import {
   type Point,
   type Target,
 } from "../src/shared/world.js";
-import { route } from "./paths.js";
+import { findKeyboardRoute } from "./paths.js";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase4";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase5";
 const backendUrl = "http://127.0.0.1:3003";
 
 const test = base.extend<{
@@ -107,7 +117,12 @@ async function walk(page: Page, goal: (p: Point) => boolean, repaired = false) {
     x: Number(el.dataset.cenyanX),
     y: Number(el.dataset.cenyanY),
   }));
-  const steps = route(await position(page), goal, repaired, [npc, ...valley.residents.filter((actor) => actor.id !== "cenyan")]);
+  const start = await position(page);
+  const steps = findKeyboardRoute(start, goal, repaired, [
+    npc,
+    ...valley.residents.filter((actor) => actor.id !== "cenyan"),
+  ]);
+  if (!steps) throw Error(`No walkable route from ${start.x}, ${start.y}`);
   for (const step of steps) {
     const axis = step.axis;
     const value = step[axis];
@@ -150,9 +165,22 @@ test("fresh journey collects all materials, repairs, crosses, explores and resto
   page,
   backend,
 }) => {
+  base.setTimeout(230_000);
   const external: string[] = [];
   const errors: string[] = [];
   const initialMissing: string[] = [];
+  const journey: object[] = [];
+  async function checkpoint(stage: string) {
+    journey.push({
+      stage,
+      position: await position(page),
+      time: await page.locator("#valley-time").innerText(),
+      objective: await page.locator("#objective").innerText(),
+      roof: await page.locator("#carpenter-roof-status").innerText(),
+      camp: await page.locator("#valley-camp-status").innerText(),
+      clues: await page.locator("#expedition-status").innerText(),
+    });
+  }
   let restarting = false;
   page.on("request", (request) => {
     const url = new URL(request.url());
@@ -200,7 +228,9 @@ test("fresh journey collects all materials, repairs, crosses, explores and resto
     );
     await screenshot(page, `resident-${resident.id}`);
     {
-      await expect(page.getByRole("dialog", { name: resident.name })).toBeVisible();
+      await expect(
+        page.getByRole("dialog", { name: resident.name }),
+      ).toBeVisible();
       await expect(page.locator("#dialogue-mode")).toContainText("模拟");
       await page.getByRole("button", { name: "关闭对话" }).click();
     }
@@ -270,30 +300,114 @@ test("fresh journey collects all materials, repairs, crosses, explores and resto
     timeout: 20000,
   });
   expect(await progress(page)).toBe(100);
+  await checkpoint("旧桥修通");
   await screenshot(page, "bridge-after");
 
   await approach(page, valley.ruin, true);
   expect((await position(page)).x).toBeGreaterThan(600);
   await page.getByRole("button", { name: "查看航标" }).click();
-  await expect(page.locator("#objective")).toHaveText("旅程完成");
+  await expect(page.locator("#objective")).toHaveText("已找到航标");
   await expect(page.locator("#feedback")).toHaveText(valley.ruin.clue);
   await screenshot(page, "beacon-ruin");
+  for (const clue of clues.slice(1)) {
+    await approach(page, clue, true);
+    await page.keyboard.press("e");
+    await expect(page.locator("#expedition-clues")).toContainText(clue.name);
+  }
+  await expect(page.locator("#expedition-status")).toHaveText("东岸线索 3 / 3");
+  await checkpoint("三条线索记入手记");
+  await screenshot(page, "phase5-east-bank-clues");
+
+  // Complete both local projects in the same journey without asking residents.
+  await approach(page, resources.get("workshop-toolbox")!, true);
+  await page.keyboard.press("e");
+  await expect(bag(page, "toolbox")).toHaveText("1");
+  for (const [index, resource] of valley.resources.slice(0, 2).entries()) {
+    await approach(page, resource, true);
+    await page.keyboard.press("e");
+    await expect(bag(page, "wood")).toHaveText(String(index + 1));
+  }
+  const roof = projects.get("carpenter-roof")!;
+  await approach(page, roof, true);
+  await screenshot(page, "phase5-roof-before");
+  await page.keyboard.press("e");
+  await expect(page.locator("#carpenter-roof-status")).toContainText(
+    "木材 2 / 2",
+  );
+  await page.keyboard.press("e");
+  await expect(page.locator("#carpenter-roof-status")).toContainText("已完成", {
+    timeout: 8500,
+  });
+  await expect(bag(page, "toolbox")).toHaveText("1");
+  await screenshot(page, "phase5-roof-complete");
+  await checkpoint("屋顶修缮完成");
+  const camp = projects.get("valley-camp")!;
+  for (const berry of ["berry-west", "berry-south"]) {
+    await approach(page, resources.get(berry)!, true);
+    await page.keyboard.press("e");
+    await expect(bag(page, "food")).toHaveText("1");
+    await approach(page, camp, true);
+    await page.keyboard.press("e");
+    await expect(bag(page, "food")).toHaveText("0");
+  }
+  await expect(page.locator("#valley-camp-status")).toContainText(
+    "食物 2 / 4 · 已完成",
+  );
+  await screenshot(page, "phase5-camp-complete");
+  await checkpoint("公共营地储备达标");
+  await page.locator("#pause").click();
+  await expect(page.locator("#pause")).toHaveText("继续");
+  await page.waitForTimeout(200);
+  const heldTime = await page.locator("#valley-time").innerText();
+  await page.waitForTimeout(1200);
+  await expect(page.locator("#valley-time")).toHaveText(heldTime);
+  await backend.stop();
+  await backend.start();
+  await ready(page);
+  await expect(page.locator("#carpenter-roof-status")).toContainText("已完成");
+  await expect(page.locator("#valley-camp-status")).toContainText("食物 2 / 4");
+  await expect(page.locator("#expedition-status")).toHaveText("东岸线索 3 / 3");
+  await expect(page.locator("#valley-time")).toContainText("第 1 天");
   const end = await position(page);
   await page.reload();
   await ready(page);
-  await expect(page.locator("#objective")).toHaveText("旅程完成");
+  await expect(page.locator("#objective")).toHaveText("雾灯谷阶段成果");
   expect(distance(await position(page), end)).toBeLessThan(1);
   await backend.stop();
   await expect(page.locator("#game")).toHaveAttribute("data-ready", "false");
   await backend.start();
   await ready(page);
-  await expect(page.locator("#objective")).toHaveText("旅程完成");
+  await expect(page.locator("#objective")).toHaveText("雾灯谷阶段成果");
   await expect(page.locator("#progress")).toHaveJSProperty("value", 100);
   expect(distance(await position(page), end)).toBeLessThan(1);
+  await checkpoint("重启后恢复进度");
+
+  const berries = resources.get("berry-south")!;
+  await approach(page, berries, true);
+  await expect(page.locator("#feedback")).toContainText("可采集", {
+    timeout: berries.cooldownMs + 2000,
+  });
+  await page.keyboard.press("e");
+  await expect(bag(page, "food")).toHaveText("1");
+  await approach(page, camp, true);
+  await page.keyboard.press("e");
+  await expect(bag(page, "food")).toHaveText("0");
+  await expect(page.locator("#valley-camp-status")).toContainText(
+    "食物 3 / 4 · 已完成",
+  );
+  await expect(page.locator("#feedback")).toContainText("交付食物");
+  await expect(page.locator("#feedback")).not.toContainText("营地备齐了两份");
+  await expect(page.locator("#objective")).toHaveText("雾灯谷阶段成果");
+  await checkpoint("阶段成果后继续采集并补给");
+  await screenshot(page, "phase5-camp-restocked");
+  writeFileSync(
+    join(evidence, "phase5-player-journey.json"),
+    JSON.stringify(journey, undefined, 2) + "\n",
+  );
 
   await page.getByRole("button", { name: "重开旅程" }).click();
   await page.getByRole("button", { name: "继续当前旅程" }).click();
-  await expect(page.locator("#objective")).toHaveText("旅程完成");
+  await expect(page.locator("#objective")).toHaveText("雾灯谷阶段成果");
   await page.getByRole("button", { name: "重开旅程" }).click();
   await page.getByRole("button", { name: "确认重开" }).click();
   await expect(page.locator("#objective")).toHaveText("修复雾灯旧桥");

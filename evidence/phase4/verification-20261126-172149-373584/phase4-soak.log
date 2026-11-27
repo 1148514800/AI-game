@@ -1,0 +1,5 @@
+
+> mistsea-phase1@0.3.0-phase3 soak:phase4
+> node --import tsx scripts/soak-phase4.mjs --duration 1800
+
+PASS 1800009 ms · /workspace/mistsea-phase4/evidence/phase4/verification-20261126-172149-373584/soak-flmxXy

@@ -1,0 +1,83 @@
+{
+  "projects": [
+    {
+      "id": "carpenter-roof",
+      "name": "岑砚的屋顶",
+      "x": 247,
+      "y": 281,
+      "range": 21,
+      "required": { "wood": 2 },
+      "workMs": 6000,
+      "done": "屋顶修好了，木匠工坊不再漏雨。"
+    },
+    {
+      "id": "valley-camp",
+      "name": "公共营地",
+      "x": 166,
+      "y": 415,
+      "range": 23,
+      "required": { "food": 2 },
+      "capacity": { "food": 4 },
+      "workMs": 0,
+      "done": "营地备齐了两份食物。"
+    }
+  ],
+  "resources": [
+    {
+      "id": "berry-west",
+      "name": "野莓灌木",
+      "x": 92,
+      "y": 407,
+      "range": 24,
+      "item": "food",
+      "asset": "bush",
+      "spent": "leaf",
+      "yieldCount": 1,
+      "cooldownMs": 30000
+    },
+    {
+      "id": "berry-south",
+      "name": "谷南野莓",
+      "x": 225,
+      "y": 450,
+      "range": 24,
+      "item": "food",
+      "asset": "bush",
+      "spent": "leaf",
+      "yieldCount": 1,
+      "cooldownMs": 30000
+    },
+    {
+      "id": "workshop-toolbox",
+      "name": "工坊备用工具",
+      "x": 281,
+      "y": 281,
+      "range": 18,
+      "item": "toolbox",
+      "asset": "toolbox",
+      "spent": "supply-crate",
+      "yieldCount": 1,
+      "cooldownMs": 9007199254740991
+    }
+  ],
+  "clues": [
+    {
+      "id": "beacon-inscription",
+      "name": "星纹石碑",
+      "x": 638,
+      "y": 304,
+      "range": 24,
+      "asset": "ruin-stone",
+      "text": "石碑上刻着三盏航灯。中间的灯指向北方，另外两盏标出退潮后可走的浅滩。"
+    },
+    {
+      "id": "beacon-journal",
+      "name": "测绘残页",
+      "x": 721,
+      "y": 328,
+      "range": 22,
+      "asset": "letter",
+      "text": "残页写着：旧航道曾连接雾灯谷与北方聚落。雾潮升起时，巡灯人会在这里等待信号。"
+    }
+  ]
+}

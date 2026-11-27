@@ -36,6 +36,7 @@
             <div class="location">
               <span></span>
               <h2 id="location">谷地聚落</h2>
+              <time id="valley-time"></time>
             </div>
             <button id="overview" type="button" aria-pressed="false" disabled>
               全谷地图
@@ -101,6 +102,8 @@
                   <select id="gift-item">
                     <option value="wood">木材</option>
                     <option value="stone">石材</option>
+                    <option value="food">食物</option>
+                    <option value="toolbox">工具箱</option>
                   </select>
                 </label>
                 <label
@@ -128,11 +131,21 @@
                       <option value="work">承诺施工</option>
                     </select>
                   </label>
+                  <label id="social-project-fields" hidden
+                    >工程
+                    <select id="social-project">
+                      <option value="old-river-bridge">雾灯旧桥</option>
+                      <option value="carpenter-roof">岑砚的屋顶</option>
+                      <option value="valley-camp">公共营地</option>
+                    </select>
+                  </label>
                   <label id="social-give-fields"
                     >材料
                     <select id="social-item">
                       <option value="wood">木材</option>
                       <option value="stone">石材</option>
+                      <option value="food">食物</option>
+                      <option value="toolbox">工具箱</option>
                     </select>
                     <input
                       id="social-qty"
@@ -148,6 +161,8 @@
                     >换取
                     <select id="social-take">
                       <option value="stone">石材</option>
+                      <option value="food">食物</option>
+                      <option value="toolbox">工具箱</option>
                       <option value="wood">木材</option>
                     </select>
                     <input
@@ -272,6 +287,16 @@
             <p id="bridge-legacy-contribution" class="contribution" hidden></p>
           </section>
 
+          <section class="panel" aria-label="建设与探索">
+            <h2>建设与探索</h2>
+            <p id="carpenter-roof-status"></p>
+            <p id="valley-camp-status"></p>
+            <p id="expedition-status"></p>
+            <ul id="expedition-clues" hidden></ul>
+            <p class="contribution">
+              木匠工坊可修屋顶。聚落南边的营地收食物。桥东有航标和两处线索。
+            </p>
+          </section>
           <section class="panel inventory">
             <h2>背包</h2>
             <ul id="inventory" aria-label="物品栏"></ul>

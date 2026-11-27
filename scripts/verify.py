@@ -1,4 +1,4 @@
-"""Run Phase 4 checks without model credentials and save separate evidence."""
+"""Run Phase 5 checks without model credentials and save separate evidence."""
 import datetime
 import json
 import os
@@ -9,7 +9,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 TIMEZONE = datetime.timezone(datetime.timedelta(hours=8))
 stamp = datetime.datetime.now(TIMEZONE).strftime("%Y%m%d-%H%M%S-%f")
-evidence = ROOT / "evidence" / "phase4" / f"verification-{stamp}"
+evidence = ROOT / "evidence" / "phase5" / f"verification-{stamp}"
 evidence.mkdir(parents=True)
 environment = {name: os.environ[name] for name in (
     "PATH", "HOME", "USERPROFILE", "SYSTEMROOT", "TMPDIR", "TMP", "TEMP",

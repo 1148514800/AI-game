@@ -1,0 +1,2972 @@
+[
+  {
+    "elapsedMs": 15037.875748999999,
+    "serverAndRunnerMemory": {
+      "rss": 238460928,
+      "heapTotal": 128442368,
+      "heapUsed": 57419472,
+      "external": 13320934,
+      "arrayBuffers": 8966276
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 7
+    },
+    "clientHeap": {
+      "usedSize": 10556184,
+      "totalSize": 16322560,
+      "embedderHeapUsedSize": 30629344,
+      "backingStorageSize": 4610091
+    },
+    "browserDocuments": 1,
+    "browserNodes": 879,
+    "browserListeners": 228,
+    "snapshots": 301,
+    "activePlans": 2
+  },
+  {
+    "elapsedMs": 30057.932581,
+    "serverAndRunnerMemory": {
+      "rss": 239247360,
+      "heapTotal": 128966656,
+      "heapUsed": 57908904,
+      "external": 13334326,
+      "arrayBuffers": 8979668
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 7
+    },
+    "clientHeap": {
+      "usedSize": 8656788,
+      "totalSize": 17108992,
+      "embedderHeapUsedSize": 4478312,
+      "backingStorageSize": 4229353
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 568,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 45079.21366,
+    "serverAndRunnerMemory": {
+      "rss": 245407744,
+      "heapTotal": 128704512,
+      "heapUsed": 63055776,
+      "external": 13360066,
+      "arrayBuffers": 9005408
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 7
+    },
+    "clientHeap": {
+      "usedSize": 9942104,
+      "totalSize": 17371136,
+      "embedderHeapUsedSize": 10772432,
+      "backingStorageSize": 4332917
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 857,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 60099.352611,
+    "serverAndRunnerMemory": {
+      "rss": 245407744,
+      "heapTotal": 128966656,
+      "heapUsed": 71287736,
+      "external": 13983286,
+      "arrayBuffers": 9628628
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 7
+    },
+    "clientHeap": {
+      "usedSize": 9089696,
+      "totalSize": 17108992,
+      "embedderHeapUsedSize": 9562888,
+      "backingStorageSize": 4202268
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 1008,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 75113.267328,
+    "serverAndRunnerMemory": {
+      "rss": 245538816,
+      "heapTotal": 128966656,
+      "heapUsed": 69637496,
+      "external": 13567737,
+      "arrayBuffers": 9213079
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 8959596,
+      "totalSize": 17108992,
+      "embedderHeapUsedSize": 8947224,
+      "backingStorageSize": 4187695
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 1095,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 90143.830929,
+    "serverAndRunnerMemory": {
+      "rss": 245538816,
+      "heapTotal": 129228800,
+      "heapUsed": 74598800,
+      "external": 14995967,
+      "arrayBuffers": 10641309
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8808216,
+      "totalSize": 17108992,
+      "embedderHeapUsedSize": 7639160,
+      "backingStorageSize": 4187695
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 1223,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 105159.299876,
+    "serverAndRunnerMemory": {
+      "rss": 245800960,
+      "heapTotal": 129228800,
+      "heapUsed": 73087304,
+      "external": 14463101,
+      "arrayBuffers": 10108443
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8807964,
+      "totalSize": 17371136,
+      "embedderHeapUsedSize": 7381104,
+      "backingStorageSize": 4187695
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 1311,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 120173.010101,
+    "serverAndRunnerMemory": {
+      "rss": 245800960,
+      "heapTotal": 129228800,
+      "heapUsed": 77642744,
+      "external": 15795827,
+      "arrayBuffers": 11441169
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9667460,
+      "totalSize": 23138304,
+      "embedderHeapUsedSize": 9135624,
+      "backingStorageSize": 4294703
+    },
+    "browserDocuments": 1,
+    "browserNodes": 871,
+    "browserListeners": 228,
+    "snapshots": 1434,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 135197.601398,
+    "serverAndRunnerMemory": {
+      "rss": 245800960,
+      "heapTotal": 129490944,
+      "heapUsed": 74514288,
+      "external": 14652817,
+      "arrayBuffers": 10298159
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8358504,
+      "totalSize": 23138304,
+      "embedderHeapUsedSize": 3567176,
+      "backingStorageSize": 4187695
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 1518,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 150218.723297,
+    "serverAndRunnerMemory": {
+      "rss": 187265024,
+      "heapTotal": 64479232,
+      "heapUsed": 59373688,
+      "external": 13339830,
+      "arrayBuffers": 8985172
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8027200,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 2608280,
+      "backingStorageSize": 4187695
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 1585,
+    "activePlans": 2
+  },
+  {
+    "elapsedMs": 165240.661915,
+    "serverAndRunnerMemory": {
+      "rss": 187527168,
+      "heapTotal": 64741376,
+      "heapUsed": 59272224,
+      "external": 13455722,
+      "arrayBuffers": 9101064
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11133424,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 25434712,
+      "backingStorageSize": 4215443
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 1712,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 180265.220977,
+    "serverAndRunnerMemory": {
+      "rss": 188182528,
+      "heapTotal": 65265664,
+      "heapUsed": 60725080,
+      "external": 13618229,
+      "arrayBuffers": 9263571
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10714984,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 22081736,
+      "backingStorageSize": 4202018
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 1798,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 195282.61332499998,
+    "serverAndRunnerMemory": {
+      "rss": 188575744,
+      "heapTotal": 65527808,
+      "heapUsed": 61300912,
+      "external": 13798776,
+      "arrayBuffers": 9444118
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9789244,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 14704432,
+      "backingStorageSize": 4201717
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 1819,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 210298.753444,
+    "serverAndRunnerMemory": {
+      "rss": 188837888,
+      "heapTotal": 66576384,
+      "heapUsed": 61875480,
+      "external": 13895500,
+      "arrayBuffers": 9540842
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10058420,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 10848232,
+      "backingStorageSize": 4318053
+    },
+    "browserDocuments": 1,
+    "browserNodes": 871,
+    "browserListeners": 228,
+    "snapshots": 1903,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 225317.523521,
+    "serverAndRunnerMemory": {
+      "rss": 189362176,
+      "heapTotal": 66838528,
+      "heapUsed": 62355976,
+      "external": 13992670,
+      "arrayBuffers": 9638012
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8120108,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 2609208,
+      "backingStorageSize": 4187695
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 1923,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 240335.689557,
+    "serverAndRunnerMemory": {
+      "rss": 190148608,
+      "heapTotal": 67362816,
+      "heapUsed": 62386120,
+      "external": 14155535,
+      "arrayBuffers": 9800877
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11840912,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 29569544,
+      "backingStorageSize": 4240764
+    },
+    "browserDocuments": 1,
+    "browserNodes": 904,
+    "browserListeners": 228,
+    "snapshots": 2015,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 255356.17733,
+    "serverAndRunnerMemory": {
+      "rss": 187379712,
+      "heapTotal": 66936832,
+      "heapUsed": 57331048,
+      "external": 13336862,
+      "arrayBuffers": 8982204
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11098764,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 24478384,
+      "backingStorageSize": 4214680
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2030,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 270371.780411,
+    "serverAndRunnerMemory": {
+      "rss": 187510784,
+      "heapTotal": 66936832,
+      "heapUsed": 56934192,
+      "external": 13499053,
+      "arrayBuffers": 9144395
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10317232,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 18364840,
+      "backingStorageSize": 4201559
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2122,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 285391.762692,
+    "serverAndRunnerMemory": {
+      "rss": 187904000,
+      "heapTotal": 66936832,
+      "heapUsed": 57970712,
+      "external": 13596186,
+      "arrayBuffers": 9241528
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10930040,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 15114920,
+      "backingStorageSize": 4383538
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2185,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 300407.586081,
+    "serverAndRunnerMemory": {
+      "rss": 187904000,
+      "heapTotal": 66936832,
+      "heapUsed": 59147440,
+      "external": 13693220,
+      "arrayBuffers": 9338562
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8899040,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 6868752,
+      "backingStorageSize": 4187695
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2230,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 315465.108322,
+    "serverAndRunnerMemory": {
+      "rss": 188166144,
+      "heapTotal": 66936832,
+      "heapUsed": 58577408,
+      "external": 13939446,
+      "arrayBuffers": 9584788
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 12897980,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 34892240,
+      "backingStorageSize": 4318300
+    },
+    "browserDocuments": 1,
+    "browserNodes": 871,
+    "browserListeners": 228,
+    "snapshots": 2253,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 330489.497506,
+    "serverAndRunnerMemory": {
+      "rss": 188559360,
+      "heapTotal": 64839680,
+      "heapUsed": 59699960,
+      "external": 14036681,
+      "arrayBuffers": 9682023
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11357696,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 31549928,
+      "backingStorageSize": 4213819
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2337,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 345508.884244,
+    "serverAndRunnerMemory": {
+      "rss": 189083648,
+      "heapTotal": 67198976,
+      "heapUsed": 60610456,
+      "external": 14199518,
+      "arrayBuffers": 9844860
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11529220,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 33015688,
+      "backingStorageSize": 4213893
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2424,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 360529.191317,
+    "serverAndRunnerMemory": {
+      "rss": 189476864,
+      "heapTotal": 67198976,
+      "heapUsed": 61137552,
+      "external": 14296977,
+      "arrayBuffers": 9942319
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 7937228,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 3997576,
+      "backingStorageSize": 4186909
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2444,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 375548.26336599997,
+    "serverAndRunnerMemory": {
+      "rss": 190656512,
+      "heapTotal": 65642496,
+      "heapUsed": 61913696,
+      "external": 14394119,
+      "arrayBuffers": 10039461
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8161988,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 6100616,
+      "backingStorageSize": 4186890
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2532,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 390571.9745,
+    "serverAndRunnerMemory": {
+      "rss": 190337024,
+      "heapTotal": 67379200,
+      "heapUsed": 55197328,
+      "external": 13349754,
+      "arrayBuffers": 9000614
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8460940,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 7868680,
+      "backingStorageSize": 4200753
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2552,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 405591.092038,
+    "serverAndRunnerMemory": {
+      "rss": 190337024,
+      "heapTotal": 67379200,
+      "heapUsed": 56404496,
+      "external": 13446453,
+      "arrayBuffers": 9097313
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8698792,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 10217784,
+      "backingStorageSize": 4200787
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2639,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 420610.146508,
+    "serverAndRunnerMemory": {
+      "rss": 190337024,
+      "heapTotal": 67379200,
+      "heapUsed": 55745752,
+      "external": 13543387,
+      "arrayBuffers": 9194247
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9082356,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 13810232,
+      "backingStorageSize": 4186890
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2658,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 435627.044558,
+    "serverAndRunnerMemory": {
+      "rss": 190337024,
+      "heapTotal": 65282048,
+      "heapUsed": 56607472,
+      "external": 13640395,
+      "arrayBuffers": 9291255
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9258008,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 14774648,
+      "backingStorageSize": 4200753
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2746,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 450643.872233,
+    "serverAndRunnerMemory": {
+      "rss": 190337024,
+      "heapTotal": 67379200,
+      "heapUsed": 57731056,
+      "external": 13737345,
+      "arrayBuffers": 9388205
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9694884,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 17933880,
+      "backingStorageSize": 4200790
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2838,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 465659.051035,
+    "serverAndRunnerMemory": {
+      "rss": 190337024,
+      "heapTotal": 67379200,
+      "heapUsed": 57611800,
+      "external": 13834928,
+      "arrayBuffers": 9485788
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9773148,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 19116280,
+      "backingStorageSize": 4200790
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2853,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 480675.547744,
+    "serverAndRunnerMemory": {
+      "rss": 190337024,
+      "heapTotal": 67379200,
+      "heapUsed": 59003520,
+      "external": 13932047,
+      "arrayBuffers": 9582907
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 12407164,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 25566904,
+      "backingStorageSize": 4538016
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 2929,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 495691.524875,
+    "serverAndRunnerMemory": {
+      "rss": 190337024,
+      "heapTotal": 67379200,
+      "heapUsed": 58402176,
+      "external": 14029192,
+      "arrayBuffers": 9680052
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1,
+      "Timeout": 1
+    },
+    "clientHeap": {
+      "usedSize": 10739340,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 25721776,
+      "backingStorageSize": 4239501
+    },
+    "browserDocuments": 1,
+    "browserNodes": 888,
+    "browserListeners": 228,
+    "snapshots": 2964,
+    "activePlans": 2
+  },
+  {
+    "elapsedMs": 510707.186877,
+    "serverAndRunnerMemory": {
+      "rss": 190599168,
+      "heapTotal": 67641344,
+      "heapUsed": 59121024,
+      "external": 14126015,
+      "arrayBuffers": 9776875
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10874860,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 27378184,
+      "backingStorageSize": 4213879
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3053,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 525723.777688,
+    "serverAndRunnerMemory": {
+      "rss": 190730240,
+      "heapTotal": 65544192,
+      "heapUsed": 59690200,
+      "external": 14222955,
+      "arrayBuffers": 9873815
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11196128,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 30200032,
+      "backingStorageSize": 4227295
+    },
+    "browserDocuments": 1,
+    "browserNodes": 887,
+    "browserListeners": 228,
+    "snapshots": 3072,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 540747.150899,
+    "serverAndRunnerMemory": {
+      "rss": 190730240,
+      "heapTotal": 67379200,
+      "heapUsed": 53961624,
+      "external": 13330574,
+      "arrayBuffers": 8983750
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11134944,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 30270376,
+      "backingStorageSize": 4200754
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3159,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 555768.78945,
+    "serverAndRunnerMemory": {
+      "rss": 190730240,
+      "heapTotal": 67379200,
+      "heapUsed": 55403816,
+      "external": 13427871,
+      "arrayBuffers": 9081047
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8085800,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 4088128,
+      "backingStorageSize": 4213708
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3212,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 570787.9797810001,
+    "serverAndRunnerMemory": {
+      "rss": 191516672,
+      "heapTotal": 68190208,
+      "heapUsed": 57085384,
+      "external": 13526182,
+      "arrayBuffers": 9179358
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 7960696,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 4287008,
+      "backingStorageSize": 4186890
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3267,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 585807.2018220001,
+    "serverAndRunnerMemory": {
+      "rss": 191516672,
+      "heapTotal": 66093056,
+      "heapUsed": 56897384,
+      "external": 13623939,
+      "arrayBuffers": 9277115
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8348376,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 7733424,
+      "backingStorageSize": 4186890
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3287,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 600824.261084,
+    "serverAndRunnerMemory": {
+      "rss": 191516672,
+      "heapTotal": 68190208,
+      "heapUsed": 56861280,
+      "external": 13722102,
+      "arrayBuffers": 9375278
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8521836,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 8904560,
+      "backingStorageSize": 4186890
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3374,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 615855.520479,
+    "serverAndRunnerMemory": {
+      "rss": 191516672,
+      "heapTotal": 66093056,
+      "heapUsed": 57432720,
+      "external": 13820665,
+      "arrayBuffers": 9473841
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8802532,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 11530584,
+      "backingStorageSize": 4186890
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3464,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 630879.351822,
+    "serverAndRunnerMemory": {
+      "rss": 191778816,
+      "heapTotal": 66093056,
+      "heapUsed": 58643864,
+      "external": 13918644,
+      "arrayBuffers": 9571820
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9234920,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 14679384,
+      "backingStorageSize": 4200790
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3479,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 645897.5797,
+    "serverAndRunnerMemory": {
+      "rss": 191778816,
+      "heapTotal": 68190208,
+      "heapUsed": 58914832,
+      "external": 14081866,
+      "arrayBuffers": 9735042
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9725260,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 18523192,
+      "backingStorageSize": 4200760
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3572,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 660912.3892430001,
+    "serverAndRunnerMemory": {
+      "rss": 191778816,
+      "heapTotal": 68190208,
+      "heapUsed": 59351808,
+      "external": 14178642,
+      "arrayBuffers": 9831818
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9883828,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 19666544,
+      "backingStorageSize": 4200758
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3587,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 675939.43568,
+    "serverAndRunnerMemory": {
+      "rss": 191352832,
+      "heapTotal": 65028096,
+      "heapUsed": 54520512,
+      "external": 13329805,
+      "arrayBuffers": 8984357
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9979980,
+      "totalSize": 24449024,
+      "embedderHeapUsedSize": 20807992,
+      "backingStorageSize": 4200795
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3676,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 690954.5077470001,
+    "serverAndRunnerMemory": {
+      "rss": 191352832,
+      "heapTotal": 65028096,
+      "heapUsed": 54831928,
+      "external": 13426988,
+      "arrayBuffers": 9081540
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10376072,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 23912904,
+      "backingStorageSize": 4200794
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3691,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 705971.6722550001,
+    "serverAndRunnerMemory": {
+      "rss": 191352832,
+      "heapTotal": 67125248,
+      "heapUsed": 56111904,
+      "external": 13589878,
+      "arrayBuffers": 9244430
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10506748,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 25235080,
+      "backingStorageSize": 4200759
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3781,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 720987.485847,
+    "serverAndRunnerMemory": {
+      "rss": 191352832,
+      "heapTotal": 67125248,
+      "heapUsed": 56683592,
+      "external": 13687170,
+      "arrayBuffers": 9341722
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 12669996,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 30564704,
+      "backingStorageSize": 4487102
+    },
+    "browserDocuments": 1,
+    "browserNodes": 870,
+    "browserListeners": 228,
+    "snapshots": 3868,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 736003.1149380001,
+    "serverAndRunnerMemory": {
+      "rss": 191352832,
+      "heapTotal": 65028096,
+      "heapUsed": 56533400,
+      "external": 13784720,
+      "arrayBuffers": 9439272
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11204096,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 30761840,
+      "backingStorageSize": 4213893
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3888,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 751023.222394,
+    "serverAndRunnerMemory": {
+      "rss": 191352832,
+      "heapTotal": 67125248,
+      "heapUsed": 56907432,
+      "external": 13965121,
+      "arrayBuffers": 9619673
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 13877140,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 32847936,
+      "backingStorageSize": 4653877
+    },
+    "browserDocuments": 1,
+    "browserNodes": 872,
+    "browserListeners": 228,
+    "snapshots": 3947,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 766038.6181800001,
+    "serverAndRunnerMemory": {
+      "rss": 191746048,
+      "heapTotal": 65396736,
+      "heapUsed": 58296264,
+      "external": 13996474,
+      "arrayBuffers": 9651026
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11531596,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 33267808,
+      "backingStorageSize": 4213824
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 3991,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 781083.0495630001,
+    "serverAndRunnerMemory": {
+      "rss": 191746048,
+      "heapTotal": 67493888,
+      "heapUsed": 58655416,
+      "external": 14093981,
+      "arrayBuffers": 9748533
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 7955156,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 4244984,
+      "backingStorageSize": 4186890
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 4082,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 796101.8422810001,
+    "serverAndRunnerMemory": {
+      "rss": 191746048,
+      "heapTotal": 67493888,
+      "heapUsed": 60153056,
+      "external": 14190285,
+      "arrayBuffers": 9844837
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8257644,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 6930848,
+      "backingStorageSize": 4186890
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 4097,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 811115.6837960001,
+    "serverAndRunnerMemory": {
+      "rss": 191746048,
+      "heapTotal": 65396736,
+      "heapUsed": 59489032,
+      "external": 14286648,
+      "arrayBuffers": 9941200
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8563876,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 9211392,
+      "backingStorageSize": 4186890
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 4190,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 826130.476751,
+    "serverAndRunnerMemory": {
+      "rss": 191746048,
+      "heapTotal": 67493888,
+      "heapUsed": 60688248,
+      "external": 14382838,
+      "arrayBuffers": 10037390
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9773884,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 12544480,
+      "backingStorageSize": 4343838
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 4227,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 841147.6543970001,
+    "serverAndRunnerMemory": {
+      "rss": 192925696,
+      "heapTotal": 68706304,
+      "heapUsed": 56567440,
+      "external": 13341478,
+      "arrayBuffers": 8996030
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9109948,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 13307568,
+      "backingStorageSize": 4200799
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 4298,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 856164.5454620001,
+    "serverAndRunnerMemory": {
+      "rss": 192925696,
+      "heapTotal": 66609152,
+      "heapUsed": 56167440,
+      "external": 13438501,
+      "arrayBuffers": 9093053
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9333492,
+      "totalSize": 24186880,
+      "embedderHeapUsedSize": 15364224,
+      "backingStorageSize": 4200794
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 4313,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1030700.978171,
+    "serverAndRunnerMemory": {
+      "rss": 192925696,
+      "heapTotal": 66609152,
+      "heapUsed": 56601776,
+      "external": 13540536,
+      "arrayBuffers": 9195088
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11150016,
+      "totalSize": 24449024,
+      "embedderHeapUsedSize": 30505136,
+      "backingStorageSize": 4226783
+    },
+    "browserDocuments": 1,
+    "browserNodes": 877,
+    "browserListeners": 228,
+    "snapshots": 4396,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1045718.3816470001,
+    "serverAndRunnerMemory": {
+      "rss": 192925696,
+      "heapTotal": 68706304,
+      "heapUsed": 57813320,
+      "external": 13637557,
+      "arrayBuffers": 9292109
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 7843356,
+      "totalSize": 12390400,
+      "embedderHeapUsedSize": 28337848,
+      "backingStorageSize": 4239733
+    },
+    "browserDocuments": 1,
+    "browserNodes": 871,
+    "browserListeners": 228,
+    "snapshots": 4417,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1060733.495868,
+    "serverAndRunnerMemory": {
+      "rss": 192925696,
+      "heapTotal": 68706304,
+      "heapUsed": 57784776,
+      "external": 13733808,
+      "arrayBuffers": 9388360
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 8323476,
+      "totalSize": 12390400,
+      "embedderHeapUsedSize": 33243624,
+      "backingStorageSize": 4240082
+    },
+    "browserDocuments": 1,
+    "browserNodes": 904,
+    "browserListeners": 228,
+    "snapshots": 4506,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1075917.838029,
+    "serverAndRunnerMemory": {
+      "rss": 192925696,
+      "heapTotal": 68706304,
+      "heapUsed": 58597720,
+      "external": 13820656,
+      "arrayBuffers": 9475208
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 7593164,
+      "totalSize": 13176832,
+      "embedderHeapUsedSize": 3609552,
+      "backingStorageSize": 4186933
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 4518,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1091032.066084,
+    "serverAndRunnerMemory": {
+      "rss": 173633536,
+      "heapTotal": 66609152,
+      "heapUsed": 59141240,
+      "external": 13982657,
+      "arrayBuffers": 9637209
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 7870460,
+      "totalSize": 12652544,
+      "embedderHeapUsedSize": 4189816,
+      "backingStorageSize": 4186933
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 4605,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1106092.454467,
+    "serverAndRunnerMemory": {
+      "rss": 174002176,
+      "heapTotal": 66609152,
+      "heapUsed": 59722552,
+      "external": 14230151,
+      "arrayBuffers": 9884703
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 8456068,
+      "totalSize": 14225408,
+      "embedderHeapUsedSize": 7933424,
+      "backingStorageSize": 4213861
+    },
+    "browserDocuments": 1,
+    "browserNodes": 870,
+    "browserListeners": 228,
+    "snapshots": 4628,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1121134.673227,
+    "serverAndRunnerMemory": {
+      "rss": 174571520,
+      "heapTotal": 68706304,
+      "heapUsed": 60043168,
+      "external": 14263130,
+      "arrayBuffers": 9917682
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 8933168,
+      "totalSize": 15273984,
+      "embedderHeapUsedSize": 12582672,
+      "backingStorageSize": 4200839
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 4713,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1136203.406487,
+    "serverAndRunnerMemory": {
+      "rss": 174743552,
+      "heapTotal": 68706304,
+      "heapUsed": 61429936,
+      "external": 14360992,
+      "arrayBuffers": 10015544
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 9360652,
+      "totalSize": 15273984,
+      "embedderHeapUsedSize": 16411496,
+      "backingStorageSize": 4186933
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 4732,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1151226.853405,
+    "serverAndRunnerMemory": {
+      "rss": 174821376,
+      "heapTotal": 65798144,
+      "heapUsed": 55074664,
+      "external": 13343079,
+      "arrayBuffers": 8997631
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9955368,
+      "totalSize": 15273984,
+      "embedderHeapUsedSize": 20432640,
+      "backingStorageSize": 4213922
+    },
+    "browserDocuments": 1,
+    "browserNodes": 871,
+    "browserListeners": 228,
+    "snapshots": 4821,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1166243.5821190001,
+    "serverAndRunnerMemory": {
+      "rss": 174821376,
+      "heapTotal": 67895296,
+      "heapUsed": 56143848,
+      "external": 13440591,
+      "arrayBuffers": 9095143
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10697112,
+      "totalSize": 15536128,
+      "embedderHeapUsedSize": 26053840,
+      "backingStorageSize": 4213939
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 4912,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1181291.762848,
+    "serverAndRunnerMemory": {
+      "rss": 174821376,
+      "heapTotal": 67895296,
+      "heapUsed": 56647952,
+      "external": 13538484,
+      "arrayBuffers": 9193036
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 7998196,
+      "totalSize": 15536128,
+      "embedderHeapUsedSize": 30456800,
+      "backingStorageSize": 4240047
+    },
+    "browserDocuments": 1,
+    "browserNodes": 904,
+    "browserListeners": 228,
+    "snapshots": 4931,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1196318.860012,
+    "serverAndRunnerMemory": {
+      "rss": 174821376,
+      "heapTotal": 67895296,
+      "heapUsed": 56956456,
+      "external": 13635588,
+      "arrayBuffers": 9290140
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10586528,
+      "totalSize": 15536128,
+      "embedderHeapUsedSize": 32623392,
+      "backingStorageSize": 4642136
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5018,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1211336.3211110001,
+    "serverAndRunnerMemory": {
+      "rss": 174821376,
+      "heapTotal": 67895296,
+      "heapUsed": 57653920,
+      "external": 13733150,
+      "arrayBuffers": 9387702
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 7978596,
+      "totalSize": 15536128,
+      "embedderHeapUsedSize": 5102896,
+      "backingStorageSize": 4186933
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5039,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1226353.501841,
+    "serverAndRunnerMemory": {
+      "rss": 174821376,
+      "heapTotal": 67895296,
+      "heapUsed": 58565944,
+      "external": 13830573,
+      "arrayBuffers": 9485125
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8569796,
+      "totalSize": 15536128,
+      "embedderHeapUsedSize": 9196744,
+      "backingStorageSize": 4186933
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5126,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1241370.5656960001,
+    "serverAndRunnerMemory": {
+      "rss": 174821376,
+      "heapTotal": 67895296,
+      "heapUsed": 59092888,
+      "external": 13927501,
+      "arrayBuffers": 9582053
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9005492,
+      "totalSize": 15536128,
+      "embedderHeapUsedSize": 12531360,
+      "backingStorageSize": 4200839
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5146,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1256387.5044510001,
+    "serverAndRunnerMemory": {
+      "rss": 174821376,
+      "heapTotal": 67895296,
+      "heapUsed": 58853424,
+      "external": 14090068,
+      "arrayBuffers": 9744620
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9024436,
+      "totalSize": 20779008,
+      "embedderHeapUsedSize": 12945656,
+      "backingStorageSize": 4186933
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5233,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1271407.8840700001,
+    "serverAndRunnerMemory": {
+      "rss": 174972928,
+      "heapTotal": 67895296,
+      "heapUsed": 59490784,
+      "external": 14205154,
+      "arrayBuffers": 9859706
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10675620,
+      "totalSize": 21041152,
+      "embedderHeapUsedSize": 16990560,
+      "backingStorageSize": 4408955
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5301,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1286426.548957,
+    "serverAndRunnerMemory": {
+      "rss": 174972928,
+      "heapTotal": 67895296,
+      "heapUsed": 60618592,
+      "external": 14302419,
+      "arrayBuffers": 9956971
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9260596,
+      "totalSize": 21303296,
+      "embedderHeapUsedSize": 14389424,
+      "backingStorageSize": 4200838
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5340,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1301446.713962,
+    "serverAndRunnerMemory": {
+      "rss": 174972928,
+      "heapTotal": 67895296,
+      "heapUsed": 60396168,
+      "external": 14399268,
+      "arrayBuffers": 10053820
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10083852,
+      "totalSize": 21303296,
+      "embedderHeapUsedSize": 16987448,
+      "backingStorageSize": 4304541
+    },
+    "browserDocuments": 1,
+    "browserNodes": 871,
+    "browserListeners": 228,
+    "snapshots": 5368,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1316467.082081,
+    "serverAndRunnerMemory": {
+      "rss": 175628288,
+      "heapTotal": 66347008,
+      "heapUsed": 55556736,
+      "external": 13347418,
+      "arrayBuffers": 9001970
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9732984,
+      "totalSize": 21303296,
+      "embedderHeapUsedSize": 18222544,
+      "backingStorageSize": 4200802
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5447,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1331484.585196,
+    "serverAndRunnerMemory": {
+      "rss": 175628288,
+      "heapTotal": 68444160,
+      "heapUsed": 56103816,
+      "external": 13444632,
+      "arrayBuffers": 9099184
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9868464,
+      "totalSize": 21303296,
+      "embedderHeapUsedSize": 19377376,
+      "backingStorageSize": 4200839
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5539,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1346499.491743,
+    "serverAndRunnerMemory": {
+      "rss": 175628288,
+      "heapTotal": 68444160,
+      "heapUsed": 58039504,
+      "external": 13542056,
+      "arrayBuffers": 9196608
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9587472,
+      "totalSize": 21565440,
+      "embedderHeapUsedSize": 17080384,
+      "backingStorageSize": 4200837
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5554,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1361518.268999,
+    "serverAndRunnerMemory": {
+      "rss": 175628288,
+      "heapTotal": 66347008,
+      "heapUsed": 57170752,
+      "external": 13705080,
+      "arrayBuffers": 9359632
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9846812,
+      "totalSize": 21827584,
+      "embedderHeapUsedSize": 19415768,
+      "backingStorageSize": 4200806
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5647,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1376533.88952,
+    "serverAndRunnerMemory": {
+      "rss": 175628288,
+      "heapTotal": 66347008,
+      "heapUsed": 58306592,
+      "external": 13801940,
+      "arrayBuffers": 9456492
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9869380,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 19425640,
+      "backingStorageSize": 4200804
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5662,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1391550.8816510001,
+    "serverAndRunnerMemory": {
+      "rss": 175628288,
+      "heapTotal": 68444160,
+      "heapUsed": 58173976,
+      "external": 13899052,
+      "arrayBuffers": 9553604
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9956468,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 20520232,
+      "backingStorageSize": 4200842
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5751,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1406565.609005,
+    "serverAndRunnerMemory": {
+      "rss": 175628288,
+      "heapTotal": 68444160,
+      "heapUsed": 59900800,
+      "external": 13995323,
+      "arrayBuffers": 9649875
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10594928,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 24257928,
+      "backingStorageSize": 4239955
+    },
+    "browserDocuments": 1,
+    "browserNodes": 872,
+    "browserListeners": 228,
+    "snapshots": 5768,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1421580.782407,
+    "serverAndRunnerMemory": {
+      "rss": 175628288,
+      "heapTotal": 66347008,
+      "heapUsed": 59319424,
+      "external": 14091963,
+      "arrayBuffers": 9746515
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10415364,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 23706376,
+      "backingStorageSize": 4213851
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5859,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1436604.103696,
+    "serverAndRunnerMemory": {
+      "rss": 177463296,
+      "heapTotal": 70254592,
+      "heapUsed": 62448464,
+      "external": 14187971,
+      "arrayBuffers": 9842523
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11976448,
+      "totalSize": 22351872,
+      "embedderHeapUsedSize": 30064016,
+      "backingStorageSize": 4370210
+    },
+    "browserDocuments": 1,
+    "browserNodes": 906,
+    "browserListeners": 228,
+    "snapshots": 5948,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1451615.5356420001,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 65789952,
+      "heapUsed": 55861888,
+      "external": 13321281,
+      "arrayBuffers": 8975833
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 9289800,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 15777392,
+      "backingStorageSize": 4200842
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5958,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1466744.043656,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 65789952,
+      "heapUsed": 56099232,
+      "external": 13409880,
+      "arrayBuffers": 9064432
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 8255156,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 7312784,
+      "backingStorageSize": 4186933
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 5969,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1481793.578186,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 67887104,
+      "heapUsed": 57613688,
+      "external": 13508104,
+      "arrayBuffers": 9162656
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 8668048,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 9196328,
+      "backingStorageSize": 4200806
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6060,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1497167.053168,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 67887104,
+      "heapUsed": 57826448,
+      "external": 13699839,
+      "arrayBuffers": 9354391
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 9629980,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 17648848,
+      "backingStorageSize": 4200532
+    },
+    "browserDocuments": 1,
+    "browserNodes": 871,
+    "browserListeners": 228,
+    "snapshots": 6076,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1512202.7136950002,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 67887104,
+      "heapUsed": 57774616,
+      "external": 13705824,
+      "arrayBuffers": 9360376
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 2
+    },
+    "clientHeap": {
+      "usedSize": 9675440,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 17660048,
+      "backingStorageSize": 4200842
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6167,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1527291.563148,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 67887104,
+      "heapUsed": 58258768,
+      "external": 13803702,
+      "arrayBuffers": 9458254
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9970160,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 20314336,
+      "backingStorageSize": 4200837
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6182,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1542374.207859,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 67887104,
+      "heapUsed": 58792640,
+      "external": 13901938,
+      "arrayBuffers": 9556490
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10075280,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 20785784,
+      "backingStorageSize": 4200800
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6271,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1557418.563877,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 67887104,
+      "heapUsed": 60230752,
+      "external": 13999478,
+      "arrayBuffers": 9654030
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10176992,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 22189720,
+      "backingStorageSize": 4200840
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6358,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1572440.3731530001,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 67887104,
+      "heapUsed": 60761144,
+      "external": 14097355,
+      "arrayBuffers": 9751907
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10229444,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 21697360,
+      "backingStorageSize": 4213935
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6378,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1587499.050219,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 67887104,
+      "heapUsed": 60352776,
+      "external": 14195347,
+      "arrayBuffers": 9849899
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 12695436,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 26507512,
+      "backingStorageSize": 4538370
+    },
+    "browserDocuments": 1,
+    "browserNodes": 870,
+    "browserListeners": 228,
+    "snapshots": 6465,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1602526.247191,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 66314240,
+      "heapUsed": 60863560,
+      "external": 14293516,
+      "arrayBuffers": 9948068
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10620348,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 25420696,
+      "backingStorageSize": 4200804
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6484,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1617587.142393,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 69197824,
+      "heapUsed": 61971896,
+      "external": 14391529,
+      "arrayBuffers": 10046081
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 10893472,
+      "totalSize": 22351872,
+      "embedderHeapUsedSize": 27233392,
+      "backingStorageSize": 4226860
+    },
+    "browserDocuments": 1,
+    "browserNodes": 872,
+    "browserListeners": 228,
+    "snapshots": 6574,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1632609.485695,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 68673536,
+      "heapUsed": 56998384,
+      "external": 13365298,
+      "arrayBuffers": 9019850
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11187352,
+      "totalSize": 22351872,
+      "embedderHeapUsedSize": 29721720,
+      "backingStorageSize": 4213937
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6592,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1647627.879859,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 68673536,
+      "heapUsed": 57079240,
+      "external": 13527826,
+      "arrayBuffers": 9182378
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 11544348,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 31737888,
+      "backingStorageSize": 4239902
+    },
+    "browserDocuments": 1,
+    "browserNodes": 904,
+    "browserListeners": 228,
+    "snapshots": 6684,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1662643.7968640001,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 68673536,
+      "heapUsed": 57172584,
+      "external": 13625270,
+      "arrayBuffers": 9279822
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 7947680,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 3051096,
+      "backingStorageSize": 4200757
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6751,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1677665.584238,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 68673536,
+      "heapUsed": 58603744,
+      "external": 13722702,
+      "arrayBuffers": 9377254
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 7544648,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 1993144,
+      "backingStorageSize": 4186907
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6791,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1692685.570457,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 68673536,
+      "heapUsed": 59684384,
+      "external": 13884980,
+      "arrayBuffers": 9539532
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8458588,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 5571632,
+      "backingStorageSize": 4239676
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6819,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1707703.0414840002,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 66576384,
+      "heapUsed": 58718312,
+      "external": 13982313,
+      "arrayBuffers": 9636865
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8279280,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 5850936,
+      "backingStorageSize": 4200800
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6898,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1722723.355485,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 68673536,
+      "heapUsed": 59243016,
+      "external": 14079794,
+      "arrayBuffers": 9734346
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8168260,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 5534696,
+      "backingStorageSize": 4186933
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 6985,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1737749.264527,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 68673536,
+      "heapUsed": 59752240,
+      "external": 14176123,
+      "arrayBuffers": 9830675
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8418660,
+      "totalSize": 22089728,
+      "embedderHeapUsedSize": 7802424,
+      "backingStorageSize": 4186933
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 7005,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1752783.958137,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 66576384,
+      "heapUsed": 60550784,
+      "external": 14338584,
+      "arrayBuffers": 9993136
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8587664,
+      "totalSize": 22351872,
+      "embedderHeapUsedSize": 8959216,
+      "backingStorageSize": 4186933
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 7094,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1767820.468444,
+    "serverAndRunnerMemory": {
+      "rss": 176238592,
+      "heapTotal": 68673536,
+      "heapUsed": 60992456,
+      "external": 14435634,
+      "arrayBuffers": 10090186
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8921440,
+      "totalSize": 22351872,
+      "embedderHeapUsedSize": 11304080,
+      "backingStorageSize": 4200799
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 7114,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1782837.529642,
+    "serverAndRunnerMemory": {
+      "rss": 177811456,
+      "heapTotal": 68673536,
+      "heapUsed": 61352176,
+      "external": 14532370,
+      "arrayBuffers": 10186922
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 8983252,
+      "totalSize": 22351872,
+      "embedderHeapUsedSize": 12327904,
+      "backingStorageSize": 4186921
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 7201,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1797859.054617,
+    "serverAndRunnerMemory": {
+      "rss": 177811456,
+      "heapTotal": 68673536,
+      "heapUsed": 56809832,
+      "external": 13346990,
+      "arrayBuffers": 9001542
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9277780,
+      "totalSize": 22351872,
+      "embedderHeapUsedSize": 14420392,
+      "backingStorageSize": 4200825
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 7221,
+    "activePlans": 3
+  },
+  {
+    "elapsedMs": 1800007.09614,
+    "serverAndRunnerMemory": {
+      "rss": 177811456,
+      "heapTotal": 66576384,
+      "heapUsed": 56560704,
+      "external": 13417556,
+      "arrayBuffers": 9072108
+    },
+    "serverTasks": {
+      "TCPServerWrap": 1,
+      "PipeWrap": 4,
+      "ProcessWrap": 1,
+      "TCPSocketWrap": 1
+    },
+    "clientHeap": {
+      "usedSize": 9669940,
+      "totalSize": 22351872,
+      "embedderHeapUsedSize": 19530312,
+      "backingStorageSize": 4200826
+    },
+    "browserDocuments": 1,
+    "browserNodes": 868,
+    "browserListeners": 228,
+    "snapshots": 7223,
+    "activePlans": 3
+  }
+]

@@ -4,8 +4,15 @@ import {
   type Decision,
   type Step,
 } from "../../shared/cenyan.js";
-import { actorName, type NpcId } from "../../shared/social.js";
-import { distance, valley, type Material } from "../../shared/world.js";
+import { actorName, materialSchema, type NpcId } from "../../shared/social.js";
+import {
+  distance,
+  valley,
+  projects,
+  resourceNodes,
+  clueTargets,
+  type Material,
+} from "../../shared/world.js";
 import type { World } from "../world.js";
 import { actorIdentity, bridgeNotice, type ChatMessage } from "./cenyan.js";
 
@@ -58,6 +65,9 @@ export function perceptionText(view: View) {
       附近人物: view.people,
       附近资源: view.resources,
       公共工程: view.bridge,
+      谷中时间: view.time,
+      其他工程: view.projects,
+      已证实的个人发现: view.discoveries,
       当前赠送: view.gift,
       可邀谈: view.invites,
       关系: view.relations,
@@ -154,8 +164,8 @@ const policies =
   "replace 立即切换，defer 等当前步骤结束；两者须带 plan。continue/reject 保留已有计划，不带 plan。";
 const socialRules = [
   "social.command.kind：offer（target、terms）或 pledge（target、condition），也可 respond（offerId、choice 为 accept/reject）、cancel/return（offerId）。",
-  'terms.kind：gift/loan 带 give；request 带 take；exchange 带 give 和 take。give/take 均为 {item:"wood" 或 "stone",qty:整数}。',
-  "承诺 condition.kind：deliver 带 item、qty；arrive 带 destination；work 无其他参数。口头同意与交接都必须等规则结果。",
+  `terms.kind：gift/loan 带 give；request 带 take；exchange 带 give 和 take。give/take 均由 item 和 qty 组成。item 为 ${materialSchema.options.join("、")}，qty 为整数。`,
+  "承诺 condition.kind：deliver 带 item、qty 和可选 project；arrive 带 destination；work 可带 project。口头同意与交接都必须等规则结果。",
 ].join("\n");
 
 function scopedCapabilities(
@@ -169,7 +179,18 @@ function scopedCapabilities(
       if (name === "talk")
         return scene === "autonomy" && view.invites.length > 0;
       if (name === "follow") return scene !== "autonomy";
-      if (name === "deliver" || name === "work") return !view.bridge.repaired;
+      if (name === "share_clue") return view.discoveries.length > 0;
+      if (name === "explore") return view.bridge.repaired;
+      if (name === "work")
+        return (
+          !view.bridge.repaired ||
+          view.projects.some((p) => p.workMs && !p.complete)
+        );
+      if (name === "deliver")
+        return (
+          !view.bridge.repaired ||
+          view.projects.some((p) => !p.complete || p.id === "valley-camp")
+        );
       if (name === "give_item" || name === "social")
         return (
           scene !== "autonomy" ||
@@ -207,18 +228,20 @@ export function playerPlanInstructions(view: View, gift: boolean) {
   };
   return [
     "根据旅人话语的含义判断意图。请居民去某处、采集或交付是行动请求。同意行动时必须给出完整计划。普通问答只给对白。",
-    "goal 为 1–80 字目标，speech 为一句简短且非空的对白。不自填身份、坐标或执行结果。",
+    "goal 为 1–80 字目标，speech 为一句简短且非空的对白。不自填身份、坐标或执行结果。探索结果以已证实的发现为准。",
     policies,
     scopedCapabilities(view, "player", "player"),
+    "资源 " +
+      resourceNodes.map((r) => `${r.id} ${r.item}×${r.yieldCount}`).join("、"),
     "采集木材示例 " + JSON.stringify(example),
-    "采集先 move_to 再 collect，两步只用 type 和相同的 target_id。把 ID 换成符合本轮要求的资源，fallen-wood-* 是木材，quarry-stone-* 是石材。优先选附近对应材料且 available=true 的资源，避开 available=false。可达地点：" +
+    "采集先 move_to 再 collect，两步只用 type 和相同的 target_id。把 ID 换成符合本轮要求的资源，资源类型及产量见资源列表。优先选附近对应材料且 available=true 的资源，避开 available=false。可达地点：" +
       knownPlaces(view),
   ].join("\n");
 }
 
 function knownPlaces(view: View) {
   return destinations
-    .filter((entry) => entry.id !== valley.ruin.id || view.bridge.repaired)
+    .filter((entry) => !clueTargets.has(entry.id) || view.bridge.repaired)
     .map(({ id, name }) => [id, name])
     .map((row) => row.join(" "))
     .join("、");
@@ -236,6 +259,13 @@ function measured(messages: ChatMessage[]) {
   };
 }
 
+export function withFormatReminder(messages: ChatMessage[], reminder: string) {
+  return measured([
+    { ...messages[0], content: messages[0].content + "\n" + reminder },
+    ...messages.slice(1),
+  ]);
+}
+
 export function autonomyMessages(view: View, trigger: string) {
   return measured([
     {
@@ -243,9 +273,16 @@ export function autonomyMessages(view: View, trigger: string) {
       content: [
         actorIdentity(view.self.id),
         bridgeNotice(view.bridge),
-        "根据公共工程缺口、自身背包和最近回执决定下一步。不要只计划查看或空等：有工地缺少的材料时前往旧桥交付；没有时选择尚缺的材料采集，再前往旧桥交付。材料齐备时前往旧桥施工。每次采集只能获得一份，计划最多三步，完成后再接续。",
-        "邀谈仅在可邀谈列表中选择，失败或对方拒绝时先做自己能完成的事。交谈要提出具体材料分工，按自己的意愿接受或拒绝，并在接受时给出可执行计划。",
-        "木材资源 fallen-wood-01 至 fallen-wood-06，石材资源 quarry-stone-01 至 quarry-stone-03。采集计划先 move_to 同一个资源 ID，再 collect；交料计划先 move_to old-river-bridge，再 deliver。",
+        "按人格、时间、承诺和工程情况选择个人生活、合作或探索。可以拒绝。若决定参加工程，交料须明确同意的 item 和 qty，选择可达工地；材料齐备时可以施工。完成工程后可换目标，避免重复失败。先移动再采集或探索。只依据已证实的发现谈论线索。",
+        "可用 talk 邀请居民同行。靠近旅人时可在 speech 中邀请旅人一起去某地，计划只执行自己的行动，由旅人自己决定是否前往。",
+        "工程 " +
+          [...projects.values()]
+            .map((p) => `${p.id} ${JSON.stringify(p.required)}`)
+            .join("、"),
+        "资源 " +
+          resourceNodes
+            .map((r) => `${r.id} ${r.item}×${r.yieldCount}`)
+            .join("、"),
         structureRules,
         "只输出一个严格 JSON 对象，不能输出内部思考。plan_policy 可省略或为 replace。",
         "自主计划示例 " +
@@ -277,6 +314,7 @@ export function socialMessages(
     ? [
         "可同意、拒绝、暂缓或另议，保持角色独立。双方没有共享私包和记忆。",
         "如果要行动，使用严格 JSON。" + structureRules,
+        "还要商量时用 JSON 附带 continue_conversation:true。最多四句，可提前结束。",
         policies,
         scopedCapabilities(view, "reply", peer),
         "地点：" + knownPlaces(view),
@@ -285,7 +323,7 @@ export function socialMessages(
   if (json)
     directions.push(
       last
-        ? jsonDialogueInstructions + " 如果接受分工，要给出可执行的行动计划。"
+        ? jsonDialogueInstructions
         : '只返回 {"speech":"对另一位居民的邀请或看法"}。',
     );
   return measured([
@@ -406,16 +444,56 @@ export function mockSocietyPlan(view: View): Decision {
   });
   if (project.repaired) {
     const goal = id === "ahe" ? "为聚落储备物资" : "stock-wood";
-    if (
-      id === "luozhou" &&
-      !view.memory.some((memory) => memory.topic === valley.ruin.id)
-    )
-      return plan("查看东岸航标", move(valley.ruin.id), {
-        type: "rest",
-        seconds: 18,
-      });
+    const personal = view.projects.find(
+      (entry) => entry.id === (id === "ahe" ? "valley-camp" : "carpenter-roof"),
+    )!;
     if (
       id !== "luozhou" &&
+      !personal.complete &&
+      (view.self.goal === "rest" || view.self.goal === personal.name)
+    ) {
+      const kind = id === "ahe" ? "food" : "wood";
+      if (!personal.missing[kind])
+        return plan(personal.name, move(personal.id), {
+          type: "work",
+          target_id: personal.id,
+        });
+      if (view.self.bag[kind])
+        return plan(personal.name, move(personal.id), {
+          type: "deliver",
+          target_id: personal.id,
+          item: kind,
+          qty: personal.missing[kind]!,
+        });
+      return mockHarvest(view, kind, personal.name);
+    }
+
+    const nextClue = [...clueTargets.values()].find(
+      (clue) => !view.discoveries.some((found) => found.id === clue.id),
+    );
+    if (id === "luozhou" && nextClue)
+      return plan(
+        `查访${nextClue.name}`,
+        move(nextClue.id),
+        { type: "explore", target_id: nextClue.id },
+      );
+    if (id === "ahe" && personal.complete && view.time.period !== "夜晚") {
+      const space = personal.space.food ?? 0;
+      if (space && view.self.bag.food)
+        return plan("补充公共营地储备", move(personal.id), {
+          type: "deliver",
+          target_id: personal.id,
+          item: "food",
+          qty: Math.min(space, view.self.bag.food),
+        });
+      if (space || (view.self.bag.food ?? 0) < 2) {
+        const harvest = mockHarvest(view, "food", "收集休息时用的野莓");
+        if (harvest.plan[0].type !== "wait") return harvest;
+      }
+    }
+    if (
+      id === "cenyan" &&
+      view.time.period !== "夜晚" &&
       view.self.bag.wood < 4 &&
       view.self.recentResults[0]?.code !== "COLLECTED"
     ) {
@@ -453,6 +531,9 @@ export function mockSocietyPlan(view: View): Decision {
   );
   const pledged =
     commitment?.condition.kind === "deliver" &&
+    (commitment.condition.item === "wood" ||
+      commitment.condition.item === "stone") &&
+    (commitment.condition.project ?? bridge.id) === bridge.id &&
     project.missing[commitment.condition.item] > 0
       ? {
           item: commitment.condition.item,
@@ -520,7 +601,7 @@ export function mockSocialReply(view: View, peer: NpcId, last?: string) {
 
 function mockHarvest(
   view: View,
-  item: Material,
+  item: Material | "food",
   goal: Decision["goal"],
 ): Decision {
   const availability = new Map(
@@ -536,7 +617,7 @@ function mockHarvest(
       )
       .map((entry) => entry.change!.target!),
   );
-  const target = valley.resources
+  const target = resourceNodes
     .filter(
       (node) =>
         node.item === item &&

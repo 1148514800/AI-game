@@ -1,0 +1,19 @@
+(node:26585) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ Phase 5 roof supports partial delivery and shared construction with a carried tool (23.988625ms)
+✔ Phase 5 food is collected once per cooldown and camp contributions are capped by real stock (3.331541ms)
+✔ Phase 5 facts distinguish exploring an object from sharing its verified clue (3.093083ms)
+✔ Phase 5 v4 migration preserves the old bridge and makes a backup before adding time and projects (2.592958ms)
+✔ Phase 5 a resident can extend an NPC conversation to four alternating lines (2.386542ms)
+✔ Phase 5 accepted delivery continuation spends only the pledged amount and respects cancellation (7.243208ms)
+✔ Phase 5 a bridge filled by another resident releases a delivery pledge without penalizing trust (2.627875ms)
+✔ Phase 5 a local provider can repair one NPC exchange and return four alternating lines (66.942333ms)
+✔ Phase 5 toolbox loans conserve the item and game time survives reopening (4.445208ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2275.70525

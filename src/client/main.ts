@@ -157,13 +157,20 @@ const connection = new Connection({
   snapshot(next) {
     const completed =
       snapshot && !snapshot.state.bridge.repaired && next.state.bridge.repaired;
+    const localCompleted =
+      snapshot &&
+      Object.entries(next.state.projects).some(
+        ([id, project]) =>
+          project.complete && !snapshot!.state.projects[id].complete,
+      );
     snapshot = next;
     scene.apply(next);
     updateControls();
     if (completed) {
       showFinished();
-      if (soundEnabled && assetState === "ready") scene.playSound();
     }
+    if ((completed || localCompleted) && soundEnabled && assetState === "ready")
+      scene.playSound();
   },
   result(result) {
     if (pending?.id !== result.id) return;
@@ -260,7 +267,7 @@ element("bridge-work").addEventListener("click", () => {
     request({
       type: "action",
       target: valley.bridge.id,
-      verb: snapshot.working ? "stop" : "work",
+      verb: snapshot.workTarget === valley.bridge.id ? "stop" : "work",
     });
 });
 element("bridge-check").addEventListener("click", () => {
@@ -314,6 +321,8 @@ function socialFields() {
   const kind = element<HTMLSelectElement>("social-kind").value;
   element("social-take-fields").hidden = kind !== "exchange";
   element("social-give-fields").hidden = kind === "work";
+  element("social-project-fields").hidden =
+    kind !== "work" && kind !== "deliver";
 }
 element("social-kind").addEventListener("change", socialFields);
 socialFields();
@@ -330,12 +339,14 @@ element("social-proposal").addEventListener("submit", (event) => {
     item: element<HTMLSelectElement>("social-take").value,
     qty: element<HTMLInputElement>("social-take-qty").valueAsNumber,
   };
+  const project = element<HTMLSelectElement>("social-project").value;
   const command =
     kind === "deliver" || kind === "work"
       ? {
           kind: "pledge",
           target,
-          condition: kind === "work" ? { kind } : { kind, ...give },
+          condition:
+            kind === "work" ? { kind, project } : { kind, project, ...give },
         }
       : {
           kind: "offer",

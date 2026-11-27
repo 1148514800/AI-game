@@ -21,7 +21,7 @@ import {
   type DialogueEvent,
 } from "../../shared/protocol.js";
 import type { World } from "../world.js";
-import { valley } from "../../shared/world.js";
+import { valley, type Item } from "../../shared/world.js";
 import {
   buildMessages,
   mockReply,
@@ -47,6 +47,7 @@ import {
   mockActionRequest,
   mockPlan,
   perceptionText,
+  withFormatReminder,
   type MockDecision,
   type MockDialogue,
 } from "./planning.js";
@@ -99,7 +100,12 @@ type Job = {
   hasPlan?: boolean;
   valid: () => boolean;
   invalidated?: () => void;
-  done: (status: string, text?: string, plan?: ActionReply) => void;
+  done: (
+    status: string,
+    text?: string,
+    plan?: ActionReply,
+    keepTalking?: boolean,
+  ) => void;
 };
 
 type Options = {
@@ -418,7 +424,8 @@ export class DialogueSession {
               : undefined;
           const accept =
             !take ||
-            view.self.bag[take.item] >= take.qty + (npc === "ahe" ? 1 : 0);
+            (view.self.bag[take.item] ?? 0) >=
+              take.qty + (npc === "ahe" ? 1 : 0);
           return JSON.stringify({
             goal: view.self.goal,
             speech: accept
@@ -434,12 +441,13 @@ export class DialogueSession {
           return JSON.stringify({
             goal: view.self.goal,
             speech:
-              view.self.bag[gift.item] >= 8
+              (view.self.bag[gift.item] ?? 0) >= 8
                 ? "我已经备够了，这份你留着吧。"
                 : "那我收下，多谢。",
             gift_response: {
               offer_id: msg.id,
-              decision: view.self.bag[gift.item] >= 8 ? "reject" : "accept",
+              decision:
+                (view.self.bag[gift.item] ?? 0) >= 8 ? "reject" : "accept",
             },
           });
         return mockActionRequested && view
@@ -552,6 +560,10 @@ export class DialogueSession {
     }
   }
 
+  get autonomyEnabled() {
+    return this.config?.autonomy === true && !this.unavailable;
+  }
+
   private hasSlot(npc: NpcId) {
     return this.pending.size < 2 && !this.pending.has(npc);
   }
@@ -621,6 +633,13 @@ export class DialogueSession {
       purpose: "autonomy",
       trigger: turn.lines ? "social-reply" : "social-invite",
       ...input,
+      retryInput: config.live
+        ? () =>
+            withFormatReminder(
+              input.messages,
+              "只返回合法 JSON。对白使用 speech；承接行动时使用合法计划。",
+            )
+        : undefined,
       format: turn.lines ? "optional-plan" : "speech",
       mock: () => mockSocialReply(view, peer, turn.last),
       valid: () =>
@@ -633,7 +652,7 @@ export class DialogueSession {
         if (options.active() && this.epoch === epoch)
           world.endConversation(conversation, false);
       },
-      done: (status, speech, proposal) => {
+      done: (status, speech, proposal, keepTalking) => {
         if (
           status !== "ok" ||
           !speech ||
@@ -643,7 +662,16 @@ export class DialogueSession {
           world.endConversation(conversation, false);
           return;
         }
-        if (!world.speak(conversation, npc, speech)) return;
+        if (
+          !world.speak(
+            conversation,
+            npc,
+            speech,
+            Date.now(),
+            keepTalking && !proposal?.plan,
+          )
+        )
+          return;
         if (turn.last) {
           if (proposal)
             world.recordActionReply(
@@ -653,6 +681,7 @@ export class DialogueSession {
               Date.now(),
               npc,
               peer,
+              config.live ? "model" : undefined,
             );
           else
             world.rememberExchange(
@@ -702,40 +731,73 @@ export class DialogueSession {
       npc,
     );
     lane.focusedTopic = undefined;
-    const needsDelivery =
-      (view.self.bag.wood > 0 && view.bridge.missing.wood > 0) ||
-      (view.self.bag.stone > 0 && view.bridge.missing.stone > 0);
-    const hasPendingSocial =
-      view.social.deals.some((entry) => entry.status === "proposed") ||
-      view.social.pledges.some(
-        (entry) => entry.status === "proposed" || entry.status === "accepted",
-      );
-    if (
-      this.config?.mode === "live" &&
-      !view.bridge.repaired &&
-      !hasPendingSocial &&
-      (view.bridge.materialsReady || needsDelivery)
-    ) {
-      const id = randomUUID();
-      const step = view.bridge.materialsReady ? "work" : "deliver";
-      lane.seenEvent = state.serial;
-      lane.nextPeriod = clock + periodMs;
-      const accepted = options.world.accept(
-        id,
-        {
-          goal: view.bridge.materialsReady ? "参与旧桥施工" : "向旧桥交付材料",
-          speech: "",
-          plan: [
-            { type: "move_to", target_id: valley.bridge.id },
-            { type: step, target_id: valley.bridge.id },
-          ],
-        },
-        Date.now(),
-        undefined,
-        npc,
-      );
-      this.autonomyOutcome(npc, accepted ? "ok" : "invalid");
-      return accepted;
+    const now = Date.now();
+    const pledge = view.social.pledges.find(
+      (entry) =>
+        entry.from === npc &&
+        entry.status === "accepted" &&
+        entry.expiresAt > now &&
+        entry.id !== view.self.interruptedPledge,
+    );
+    if (this.config?.mode === "live" && pledge) {
+      const condition = pledge.condition;
+      if (condition.kind === "deliver" || condition.kind === "work") {
+        const target = condition.project ?? valley.bridge.id;
+        const project =
+          target === valley.bridge.id
+            ? {
+                missing: view.bridge.missing,
+              space: view.bridge.missing,
+                complete: view.bridge.repaired,
+                workMs: valley.bridge.workMs,
+              }
+            : view.projects.find((entry) => entry.id === target);
+        const space: Partial<Record<Item, number>> | undefined = project?.space;
+        const quantity =
+          condition.kind === "deliver"
+            ? Math.min(
+                condition.qty - pledge.progress,
+                view.self.bag[condition.item] ?? 0,
+                space?.[condition.item] ?? 0,
+              )
+            : 0;
+        const step =
+          condition.kind === "deliver"
+            ? quantity > 0
+              ? {
+                  type: "deliver" as const,
+                  target_id: target,
+                  item: condition.item,
+                  qty: quantity,
+                }
+              : undefined
+            : project?.workMs &&
+                !project.complete &&
+                !Object.values(project.missing).some(Boolean)
+              ? { type: "work" as const, target_id: target }
+              : undefined;
+        if (step) {
+          lane.seenEvent = state.serial;
+          lane.nextPeriod = clock + periodMs;
+          const accepted =
+            options.world.recordActionReply(
+              randomUUID(),
+              undefined,
+              {
+                goal: view.self.goal,
+                speech: "",
+                plan: [{ type: "move_to", target_id: target }, step],
+              },
+              now,
+              npc,
+              undefined,
+              "continuation",
+              pledge.id,
+            ) === "accepted";
+          this.autonomyOutcome(npc, accepted ? "ok" : "invalid");
+          return accepted;
+        }
+      }
     }
     const input = autonomyMessages(view, trigger);
     lane.seenEvent = state.serial;
@@ -752,6 +814,13 @@ export class DialogueSession {
       purpose: "autonomy",
       trigger,
       ...input,
+      retryInput: this.config?.live
+        ? () =>
+            withFormatReminder(
+              input.messages,
+              "仅返回包含 goal、speech 和 1–3 步合法 plan 的 JSON。",
+            )
+        : undefined,
       format: "plan",
       mock: () =>
         options.mockDecision?.(view, trigger) ??
@@ -772,6 +841,7 @@ export class DialogueSession {
             Date.now(),
             undefined,
             npc,
+            this.config?.mode === "live",
           );
         this.autonomyOutcome(npc, status);
       },
@@ -882,6 +952,7 @@ export class DialogueSession {
     );
     let speech: string | undefined;
     let plan: ActionReply | undefined;
+    let keepTalking: boolean | undefined;
     if (job.format === "text" || (job.format === "speech" && !jsonMode))
       speech = text;
     else {
@@ -897,6 +968,18 @@ export class DialogueSession {
         )
           throw new ReplyFormatFailure(usage);
         speech = text;
+      }
+      if (
+        job.trigger.startsWith("social-") &&
+        raw &&
+        typeof raw === "object" &&
+        "continue_conversation" in raw
+      ) {
+        const { continue_conversation, ...body } = raw;
+        if (typeof continue_conversation !== "boolean")
+          throw new ReplyFormatFailure(usage);
+        keepTalking = continue_conversation;
+        raw = body;
       }
       if (speech === undefined && job.format === "speech") {
         const parsed = speechReplySchema.safeParse(raw);
@@ -928,6 +1011,7 @@ export class DialogueSession {
           if (!parsed.success) throw new ReplyFormatFailure(usage);
           plan = parsed.data;
           if (
+            job.purpose === "dialogue" &&
             job.retryInput &&
             (plan.gift_response ||
               plan.social_response ||
@@ -961,7 +1045,7 @@ export class DialogueSession {
         /[\u0000-\u0008\u000e-\u001f]/.test(speech))
     )
       throw new DialogueFailure("invalid", usage);
-    return { usage, speech, plan };
+    return { usage, speech, plan, keepTalking };
   }
 
   private async run(
@@ -974,6 +1058,7 @@ export class DialogueSession {
     let status = "ok";
     let speech: string | undefined;
     let plan: ActionReply | undefined;
+    let keepTalking: boolean | undefined;
     let tokens: number | undefined;
     let estimatedNano: number | undefined;
     let attemptId = job.id;
@@ -984,7 +1069,7 @@ export class DialogueSession {
       let usage: Usage | undefined;
       let formatFailed = false;
       try {
-        ({ usage, speech, plan } = await this.requestReply(
+        ({ usage, speech, plan, keepTalking } = await this.requestReply(
           job,
           config,
           messages,
@@ -1031,7 +1116,7 @@ export class DialogueSession {
       }
       timeoutMs =
         config.limits.LLM_TIMEOUT_MS - Math.ceil(performance.now() - start);
-      if (timeoutMs <= 0) break;
+      if (timeoutMs <= 0 || retry.reservedInputTokens > contextBytes) break;
       const retryId = randomUUID();
       try {
         if (
@@ -1072,7 +1157,8 @@ export class DialogueSession {
         estimatedNano === undefined ? undefined : estimatedNano / 1e9,
     };
     this.pending.delete(job.npc);
-    if (status !== "cancelled") this.deliver(job, status, speech, plan);
+    if (status !== "cancelled")
+      this.deliver(job, status, speech, plan, keepTalking);
     else if (job.invalidated) job.invalidated();
     else if (job.valid()) {
       lane.seenEvent = -1;
@@ -1086,10 +1172,11 @@ export class DialogueSession {
     status: string,
     speech?: string,
     plan?: ActionReply,
+    keepTalking?: boolean,
   ) {
     if (!job.valid()) return;
     try {
-      job.done(status, speech, plan);
+      job.done(status, speech, plan, keepTalking);
     } catch (error) {
       this.options?.storageError(error);
     }
