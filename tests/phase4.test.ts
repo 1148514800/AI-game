@@ -785,3 +785,5 @@ test("a delivery pledge is fulfilled only after its accepted amount reaches the 
   assert.equal(world.snapshot().state.actors.ahe.relations.player?.level, 1);
   assert.equal(world.snapshot().state.inventory.wood, 1);
 });
+
+

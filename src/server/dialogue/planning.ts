@@ -243,6 +243,9 @@ export function autonomyMessages(view: View, trigger: string) {
       content: [
         actorIdentity(view.self.id),
         bridgeNotice(view.bridge),
+        "根据公共工程缺口、自身背包和最近回执决定下一步。不要只计划查看或空等：有工地缺少的材料时前往旧桥交付；没有时选择尚缺的材料采集，再前往旧桥交付。材料齐备时前往旧桥施工。每次采集只能获得一份，计划最多三步，完成后再接续。",
+        "邀谈仅在可邀谈列表中选择，失败或对方拒绝时先做自己能完成的事。交谈要提出具体材料分工，按自己的意愿接受或拒绝，并在接受时给出可执行计划。",
+        "木材资源 fallen-wood-01 至 fallen-wood-06，石材资源 quarry-stone-01 至 quarry-stone-03。采集计划先 move_to 同一个资源 ID，再 collect；交料计划先 move_to old-river-bridge，再 deliver。",
         structureRules,
         "只输出一个严格 JSON 对象，不能输出内部思考。plan_policy 可省略或为 replace。",
         "自主计划示例 " +
@@ -282,7 +285,7 @@ export function socialMessages(
   if (json)
     directions.push(
       last
-        ? jsonDialogueInstructions
+        ? jsonDialogueInstructions + " 如果接受分工，要给出可执行的行动计划。"
         : '只返回 {"speech":"对另一位居民的邀请或看法"}。',
     );
   return measured([

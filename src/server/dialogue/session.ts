@@ -21,6 +21,7 @@ import {
   type DialogueEvent,
 } from "../../shared/protocol.js";
 import type { World } from "../world.js";
+import { valley } from "../../shared/world.js";
 import {
   buildMessages,
   mockReply,
@@ -701,6 +702,41 @@ export class DialogueSession {
       npc,
     );
     lane.focusedTopic = undefined;
+    const needsDelivery =
+      (view.self.bag.wood > 0 && view.bridge.missing.wood > 0) ||
+      (view.self.bag.stone > 0 && view.bridge.missing.stone > 0);
+    const hasPendingSocial =
+      view.social.deals.some((entry) => entry.status === "proposed") ||
+      view.social.pledges.some(
+        (entry) => entry.status === "proposed" || entry.status === "accepted",
+      );
+    if (
+      this.config?.mode === "live" &&
+      !view.bridge.repaired &&
+      !hasPendingSocial &&
+      (view.bridge.materialsReady || needsDelivery)
+    ) {
+      const id = randomUUID();
+      const step = view.bridge.materialsReady ? "work" : "deliver";
+      lane.seenEvent = state.serial;
+      lane.nextPeriod = clock + periodMs;
+      const accepted = options.world.accept(
+        id,
+        {
+          goal: view.bridge.materialsReady ? "参与旧桥施工" : "向旧桥交付材料",
+          speech: "",
+          plan: [
+            { type: "move_to", target_id: valley.bridge.id },
+            { type: step, target_id: valley.bridge.id },
+          ],
+        },
+        Date.now(),
+        undefined,
+        npc,
+      );
+      this.autonomyOutcome(npc, accepted ? "ok" : "invalid");
+      return accepted;
+    }
     const input = autonomyMessages(view, trigger);
     lane.seenEvent = state.serial;
     lane.nextPeriod = clock + periodMs;
