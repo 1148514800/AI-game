@@ -11,14 +11,15 @@
     "dev:client": "vite --host 127.0.0.1",
     "dev:server": "node --import tsx src/server/index.ts",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test --test-isolation=none tests/unit.test.ts tests/dialogue.test.ts tests/phase3.test.ts tests/phase3_1.test.ts",
-    "test:integration": "node --import tsx --test --test-isolation=none tests/dialogue.integration.ts tests/phase3_1.integration.ts",
+    "test": "node --import tsx --test --test-isolation=none tests/unit.test.ts tests/dialogue.test.ts tests/phase3.test.ts tests/phase3_1.test.ts tests/phase4.test.ts",
+    "test:integration": "node --import tsx --test --test-isolation=none tests/dialogue.integration.ts tests/phase3_1.integration.ts tests/phase4.integration.ts",
     "test:e2e": "playwright test",
     "build": "vite build --outDir release/client && tsc -p tsconfig.server.json",
     "start": "node release/server/src/server/index.js",
     "assets:prepare": "python3 scripts/assets/prepare.py",
     "assets:fetch": "python3 scripts/assets/fetch.py",
-    "world:generate": "python3 scripts/world/generate.py"
+    "world:generate": "python3 scripts/world/generate.py",
+    "soak:phase4": "node --import tsx scripts/soak-phase4.mjs --duration 1800"
   },
   "dependencies": {
     "@fastify/static": "10.1.12",

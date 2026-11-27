@@ -1,19 +1,30 @@
 import { z } from "zod";
-import { inventoryLimit, residents, valley } from "./world.js";
+import { inventoryLimit, valley } from "./world.js";
 
+import {
+  actorIdSchema,
+  npcSchema,
+  homes,
+  destinations,
+  destinationId,
+  materialAmount,
+  waitCondition,
+  socialCommand,
+  conversationSchema,
+  relationsSchema,
+  type NpcId,
+  type ActorId,
+} from "./social.js";
+
+export {
+  destinations,
+  materialSchema,
+  quantitySchema,
+  materialAmount,
+  type MaterialAmount,
+} from "./social.js";
 export const cenyanId = "cenyan";
-export const home = {
-  ...residents.get(cenyanId)!,
-  id: "cenyan-home",
-  name: "木匠工坊",
-  range: 12,
-};
-export const destinations = [
-  home,
-  valley.bridge,
-  valley.ruin,
-  ...valley.resources,
-];
+export const home = homes[0];
 export const destinationNames = new Map(
   destinations.map(({ id, name }) => [id, name]),
 );
@@ -38,27 +49,21 @@ export function goalName(goal: string) {
   const tag = legacyGoalTag(goal);
   return tag ? goals[tag] : goal;
 }
-export const materialSchema = z.enum(["wood", "stone"]);
-export const quantitySchema = z.int().min(1).max(inventoryLimit);
-export const materialAmount = z.strictObject({
-  item: materialSchema,
-  qty: quantitySchema,
-});
 export const giftChoice = z.enum(["accept", "reject"]);
 export const giftOffer = materialAmount.extend({
   id: z.uuid(),
-  from: z.enum(["player", "cenyan"]),
+  from: actorIdSchema,
+  to: actorIdSchema.optional(),
   expiresAt: z.int().positive(),
 });
 export type GiftOffer = z.infer<typeof giftOffer>;
-export type MaterialAmount = z.infer<typeof materialAmount>;
 const policy = z.enum(["continue", "replace", "defer", "reject"]);
 const giftResponse = z.strictObject({
   offer_id: z.uuid(),
   decision: giftChoice,
 });
 const resourceId = z.enum(valley.resources.map(({ id }) => id));
-const moveId = z.enum(destinations.map(({ id }) => id));
+const moveId = destinationId;
 export const capabilities = {
   move_to: {
     description: "走到地点的交互范围",
@@ -71,16 +76,17 @@ export const capabilities = {
     schema: z.strictObject({ type: z.literal("move_to"), target_id: moveId }),
   },
   follow: {
-    description: "动态跟随旅人至旧桥边",
-    params: '必填 target_id，固定为 "player"',
+    description: "动态跟随另一角色前往指定地点",
+    params: "target_id 为对象 ID，destination_id 为地点 ID（省略则去旧桥）",
     examples: [{ type: "follow", target_id: "player" }],
     targets: ["player"],
-    preconditions: "旅人主动邀请，起步时在交谈范围",
+    preconditions: "对方邀请或同意，起步在交谈范围，无互跟",
     execution: "避让同行，抵达、取消、超时或受阻时结束",
     results: "同行抵达或失败原因",
     schema: z.strictObject({
       type: z.literal("follow"),
-      target_id: z.literal("player"),
+      target_id: actorIdSchema,
+      destination_id: destinationId.optional(),
     }),
   },
   collect: {
@@ -97,18 +103,18 @@ export const capabilities = {
     }),
   },
   give_item: {
-    description: "提议把自己的材料赠给旅人",
-    params: `必填 target_id（"player"）、item（"wood" 或 "stone"）、qty（1–${inventoryLimit} 整数）`,
+    description: "提议把自己的材料赠给对方",
+    params: `必填 target_id（角色 ID）、item（"wood" 或 "stone"）、qty（1–${inventoryLimit} 整数）`,
     examples: [
       { type: "give_item", target_id: "player", item: "stone", qty: 1 },
     ],
     targets: ["player"],
     preconditions: "双方在交谈范围，拥有所提议的数量",
-    execution: "创建有时限的提议，旅人明确接受后再检查并转移",
+    execution: "创建有时限的提议，接收者明确接受后再检查并转移",
     results: "提议、同意、拒绝或失败原因",
     schema: materialAmount.extend({
       type: z.literal("give_item"),
-      target_id: z.literal("player"),
+      target_id: actorIdSchema,
     }),
   },
   deliver: {
@@ -136,7 +142,7 @@ export const capabilities = {
     examples: [{ type: "work", target_id: valley.bridge.id }],
     targets: [valley.bridge.id],
     preconditions: "在桥边且材料齐备",
-    execution: "自己主动施工可与旅人叠加",
+    execution: "自己主动施工可与其他角色叠加",
     results: "工时和完工或失败原因",
     schema: z.strictObject({
       type: z.literal("work"),
@@ -154,6 +160,54 @@ export const capabilities = {
     schema: z.strictObject({
       type: z.literal("wait"),
       seconds: z.int().min(1).max(30),
+    }),
+  },
+  wait_until: {
+    description: "等待有限规则条件，然后继续后续步骤",
+    params:
+      "condition.kind 为 materials-ready、arrived（actor、destination）或 gift-response（offerId 可省略，等待本人最近的交接提议）。seconds 为 1–60",
+    examples: [
+      {
+        type: "wait_until",
+        condition: { kind: "materials-ready" },
+        seconds: 50,
+      },
+    ],
+    preconditions: "条件有效",
+    schema: z.strictObject({
+      type: z.literal("wait_until"),
+      condition: waitCondition,
+      seconds: z.int().min(1).max(60),
+    }),
+  },
+  talk: {
+    description: "找另一名居民交谈",
+    params: "target_id 为 NPC ID，topic 为简短话题",
+    examples: [{ type: "talk", target_id: "ahe", topic: "商量旧桥分工" }],
+    preconditions: "双方可交谈，同一角色对冷却约三分钟",
+    schema: z.strictObject({
+      type: z.literal("talk"),
+      target_id: npcSchema,
+      topic: conversationSchema.shape.topic,
+    }),
+  },
+  social: {
+    description: "正式提出或处理交接及承诺",
+    params: "command.kind 为 offer、pledge、respond、cancel 或 return",
+    examples: [
+      {
+        type: "social",
+        command: {
+          kind: "offer",
+          target: "ahe",
+          terms: { kind: "request", take: { item: "wood", qty: 1 } },
+        },
+      },
+    ],
+    preconditions: "正式提议与确认绑定双方，成交需在交谈距离内",
+    schema: z.strictObject({
+      type: z.literal("social"),
+      command: socialCommand,
     }),
   },
   rest: {
@@ -181,6 +235,9 @@ export const stepSchema = z.discriminatedUnion("type", [
   work.schema,
   wait.schema,
   rest.schema,
+  capabilities.wait_until.schema,
+  capabilities.talk.schema,
+  capabilities.social.schema,
 ]);
 export const planSteps = z.array(stepSchema).min(1).max(3);
 const speech = z
@@ -206,9 +263,15 @@ export const actionReplySchema = z
     plan: planSteps.optional(),
     plan_policy: policy.optional(),
     gift_response: giftResponse.optional(),
+    social_response: giftResponse.optional(),
   })
   .refine((reply) => {
-    if (reply.gift_response) return !reply.plan && !reply.plan_policy;
+    if (reply.gift_response || reply.social_response)
+      return (
+        !(reply.gift_response && reply.social_response) &&
+        !reply.plan &&
+        !reply.plan_policy
+      );
     const selected = reply.plan_policy ?? (reply.plan ? "replace" : "reject");
     return (selected === "replace" || selected === "defer") === !!reply.plan;
   });
@@ -227,9 +290,11 @@ export const actionOutcome = z.strictObject({
       wood: z.int().optional(),
       stone: z.int().optional(),
       target: z.string().optional(),
+      offerId: z.uuid().optional(),
+      traveled: z.boolean().optional(),
       workMs: z.number().optional(),
       sharedWorkMs: z.number().optional(),
-      actor: z.enum(["player", "cenyan"]).optional(),
+      actor: actorIdSchema.optional(),
     })
     .optional(),
 });
@@ -263,7 +328,8 @@ const giftDecision = z.strictObject({
 export type GiftDecision = z.infer<typeof giftDecision>;
 
 export const actorSchema = z.strictObject({
-  id: z.literal(cenyanId),
+  id: npcSchema,
+  relations: relationsSchema.default({}),
   x: z.number(),
   y: z.number(),
   facing: z.enum(["down", "up", "left", "right"]),
@@ -281,6 +347,7 @@ export const actorSchema = z.strictObject({
       index: z.int().min(0).max(2),
       remainingMs: z.number().min(0).max(60_000).optional(),
       followed: z.boolean().optional(),
+      traveled: z.boolean().optional(),
     })
     .nullable(),
   pending: z
@@ -297,13 +364,14 @@ export const actorSchema = z.strictObject({
   results: z.array(actionOutcome).max(3).default([]),
 });
 
-export type Actor = z.infer<typeof actorSchema>;
+export type ActorState = z.infer<typeof actorSchema>;
+export type Actor = ActorState;
 export type Memory = {
   id: string;
-  actor: typeof cenyanId;
+  actor: NpcId;
   at: number;
-  kind: "fact" | "claim" | "opinion";
-  source: "rules" | "traveler" | "cenyan";
+  kind: "fact" | "claim" | "opinion" | "commitment";
+  source: "rules" | "traveler" | ActorId;
   event: string;
   topic: string;
   content: string;
@@ -318,7 +386,7 @@ export type ModelStatus = {
   estimatedUsd?: number;
   sharedUsage?: { requests: number; tokens: number; chargedUsd?: number };
 };
-export type CenyanStatus = {
+export type ActorStatus = {
   activity:
     | "idle"
     | "moving"
@@ -327,6 +395,7 @@ export type CenyanStatus = {
     | "working"
     | "waiting"
     | "resting"
+    | "talking"
     | "paused";
   memory: Memory[];
   model?: ModelStatus;

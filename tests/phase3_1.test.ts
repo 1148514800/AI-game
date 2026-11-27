@@ -37,6 +37,7 @@ import { contextBytes } from "../src/server/dialogue/config.js";
 import {
   autonomyMessages,
   dialoguePlanInstructions,
+  playerPlanInstructions,
   jsonDialogueInstructions,
   perceptionText,
 } from "../src/server/dialogue/planning.js";
@@ -167,6 +168,9 @@ test("Phase3.1 step and client schemas only admit material pairs, valid targets 
     "deliver",
     "work",
     "wait",
+    "wait_until",
+    "talk",
+    "social",
     "rest",
   ]);
   assert.ok(
@@ -181,7 +185,7 @@ test("Phase3.1 step and client schemas only admit material pairs, valid targets 
     }).success,
   );
   for (const step of [
-    { type: "follow", target_id: "cenyan" },
+    { type: "follow", target_id: "unknown" },
     { type: "give_item", target_id: "player", item: "food", qty: 1 },
     { type: "give_item", target_id: "player", item: "wood", qty: -1 },
     { type: "deliver", target_id: bridge.id, qty: 1 },
@@ -644,6 +648,8 @@ test("v2 backup and transactional migration preserve old activity, unidentified 
     gift: _gift,
     contributions: _contribution,
     sharedWorkMs: _shared,
+    actors: _actors, workPairs: _workPairs, talkCooldowns: _talkCooldowns, deals: _deals,
+    pledges: _pledges, events: _events,
     cenyan,
     ...previous
   } = freshState();
@@ -687,14 +693,14 @@ test("v2 backup and transactional migration preserve old activity, unidentified 
       stone: 2,
       workMs: 150,
     });
-    assert.equal(save.initial.schemaVersion, 3);
+    assert.equal(save.initial.schemaVersion, 4);
     assert.deepEqual(save.initial.cenyan.plan, actor.plan);
     assert.equal(save.initial.cenyan.pending, null);
     assert.equal(save.initial.cenyan.goal, "repair-bridge");
     assert.equal(save.initial.cenyan.goalTag, "repair-bridge");
     assert.ok(save.hasReceipt("v2-receipt"));
     assert.equal(save.memories()[0].content, "旧档事实");
-    const backup = path + ".pre-phase3_1.sqlite";
+    const backup = path + ".pre-phase4.sqlite";
     assert.ok(existsSync(backup));
     const original = new DatabaseSync(backup, { readOnly: true });
     try {
@@ -901,7 +907,7 @@ test("bounded model context retains steps, replies and facts with long Chinese i
     incoming,
     jsonDialogueInstructions +
       "\n" +
-      dialoguePlanInstructions +
+      playerPlanInstructions(view, false) +
       "\n" +
       contextual,
   );

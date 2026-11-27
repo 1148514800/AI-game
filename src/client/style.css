@@ -582,6 +582,8 @@ dialog form {
   z-index: 1;
   margin: 0;
   width: min(410px, calc(100% - 24px));
+  max-height: calc(100% - 24px);
+  overflow: auto;
   padding: 12px;
   background: #1a2b29;
   border: 2px solid #7d896b;
@@ -591,6 +593,12 @@ dialog form {
   display: flex;
   align-items: center;
   gap: 8px;
+  position: sticky;
+  top: -12px;
+  z-index: 2;
+  margin: 0 -12px;
+  padding: 0 12px 8px;
+  background: #1a2b29;
 }
 .dialogue-header img {
   width: 38px;
@@ -727,3 +735,15 @@ dialog form {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+
+.dialogue-agreements { margin-top: 0.65rem; }
+.dialogue-agreements summary { cursor: pointer; }
+#dialogue-agreements, #player-agreements, #valley-events {
+  margin: 0.5rem 0 0;
+  padding-inline-start: 1.2rem;
+  font-size: 0.85rem;
+}
+#dialogue-agreements li, #player-agreements li, #valley-events li { margin-block: 0.35rem; }
+#dialogue-agreements button, #player-agreements button { margin-inline-start: 0.4rem; }
+#social-proposal input { width: 4rem; }
+#social-proposal [hidden] { display: none; }

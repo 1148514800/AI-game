@@ -11,6 +11,8 @@
 - 只岑砚，无其他 NPC 智能、新地图、战斗、经济关系或复杂 Agent 框架。未碰 Mac、未读取私密 env/密钥/个人存档、未调用 Live、未 push/PR/公网部署。
 - 本地提交与最后打包 HEAD 见交付 `DELIVERY_COMMIT.txt` 和包旁 `delivery-info.json`；提交前最终验证输入哈希见 `native-input-sha256.json`。
 
+本页是 Phase 3.1 的历史验收记录。工程与离线已通过。用户此前确认的 Phase 3 Live 自主采集仍按原阶段列记。Phase 3.1 真实模型完整协作仍待验证。后续 Phase 4 的实际验证另见 [Phase 4 报告](PHASE4_REPORT.md)。Phase 4 回归再次跑通本阶段 A–F Mock UI；Phase 3.1 真实模型完整协作仍未跑，不得标为通过。
+
 ## 原有程序限制与本次解决
 
 | 原限制 | Phase3.1 实际规则 |

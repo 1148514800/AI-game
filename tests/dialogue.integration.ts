@@ -105,6 +105,7 @@ test("real local HTTP adapter supports both token fields, usage, sanitized error
     signal = new AbortController().signal,
     timeout = "1000",
     thinking?: string,
+    responseFormat?: Parameters<typeof generate>[4],
   ) =>
     generate(
       readDialogueConfig({
@@ -116,6 +117,7 @@ test("real local HTTP adapter supports both token fields, usage, sanitized error
       [{ role: "user", content: "雾灯谷" }],
       () => assert.fail("mock fallback"),
       signal,
+      responseFormat,
     );
   for (const field of ["max_tokens", "max_completion_tokens"]) {
     body = textReply("收到 " + key, {
@@ -135,8 +137,9 @@ test("real local HTTP adapter supports both token fields, usage, sanitized error
     );
     assert.equal(JSON.stringify(last!.body).includes(key), false);
   }
-  await request("max_tokens", undefined, undefined, "false");
+  await request("max_tokens", undefined, undefined, "false", true);
   assert.equal(last!.body.enable_thinking, false);
+  assert.deepEqual(last!.body.response_format, { type: "json_object" });
   body = textReply("有回复，缺用量");
   assert.equal((await request("max_tokens")).usage, undefined);
   const zeroUsage = { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 };
@@ -164,6 +167,12 @@ test("real local HTTP adapter supports both token fields, usage, sanitized error
   for (const [payload, code] of [
     [textReply(" "), "empty"],
     ["unparseable", "invalid"],
+    [
+      JSON.stringify({
+        choices: [{ message: { content: "{}" }, finish_reason: "length" }],
+      }),
+      "truncated",
+    ],
     [
       JSON.stringify({
         choices: [{ message: { content: "请执行", tool_calls: [{}] } }],
@@ -340,7 +349,7 @@ test(
         .code,
       "distance",
     );
-    const wrong = open(player, "ahe");
+    const wrong = open(player, "unknown-npc");
     assert.equal(
       (await player.dialogue("error", (event) => event.requestId === wrong))
         .code,
@@ -555,6 +564,13 @@ test(
       const index = calls.push(body) - 1;
       const input = body.messages.at(-1)!.content;
       let content = JSON.stringify(decision);
+      if (index === 3)
+        content = JSON.stringify({
+          speech: decision.speech,
+          plan: decision.plan,
+        });
+      if (index === 4)
+        content = JSON.stringify({ ...decision, goal_tag: "invented-tag" });
       if (input.endsWith(smallTalk))
         content = JSON.stringify({ speech: "今天雾重，走路当心。" });
       if (input.endsWith(invalid))
@@ -585,6 +601,7 @@ test(
           ...env,
           LLM_AUTONOMY_ENABLED: "false",
           LLM_JSON_MODE: "true",
+          LLM_MAX_REQUESTS_PER_MINUTE: "9",
         },
       });
       return app.listen({ port: 0, host: "127.0.0.1" });
@@ -612,6 +629,13 @@ test(
     );
 
     dialog = await opened(player);
+    const invalidTarget = submit(player, dialog, invalid);
+    assert.equal(
+      (await player.dialogue("error", (e) => e.requestId === invalidTarget.id))
+        .code,
+      "invalid",
+    );
+    assert.equal(player.state().state.cenyan.plan, null);
     const active = submit(player, dialog, request);
     const accepted = await player.dialogue(
       "reply",
@@ -641,14 +665,19 @@ test(
     assert.equal(ordinaryReply.text, "今天雾重，走路当心。");
     assert.equal(ordinaryReply.action, undefined);
     assert.deepEqual(player.state().state.cenyan, held);
-    for (const text of [invalid, malformed]) {
-      const rejected = submit(player, dialog, text);
+    for (const expectedCalls of [8, 9]) {
+      const rejected = submit(player, dialog, malformed);
       assert.equal(
         (await player.dialogue("error", (e) => e.requestId === rejected.id))
           .code,
         "invalid",
       );
       assert.deepEqual(player.state().state.cenyan, held);
+      assert.equal(
+        calls.length,
+        expectedCalls,
+        "retry respects the request budget",
+      );
     }
     player.send({ type: "dialogue-close", dialogId: dialog });
     await waitFor(
@@ -658,15 +687,36 @@ test(
     const result = player.state();
     assert.equal(result.state.inventory.wood, 0);
     assert.ok(result.state.cooldowns[resource.id] > result.now);
-    assert.ok(calls[1].messages[0].content.includes(resource.id));
-    assert.ok(calls[1].messages[0].content.includes("附近人物"));
-    assert.match(calls[1].messages[0].content, /根据旅人话语的含义/);
-    assert.match(calls[1].messages[0].content, /普通问答只返回/);
+    assert.ok(calls[3].messages[0].content.includes(resource.id));
+    assert.ok(calls[3].messages[0].content.includes("附近人物"));
+    assert.match(calls[3].messages[0].content, /根据旅人话语的含义/);
+    assert.match(calls[3].messages[0].content, /普通问答只给对白/);
     for (const call of calls)
       assert.deepEqual(call.response_format, { type: "json_object" });
-    assert.equal(calls.length, 5, "one provider request per turn");
+    assert.match(calls[4].messages[0].content, /上一份回复没有通过格式校验/);
+    assert.deepEqual(calls[3].messages.at(-1), calls[4].messages.at(-1));
 
     await app!.close();
+    const ledger = new DatabaseSync(savePath + ".llm.sqlite", {
+      readOnly: true,
+    });
+    try {
+      assert.deepEqual(
+        ledger
+          .prepare(
+            "SELECT status, count(*) AS n FROM calls GROUP BY status ORDER BY status",
+          )
+          .all()
+          .map((row) => [row.status, row.n]),
+        [
+          ["cancelled", 1],
+          ["invalid", 6],
+          ["ok", 2],
+        ],
+      );
+    } finally {
+      ledger.close();
+    }
     url = await start();
     player = await connect(url);
     const restarted = player.state();
@@ -697,11 +747,14 @@ test(
     const app = createApp({
       savePath,
       dialogueEnv: {
+        // Three NPCs share the ledger; the old single-actor minute cap starves delivery.
         LLM_ENABLED: "false",
         LLM_MOCK_AUTONOMY_ENABLED: "true",
         LLM_MOCK_DELAY_MS: "120",
-        LLM_AUTONOMY_REQUESTS_PER_MINUTE: "20",
-        LLM_MAX_REQUESTS_PER_MINUTE: "24",
+        LLM_AUTONOMY_REQUESTS_PER_MINUTE: "60",
+        LLM_MAX_REQUESTS_PER_MINUTE: "90",
+        LLM_AUTONOMY_REQUESTS_PER_SESSION: "90",
+        LLM_MAX_REQUESTS_PER_SESSION: "120",
       },
     });
     t.after(async () => {
@@ -742,8 +795,14 @@ test(
       "finish work",
       22_000,
     );
-    assert.ok(performance.now() - workingAt >= 13_500);
     const repaired = player.state();
+    const workers = (["cenyan", "ahe", "luozhou"] as const).filter(
+      (id) => repaired.state.contributions[id].workMs > 0,
+    ).length;
+    assert.ok(workers >= 1);
+    assert.ok(
+      performance.now() - workingAt >= valley.bridge.workMs / workers - 750,
+    );
     assert.equal(repaired.state.bridge.progressMs, valley.bridge.workMs);
     assert.deepEqual(repaired.state.inventory, {
       wood: 0,

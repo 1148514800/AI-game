@@ -1,4 +1,9 @@
 import { materialAmount } from "../shared/cenyan.js";
+import {
+  npcSchema,
+  socialCommand,
+  type SocialCommand,
+} from "../shared/social.js";
 import Phaser from "phaser";
 import "./style.css";
 import { Connection, type ConnectionStatus } from "./connection.js";
@@ -10,6 +15,7 @@ import {
   enableActions,
   furnishJournal,
   render,
+  renderSociety,
   selectedAction,
   setText,
   showFeedback,
@@ -41,7 +47,7 @@ let snapshot: Snapshot | undefined;
 let paused = false;
 let soundEnabled = true;
 let showingOverview = false;
-let pending: { id: string; timer: number } | undefined;
+let pending: { id: string; timer: number; social: boolean } | undefined;
 
 function online() {
   return (
@@ -90,8 +96,10 @@ function updateControls() {
   if (music.disabled === (assetState === "ready"))
     music.disabled = assetState !== "ready";
   setText(element("save-status"), connected ? "本地自动存档" : "等待本地存档");
-  if (snapshot) render(snapshot, canPlay() && !pending);
-  else {
+  if (snapshot) {
+    render(snapshot, canPlay() && !pending);
+    renderSociety(snapshot, connected && !paused && !pending, dialogue.npc);
+  } else {
     enableActions(false);
     setText(element("cenyan-status"), "岑砚 · 等待连接");
   }
@@ -159,9 +167,18 @@ const connection = new Connection({
   },
   result(result) {
     if (pending?.id !== result.id) return;
+    const social = pending.social;
     clearPending();
     updateControls();
-    showResult(result);
+    if (social && dialogue.npc) {
+      setText(element("social-feedback"), result.text);
+      if (
+        result.offerId &&
+        result.ok &&
+        ["PLEDGE_PROPOSED", "OFFER_PROPOSED"].includes(result.code)
+      )
+        dialogue.askAgreement(result.offerId);
+    } else showResult(result);
     if (result.ok && soundEnabled && assetState === "ready") scene.playSound();
   },
   dialogue(event) {
@@ -171,13 +188,17 @@ const connection = new Connection({
 });
 
 function request(
-  message: Omit<Action, "id"> | { type: "reset"; confirm: true },
+  message:
+    | Omit<Action, "id">
+    | { type: "reset"; confirm: true }
+    | { type: "social"; command: SocialCommand },
 ) {
   if (!online() || pending) return;
   const id = crypto.randomUUID();
   if (!connection.send({ ...message, id })) return;
   pending = {
     id,
+    social: message.type === "social",
     timer: window.setTimeout(() => {
       clearPending();
       updateControls();
@@ -190,7 +211,8 @@ function request(
 function interact() {
   const action = selectedAction();
   if (!canPlay() || !action) return;
-  if (action.target === "cenyan") dialogue.open();
+  const npc = npcSchema.safeParse(action.target).data;
+  if (npc) dialogue.open(npc);
   else request({ type: "action", target: action.target, verb: action.verb });
 }
 
@@ -224,8 +246,14 @@ const dialogue = bindDialogue({
 retry.addEventListener("click", () => void connection.connect());
 pause.addEventListener("click", () => setPaused(!paused));
 element("interact").addEventListener("click", interact);
+element("residents").addEventListener("click", (event) => {
+  if (!canPlay() || !(event.target instanceof HTMLButtonElement)) return;
+  const target = npcSchema.safeParse(event.target.dataset.talk).data;
+  if (target) dialogue.open(target);
+});
 element("nearby-cenyan").addEventListener("click", () => {
-  if (canPlay()) dialogue.open();
+  const npc = npcSchema.safeParse(element("nearby-cenyan").dataset.actor).data;
+  if (canPlay() && npc) dialogue.open(npc);
 });
 element("bridge-work").addEventListener("click", () => {
   if (canPlay() && snapshot)
@@ -260,19 +288,79 @@ element<HTMLFormElement>("bridge-delivery").addEventListener(
 for (const choice of ["accept", "reject"] as const)
   element(`gift-${choice}`).addEventListener("click", () => {
     const offer = snapshot?.state.gift;
-    if (canPlay() && offer?.from === "cenyan")
+    if (
+      canPlay() &&
+      offer &&
+      offer.from !== "player" &&
+      (offer.to ?? "player") === "player"
+    )
       request({
         type: "action",
-        target: "cenyan",
+        target: offer.from,
         verb: "gift-response",
         offerId: offer.id,
         choice,
       });
   });
-element("stop-follow").addEventListener("click", () => {
-  if (canPlay())
-    request({ type: "action", target: "cenyan", verb: "stop-follow" });
+for (const verb of ["stop-follow", "stop-wait"] as const) {
+  const button = element(verb);
+  button.addEventListener("click", () => {
+    if (canPlay() && button.dataset.actor)
+      request({ type: "action", target: button.dataset.actor, verb });
+  });
+}
+element("debug-actor").addEventListener("change", updateControls);
+function socialFields() {
+  const kind = element<HTMLSelectElement>("social-kind").value;
+  element("social-take-fields").hidden = kind !== "exchange";
+  element("social-give-fields").hidden = kind === "work";
+}
+element("social-kind").addEventListener("change", socialFields);
+socialFields();
+element("social-proposal").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const target = dialogue.npc;
+  if (!target || paused) return;
+  const kind = element<HTMLSelectElement>("social-kind").value;
+  const give = {
+    item: element<HTMLSelectElement>("social-item").value,
+    qty: element<HTMLInputElement>("social-qty").valueAsNumber,
+  };
+  const take = {
+    item: element<HTMLSelectElement>("social-take").value,
+    qty: element<HTMLInputElement>("social-take-qty").valueAsNumber,
+  };
+  const command =
+    kind === "deliver" || kind === "work"
+      ? {
+          kind: "pledge",
+          target,
+          condition: kind === "work" ? { kind } : { kind, ...give },
+        }
+      : {
+          kind: "offer",
+          target,
+          terms:
+            kind === "request"
+              ? { kind, take: give }
+              : kind === "exchange"
+                ? { kind, give, take }
+                : { kind, give },
+        };
+  const parsed = socialCommand.safeParse(command);
+  if (parsed.success) request({ type: "social", command: parsed.data });
 });
+for (const list of ["player-agreements", "dialogue-agreements"])
+  element(list).addEventListener("click", (event) => {
+    if (!(event.target instanceof HTMLButtonElement) || paused) return;
+    const { agreement: offerId, command } = event.target.dataset;
+    const parsed = socialCommand.safeParse(
+      command === "accept" || command === "reject"
+        ? { kind: "respond", offerId, choice: command }
+        : { kind: command, offerId },
+    );
+    if (parsed.success) request({ type: "social", command: parsed.data });
+  });
 overview.addEventListener("click", () => {
   showingOverview = !showingOverview;
   overview.setAttribute("aria-pressed", String(showingOverview));

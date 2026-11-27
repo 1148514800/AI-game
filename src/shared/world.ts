@@ -59,14 +59,20 @@ export function distance(a: Point, b: Point) {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
-export function nearbyTarget(player: Point, cenyan?: Point) {
+export function nearbyTarget(
+  player: Point,
+  actors?: Point | Partial<Record<string, Point>>,
+) {
   let nearby: Target | undefined;
   let closest = Infinity;
   for (const entry of targets) {
-    const target =
-      entry.id === "cenyan" && cenyan
-        ? { ...entry, x: cenyan.x, y: cenyan.y }
-        : entry;
+    const actor =
+      actors && typeof actors.x === "number"
+        ? entry.id === "cenyan"
+          ? (actors as Point)
+          : undefined
+        : (actors as Partial<Record<string, Point>> | undefined)?.[entry.id];
+    const target = actor ? { ...entry, x: actor.x, y: actor.y } : entry;
     const distanceToPlayer = distance(player, target);
     if (distanceToPlayer <= target.range && distanceToPlayer < closest) {
       nearby = target;

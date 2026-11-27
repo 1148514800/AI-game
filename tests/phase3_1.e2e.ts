@@ -1,6 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 import { spawn, type ChildProcess } from "node:child_process";
 import { once } from "node:events";
+import { freeBackendPort } from "./backend-process.js";
 import {
   closeSync,
   mkdirSync,
@@ -26,7 +27,7 @@ import {
 import { findKeyboardRoute } from "./paths.js";
 
 const evidence = resolve(
-  process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1",
+  process.env.MISTSEA_EVIDENCE ?? "evidence/phase4",
   "cooperation",
 );
 const stage = (page: Page) => page.locator("#game");
@@ -61,7 +62,7 @@ async function walk(
     const { player, cenyan } = await positions(page);
     if (reached(player, cenyan)) return;
     const goal = (point: Point) => reached(point, cenyan);
-    const steps = findKeyboardRoute(player, goal, repaired, [cenyan]);
+    const steps = findKeyboardRoute(player, goal, repaired, [cenyan, ...valley.residents.filter((id) => id.id !== "cenyan")]);
     if (!steps) {
       // Diagnose the obstruction without using a route that ignores Cenyan.
       const terrainRoute = findKeyboardRoute(player, goal, repaired, []);
@@ -135,7 +136,7 @@ async function openChat(page: Page, moveToNpc = true) {
   if (nearbyTarget(player, cenyan)?.id === "cenyan") {
     await stage(page).focus();
     await page.keyboard.press("e");
-  } else await page.locator("#nearby-cenyan").click();
+  } else await page.locator("#talk-cenyan").click();
   await expect(replyInput(page)).toBeVisible();
   await expect(page.locator("#dialogue-mode")).toContainText("Mock");
 }
@@ -243,6 +244,7 @@ test("Phase3.1 A–F normal UI: consent, persisted plan, following, shared bridg
     page.screenshot({ path: join(evidence, name + ".png"), fullPage: true });
 
   async function start() {
+    await freeBackendPort();
     child = spawn(
       process.execPath,
       ["--import", "tsx", "tests/fixtures/phase3_1-server.ts"],

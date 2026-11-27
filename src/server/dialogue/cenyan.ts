@@ -1,4 +1,7 @@
 import personality from "../../../data/npcs/cenyan.json" with { type: "json" };
+import ahe from "../../../data/npcs/ahe.json" with { type: "json" };
+import luozhou from "../../../data/npcs/luozhou.json" with { type: "json" };
+import type { NpcId } from "../../shared/social.js";
 import { contextBytes, historyTurns } from "./config.js";
 
 export type PublicBridge = {
@@ -10,6 +13,9 @@ export type PublicBridge = {
   progressPercent: number;
   repaired: boolean;
   missing?: { wood: number; stone: number };
+  materialsReady?: boolean;
+  committed?: { wood: number; stone: number };
+  unassigned?: { wood: number; stone: number };
   contributions?: import("../../shared/protocol.js").SaveState["contributions"];
   sharedWorkMs?: number;
 };
@@ -19,18 +25,32 @@ export type ChatMessage = {
   content: string;
 };
 
-export const identity = [
-  personality.background,
-  personality.goals,
-  personality.knowledge,
-  personality.expression,
-  ...personality.boundaries,
-].join("\n");
+const personalities = { cenyan: personality, ahe, luozhou };
+export function actorIdentity(actor: NpcId) {
+  const profile = personalities[actor];
+  return [
+    profile.background,
+    profile.goals,
+    profile.knowledge,
+    profile.expression,
+    ...profile.boundaries,
+  ].join("\n");
+}
+export const identity = actorIdentity("cenyan");
 
 export function bridgeNotice(bridge: PublicBridge): string {
-  return bridge.repaired
-    ? "公共告示：旧桥已修通，可往东岸。"
-    : `公共告示：旧桥未修通。已交木材 ${bridge.wood}/${bridge.woodRequired}，石材 ${bridge.stone}/${bridge.stoneRequired}，施工 ${bridge.progressPercent}%。`;
+  if (bridge.repaired) return "公共告示：旧桥已修通，可往东岸。";
+  const { wood, stone } = bridge.missing ?? {
+    wood: bridge.woodRequired - bridge.wood,
+    stone: bridge.stoneRequired - bridge.stone,
+  };
+  const received = `公共告示：旧桥未修通。已交木材 ${bridge.wood}/${bridge.woodRequired}，石材 ${bridge.stone}/${bridge.stoneRequired}，施工 ${bridge.progressPercent}%。`;
+  return (
+    received +
+    (wood || stone
+      ? `工地实际还缺木材 ${wood}、石材 ${stone}。`
+      : "工地材料已交齐，可以施工。")
+  );
 }
 
 export function buildMessages(
@@ -38,11 +58,15 @@ export function buildMessages(
   history: Turn[],
   player: string,
   context?: string,
+  npc: NpcId = "cenyan",
 ) {
   const opening: ChatMessage = {
     role: "system",
     content:
-      identity + "\n" + bridgeNotice(bridge) + (context ? "\n" + context : ""),
+      actorIdentity(npc) +
+      "\n" +
+      bridgeNotice(bridge) +
+      (context ? "\n" + context : ""),
   };
   const userMessage = (content: string): ChatMessage => ({
     role: "user",
@@ -67,7 +91,18 @@ export function buildMessages(
   return { messages, reservedInputTokens: measure() };
 }
 
-export function mockReply(bridge: PublicBridge, history: Turn[], text: string) {
+export function mockReply(
+  bridge: PublicBridge,
+  history: Turn[],
+  text: string,
+  npc: NpcId = "cenyan",
+) {
+  if (npc !== "cenyan") {
+    if (/桥|材料|航标/.test(text)) return bridgeNotice(bridge);
+    return npc === "ahe"
+      ? "我在给聚落备些日常物资。一起采集也好，咱们先说清怎么分。"
+      : "我打算去看看东岸的航标。雾散一点，就能看清河对岸的路了。";
+  }
   if (/桥|告示|材料|对岸/.test(text))
     return (
       bridgeNotice(bridge) +

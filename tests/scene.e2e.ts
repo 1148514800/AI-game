@@ -2,6 +2,7 @@ import { test as base, expect, type Page } from "@playwright/test";
 import { spawn, type ChildProcess } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { once } from "node:events";
+import { freeBackendPort, stopBackend } from "./backend-process.js";
 import { closeSync, mkdirSync, mkdtempSync, openSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -17,7 +18,7 @@ import {
 } from "../src/shared/world.js";
 import { route } from "./paths.js";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase4";
 const backendUrl = "http://127.0.0.1:3003";
 
 const test = base.extend<{
@@ -36,6 +37,7 @@ const test = base.extend<{
       );
       let child: ChildProcess | undefined;
       async function start() {
+        await freeBackendPort();
         child = spawn(
           process.execPath,
           ["--import", "tsx", "src/server/index.ts"],
@@ -66,11 +68,7 @@ const test = base.extend<{
           .toBe(200);
       }
       async function stop() {
-        if (child && child.exitCode === null && child.signalCode === null) {
-          const exit = once(child, "exit");
-          child.kill("SIGTERM");
-          await exit;
-        }
+        await stopBackend(child);
         child = undefined;
       }
       try {
@@ -109,7 +107,7 @@ async function walk(page: Page, goal: (p: Point) => boolean, repaired = false) {
     x: Number(el.dataset.cenyanX),
     y: Number(el.dataset.cenyanY),
   }));
-  const steps = route(await position(page), goal, repaired, [npc]);
+  const steps = route(await position(page), goal, repaired, [npc, ...valley.residents.filter((actor) => actor.id !== "cenyan")]);
   for (const step of steps) {
     const axis = step.axis;
     const value = step[axis];
@@ -201,8 +199,8 @@ test("fresh journey collects all materials, repairs, crosses, explores and resto
       `/assets/${resident.asset}-face.png`,
     );
     await screenshot(page, `resident-${resident.id}`);
-    if (resident.id === "cenyan") {
-      await expect(page.getByRole("dialog", { name: "岑砚" })).toBeVisible();
+    {
+      await expect(page.getByRole("dialog", { name: resident.name })).toBeVisible();
       await expect(page.locator("#dialogue-mode")).toContainText("模拟");
       await page.getByRole("button", { name: "关闭对话" }).click();
     }

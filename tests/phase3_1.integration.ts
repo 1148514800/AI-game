@@ -40,7 +40,7 @@ test(
   { timeout: 40_000 },
   async (t) => {
     const dir = mkdtempSync(join(tmpdir(), "mistsea-phase31-http-"));
-    const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1";
+    const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase4";
     mkdirSync(evidence, { recursive: true });
     const capture = (label: string, value: unknown) =>
       appendFileSync(

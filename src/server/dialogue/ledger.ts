@@ -2,6 +2,7 @@ import { existsSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { npcId, sessionMs, type DialogueConfig } from "./config.js";
+import type { NpcId } from "../../shared/social.js";
 import type { Usage } from "./provider.js";
 
 export type Purpose = "dialogue" | "autonomy";
@@ -30,17 +31,18 @@ export class DialogueLedger {
           id TEXT PRIMARY KEY, at_ms INTEGER NOT NULL, npc TEXT NOT NULL,
           mode TEXT NOT NULL, model TEXT NOT NULL, status TEXT NOT NULL, elapsed_ms INTEGER,
           charged_tokens INTEGER NOT NULL, charged_nano INTEGER, estimated_nano INTEGER, usage TEXT,
+          intent TEXT NOT NULL DEFAULT '',
           purpose TEXT NOT NULL CHECK(purpose IN ('dialogue', 'autonomy'))
         ) STRICT;
         CREATE INDEX calls_mode_at ON calls(mode, at_ms);
-        PRAGMA user_version = 2;
+        PRAGMA user_version = 3;
       `),
         );
       const version = this.db
         .prepare("PRAGMA user_version")
         .get()?.user_version;
       if (
-        (version !== 1 && version !== 2) ||
+        (version !== 1 && version !== 2 && version !== 3) ||
         this.db.prepare("PRAGMA quick_check").get()?.quick_check !== "ok"
       )
         throw Error("Invalid dialogue ledger");
@@ -51,6 +53,12 @@ export class DialogueLedger {
             CHECK(purpose IN ('dialogue', 'autonomy'));
           PRAGMA user_version = 2;
         `),
+        );
+      if (version === 1 || version === 2)
+        this.transaction(() =>
+          this.db.exec(
+            "ALTER TABLE calls ADD COLUMN intent TEXT NOT NULL DEFAULT ''; PRAGMA user_version = 3;",
+          ),
         );
       this.db
         .prepare(
@@ -81,6 +89,9 @@ export class DialogueLedger {
     inputTokens: number,
     now = Date.now(),
     purpose: Purpose = "dialogue",
+    actor: NpcId = npcId,
+    fair = false,
+    intent = purpose as string,
   ) {
     const limits = config.limits;
     const output = limits.LLM_MAX_OUTPUT_TOKENS;
@@ -97,12 +108,18 @@ export class DialogueLedger {
           coalesce(sum(charged_tokens), 0) AS tokens, coalesce(sum(charged_nano), 0) AS nano,
           count(*) - count(charged_nano) AS unpriced,
           coalesce(sum(purpose = 'autonomy'), 0) AS autoTotal,
+          coalesce(sum(purpose = 'autonomy' AND npc = $npc), 0) AS actorTotal,
+          coalesce(sum(purpose = 'autonomy' AND npc = $npc AND at_ms > $minute), 0) AS actorMinute,
+          coalesce(sum(purpose = 'autonomy' AND npc = $npc AND at_ms > $session), 0) AS actorSession,
+          coalesce(sum(CASE WHEN purpose = 'autonomy' AND npc = $npc THEN charged_tokens END), 0) AS actorTokens,
+          coalesce(sum(CASE WHEN purpose = 'autonomy' AND npc = $npc THEN charged_nano END), 0) AS actorNano,
           coalesce(sum(purpose = 'autonomy' AND at_ms > $minute), 0) AS autoMinute,
           coalesce(sum(purpose = 'autonomy' AND at_ms > $session), 0) AS autoSession
         FROM calls WHERE mode = $mode
       `,
         )
         .get({
+          npc: actor,
           minute: now - 60_000,
           session: now - sessionMs,
           mode: config.mode,
@@ -123,7 +140,20 @@ export class DialogueLedger {
       }
       if (
         purpose === "autonomy" &&
-        (totals.autoMinute >= limits.LLM_AUTONOMY_REQUESTS_PER_MINUTE ||
+        ((fair &&
+          (totals.actorMinute >=
+            Math.ceil(limits.LLM_AUTONOMY_REQUESTS_PER_MINUTE / 2) ||
+            totals.actorSession >=
+              Math.ceil(limits.LLM_AUTONOMY_REQUESTS_PER_SESSION / 2) ||
+            totals.actorTotal >=
+              Math.ceil(limits.LLM_AUTONOMY_MAX_TOTAL_REQUESTS / 2) ||
+            totals.actorTokens + reservedTokens >
+              Math.ceil(limits.LLM_MAX_TOTAL_TOKENS * 0.5) ||
+            (cap !== undefined &&
+              reservedNano !== null &&
+              totals.actorNano + reservedNano >
+                Math.floor(cap * nanoPerUsd * 0.5)))) ||
+          totals.autoMinute >= limits.LLM_AUTONOMY_REQUESTS_PER_MINUTE ||
           totals.autoSession >= limits.LLM_AUTONOMY_REQUESTS_PER_SESSION ||
           totals.autoTotal >= limits.LLM_AUTONOMY_MAX_TOTAL_REQUESTS ||
           totals.minute >= limits.LLM_MAX_REQUESTS_PER_MINUTE - 1 ||
@@ -140,19 +170,20 @@ export class DialogueLedger {
       this.db
         .prepare(
           `
-        INSERT INTO calls (id, at_ms, npc, mode, model, status, charged_tokens, charged_nano, purpose)
-        VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, ?)
+        INSERT INTO calls (id, at_ms, npc, mode, model, status, charged_tokens, charged_nano, purpose, intent)
+        VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?)
       `,
         )
         .run(
           id,
           now,
-          npcId,
+          actor,
           config.mode,
           config.model,
           reservedTokens,
           reservedNano,
           purpose,
+          intent,
         );
       return "ok";
     });

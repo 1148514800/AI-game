@@ -1,4 +1,13 @@
 import { destinationNames, goalName, type Step } from "../shared/cenyan.js";
+import {
+  actorName,
+  agreementText,
+  npcIds,
+  npcSchema,
+  trustLabels,
+  type ActorId,
+  type NpcId,
+} from "../shared/social.js";
 import type { Action, Result, Snapshot } from "../shared/protocol.js";
 import {
   distance,
@@ -68,6 +77,13 @@ export function furnishJournal() {
       label(resident.name, "strong"),
       label(resident.role, "small"),
     );
+    const talk = label("交谈", "button") as HTMLButtonElement;
+    talk.type = "button";
+    talk.id = "talk-" + resident.id;
+    talk.dataset.talk = resident.id;
+    talk.setAttribute("aria-label", `找${resident.name}聊聊`);
+    talk.hidden = true;
+    row.append(talk);
     element("residents").append(row);
   }
 }
@@ -116,6 +132,7 @@ const activities = {
   working: "正在施工",
   waiting: "在等待",
   resting: "在休息",
+  talking: "在交谈",
   paused: "已暂停",
 };
 const steps = {
@@ -127,6 +144,9 @@ const steps = {
   work: "施工",
   wait: "等待",
   rest: "休息",
+  social: "处理正式约定",
+  wait_until: "等待条件",
+  talk: "邀谈",
 };
 const triggerNames: Record<string, string> = {
   "first-active": "首次活跃",
@@ -141,8 +161,9 @@ const triggerNames: Record<string, string> = {
 };
 const memoryLabels = {
   fact: "规则事实",
-  claim: "旅人声称",
-  opinion: "岑砚观点",
+  claim: "他人声称",
+  opinion: "自身观点",
+  commitment: "约定",
 };
 
 function stepText(step: Step) {
@@ -152,25 +173,51 @@ function stepText(step: Step) {
       ? " " +
         (step.target_id === "player"
           ? "旅人"
-          : (destinationNames.get(step.target_id) ?? step.target_id)) +
+          : (destinationNames.get(step.target_id) ??
+            residents.get(step.target_id)?.name ??
+            step.target_id)) +
         ("item" in step && step.item ? ` ${items[step.item]} ×${step.qty}` : "")
-      : ` ${step.seconds} 秒`)
+      : "seconds" in step
+        ? ` ${step.seconds} 秒`
+        : "")
   );
 }
 
 let shownMemory = "";
-function renderCenyan(snapshot: Snapshot) {
-  const actor = snapshot.state.cenyan;
-  const { activity, model, memory } = snapshot.cenyan;
-  const activityLabel =
-    activity === "idle" && model?.kind === "pending"
-      ? "正在斟酌"
-      : activities[activity];
-  const mode =
-    model?.mode === "mock" && (model.kind !== "disabled" || actor.plan)
-      ? " · Mock 模拟"
-      : "";
-  setText(element("cenyan-status"), "岑砚 · " + activityLabel + mode);
+function renderResidents(snapshot: Snapshot) {
+  for (const id of npcIds) {
+    const { activity, model } = snapshot.actors[id];
+    const label =
+      activity === "idle" && model?.kind === "pending"
+        ? "正在斟酌"
+        : activities[activity];
+    const mode =
+      model?.mode === "mock" &&
+      (model.kind !== "disabled" || snapshot.state.actors[id].plan)
+        ? " · Mock 模拟"
+        : "";
+    setText(element(id + "-status"), actorName(id) + " · " + label + mode);
+  }
+  const selected = npcSchema.parse(
+    element<HTMLSelectElement>("debug-actor").value,
+  );
+  const actor = snapshot.state.actors[selected];
+  const { model, memory } = snapshot.actors[selected];
+  const relations = Object.entries(actor.relations).map(
+    ([id, record]) =>
+      `${actorName(id as ActorId)} ${trustLabels[record.level + 2]}（${record.reason}）`,
+  );
+  setText(element("actor-relations"), relations.join("、") || "普通");
+  const own = [...snapshot.state.deals, ...snapshot.state.pledges].filter(
+    (entry) =>
+      (entry.from === selected || entry.to === selected) &&
+      entry.expiresAt > snapshot.now &&
+      (entry.status === "proposed" || entry.status === "accepted"),
+  );
+  setText(
+    element("actor-agreements"),
+    own.map(agreementText).join("、") || "暂无",
+  );
   setText(element("cenyan-goal"), goalName(actor.goal));
   setText(
     element("cenyan-plan"),
@@ -245,7 +292,18 @@ function renderCenyan(snapshot: Snapshot) {
     shownMemory = memoryKey;
     element("cenyan-memory").replaceChildren(
       ...memory.map((entry) =>
-        label(`${memoryLabels[entry.kind]} · ${entry.content}`, "li"),
+        label(
+          `${
+            entry.kind === "claim"
+              ? entry.source === "traveler"
+                ? "旅人声称"
+                : entry.source === "rules"
+                  ? memoryLabels.claim
+                  : actorName(entry.source) + "声称"
+              : memoryLabels[entry.kind]
+          } · ${entry.content}`,
+          "li",
+        ),
       ),
     );
   }
@@ -253,7 +311,12 @@ function renderCenyan(snapshot: Snapshot) {
 
 export function render(snapshot: Snapshot, enabled: boolean) {
   const { state, now, working } = snapshot;
-  renderCenyan(snapshot);
+  renderResidents(snapshot);
+  for (const id of npcIds) {
+    const button = element<HTMLButtonElement>("talk-" + id);
+    button.hidden = !nearPlayer(snapshot, id);
+    button.disabled = !enabled;
+  }
   for (const [key, amount] of Object.entries(state.inventory))
     setText(itemCounts.get(key)!, String(amount));
   setText(
@@ -271,14 +334,14 @@ export function render(snapshot: Snapshot, enabled: boolean) {
   setText(percentLabel, `${percent}%`);
   setText(deliveredWood, `${built.wood} / ${bridge.required.wood}`);
   setText(deliveredStone, `${built.stone} / ${bridge.required.stone}`);
-  const names = { player: "旅人", cenyan: "岑砚", legacy: "旧档记录" };
-  for (const key of ["player", "cenyan", "legacy"] as const) {
+  for (const key of ["player", ...npcIds, "legacy"] as const) {
     const node = element(`bridge-${key}-contribution`);
     const { wood, stone, workMs } = state.contributions[key];
-    if (key === "legacy") node.hidden = !wood && !stone && !workMs;
+    if (key !== "player" && key !== "cenyan")
+      node.hidden = !wood && !stone && !workMs;
     setText(
       node,
-      `${names[key]} · 木材 ${wood} · 石材 ${stone} · 施工 ${(workMs / 1000).toFixed(2)} 秒`,
+      `${key === "legacy" ? "旧档记录" : actorName(key)} · 木材 ${wood} · 石材 ${stone} · 施工 ${(workMs / 1000).toFixed(2)} 秒`,
     );
   }
   const shared = element("bridge-shared-work");
@@ -288,23 +351,46 @@ export function render(snapshot: Snapshot, enabled: boolean) {
   element("bridge-delivery").hidden = !atBridge || hasMaterials;
   element<HTMLButtonElement>("delivery-send").disabled = !enabled;
   const incoming =
-    state.gift?.from === "cenyan" && state.gift.expiresAt > now
+    state.gift &&
+    state.gift.from !== "player" &&
+    (state.gift.to ?? "player") === "player" &&
+    state.gift.expiresAt > now
       ? state.gift
       : undefined;
   element("gift-incoming").hidden = !incoming;
-  if (incoming)
+  if (incoming) {
+    const npc = npcSchema.parse(incoming.from);
     setText(
       element("gift-description"),
-      `岑砚提议赠你${items[incoming.item]} ×${incoming.qty}`,
+      `${actorName(npc)}提议赠你${items[incoming.item]} ×${incoming.qty}`,
     );
-  for (const choice of ["accept", "reject"])
-    element<HTMLButtonElement>(`gift-${choice}`).disabled =
-      !enabled ||
-      distance(state.player, state.cenyan) > residents.get("cenyan")!.range;
+    for (const choice of ["accept", "reject"])
+      element<HTMLButtonElement>(`gift-${choice}`).disabled =
+        !enabled || !nearPlayer(snapshot, npc);
+  }
   const follow = element<HTMLButtonElement>("stop-follow");
-  follow.hidden =
-    state.cenyan.plan?.steps[state.cenyan.plan.index].type !== "follow";
+  const follower = npcIds.find((id) => {
+    const plan = state.actors[id].plan;
+    const step = plan?.steps[plan.index];
+    return step?.type === "follow" && step.target_id === "player";
+  });
+  follow.hidden = !follower;
   follow.disabled = !enabled;
+  follow.dataset.actor = follower ?? "";
+  const waiting = element<HTMLButtonElement>("stop-wait");
+  const waiter = npcIds.find((id) => {
+    const plan = state.actors[id].plan;
+    return (
+      nearPlayer(snapshot, id) && plan?.steps[plan.index].type === "wait_until"
+    );
+  });
+  waiting.hidden = !waiter;
+  waiting.disabled = !enabled;
+  waiting.dataset.actor = waiter ?? "";
+  const workers = npcIds
+    .filter((id) => snapshot.actors[id].activity === "working")
+    .map(actorName)
+    .join("、");
   setText(
     objective,
     state.explored
@@ -320,11 +406,11 @@ export function render(snapshot: Snapshot, enabled: boolean) {
       : built.repaired
         ? "穿过旧桥，顺着东岸小路前往航标遗迹。"
         : working
-          ? snapshot.cenyan.activity === "working"
-            ? "你和岑砚正在一起铺设桥板。"
+          ? workers
+            ? `你和${workers}正在一起铺设桥板。`
             : "正在铺设桥板。留在渡口，直到施工完成。"
-          : snapshot.cenyan.activity === "working"
-            ? "岑砚正在旧桥施工。"
+          : workers
+            ? `${workers}正在旧桥施工。`
             : hasMaterials
               ? "材料已到位。在渡口开始施工。"
               : built.discovered
@@ -336,14 +422,17 @@ export function render(snapshot: Snapshot, enabled: boolean) {
 
   const alternateWork = element<HTMLButtonElement>("bridge-work");
   const alternateChat = element<HTMLButtonElement>("nearby-cenyan");
-  const target = nearbyTarget(state.player, state.cenyan);
+  const target = nearbyTarget(state.player, state.actors);
   alternateWork.hidden =
     !atBridge || !hasMaterials || built.repaired || target?.id === bridge.id;
   alternateWork.disabled = !enabled;
   setText(alternateWork, working ? "暂停施工" : "开始施工");
-  alternateChat.hidden =
-    target?.id === "cenyan" ||
-    distance(state.player, state.cenyan) > residents.get("cenyan")!.range;
+  const nearby = npcIds.find(
+    (id) => id !== target?.id && nearPlayer(snapshot, id),
+  );
+  alternateChat.hidden = !nearby;
+  alternateChat.dataset.actor = nearby ?? "";
+  if (nearby) setText(alternateChat, `与${actorName(nearby)}交谈`);
   alternateChat.disabled = !enabled;
   let nextSelection: typeof selection;
   let hint = "沿小路探索，靠近居民或采集点后按 E。";
@@ -353,14 +442,11 @@ export function render(snapshot: Snapshot, enabled: boolean) {
     const resource = resources.get(target.id);
     if (resident) {
       image = `${resident.asset}-face`;
-      const conversational = target.id === "cenyan";
-      hint = conversational
-        ? "木匠 · 和岑砚聊聊。"
-        : `${resident.role} · 听听${resident.name}的介绍。`;
+      hint = `${resident.role} · 和${resident.name}聊聊。`;
       nextSelection = {
         target: target.id,
         verb: "inspect",
-        label: conversational ? "与岑砚交谈" : "认识居民",
+        label: `与${resident.name}交谈`,
       };
     } else if (resource) {
       image = resource.item;
@@ -396,10 +482,9 @@ export function render(snapshot: Snapshot, enabled: boolean) {
         hint = "留在渡口完成施工，走动会暂停。";
         nextSelection = { target: bridge.id, verb: "stop", label: "暂停施工" };
       } else {
-        hint =
-          snapshot.cenyan.activity === "working"
-            ? "岑砚正在施工，可以一起动手。"
-            : "材料已就位，按 E 开始施工。";
+        hint = workers
+          ? `${workers}正在施工，可以一起动手。`
+          : "材料已就位，按 E 开始施工。";
         nextSelection = { target: bridge.id, verb: "work", label: "开始施工" };
       }
     } else {
@@ -432,4 +517,86 @@ export function render(snapshot: Snapshot, enabled: boolean) {
   lastHint = hint;
   selection = nextSelection;
   enableActions(enabled);
+}
+
+function nearPlayer({ state }: Snapshot, id: NpcId) {
+  return distance(state.player, state.actors[id]) <= residents.get(id)!.range;
+}
+
+let shownEvents = "";
+const agreementKeys = new WeakMap<HTMLElement, string>();
+export function renderSociety(
+  snapshot: Snapshot,
+  available: boolean,
+  dialogNpc?: NpcId,
+) {
+  const events = snapshot.state.events.slice(0, 4);
+  const key = events.map((event) => event.id).join("|");
+  if (key !== shownEvents) {
+    shownEvents = key;
+    element("valley-events").replaceChildren(
+      ...events.map((event) => label(event.text, "li")),
+    );
+  }
+  const player = [...snapshot.state.deals, ...snapshot.state.pledges].filter(
+    (entry) =>
+      (entry.from === "player" || entry.to === "player") &&
+      entry.expiresAt > snapshot.now &&
+      (entry.status === "proposed" || entry.status === "accepted"),
+  );
+  const renderList = (node: HTMLElement, entries: typeof player) => {
+    const key = JSON.stringify(
+      entries.map((entry) => [
+        entry.id,
+        entry.status,
+        "progress" in entry ? entry.progress : 0,
+        nearPlayer(
+          snapshot,
+          (entry.from === "player" ? entry.to : entry.from) as NpcId,
+        ),
+        available,
+      ]),
+    );
+    if (agreementKeys.get(node) === key) return;
+    agreementKeys.set(node, key);
+    node.replaceChildren(
+      ...entries.map((entry) => {
+        const other = (
+          entry.from === "player" ? entry.to : entry.from
+        ) as NpcId;
+        const row = label(
+          `${actorName(other)} · ${agreementText(entry)} · ${entry.status === "accepted" ? "已接受" : "待回应"}`,
+          "li",
+        );
+        const add = (command: string, name: string, needsNear = false) => {
+          const button = label(name, "button") as HTMLButtonElement;
+          button.type = "button";
+          button.dataset.agreement = entry.id;
+          button.dataset.command = command;
+          button.disabled =
+            !available || (needsNear && !nearPlayer(snapshot, other));
+          row.append(button);
+        };
+        if (entry.to === "player" && entry.status === "proposed") {
+          add("accept", "接受", true);
+          add("reject", "拒绝");
+        } else if (
+          entry.from === "player" &&
+          "condition" in entry &&
+          entry.condition.kind === "return"
+        )
+          add("return", "归还", true);
+        else if (entry.from === "player") add("cancel", "取消");
+        return row;
+      }),
+    );
+  };
+  element("valley-news").hidden = events.length === 0 && player.length === 0;
+  renderList(element("player-agreements"), player);
+  renderList(
+    element("dialogue-agreements"),
+    player.filter((entry) =>
+      [entry.from, entry.to].includes(dialogNpc ?? "player"),
+    ),
+  );
 }

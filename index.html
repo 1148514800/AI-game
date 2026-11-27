@@ -64,7 +64,7 @@
                 role="log"
                 aria-live="polite"
               ></div>
-              <p id="dialogue-pending" role="status" hidden>岑砚正在斟酌……</p>
+              <p id="dialogue-pending" role="status" hidden></p>
               <div class="dialogue-actions">
                 <p id="dialogue-error" role="alert" hidden></p>
                 <button id="dialogue-retry" type="button" hidden>
@@ -79,7 +79,7 @@
                   聊聊旧桥
                 </button>
                 <button type="button" data-suggestion="请你帮忙修桥，可以吗？">
-                  请岑砚修桥
+                  请居民修桥
                 </button>
               </div>
               <div class="dialogue-compose">
@@ -115,6 +115,56 @@
                 /></label>
                 <button id="gift-send" type="submit">提议赠送</button>
               </form>
+              <details class="dialogue-agreements">
+                <summary>交接与约定</summary>
+                <form id="social-proposal" class="material-controls">
+                  <label
+                    >提议
+                    <select id="social-kind">
+                      <option value="exchange">交换材料</option>
+                      <option value="loan">出借材料</option>
+                      <option value="request">请求材料</option>
+                      <option value="deliver">承诺交材</option>
+                      <option value="work">承诺施工</option>
+                    </select>
+                  </label>
+                  <label id="social-give-fields"
+                    >材料
+                    <select id="social-item">
+                      <option value="wood">木材</option>
+                      <option value="stone">石材</option>
+                    </select>
+                    <input
+                      id="social-qty"
+                      aria-label="材料数量"
+                      type="number"
+                      min="1"
+                      max="999"
+                      value="1"
+                      required
+                    />
+                  </label>
+                  <label id="social-take-fields"
+                    >换取
+                    <select id="social-take">
+                      <option value="stone">石材</option>
+                      <option value="wood">木材</option>
+                    </select>
+                    <input
+                      id="social-take-qty"
+                      aria-label="换取数量"
+                      type="number"
+                      min="1"
+                      max="999"
+                      value="1"
+                      required
+                    />
+                  </label>
+                  <button type="submit">提出约定</button>
+                </form>
+                <ul id="dialogue-agreements"></ul>
+                <p id="social-feedback" role="status"></p>
+              </details>
             </dialog>
             <div id="screen-message" class="screen-message" role="status">
               <strong id="screen-title">正在进入雾灯谷</strong>
@@ -180,6 +230,7 @@
             >
             <span><kbd>E</kbd> 交互</span><span><kbd>Esc</kbd> 暂停</span>
             <button id="stop-follow" type="button" hidden>结束同行</button>
+            <button id="stop-wait" type="button" hidden>取消等待</button>
             <button id="sound" type="button" aria-pressed="true">音效开</button>
           </div>
           <div class="touch-controls" aria-label="触屏移动">
@@ -215,6 +266,8 @@
             <progress id="progress" value="0" max="100">0%</progress>
             <p id="bridge-player-contribution" class="contribution"></p>
             <p id="bridge-cenyan-contribution" class="contribution"></p>
+            <p id="bridge-ahe-contribution" class="contribution" hidden></p>
+            <p id="bridge-luozhou-contribution" class="contribution" hidden></p>
             <p id="bridge-shared-work" class="contribution" hidden></p>
             <p id="bridge-legacy-contribution" class="contribution" hidden></p>
           </section>
@@ -228,8 +281,18 @@
             <h2>谷中居民</h2>
             <ul id="residents"></ul>
             <p id="cenyan-status" class="cenyan-status">岑砚 · 等待连接</p>
+            <p id="ahe-status" class="cenyan-status">阿禾 · 等待连接</p>
+            <p id="luozhou-status" class="cenyan-status">洛舟 · 等待连接</p>
             <details id="cenyan-debug" class="cenyan-debug">
               <summary>AI Debug</summary>
+              <label
+                >角色
+                <select id="debug-actor">
+                  <option value="cenyan">岑砚</option>
+                  <option value="ahe">阿禾</option>
+                  <option value="luozhou">洛舟</option>
+                </select>
+              </label>
               <dl>
                 <dt>目标</dt>
                 <dd id="cenyan-goal"></dd>
@@ -239,17 +302,27 @@
                 <dd id="cenyan-pending"></dd>
                 <dt>最近决策</dt>
                 <dd><pre id="cenyan-decision"></pre></dd>
-                <dt>岑砚的背包</dt>
+                <dt>背包</dt>
                 <dd id="cenyan-bag"></dd>
                 <dt>规则回执</dt>
                 <dd id="cenyan-result"></dd>
                 <dt>调用</dt>
                 <dd id="cenyan-model"></dd>
+                <dt>关系</dt>
+                <dd id="actor-relations"></dd>
+                <dt>约定</dt>
+                <dd id="actor-agreements"></dd>
               </dl>
               <p id="cenyan-results"></p>
               <h3>近期重要记忆</h3>
               <ul id="cenyan-memory"></ul>
             </details>
+          </section>
+
+          <section id="valley-news" class="panel" hidden>
+            <h2>谷中近况</h2>
+            <ul id="valley-events"></ul>
+            <ul id="player-agreements"></ul>
           </section>
 
           <footer class="save-bar">

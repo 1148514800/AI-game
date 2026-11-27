@@ -8,9 +8,10 @@ import {
   schemaVersion,
   type ServerMessage,
 } from "../shared/protocol.js";
+import { npcIds, type NpcId } from "../shared/social.js";
 import { tickMs, valley } from "../shared/world.js";
 import { SaveFile } from "./save.js";
-import { World } from "./world.js";
+import { World, type WorldObservation } from "./world.js";
 import type { MockDecision, MockDialogue } from "./dialogue/planning.js";
 import { DialogueSession } from "./dialogue/session.js";
 
@@ -21,10 +22,12 @@ export function createApp(
     dialogueEnv?: NodeJS.ProcessEnv;
     mockDecision?: MockDecision;
     mockDialogue?: MockDialogue;
+    observeWorld?: (event: WorldObservation) => void;
     observeTick?: (sample: {
       elapsedMs: number;
       durationMs: number;
       pending: number;
+      pendingActors: NpcId[];
       queued: number;
     }) => void;
   } = {},
@@ -39,7 +42,7 @@ export function createApp(
   const savePath = options.savePath ?? resolve("saves/foglamp-valley.sqlite");
   try {
     save = new SaveFile(savePath);
-    world = new World(save);
+    world = new World(save, options.observeWorld);
   } catch (error) {
     console.error("存档无法打开，已保留原件。", error);
     unavailable = "存档无法打开。请保留原件并检查 SQLite 文件与存档版本。";
@@ -47,7 +50,7 @@ export function createApp(
 
   app.get("/health", (_request, reply) => {
     const info = {
-      phase: 3,
+      phase: 4,
       schemaVersion,
       contentVersion: valley.contentVersion,
     };
@@ -68,9 +71,7 @@ export function createApp(
   let lastSent = 0;
   let wasMoving = false;
   let wasWorking = false;
-  let lastCenyanActivity: ReturnType<World["snapshot"]>["cenyan"]["activity"] =
-    "idle";
-  let lastModel: DialogueSession["status"] | undefined;
+  let lastStatus = "";
 
   function send(socket: WebSocket, message: ServerMessage) {
     if (socket.readyState !== WebSocket.OPEN) return;
@@ -85,7 +86,7 @@ export function createApp(
     !paused && active?.readyState === WebSocket.OPEN && !unavailable;
   const dialogue = new DialogueSession(
     savePath === ":memory:" ? savePath : `${savePath}.llm.sqlite`,
-    (socket) => {
+    (socket, npc) => {
       if (
         active !== socket ||
         socket.readyState !== WebSocket.OPEN ||
@@ -94,7 +95,7 @@ export function createApp(
         unavailable
       )
         return;
-      const near = world.canTalkToCenyan();
+      const near = world.canTalkTo(npc);
       return { near, bridge: near ? world.publicBridge() : undefined };
     },
     send,
@@ -107,6 +108,7 @@ export function createApp(
           storageError,
           mockDecision: options.mockDecision,
           mockDialogue: options.mockDialogue,
+          actors: npcIds,
         }
       : undefined,
   );
@@ -122,12 +124,27 @@ export function createApp(
     }
   }
 
+  function statusKey() {
+    return npcIds
+      .map((id) => {
+        const model = dialogue.statusFor(id);
+        return [
+          world?.actorActivity(id),
+          model.kind,
+          model.trigger,
+          model.result,
+          model.sharedUsage?.requests,
+        ].join(":");
+      })
+      .join("|");
+  }
+
   function update(clock = performance.now()) {
     if (!active || !world) return;
     const snapshot = world.snapshot(Date.now(), paused);
-    lastCenyanActivity = snapshot.cenyan.activity;
-    lastModel = dialogue.status;
-    snapshot.cenyan.model = dialogue.status;
+    lastStatus = statusKey();
+    for (const id of npcIds) snapshot.actors[id].model = dialogue.statusFor(id);
+    snapshot.cenyan = snapshot.actors.cenyan;
     send(active, snapshot);
     lastSent = clock;
     ({ moving: wasMoving, working: wasWorking } = world.activity);
@@ -153,7 +170,7 @@ export function createApp(
         }
       }
       if (isActive()) {
-        world.tick(clock, elapsed, Date.now(), dialogue.holdsCenyan);
+        world.tick(clock, elapsed, Date.now(), dialogue.heldActor);
         dialogue.checkDistance();
         dialogue.tick(clock);
       }
@@ -163,8 +180,7 @@ export function createApp(
         working ||
         wasMoving ||
         wasWorking ||
-        (!paused && world.cenyanActivity !== lastCenyanActivity) ||
-        dialogue.status !== lastModel ||
+        (!paused && statusKey() !== lastStatus) ||
         clock - lastSent >= 1000
       )
         update(clock);
@@ -175,6 +191,7 @@ export function createApp(
         elapsedMs: elapsed,
         durationMs: performance.now() - clock,
         ...dialogue.load,
+        pendingActors: dialogue.pendingActors,
       });
     }
   }, tickMs);
@@ -258,6 +275,7 @@ export function createApp(
         message.type === "dialogue-open" ||
         message.type === "dialogue-send" ||
         message.type === "dialogue-gift" ||
+        message.type === "dialogue-agreement" ||
         message.type === "dialogue-close"
       ) {
         try {
@@ -295,8 +313,9 @@ export function createApp(
             update(clock);
             break;
           case "action":
+          case "social":
           case "reset": {
-            if (++actions > 8 || (paused && message.type === "action")) {
+            if (++actions > 8 || (paused && message.type !== "reset")) {
               send(socket, {
                 type: "result",
                 id: message.id,
@@ -309,7 +328,9 @@ export function createApp(
             const result =
               message.type === "reset"
                 ? current.reset(message)
-                : current.perform(message);
+                : message.type === "social"
+                  ? current.applySocial(message.id, "player", message.command)
+                  : current.perform(message);
             if (message.type === "reset" && result.ok) dialogue.reset();
             update(clock);
             send(socket, result);
@@ -350,6 +371,7 @@ export function createApp(
       }
     }
     ws.close();
+    app.server.closeAllConnections();
   });
   app.addHook("onClose", async () => {
     await dialogue.close();

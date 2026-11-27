@@ -462,8 +462,8 @@ test("healthy Fastify opens a versioned local save without API keys", async () =
     const response = await app.inject("/health");
     assert.equal(response.statusCode, 200);
     assert.deepEqual(response.json(), {
-      phase: 3,
-      schemaVersion: 3,
+      phase: 4,
+      schemaVersion: 4,
       contentVersion: valley.contentVersion,
       status: "ok",
     });
@@ -480,6 +480,7 @@ test("fresh rules-only journey follows walkable paths, collects six wood and two
       world.snapshot().state.player,
       goal,
       repaired,
+      Object.values(world.snapshot().state.actors),
     )) {
       const sign = Math.sign(
         waypoint[waypoint.axis] - world.snapshot().state.player[waypoint.axis],

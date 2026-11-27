@@ -58,7 +58,7 @@ export class Connection {
       if (attempt !== this.attempt) return;
       if (
         health.status !== "ok" ||
-        health.phase !== 3 ||
+        health.phase !== 4 ||
         health.schemaVersion !== schemaVersion ||
         health.contentVersion !== valley.contentVersion
       ) {
@@ -102,7 +102,9 @@ export class Connection {
       try {
         const message = JSON.parse(event.data);
         if (message.type === "snapshot") {
-          const state = saveSchema.parse(message.state);
+          const { cenyan: _legacy, ...stored } = message.state;
+          const parsed = saveSchema.parse(stored);
+          const state = { ...parsed, cenyan: parsed.actors.cenyan };
           if (
             !Number.isFinite(message.now) ||
             typeof message.moving !== "boolean" ||

@@ -12,6 +12,7 @@ export type Failure =
   | "timeout"
   | "empty"
   | "invalid"
+  | "truncated"
   | "cancelled";
 export class DialogueFailure extends Error {
   constructor(
@@ -55,7 +56,6 @@ export const containsPrivateThought = (text: string) =>
   /<\/?think(?:ing)?\b[^>]*>/i.test(text);
 
 export type Generation = { text: string; usage?: Usage };
-
 function statusFailure(status: number): Failure {
   if (status === 401 || status === 403) return "auth";
   if (status === 400 || status === 404 || status === 422) return "model";
@@ -101,9 +101,10 @@ export async function generate(
   messages: ChatMessage[],
   mock: () => string,
   cancellation: AbortSignal,
-  jsonMode = false,
+  json = false,
+  timeoutMs = config.limits.LLM_TIMEOUT_MS,
 ): Promise<Generation> {
-  const timeout = AbortSignal.timeout(config.limits.LLM_TIMEOUT_MS);
+  const timeout = AbortSignal.timeout(timeoutMs);
   const signal = AbortSignal.any([cancellation, timeout]);
   try {
     if (!config.live) {
@@ -132,7 +133,7 @@ export async function generate(
         messages,
         [tokenField]: config.limits.LLM_MAX_OUTPUT_TOKENS,
         enable_thinking: enableThinking,
-        response_format: jsonMode ? { type: "json_object" } : undefined,
+        response_format: json ? { type: "json_object" } : undefined,
         stream: false,
       }),
     });
@@ -153,6 +154,7 @@ export async function generate(
     const calledTools =
       tools != null && (!Array.isArray(tools) || tools.length > 0);
 
+    if (finish === "length") throw new DialogueFailure("truncated", usage);
     if (
       calledTools ||
       message.function_call != null ||

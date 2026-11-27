@@ -9,10 +9,24 @@ import {
   type GiftDecision,
   type MaterialAmount,
   type ActionReply,
-  type CenyanStatus,
+  type ActorStatus,
+  type ActorState,
   type Decision,
   type Memory,
+  type Step,
 } from "../shared/cenyan.js";
+import {
+  actorName,
+  agreementText,
+  npcIds,
+  npcSchema,
+  type ActorId,
+  type NpcId,
+  type Conversation,
+  type SpeechBubble,
+  type SocialCommand,
+  type PublicEvent,
+} from "../shared/social.js";
 import type {
   ClientMessage,
   Action,
@@ -37,16 +51,64 @@ import {
 } from "../shared/world.js";
 import { canApproach, findPath } from "./path.js";
 import { freshState, SaveFile } from "./save.js";
+import {
+  activeAgreement,
+  adjustTrust,
+  cancelAgreement,
+  fulfillPledge,
+  socialAction,
+} from "./social.js";
 
 const leaseMs = 420;
 const followMs = 60_000;
 const followGap = 22;
 const giftMs = 90_000;
-type Contributor = "player" | "cenyan";
+type Contributor = ActorId;
 const materials = ["wood", "stone"] as const;
+
+function bridgeMaterialStatus(current: SaveState["bridge"]) {
+  const missing = {
+    wood: bridge.required.wood - current.wood,
+    stone: bridge.required.stone - current.stone,
+  };
+  return { missing, materialsReady: missing.wood === 0 && missing.stone === 0 };
+}
 const bridge = valley.bridge;
-const resident = residents.get(cenyanId)!;
-const otherResidents = valley.residents.filter((npc) => npc.id !== cenyanId);
+const talkMs = 35_000;
+const pairCooldown = 180_000;
+const pairKey = (a: ActorId, b: ActorId) => [a, b].sort().join(":");
+const giftTarget = (gift: NonNullable<SaveState["gift"]>): ActorId =>
+  gift.to ?? (gift.from === "player" ? cenyanId : "player");
+export type WorldObservation =
+  | {
+      kind: "action";
+      actor: ActorId;
+      code: string;
+      ok: boolean;
+      materials?: { wood?: number; stone?: number };
+    }
+  | { kind: "speech"; actor: NpcId; session: string }
+  | { kind: "conversation"; session: string; ok: boolean };
+
+type RunningConversation = Conversation & {
+  expires: number;
+  lines: number;
+  last?: string;
+};
+type Runtime = {
+  activity: ActorStatus["activity"];
+  working: boolean;
+  route?: Point[];
+  blockedSince?: number;
+  retryPathAt: number;
+  routeTarget?: Point;
+  refreshPathAt: number;
+  displayUntil: number;
+  recentMemory: Memory[];
+  lastChatterAt?: number;
+  event: { serial: number; trigger: string; topic?: string };
+};
+
 const known = new Map<string, Target>(
   destinations.map((target) => [target.id, target]),
 );
@@ -74,57 +136,113 @@ export class World {
   private moving = false;
   private dirty = false;
   private positionSavedAt = 0;
-  private actorActivity: CenyanStatus["activity"] = "idle";
-  private actorWorking = false;
-  private route?: Point[];
-  private blockedSince?: number;
-  private retryPathAt = 0;
-  private routeTarget?: Point;
-  private refreshPathAt = 0;
-  private displayUntil = 0;
-  private recentMemory: Memory[];
-  private event: { serial: number; trigger: string; topic?: string } = {
-    serial: 0,
-    trigger: "first-active",
-  };
+  private readonly runtime: Record<NpcId, Runtime>;
+  private readonly conversations = new Map<string, RunningConversation>();
+  private bubbles: SpeechBubble[] = [];
+  private nextSocialExpiry = 0;
+  private playerContact?: NpcId;
 
-  constructor(private readonly save: SaveFile) {
+  constructor(
+    private readonly save: SaveFile,
+    private readonly observe?: (event: WorldObservation) => void,
+  ) {
     this.state = structuredClone(save.initial);
-    this.recentMemory = save.memories();
-    // A restarted service cannot resume a delivery of the old model reply.
+    const runtime = (id: NpcId): Runtime => ({
+      activity: "idle",
+      working: false,
+      retryPathAt: 0,
+      refreshPathAt: 0,
+      displayUntil: 0,
+      recentMemory: save.memories(undefined, 6, id),
+      event: { serial: 0, trigger: "first-active" },
+    });
+    this.runtime = {
+      cenyan: runtime("cenyan"),
+      ahe: runtime("ahe"),
+      luozhou: runtime("luozhou"),
+    };
     if (this.state.gift?.from === "player")
       this.discardPlayerGift(this.state.gift.id);
   }
 
   get activity() {
     return {
-      moving: this.moving || this.actorActivity === "moving",
-      working: this.working || this.actorWorking,
+      moving:
+        this.moving ||
+        npcIds.some((id) => this.runtime[id].activity === "moving"),
+      working: this.working || npcIds.some((id) => this.runtime[id].working),
     };
   }
 
   get cenyanActivity() {
-    return this.actorActivity;
+    return this.actorActivity(cenyanId);
+  }
+  actorActivity(id: NpcId) {
+    return this.runtime[id].activity;
+  }
+  get decisionState() {
+    return this.actorDecision(cenyanId);
   }
 
-  get decisionState() {
+  actorDecision(id: NpcId) {
+    const actor = this.state.actors[id];
     return {
-      ...this.event,
-      generation: this.state.cenyan.generation,
-      executing: !!this.state.cenyan.plan,
+      ...this.runtime[id].event,
+      generation: actor.generation,
+      executing: !!actor.plan,
     };
   }
 
-  private trigger(trigger: string, topic?: string) {
-    this.event = { serial: this.event.serial + 1, trigger, topic };
+  private trigger(
+    trigger: string,
+    topic?: string,
+    ids: readonly NpcId[] = npcIds,
+  ) {
+    for (const id of ids) {
+      const runtime = this.runtime[id];
+      runtime.event = { serial: runtime.event.serial + 1, trigger, topic };
+    }
+  }
+
+  private position(id: ActorId, state = this.state) {
+    return id === "player" ? state.player : state.actors[id];
+  }
+
+  near(a: ActorId, b: ActorId) {
+    if (a === b) return false;
+    const range = Math.min(
+      residents.get(a)?.range ?? Infinity,
+      residents.get(b)?.range ?? Infinity,
+    );
+    return distance(this.position(a), this.position(b)) <= range;
   }
 
   canTalkToCenyan() {
-    return distance(this.state.player, this.state.cenyan) <= resident.range;
+    return this.canTalkTo(cenyanId);
+  }
+  canTalkTo(id: NpcId) {
+    return this.near("player", id);
   }
 
-  publicBridge() {
+  private bag(state: SaveState, id: ActorId) {
+    return id === "player" ? state.inventory : state.actors[id].bag;
+  }
+
+  publicBridge(now = Date.now()) {
     const value = this.state.bridge;
+    const { missing, materialsReady } = bridgeMaterialStatus(value);
+    const committed = { wood: 0, stone: 0 };
+    for (const pledge of this.state.pledges) {
+      if (
+        pledge.condition.kind === "deliver" &&
+        pledge.status === "accepted" &&
+        pledge.expiresAt > now
+      )
+        committed[pledge.condition.item] += Math.max(
+          0,
+          pledge.condition.qty - pledge.progress,
+        );
+    }
     return {
       discovered: value.discovered,
       wood: value.wood,
@@ -133,17 +251,26 @@ export class World {
       stoneRequired: bridge.required.stone,
       progressPercent: Math.floor((value.progressMs * 100) / bridge.workMs),
       repaired: value.repaired,
-      missing: {
-        wood: bridge.required.wood - value.wood,
-        stone: bridge.required.stone - value.stone,
+      missing,
+      materialsReady,
+      committed,
+      unassigned: {
+        wood: Math.max(0, missing.wood - committed.wood),
+        stone: Math.max(0, missing.stone - committed.stone),
       },
       contributions: this.state.contributions,
       sharedWorkMs: this.state.sharedWorkMs,
     };
   }
 
-  perceive(topic?: string, now = Date.now()) {
-    const { cenyan, player, cooldowns } = this.state;
+  perceive(
+    topic?: string,
+    now = Date.now(),
+    id: NpcId = cenyanId,
+    peer?: ActorId,
+  ) {
+    const { player, cooldowns } = this.state;
+    const cenyan = this.state.actors[id];
     const near = (point: Point) => distance(cenyan, point) <= 120;
     return {
       self: {
@@ -164,7 +291,14 @@ export class World {
             : [],
       },
       people: [
-        ...otherResidents,
+        ...npcIds
+          .filter((other) => other !== id)
+          .map((other) => ({
+            x: this.position(other).x,
+            y: this.position(other).y,
+            name: actorName(other),
+            id: other,
+          })),
         { ...player, id: valley.spawn.id, name: valley.spawn.name },
       ]
         .filter(near)
@@ -181,29 +315,49 @@ export class World {
         y,
         available: (cooldowns[id] ?? 0) <= now,
       })),
-      bridge: this.publicBridge(),
+      bridge: this.publicBridge(now),
       gift:
-        this.state.gift && this.state.gift.expiresAt > now
+        this.state.gift &&
+        this.state.gift.expiresAt > now &&
+        (this.state.gift.from === id || giftTarget(this.state.gift) === id)
           ? this.state.gift
           : null,
+      invites: npcIds.filter((other) => this.canInvite(id, other, now)),
+      relations: peer ? cenyan.relations[peer] : undefined,
+      social: this.socialInbox(id, now, peer),
       memory: this.save.memories(
         topic ?? goalTopic(cenyan.goal, cenyan.goalTag),
         5,
+        id,
       ),
     };
   }
 
   snapshot(now = Date.now(), paused = false): Snapshot {
+    const status = (id: NpcId): ActorStatus => ({
+      activity: paused ? "paused" : this.runtime[id].activity,
+      memory: this.runtime[id].recentMemory,
+    });
     return {
       type: "snapshot",
       now,
-      state: structuredClone(this.state),
+      state: structuredClone({
+        ...this.state,
+        cenyan: this.state.actors.cenyan,
+      }),
       moving: this.moving,
       working: this.working,
-      cenyan: {
-        activity: paused ? "paused" : this.actorActivity,
-        memory: this.recentMemory,
+      cenyan: status(cenyanId),
+      actors: {
+        cenyan: status(cenyanId),
+        ahe: status("ahe"),
+        luozhou: status("luozhou"),
       },
+      bubbles: this.bubbles.filter(
+        (line) =>
+          line.until > now &&
+          distance(this.state.player, this.position(line.actor)) <= 135,
+      ),
     };
   }
 
@@ -212,18 +366,20 @@ export class World {
     decision: Decision,
     now = Date.now(),
     claim?: string,
+    npc: NpcId = cenyanId,
   ): boolean {
-    if (this.state.cenyan.plan) return false;
-    return this.recordActionReply(id, claim, decision, now) === "accepted";
+    if (this.state.actors[npc].plan) return false;
+    return this.recordActionReply(id, claim, decision, now, npc) === "accepted";
   }
 
   private activatePlan(
     next: SaveState,
-    plan: NonNullable<SaveState["cenyan"]["pending"]>,
+    plan: NonNullable<ActorState["pending"]>,
     now: number,
     records: Memory[],
+    npc: NpcId,
   ) {
-    const actor = next.cenyan;
+    const actor = next.actors[npc];
     if (actor.goal !== plan.goal)
       records.push(
         this.memory(
@@ -231,6 +387,9 @@ export class World {
           goalTopic(plan.goal, plan.goalTag),
           "改为目标：" + goalName(plan.goal),
           now,
+          "fact",
+          "rules",
+          npc,
         ),
       );
     actor.goal = plan.goal;
@@ -240,8 +399,8 @@ export class World {
   }
 
   private updateResult(
-    actor: SaveState["cenyan"],
-    result: NonNullable<SaveState["cenyan"]["last"]>,
+    actor: ActorState,
+    result: NonNullable<ActorState["last"]>,
   ) {
     actor.last = result;
     actor.results = [result, ...actor.results].slice(0, 3);
@@ -252,13 +411,31 @@ export class World {
     claim: string,
     speech: string,
     now: number,
+    npc: NpcId,
+    peer: ActorId = "player",
   ): Memory[] {
     const entries = [
-      this.memory(id, this.topic(claim), claim, now, "claim", "traveler"),
+      this.memory(
+        id,
+        this.topic(claim, npc),
+        claim,
+        now,
+        "claim",
+        peer === "player" ? "traveler" : peer,
+        npc,
+      ),
     ];
     if (speech)
       entries.push(
-        this.memory(id, this.topic(claim), speech, now, "opinion", "cenyan"),
+        this.memory(
+          id,
+          this.topic(claim, npc),
+          speech,
+          now,
+          "opinion",
+          npc,
+          npc,
+        ),
       );
     return entries;
   }
@@ -268,19 +445,36 @@ export class World {
     claim: string,
     speech: string,
     now = Date.now(),
+    npc: NpcId = cenyanId,
+    peer: ActorId = "player",
   ) {
-    if (!/桥|材料|屋顶|木|石|遗迹|答应|计划|工坊/.test(claim)) return;
-    this.commit(this.state, undefined, this.exchange(id, claim, speech, now));
+    const runtime = this.runtime[npc];
+    if (
+      peer === "player" &&
+      (!/桥|材料|屋顶|木|石|遗迹|答应|计划|工坊/.test(claim) ||
+        (runtime.lastChatterAt !== undefined &&
+          now - runtime.lastChatterAt < 2000))
+    )
+      return;
+    this.commit(
+      this.state,
+      undefined,
+      this.exchange(id, claim, speech, now, npc, peer),
+    );
+    if (peer === "player") runtime.lastChatterAt = now;
   }
 
-  topic(text: string) {
+  topic(text: string, npc: NpcId = cenyanId) {
     return /桥|施工|渡口/.test(text)
       ? bridge.id
       : /木|屋顶/.test(text)
         ? "stock-wood"
         : /遗迹/.test(text)
           ? valley.ruin.id
-          : goalTopic(this.state.cenyan.goal, this.state.cenyan.goalTag);
+          : goalTopic(
+              this.state.actors[npc].goal,
+              this.state.actors[npc].goalTag,
+            );
   }
 
   recordActionReply(
@@ -288,20 +482,33 @@ export class World {
     claim: string | undefined,
     reply: ActionReply,
     now = Date.now(),
+    npc: NpcId = cenyanId,
+    peer?: ActorId,
   ) {
     const receipt = `plan:${id}`;
     if (this.save.hasReceipt(receipt)) return "rejected";
     const next = structuredClone(this.state);
-    const actor = next.cenyan;
+    const actor = next.actors[npc];
     const policy = reply.plan_policy ?? (reply.plan ? "replace" : "reject");
     const goalTag = reply.goal_tag ?? legacyGoalTag(reply.goal);
-    const records = claim ? this.exchange(id, claim, reply.speech, now) : [];
+    const records = claim
+      ? this.exchange(id, claim, reply.speech, now, npc, peer)
+      : [];
     let status: PlanDecision["status"] =
       policy === "continue" ? "continued" : "rejected";
+    const companion = peer ?? (claim !== undefined ? "player" : undefined);
     const permittedPlan =
       reply.plan &&
-      (claim !== undefined ||
-        !reply.plan.some((step) => step.type === "follow"));
+      reply.plan.every((step) => {
+        if (step.type === "follow")
+          return (
+            step.target_id === companion &&
+            !this.followCycle(npc, step.target_id, next)
+          );
+        if (step.type === "talk" || step.type === "give_item")
+          return step.target_id !== npc;
+        return true;
+      });
     if (
       reply.plan &&
       permittedPlan &&
@@ -331,7 +538,7 @@ export class World {
           });
         actor.pending = null;
         actor.generation++;
-        this.activatePlan(next, proposed, now, records);
+        this.activatePlan(next, proposed, now, records, npc);
         status = "accepted";
       }
     }
@@ -346,18 +553,29 @@ export class World {
     };
     this.commit(next, receipt, records);
     if (status === "accepted") {
-      this.haltCenyan();
-      this.trigger("goal-changed");
+      this.haltActor(npc);
+      this.trigger("goal-changed", undefined, [npc]);
     }
     return status;
   }
 
-  proposePlayerGift(id: string, amount: MaterialAmount, now = Date.now()) {
+  proposePlayerGift(
+    id: string,
+    amount: MaterialAmount,
+    now = Date.now(),
+    npc: NpcId = cenyanId,
+  ) {
     const receipt = `gift-offer:${id}`;
     if (this.save.hasReceipt(receipt))
-      return this.giftResult(id, false, "DUPLICATE", "这次赠送提议已处理。");
+      return this.giftResult(
+        id,
+        false,
+        "DUPLICATE",
+        "这次赠送提议已处理。",
+        npc,
+      );
     const next = structuredClone(this.state);
-    const result = this.offerGift(next, id, "player", amount, now);
+    const result = this.offerGift(next, id, "player", npc, amount, now);
     if (result.ok) this.commit(next, receipt, [], result);
     return result;
   }
@@ -365,9 +583,10 @@ export class World {
   discardPlayerGift(id: string) {
     if (this.state.gift?.id !== id || this.state.gift.from !== "player") return;
     const next = structuredClone(this.state);
+    const receiver = giftTarget(next.gift!) as NpcId;
     next.gift = null;
     const text = "旅人的赠送提议已取消，材料留在原背包。";
-    this.updateResult(next.cenyan, {
+    this.updateResult(next.actors[receiver], {
       id: `gift-cancel:${id}`,
       type: "give_item",
       status: "cancelled",
@@ -375,7 +594,15 @@ export class World {
       text,
     });
     this.commit(next, undefined, [
-      this.memory(`gift:${id}`, bridge.id, text, Date.now()),
+      this.memory(
+        `gift:${id}`,
+        bridge.id,
+        text,
+        Date.now(),
+        "fact",
+        "rules",
+        receiver,
+      ),
     ]);
   }
 
@@ -384,27 +611,29 @@ export class World {
     ok: boolean,
     code: string,
     text: string,
+    target: ActorId | undefined,
   ): Result {
-    return { type: "result", id, ok, code, text, target: cenyanId };
+    return { type: "result", id, ok, code, text, target };
   }
 
   private offerGift(
     next: SaveState,
     id: string,
     from: Contributor,
+    to: Contributor,
     amount: MaterialAmount,
     now: number,
   ): Result {
     const result = (ok: boolean, code: string, text: string) => ({
-      ...this.giftResult(id, ok, code, text),
+      ...this.giftResult(id, ok, code, text, from === "player" ? to : from),
       offerId: id,
       actor: from,
     });
-    if (!this.canTalkToCenyan())
+    if (!this.near(from, to))
       return result(false, "TOO_FAR", "请走近后再提议赠送。");
     if (next.gift && next.gift.expiresAt > now)
       return result(false, "GIFT_BUSY", "请先处理现有的赠送提议。");
-    const source = from === "player" ? next.inventory : next.cenyan.bag;
+    const source = this.bag(next, from);
     if (source[amount.item] < amount.qty)
       return result(
         false,
@@ -416,6 +645,10 @@ export class World {
       qty: amount.qty,
       id,
       from,
+      ...((from === "player" && to === cenyanId) ||
+      (from === cenyanId && to === "player")
+        ? {}
+        : { to }),
       expiresAt: now + giftMs,
     };
     return result(
@@ -444,21 +677,26 @@ export class World {
       code: Code,
       text: string,
     ) => ({
-      ...this.giftResult(id, ok, code, text),
+      ...this.giftResult(
+        id,
+        ok,
+        code,
+        text,
+        receiver === "player" ? offer?.from : receiver,
+      ),
       code,
       offerId,
       actor: offer?.from,
     });
-    if (!offer || offer.id !== offerId || offer.from === receiver)
+    if (!offer || offer.id !== offerId || giftTarget(offer) !== receiver)
       return result(false, "GIFT_UNKNOWN", "没有可由你处理的赠送提议。");
-    if (offer.expiresAt > now && !this.canTalkToCenyan())
+    if (offer.expiresAt > now && !this.near(offer.from, receiver))
       return result(false, "TOO_FAR", "请走近后再处理赠送提议。");
     const { item, qty } = offer;
-    const source = offer.from === "player" ? next.inventory : next.cenyan.bag;
-    const destination =
-      receiver === "player" ? next.inventory : next.cenyan.bag;
-    const giverName = offer.from === "player" ? "旅人" : "岑砚";
-    const receiverName = receiver === "player" ? "旅人" : "岑砚";
+    const source = this.bag(next, offer.from);
+    const destination = this.bag(next, receiver);
+    const giverName = actorName(offer.from);
+    const receiverName = actorName(receiver);
     let outcome: Result & { code: GiftDecision["code"] };
     if (offer.expiresAt <= now)
       outcome = result(false, "GIFT_EXPIRED", "赠送提议已过期。");
@@ -490,9 +728,9 @@ export class World {
       };
     }
     next.gift = null;
-    if (receiver === "cenyan" && modelReply) {
+    if (receiver !== "player" && modelReply) {
       const goalTag = modelReply.goal_tag ?? legacyGoalTag(modelReply.goal);
-      next.cenyan.decision = {
+      next.actors[receiver].decision = {
         id,
         goal: modelReply.goal,
         ...(goalTag && { goalTag }),
@@ -502,50 +740,82 @@ export class World {
         code: outcome.code,
       };
     }
-    this.updateResult(next.cenyan, {
-      id: receipt,
-      type: "give_item",
-      status: outcome.ok ? "ok" : "failed",
-      code: outcome.code,
-      text: outcome.text,
-      change: { ...outcome.materials, actor: offer.from },
-    });
-    this.commit(
-      next,
-      receipt,
-      [this.memory(`gift:${offer.id}`, bridge.id, outcome.text, now)],
-      outcome,
-    );
+    const records: Memory[] = [];
+    for (const actor of [offer.from, receiver]) {
+      if (actor === "player") continue;
+      this.updateResult(next.actors[actor], {
+        id: receipt,
+        type: "give_item",
+        status: outcome.ok ? "ok" : "failed",
+        code: outcome.code,
+        text: outcome.text,
+        change: { ...outcome.materials, actor: offer.from },
+      });
+      records.push(
+        this.memory(
+          `gift:${offer.id}`,
+          bridge.id,
+          outcome.text,
+          now,
+          "fact",
+          "rules",
+          actor,
+        ),
+      );
+    }
+    if (outcome.code === "GIFT_TRANSFERRED") {
+      adjustTrust(next, receiver, offer.from, 1, "收到材料赠送");
+      this.publicEvent(next, receipt, "handoff", outcome.text, now);
+    }
+    this.commit(next, receipt, records, outcome, `gift-resolution:${offer.id}`);
     return outcome;
   }
 
-  private cancelFollow(action: Action, now: number): Result {
-    const plan = this.state.cenyan.plan;
-    if (plan?.steps[plan.index].type !== "follow")
-      return {
-        type: "result",
-        id: action.id,
-        ok: false,
-        code: "NOT_FOLLOWING",
-        text: "岑砚现在没有在同行。",
-      };
+  private cancelAction(action: Action, now: number, npc: NpcId): Result {
+    const step = this.currentStep(npc);
+    const waiting =
+      action.verb === "stop-wait" &&
+      step?.type === "wait_until" &&
+      this.canTalkTo(npc);
+    const following =
+      action.verb === "stop-follow" &&
+      step?.type === "follow" &&
+      step.target_id === "player";
     const outcome: Result = {
       type: "result",
       id: action.id,
-      ok: true,
-      code: "FOLLOW_CANCELLED",
-      text: "旅人结束了同行。",
+      target: npc,
+      ok: waiting || following,
+      code: waiting
+        ? "WAIT_CANCELLED"
+        : following
+          ? "FOLLOW_CANCELLED"
+          : action.verb === "stop-follow"
+            ? "NOT_FOLLOWING"
+            : "NOT_WAITING",
+      text: waiting
+        ? "已取消条件等待。"
+        : following
+          ? "旅人结束了同行。"
+          : "当前没有可结束的行动。",
     };
-    this.finishStep(
-      structuredClone(this.state),
-      false,
-      outcome.code,
-      outcome.text,
-      bridge.id,
-      now,
-      { receipt: action.id, result: outcome },
-    );
+    if (outcome.ok)
+      this.finishStep(
+        structuredClone(this.state),
+        false,
+        outcome.code,
+        outcome.text,
+        bridge.id,
+        now,
+        { receipt: action.id, result: outcome },
+        npc,
+      );
     return outcome;
+  }
+
+  private currentStep(id: NpcId) {
+    const plan = this.state.actors[id].plan;
+    return plan?.steps[plan.index];
   }
 
   setMovement(
@@ -559,7 +829,12 @@ export class World {
     }
   }
 
-  tick(clock: number, elapsed: number, now = Date.now(), holdCenyan = false) {
+  tick(
+    clock: number,
+    elapsed: number,
+    now = Date.now(),
+    hold: boolean | NpcId = false,
+  ) {
     const stepMs = Math.min(tickMs, Math.max(0, elapsed));
     const { dx, dy } =
       this.intent.expires > clock ? this.intent : { dx: 0, dy: 0 };
@@ -569,7 +844,7 @@ export class World {
       const step = (speed * stepMs) / 1000 / Math.hypot(dx, dy);
       const clear = (from: Point, to: Point) =>
         isPassable(to.x, to.y, this.state.bridge.repaired) &&
-        canApproach(from, to, this.state.cenyan);
+        npcIds.every((id) => canApproach(from, to, this.state.actors[id]));
       const x = clear(player, { x: player.x + dx * step, y: player.y })
         ? player.x + dx * step
         : player.x;
@@ -583,28 +858,465 @@ export class World {
         this.dirty = true;
       }
     }
-    if (holdCenyan) this.haltCenyan();
-    else if (stepMs > 0) this.tickCenyan(clock, stepMs, now);
-    if (stepMs > 0 && (this.working || this.actorWorking))
-      this.advanceWork(stepMs, now);
+    if (this.moving) this.checkPlayerArrival(player, now);
+    this.playerContact =
+      typeof hold === "string" ? hold : hold ? cenyanId : undefined;
+    this.checkConversations(now);
+    if (now >= this.nextSocialExpiry) this.expireSocial(now);
+    for (const npc of npcIds) {
+      if (hold === npc || (hold === true && npc === cenyanId))
+        this.haltActor(npc);
+      else if (this.conversationFor(npc)) {
+        this.runtime[npc].working = false;
+        this.runtime[npc].activity = "talking";
+      } else if (stepMs > 0) this.tickActor(npc, clock, stepMs, now);
+    }
+    if (stepMs > 0 && this.activity.working) this.advanceWork(stepMs, now);
     if (this.dirty && clock - this.positionSavedAt >= 5000) {
       this.flush();
       this.positionSavedAt = clock;
     }
   }
 
-  private tickCenyan(clock: number, elapsed: number, now: number) {
-    if (clock < this.displayUntil) return;
-    this.displayUntil = 0;
-    const actor = this.state.cenyan;
+  private checkPlayerArrival(before: Point, now: number) {
+    const pledge = this.state.pledges.find(
+      (entry) =>
+        entry.from === "player" &&
+        entry.status === "accepted" &&
+        entry.expiresAt > now &&
+        entry.condition.kind === "arrive",
+    );
+    if (pledge?.condition.kind !== "arrive") return;
+    const target = known.get(pledge.condition.destination)!;
+    if (
+      distance(before, target) <= target.range ||
+      distance(this.state.player, target) > target.range
+    )
+      return;
+    const next = structuredClone(this.state);
+    const records: Memory[] = [];
+    this.fulfillAction(
+      next,
+      "player",
+      "ARRIVED",
+      target.id,
+      undefined,
+      now,
+      records,
+    );
+    this.commit(next, undefined, records);
+  }
+
+  private finishCondition(
+    npc: NpcId,
+    ok: boolean,
+    code: string,
+    text: string,
+    now: number,
+  ) {
+    this.finishStep(
+      structuredClone(this.state),
+      ok,
+      code,
+      text,
+      bridge.id,
+      now,
+      undefined,
+      npc,
+    );
+  }
+
+  private tickCondition(
+    npc: NpcId,
+    step: Extract<Step, { type: "wait_until" }>,
+    elapsed: number,
+    now: number,
+  ) {
+    const { condition } = step;
+    const plan = this.state.actors[npc].plan!;
+    let ready = false;
+    if (condition.kind === "materials-ready") {
+      if (this.state.bridge.repaired)
+        return this.finishCondition(
+          npc,
+          false,
+          "WAIT_INVALID",
+          "旧桥已经完工。",
+          now,
+        );
+      ready = !this.checkWork(this.state);
+    } else if (condition.kind === "arrived") {
+      const target = known.get(condition.destination)!;
+      ready = distance(this.position(condition.actor), target) <= target.range;
+    } else {
+      const id =
+        condition.offerId ??
+        this.state.actors[npc].results.find((result) => result.change?.offerId)
+          ?.change?.offerId;
+      const receipt = id && this.save.receipt(`gift-resolution:${id}`);
+      const deal = this.state.deals.find(
+        (entry) => entry.id === id && entry.from === npc,
+      );
+      const gift = this.state.gift;
+      ready = Boolean(
+        (receipt &&
+          receipt.actor === npc &&
+          (receipt.code === "GIFT_TRANSFERRED" ||
+            receipt.code === "GIFT_REJECTED")) ||
+        deal?.status === "fulfilled" ||
+        deal?.cancellation === "declined",
+      );
+      const pending =
+        (gift?.id === id && gift?.from === npc && gift.expiresAt > now) ||
+        (deal && activeAgreement(deal) && deal.expiresAt > now);
+      if (!ready && !pending)
+        return this.finishCondition(
+          npc,
+          false,
+          "WAIT_INVALID",
+          "交接提议已失效。",
+          now,
+        );
+    }
+    if (ready)
+      return this.finishCondition(
+        npc,
+        true,
+        "WAIT_READY",
+        "条件已满足，继续后续行动。",
+        now,
+      );
+    const remaining = (plan.remainingMs ?? step.seconds * 1000) - elapsed;
+    if (remaining <= 0)
+      return this.finishCondition(
+        npc,
+        false,
+        "WAIT_TIMEOUT",
+        "等待条件超时。",
+        now,
+      );
+    plan.remainingMs = remaining;
+    this.runtime[npc].activity = "waiting";
+    this.dirty = true;
+  }
+
+  conversationFor(id: NpcId) {
+    return [...this.conversations.values()].find(
+      (entry) => entry.from === id || entry.to === id,
+    );
+  }
+
+  canInvite(from: NpcId, to: NpcId, now: number) {
+    return (
+      from !== to &&
+      this.playerContact !== to &&
+      !this.conversationFor(from) &&
+      !this.conversationFor(to) &&
+      (this.state.talkCooldowns[pairKey(from, to)] ?? 0) <= now
+    );
+  }
+
+  private tickTalk(
+    npc: NpcId,
+    step: Extract<Step, { type: "talk" }>,
+    clock: number,
+    elapsed: number,
+    now: number,
+  ) {
+    const peer = step.target_id;
+    const remaining =
+      (this.state.actors[npc].plan!.remainingMs ?? talkMs) - elapsed;
+    if (remaining <= 0)
+      return this.finishCondition(
+        npc,
+        false,
+        "TALK_TIMEOUT",
+        "邀谈已超时。",
+        now,
+      );
+    if (!this.canInvite(npc, peer, now))
+      return this.finishCondition(
+        npc,
+        false,
+        "TALK_UNAVAILABLE",
+        "对方暂时不便交谈。",
+        now,
+      );
+    this.state.actors[npc].plan!.remainingMs = remaining;
+    this.dirty = true;
+    if (!this.near(npc, peer)) {
+      const range = Math.min(
+        residents.get(npc)!.range,
+        residents.get(peer)!.range,
+      );
+      this.walk(
+        npc,
+        {
+          ...this.position(peer),
+          id: peer,
+          name: actorName(peer),
+          range: range - 2,
+        },
+        clock,
+        elapsed,
+        now,
+        true,
+      );
+      return;
+    }
+    const id = randomUUID();
+    const next = structuredClone(this.state);
+    next.talkCooldowns[pairKey(npc, peer)] = now + pairCooldown;
+    this.commit(next);
+    this.conversations.set(id, {
+      id,
+      from: npc,
+      to: peer,
+      topic: step.topic,
+      expires: now + talkMs,
+      lines: 0,
+    });
+    for (const actor of [npc, peer]) {
+      this.haltActor(actor);
+      this.runtime[actor].activity = "talking";
+    }
+  }
+
+  socialTurn(id: string) {
+    const turn = this.conversations.get(id);
+    if (!turn) return;
+    return { ...turn, actor: turn.lines === 0 ? turn.from : turn.to };
+  }
+
+  speak(id: string, actor: NpcId, speech: string, now = Date.now()) {
+    const turn = this.socialTurn(id);
+    if (
+      !turn ||
+      turn.actor !== actor ||
+      turn.expires <= now ||
+      !this.near(turn.from, turn.to) ||
+      turn.lines >= 4
+    )
+      return false;
+    const current = this.conversations.get(id)!;
+    current.lines++;
+    this.observe?.({ kind: "speech", actor, session: id });
+    current.last = speech;
+    this.bubbles = [
+      ...this.bubbles.filter(
+        (line) => line.actor !== actor && line.until > now,
+      ),
+      { id: `${id}:${current.lines}`, actor, text: speech, until: now + 7000 },
+    ];
+    if (current.lines === 2) this.endConversation(id, true, now);
+    return true;
+  }
+
+  endConversation(id: string, ok: boolean, now = Date.now()) {
+    const turn = this.conversations.get(id);
+    if (!turn) return;
+    this.conversations.delete(id);
+    this.observe?.({ kind: "conversation", session: id, ok });
+    for (const actor of [turn.from, turn.to]) this.haltActor(actor);
+    if (this.currentStep(turn.from)?.type === "talk")
+      this.finishCondition(
+        turn.from,
+        ok,
+        ok ? "TALK_ENDED" : "TALK_INTERRUPTED",
+        ok
+          ? `与${actorName(turn.to)}谈过了。`
+          : "交流已结束，双方可以继续行动。",
+        now,
+      );
+  }
+
+  interruptConversation(id: NpcId) {
+    const current = this.conversationFor(id);
+    if (current) this.endConversation(current.id, false);
+  }
+
+  private checkConversations(now: number) {
+    for (const turn of this.conversations.values())
+      if (turn.expires <= now || !this.near(turn.from, turn.to))
+        this.endConversation(turn.id, false, now);
+  }
+
+  socialInbox(id: ActorId, now = Date.now(), peer?: ActorId) {
+    const relevant = (
+      entry: SaveState["deals"][number] | SaveState["pledges"][number],
+    ) =>
+      activeAgreement(entry) &&
+      entry.expiresAt > now &&
+      (entry.from === id || entry.to === id) &&
+      (!peer || entry.from === peer || entry.to === peer);
+    return {
+      deals: this.state.deals.filter(relevant),
+      pledges: this.state.pledges.filter(relevant),
+    };
+  }
+
+  applySocial(
+    id: string,
+    actor: ActorId,
+    command: SocialCommand,
+    now = Date.now(),
+  ): Result {
+    const receipt = `social:${id}`;
+    const previous = this.save.receipt(receipt);
+    if (previous) return previous;
+    const next = structuredClone(this.state);
+    const { result, effect } = socialAction(
+      next,
+      id,
+      actor,
+      command,
+      now,
+      (a, b) => this.near(a, b),
+    );
+    if (effect?.handoff)
+      this.publicEvent(next, receipt, "handoff", result.text, now);
+    const records = effect?.people
+      .filter((who): who is NpcId => who !== "player")
+      .map((who) =>
+        this.memory(
+          receipt,
+          bridge.id,
+          result.text,
+          now,
+          result.code === "PLEDGE_PROPOSED" || result.code === "PLEDGE_ACCEPTED"
+            ? "commitment"
+            : "fact",
+          "rules",
+          who,
+        ),
+      );
+    this.commit(next, receipt, records, result);
+    this.observe?.({ kind: "action", actor, code: result.code, ok: result.ok });
+    if (effect && (command.kind === "offer" || command.kind === "pledge"))
+      this.trigger(
+        "social-invitation",
+        bridge.id,
+        effect.people.filter(
+          (id): id is NpcId => id !== "player" && id !== actor,
+        ),
+      );
+    if (result.code === "HANDOFF_DONE" || result.code === "PLEDGE_ACCEPTED")
+      this.trigger(
+        "commitment",
+        bridge.id,
+        effect?.people.filter((id): id is NpcId => id !== "player"),
+      );
+    return result;
+  }
+
+  private expireSocial(now: number) {
+    this.nextSocialExpiry = now + 1000;
+    const expired = [...this.state.deals, ...this.state.pledges].some(
+      (entry) => activeAgreement(entry) && entry.expiresAt <= now,
+    );
+    const gift = this.state.gift;
+    if (gift && gift.expiresAt <= now)
+      this.resolveGift(randomUUID(), gift.id, giftTarget(gift), "reject", now);
+    if (!expired) return;
+    const next = structuredClone(this.state);
+    const records: Memory[] = [];
+    for (const entry of [...next.deals, ...next.pledges]) {
+      if (!activeAgreement(entry) || entry.expiresAt > now) continue;
+      const effect = cancelAgreement(next, entry, true);
+      for (const id of effect.people)
+        if (id !== "player")
+          records.push(
+            this.memory(
+              entry.id,
+              bridge.id,
+              effect.text,
+              now,
+              "fact",
+              "rules",
+              id,
+            ),
+          );
+    }
+    this.commit(next, undefined, records);
+  }
+
+  private publicEvent(
+    next: SaveState,
+    id: string,
+    kind: PublicEvent["kind"],
+    text: string,
+    at: number,
+  ) {
+    next.events = [{ id, kind, text, at }, ...next.events].slice(0, 12);
+  }
+
+  private fulfillAction(
+    next: SaveState,
+    from: ActorId,
+    code: string,
+    target: string,
+    materials:
+      Result["materials"] | undefined | { wood?: number; stone?: number },
+    now: number,
+    records: Memory[],
+  ) {
+    for (const pledge of next.pledges) {
+      if (
+        pledge.from !== from ||
+        pledge.status !== "accepted" ||
+        pledge.expiresAt <= now
+      )
+        continue;
+      const { condition } = pledge;
+      const arrived =
+        (code === "ARRIVED" || code === "FOLLOW_ARRIVED") &&
+        condition.kind === "arrive" &&
+        condition.destination === target;
+      const worked =
+        code === "BRIDGE_REPAIRED" &&
+        condition.kind === "work" &&
+        pledge.progress > 0;
+      if (code === "DELIVERED" && condition.kind === "deliver")
+        pledge.progress = Math.min(
+          condition.qty,
+          pledge.progress + (materials?.[condition.item] ?? 0),
+        );
+      if (
+        !arrived &&
+        !worked &&
+        !(condition.kind === "deliver" && pledge.progress >= condition.qty)
+      )
+        continue;
+      fulfillPledge(next, pledge);
+      for (const id of [pledge.from, pledge.to])
+        if (id !== "player")
+          records.push(
+            this.memory(
+              pledge.id,
+              bridge.id,
+              `${actorName(from)}履行约定：${agreementText(pledge)}。`,
+              now,
+              "fact",
+              "rules",
+              id,
+            ),
+          );
+    }
+  }
+
+  private tickActor(npc: NpcId, clock: number, elapsed: number, now: number) {
+    const runtime = this.runtime[npc];
+    if (clock < runtime.displayUntil) return;
+    runtime.displayUntil = 0;
+    const actor = this.state.actors[npc];
     const plan = actor.plan;
     const step = plan?.steps[plan.index];
     if (!plan || !step) {
-      this.actorActivity = "idle";
+      runtime.activity = "idle";
       return;
     }
     if (step.type === "wait" || step.type === "rest") {
-      this.actorActivity = step.type === "wait" ? "waiting" : "resting";
+      runtime.activity = step.type === "wait" ? "waiting" : "resting";
       const remainingMs = Math.max(
         0,
         (plan.remainingMs ?? step.seconds * 1000) - elapsed,
@@ -612,7 +1324,10 @@ export class World {
       if (remainingMs > 0) {
         this.state = {
           ...this.state,
-          cenyan: { ...actor, plan: { ...plan, remainingMs } },
+          actors: {
+            ...this.state.actors,
+            [npc]: { ...actor, plan: { ...plan, remainingMs } },
+          },
         };
         this.dirty = true;
       } else {
@@ -623,17 +1338,76 @@ export class World {
           step.type === "wait" ? "等待结束。" : "休息结束。",
           actor.goal,
           now,
+          undefined,
+          npc,
         );
       }
       return;
     }
+    if (step.type === "wait_until") {
+      this.tickCondition(npc, step, elapsed, now);
+      return;
+    }
+    if (step.type === "talk") {
+      this.tickTalk(npc, step, clock, elapsed, now);
+      return;
+    }
+    if (step.type === "social") {
+      const result = this.applySocial(
+        `npc-social:${plan.id}:${plan.index}`,
+        npc,
+        step.command,
+        now,
+      );
+      this.finishStep(
+        structuredClone(this.state),
+        result.ok,
+        result.code,
+        result.text,
+        bridge.id,
+        now,
+        { change: { offerId: result.offerId } },
+        npc,
+      );
+      return;
+    }
     if (step.type === "follow") {
-      this.followPlayer(clock, elapsed, now);
+      this.followActor(npc, step, clock, elapsed, now);
       return;
     }
     if (step.type === "give_item") {
       const next = structuredClone(this.state);
-      const result = this.offerGift(next, randomUUID(), "cenyan", step, now);
+      if (step.target_id !== "player") {
+        const result = this.applySocial(
+          `npc-social:${plan.id}:${plan.index}`,
+          npc,
+          {
+            kind: "offer",
+            target: step.target_id,
+            terms: { kind: "gift", give: { item: step.item, qty: step.qty } },
+          },
+          now,
+        );
+        this.finishStep(
+          structuredClone(this.state),
+          result.ok,
+          result.code,
+          result.text,
+          bridge.id,
+          now,
+          { change: { offerId: result.offerId } },
+          npc,
+        );
+        return;
+      }
+      const result = this.offerGift(
+        next,
+        randomUUID(),
+        npc,
+        step.target_id,
+        step,
+        now,
+      );
       this.finishStep(
         next,
         result.ok,
@@ -641,11 +1415,13 @@ export class World {
         result.text,
         bridge.id,
         now,
+        { change: { offerId: result.offerId } },
+        npc,
       );
       return;
     }
     if (step.type === "move_to") {
-      this.walkTo(known.get(step.target_id)!, clock, elapsed, now);
+      this.walkTo(npc, known.get(step.target_id)!, clock, elapsed, now);
       return;
     }
     const target = known.get(step.target_id)!;
@@ -657,6 +1433,8 @@ export class World {
         "行动对象超出交互距离。",
         target.id,
         now,
+        undefined,
+        npc,
       );
       return;
     }
@@ -670,22 +1448,23 @@ export class World {
           failure.text,
           target.id,
           now,
+          undefined,
+          npc,
         );
         return;
       }
-      this.actorWorking = true;
-      this.actorActivity = "working";
+      runtime.working = true;
+      runtime.activity = "working";
       return;
     }
     const next = structuredClone(this.state);
     const result =
       step.type === "collect"
-        ? this.collect(next, next.cenyan.bag, step.target_id, now)
-        : this.deliver(next, "cenyan", step.item, step.qty);
+        ? this.collect(next, next.actors[npc].bag, step.target_id, now)
+        : this.deliver(next, npc, step.item, step.qty);
     if (result.ok) {
-      this.actorActivity =
-        step.type === "collect" ? "collecting" : "delivering";
-      this.displayUntil = clock + 450;
+      runtime.activity = step.type === "collect" ? "collecting" : "delivering";
+      runtime.displayUntil = clock + 450;
     }
     this.finishStep(
       next,
@@ -695,74 +1474,105 @@ export class World {
       target.id,
       now,
       result.materials
-        ? { change: { ...result.materials, actor: "cenyan" } }
+        ? { change: { ...result.materials, actor: npc } }
         : undefined,
+      npc,
     );
   }
 
-  private followPlayer(clock: number, elapsed: number, now: number) {
-    const { player, cenyan: actor } = this.state;
+  private followCycle(npc: NpcId, target: ActorId, state = this.state) {
+    const seen = new Set<ActorId>([npc]);
+    while (target !== "player") {
+      if (seen.has(target)) return true;
+      seen.add(target);
+      const plan = state.actors[target].plan;
+      const step = plan?.steps[plan.index];
+      if (step?.type !== "follow") break;
+      target = step.target_id;
+    }
+    return false;
+  }
+
+  private followActor(
+    npc: NpcId,
+    step: Extract<Step, { type: "follow" }>,
+    clock: number,
+    elapsed: number,
+    now: number,
+  ) {
+    const actor = this.state.actors[npc];
     const plan = actor.plan!;
+    const peer = step.target_id;
+    const leader = this.position(peer);
+    const destination = known.get(step.destination_id ?? bridge.id)!;
     const finish = (ok: boolean, code: string, text: string) =>
       this.finishStep(
         structuredClone(this.state),
         ok,
         code,
         text,
-        bridge.id,
+        destination.id,
         now,
+        { change: { traveled: plan.followed } },
+        npc,
       );
-    if (plan.remainingMs === undefined && !this.canTalkToCenyan()) {
-      finish(false, "TOO_FAR", "开始同行前，请先走近岑砚。");
+    if (this.followCycle(npc, peer)) {
+      finish(false, "FOLLOW_CYCLE", "无法相互跟随。");
       return;
     }
-    const actorAtBridge = distance(actor, bridge) <= bridge.range;
-    const playerAtBridge = distance(player, bridge) <= bridge.range;
-    if (actorAtBridge && playerAtBridge && this.canTalkToCenyan()) {
+    if (plan.remainingMs === undefined && !this.near(npc, peer)) {
+      finish(false, "TOO_FAR", "开始同行前，双方需要在交谈范围。");
+      return;
+    }
+    const atDestination = distance(actor, destination) <= destination.range;
+    const leaderThere = distance(leader, destination) <= destination.range;
+    if (atDestination && leaderThere && this.near(npc, peer)) {
       finish(
         true,
         "FOLLOW_ARRIVED",
-        plan.followed ? "岑砚和旅人同行抵达旧桥边。" : "岑砚和旅人已在旧桥边。",
+        `${actorName(npc)}和${actorName(peer)}${plan.followed ? "同行抵达" : "已在"}${
+          destination.id === valley.bridge.id ? "旧桥" : destination.name
+        }边。`,
       );
       return;
     }
     const remainingMs = (plan.remainingMs ?? followMs) - elapsed;
     if (remainingMs <= 0) {
-      finish(false, "FOLLOW_TIMEOUT", "同行时间已到，岑砚停下了。");
+      finish(false, "FOLLOW_TIMEOUT", "同行时间已到。");
       return;
     }
     const target =
-      playerAtBridge &&
-      !actorAtBridge &&
-      distance(actor, player) <= bridge.range * 2
-        ? bridge
+      leaderThere &&
+      !atDestination &&
+      distance(actor, leader) <= destination.range * 2
+        ? destination
         : {
-            id: "player",
-            name: "旅人",
-            x: player.x,
-            y: player.y,
+            id: peer,
+            name: actorName(peer),
+            x: leader.x,
+            y: leader.y,
             range: followGap,
           };
-    const followed = this.walk(target, clock, elapsed, now, true);
-    const current = this.state.cenyan;
+    const followed = this.walk(npc, target, clock, elapsed, now, true);
+    const current = this.state.actors[npc];
     if (current.plan?.id === plan.id && current.plan.index === plan.index) {
-      this.state = {
-        ...this.state,
-        cenyan: {
-          ...current,
-          plan: {
-            ...plan,
-            remainingMs,
-            followed: plan.followed || followed,
-          },
-        },
+      current.plan = {
+        ...plan,
+        remainingMs,
+        followed: plan.followed || followed,
       };
       this.dirty = true;
     }
   }
 
-  private walkTo(target: Target, clock: number, elapsed: number, now: number) {
-    if (distance(this.state.cenyan, target) <= target.range) {
+  private walkTo(
+    npc: NpcId,
+    target: Target,
+    clock: number,
+    elapsed: number,
+    now: number,
+  ) {
+    if (distance(this.state.actors[npc], target) <= target.range) {
       this.finishStep(
         structuredClone(this.state),
         true,
@@ -770,60 +1580,70 @@ export class World {
         `抵达${target.name}附近。`,
         target.id,
         now,
+        { change: { traveled: this.state.actors[npc].plan?.traveled } },
+        npc,
       );
       return;
     }
-    this.walk(target, clock, elapsed, now);
+    this.walk(npc, target, clock, elapsed, now);
   }
 
   private walk(
+    npc: NpcId,
     target: Target,
     clock: number,
     elapsed: number,
     now: number,
     following = false,
   ) {
-    const actor = this.state.cenyan;
+    const runtime = this.runtime[npc];
+    const actor = this.state.actors[npc];
     if (distance(actor, target) <= target.range) {
-      this.clearRoute();
-      this.actorActivity = "waiting";
+      this.clearRoute(npc);
+      runtime.activity = "waiting";
       return false;
     }
-    if (clock < this.retryPathAt) return false;
+    if (clock < runtime.retryPathAt) return false;
     if (
       following &&
-      clock >= this.refreshPathAt &&
-      (!this.routeTarget ||
-        distance(this.routeTarget, target) >= 10 ||
-        !this.route?.length)
+      clock >= runtime.refreshPathAt &&
+      (!runtime.routeTarget ||
+        distance(runtime.routeTarget, target) >= 10 ||
+        !runtime.route?.length)
     ) {
-      this.route = undefined;
-      this.refreshPathAt = clock + 275;
+      runtime.route = undefined;
+      runtime.refreshPathAt = clock + 275;
     }
-    const occupants = [this.state.player, ...otherResidents];
-    if (!this.route) {
+    const occupants = [
+      this.state.player,
+      ...npcIds.filter((id) => id !== npc).map((id) => this.position(id)),
+    ];
+    if (!runtime.route) {
       const destination =
-        following && target.id === "player" ? { ...target, range: 13 } : target;
-      this.route = findPath(
+        following &&
+        (target.id === "player" || npcSchema.safeParse(target.id).success)
+          ? { ...target, range: 13 }
+          : target;
+      runtime.route = findPath(
         actor,
         destination,
         this.state.bridge.repaired,
         occupants,
       );
-      this.routeTarget = { x: target.x, y: target.y };
+      runtime.routeTarget = { x: target.x, y: target.y };
     }
-    if (following && this.route?.length === 0) {
-      this.actorActivity = "waiting";
+    if (following && runtime.route?.length === 0) {
+      runtime.activity = "waiting";
       return false;
     }
     let current: Point = actor;
     let direction = actor.facing;
     let budget = (speed * elapsed) / 1000;
-    while (this.route?.length && budget > 0) {
-      const point = this.route[0];
+    while (runtime.route?.length && budget > 0) {
+      const point = runtime.route[0];
       const length = distance(current, point);
       if (length < 0.001) {
-        this.route.shift();
+        runtime.route.shift();
         continue;
       }
       const step = Math.min(length, budget);
@@ -837,27 +1657,38 @@ export class World {
         !isPassable(next.x, next.y, this.state.bridge.repaired) ||
         occupants.some((other) => !canApproach(current, next, other))
       ) {
-        this.route = undefined;
-        this.retryPathAt = clock + (following ? 500 : 750);
+        runtime.route = undefined;
+        runtime.retryPathAt = clock + (following ? 500 : 750);
         break;
       }
       current = next;
       direction = facing(dx, dy);
       budget -= step;
-      if (step === length) this.route.shift();
+      if (step === length) runtime.route.shift();
       if (following && distance(current, target) <= target.range) break;
     }
     if (current !== actor) {
       this.state = {
         ...this.state,
-        cenyan: { ...actor, ...current, facing: direction },
+        actors: {
+          ...this.state.actors,
+          [npc]: {
+            ...actor,
+            ...current,
+            facing: direction,
+            plan: actor.plan && { ...actor.plan, traveled: true },
+          },
+        },
       };
       this.dirty = true;
-      this.actorActivity = "moving";
-      this.blockedSince = undefined;
+      runtime.activity = "moving";
+      runtime.blockedSince = undefined;
       return true;
     }
-    if (this.blockedSince !== undefined && clock - this.blockedSince >= 3000) {
+    if (
+      runtime.blockedSince !== undefined &&
+      clock - runtime.blockedSince >= 3000
+    ) {
       this.finishStep(
         structuredClone(this.state),
         false,
@@ -865,21 +1696,24 @@ export class World {
         `无法走到${target.name}，路线受阻。`,
         following ? bridge.id : target.id,
         now,
+        undefined,
+        npc,
       );
       return false;
     }
-    this.actorActivity = "waiting";
-    this.blockedSince ??= clock;
-    this.retryPathAt = clock + 750;
+    runtime.activity = "waiting";
+    runtime.blockedSince ??= clock;
+    runtime.retryPathAt = clock + 750;
     return false;
   }
 
-  private clearRoute() {
-    this.route = undefined;
-    this.routeTarget = undefined;
-    this.blockedSince = undefined;
-    this.retryPathAt = 0;
-    this.refreshPathAt = 0;
+  private clearRoute(npc: NpcId) {
+    const runtime = this.runtime[npc];
+    runtime.route = undefined;
+    runtime.routeTarget = undefined;
+    runtime.blockedSince = undefined;
+    runtime.retryPathAt = 0;
+    runtime.refreshPathAt = 0;
   }
 
   private memory(
@@ -889,10 +1723,11 @@ export class World {
     at: number,
     kind: Memory["kind"] = "fact",
     source: Memory["source"] = "rules",
+    npc: NpcId = cenyanId,
   ): Memory {
     return {
       id: randomUUID(),
-      actor: cenyanId,
+      actor: npc,
       at,
       kind,
       source,
@@ -911,19 +1746,47 @@ export class World {
     now: number,
     details: {
       receipt?: string;
-      change?: NonNullable<SaveState["cenyan"]["last"]>["change"];
+      change?: NonNullable<ActorState["last"]>["change"];
       result?: Result;
       memories?: Memory[];
     } = {},
+    npc: NpcId = cenyanId,
   ) {
-    const actor = next.cenyan;
+    const { event, records } = this.prepareStep(
+      next,
+      npc,
+      ok,
+      code,
+      text,
+      topic,
+      now,
+      details,
+    );
+    this.commit(next, details.receipt ?? event, records, details.result);
+    this.afterStep(npc, ok, code, topic);
+  }
+
+  private prepareStep(
+    next: SaveState,
+    npc: NpcId,
+    ok: boolean,
+    code: string,
+    text: string,
+    topic: string,
+    now: number,
+    details: {
+      change?: NonNullable<ActorState["last"]>["change"];
+      memories?: Memory[];
+    } = {},
+  ) {
+    const actor = next.actors[npc];
     const plan = actor.plan!;
     const type = plan.steps[plan.index].type;
     const event = `npc:${plan.id}:${plan.index}`;
     this.updateResult(actor, {
       id: event,
       type,
-      status: ok ? "ok" : code === "FOLLOW_CANCELLED" ? "cancelled" : "failed",
+      status: ok ? "ok" : code.endsWith("_CANCELLED") ? "cancelled" : "failed",
       code,
       text,
       change: { target: topic, ...details.change },
@@ -933,84 +1796,180 @@ export class World {
         ? `cooperation:${event}`
         : event;
     const records = [
-      this.memory(memoryEvent, topic, text, now),
+      this.memory(memoryEvent, topic, text, now, "fact", "rules", npc),
       ...(details.memories ?? []),
     ];
     actor.generation++;
     if (actor.pending) {
       const pending = actor.pending;
       actor.pending = null;
-      this.activatePlan(next, pending, now, records);
+      this.activatePlan(next, pending, now, records, npc);
     } else {
       actor.plan =
         ok && plan.index + 1 < plan.steps.length
           ? { id: plan.id, steps: plan.steps, index: plan.index + 1 }
           : null;
     }
-    this.commit(next, details.receipt ?? event, records, details.result);
-    this.clearRoute();
-    this.actorWorking = false;
-    if (!this.displayUntil) this.actorActivity = "idle";
-    if (!actor.plan || !ok)
-      this.trigger(ok ? "plan-complete" : "step-failed", topic);
+    if (ok) {
+      this.fulfillAction(
+        next,
+        npc,
+        details.change?.traveled ||
+          (code !== "ARRIVED" && code !== "FOLLOW_ARRIVED")
+          ? code
+          : "",
+        topic,
+        details.change,
+        now,
+        records,
+      );
+      if (code === "DELIVERED")
+        this.publicEvent(next, event, "project", text, now);
+    }
+    return { event, records };
+  }
+
+  private afterStep(npc: NpcId, ok: boolean, code: string, topic: string) {
+    const runtime = this.runtime[npc];
+    const change = this.state.actors[npc].last?.change;
+    this.observe?.({
+      kind: "action",
+      actor: npc,
+      code,
+      ok,
+      materials: change && { wood: change.wood, stone: change.stone },
+    });
+    this.clearRoute(npc);
+    runtime.working = false;
+    if (!runtime.displayUntil) runtime.activity = "idle";
+    if (!this.state.actors[npc].plan || !ok)
+      this.trigger(
+        ok
+          ? "plan-complete"
+          : code === "COOLDOWN"
+            ? "step-retry"
+            : "step-failed",
+        topic,
+        [npc],
+      );
+    if (ok && code === "DELIVERED")
+      this.trigger(
+        "bridge-materials",
+        bridge.id,
+        npcIds.filter((id) => id !== npc),
+      );
   }
 
   private advanceWork(elapsed: number, now: number) {
     const next = structuredClone(this.state);
-    const player =
-      this.working && distance(next.player, bridge) <= bridge.range;
-    const cenyan =
-      this.actorWorking && distance(next.cenyan, bridge) <= bridge.range;
-    if (!player) this.working = false;
-    if (!cenyan) this.actorWorking = false;
-    const workers = Number(player) + Number(cenyan);
-    if (!workers || next.bridge.repaired) return;
+    const workers: ActorId[] = [];
+    if (this.working && distance(next.player, bridge) <= bridge.range)
+      workers.push("player");
+    else this.working = false;
+    for (const id of npcIds) {
+      if (
+        this.runtime[id].working &&
+        distance(next.actors[id], bridge) <= bridge.range
+      )
+        workers.push(id);
+      else this.runtime[id].working = false;
+    }
+    if (!workers.length || next.bridge.repaired) return;
     const remaining = bridge.workMs - next.bridge.progressMs;
-    const applied = Math.min(remaining, workers * elapsed);
-    const share = applied / workers;
-    if (player) next.contributions.player.workMs += share;
-    if (cenyan) next.contributions.cenyan.workMs += share;
-    if (player && cenyan) next.sharedWorkMs += share;
+    const applied = Math.min(remaining, workers.length * elapsed);
+    const share = applied / workers.length;
+    for (const id of workers) next.contributions[id].workMs += share;
+    for (const pledge of next.pledges)
+      if (
+        pledge.condition.kind === "work" &&
+        pledge.status === "accepted" &&
+        pledge.expiresAt > now &&
+        workers.includes(pledge.from)
+      )
+        pledge.progress = 1;
+    if (workers.length > 1) {
+      next.sharedWorkMs += share;
+      for (let index = 0; index < workers.length; index++)
+        for (const other of workers.slice(index + 1)) {
+          const pair = pairKey(workers[index], other);
+          if (!next.workPairs.includes(pair)) next.workPairs.push(pair);
+        }
+    }
     next.bridge.progressMs += applied;
     next.bridge.repaired = applied === remaining;
     if (!next.bridge.repaired) {
       this.commit(next);
       return;
     }
+
     next.bridge.progressMs = bridge.workMs;
-    const coWork = next.sharedWorkMs > 0;
-    const total = next.contributions;
+    const contributors = (["player", ...npcIds] as const).filter(
+      (id) => next.contributions[id].workMs > 0,
+    );
+    const coWork = next.workPairs.length > 0;
     const text = coWork
-      ? `旅人与岑砚合力修通旧桥。实际施工：旅人 ${(total.player.workMs / 1000).toFixed(2)} 秒，岑砚 ${(total.cenyan.workMs / 1000).toFixed(2)} 秒。`
+      ? `${contributors.map(actorName).join(contributors.length === 2 ? "与" : "、")}合力修通旧桥。实际施工：${contributors
+          .map(
+            (id) =>
+              `${actorName(id)} ${(next.contributions[id].workMs / 1000).toFixed(2)} 秒`,
+          )
+          .join("，")}。`
       : "公共告示：旧桥已修通。";
-    const records = [
-      this.memory(
-        coWork
-          ? `cooperation:bridge:${this.playerWorkEvent ?? randomUUID()}`
-          : (this.playerWorkEvent ?? randomUUID()),
-        bridge.id,
-        text,
-        now,
-      ),
-    ];
-    if (cenyan)
-      this.finishStep(
-        next,
-        true,
-        "BRIDGE_REPAIRED",
-        "岑砚完成施工，旧桥已修通。",
-        bridge.id,
-        now,
-        {
-          change: {
-            actor: "cenyan",
-            workMs: total.cenyan.workMs,
-            sharedWorkMs: next.sharedWorkMs,
-          },
-          memories: records,
-        },
+    const event = `${coWork ? "cooperation:" : ""}bridge:${this.playerWorkEvent ?? randomUUID()}`;
+    const records = npcIds
+      .filter(
+        (id) =>
+          contributors.includes(id) ||
+          distance(this.position(id), bridge) <= 120,
+      )
+      .map((id) =>
+        this.memory(event, bridge.id, text, now, "fact", "rules", id),
       );
-    else this.commit(next, undefined, records);
+    for (const pair of next.workPairs) {
+      const [a, b] = pair.split(":") as [ActorId, ActorId];
+      adjustTrust(next, a, b, 1, "共同施工并修通旧桥");
+      adjustTrust(next, b, a, 1, "共同施工并修通旧桥");
+    }
+    this.publicEvent(
+      next,
+      event,
+      coWork ? "cooperation" : "project",
+      text,
+      now,
+    );
+    for (const id of contributors)
+      this.fulfillAction(
+        next,
+        id,
+        "BRIDGE_REPAIRED",
+        bridge.id,
+        undefined,
+        now,
+        records,
+      );
+    const finished = workers.filter((id): id is NpcId => id !== "player");
+    for (const id of finished)
+      records.push(
+        ...this.prepareStep(
+          next,
+          id,
+          true,
+          "BRIDGE_REPAIRED",
+          `${actorName(id)}完成施工，旧桥已修通。`,
+          bridge.id,
+          now,
+          {
+            change: {
+              actor: id,
+              workMs: next.contributions[id].workMs,
+              sharedWorkMs: next.sharedWorkMs,
+            },
+          },
+        ).records,
+      );
+    this.commit(next, event, records);
+    for (const id of finished)
+      this.afterStep(id, true, "BRIDGE_REPAIRED", bridge.id);
     this.working = false;
     this.playerWorkEvent = undefined;
     this.trigger("bridge-repaired", bridge.id);
@@ -1022,7 +1981,7 @@ export class World {
 
   private collect(
     next: SaveState,
-    bag: SaveState["cenyan"]["bag"],
+    bag: ActorState["bag"],
     id: string,
     now: number,
   ): Pick<Result, "ok" | "code" | "text" | "materials"> {
@@ -1059,13 +2018,10 @@ export class World {
   ): Pick<Result, "ok" | "code" | "text" | "materials"> {
     if (next.bridge.repaired)
       return this.outcome(false, "BRIDGE_DONE", "旧桥已经修好。");
-    const missing = {
-      wood: bridge.required.wood - next.bridge.wood,
-      stone: bridge.required.stone - next.bridge.stone,
-    };
-    if (!missing.wood && !missing.stone)
+    const { missing, materialsReady } = bridgeMaterialStatus(next.bridge);
+    if (materialsReady)
       return this.outcome(false, "MATERIALS_READY", "材料已交齐，可以施工。");
-    const bag = who === "player" ? next.inventory : next.cenyan.bag;
+    const bag = this.bag(next, who);
     const delivered = { wood: 0, stone: 0 };
     for (const material of item ? [item] : materials)
       delivered[material] = Math.min(
@@ -1102,7 +2058,7 @@ export class World {
       ...this.outcome(
         true,
         "DELIVERED",
-        `${who === "player" ? "旅人" : "岑砚"}交付${detail}。${clipped}${gap}`,
+        `${actorName(who)}交付${detail}。${clipped}${gap}`,
       ),
       materials: delivered,
     };
@@ -1111,10 +2067,7 @@ export class World {
   private checkWork(next: SaveState) {
     if (next.bridge.repaired)
       return this.outcome(false, "BRIDGE_DONE", "旧桥已经修好。");
-    if (
-      next.bridge.wood !== bridge.required.wood ||
-      next.bridge.stone !== bridge.required.stone
-    )
+    if (!bridgeMaterialStatus(next.bridge).materialsReady)
       return this.outcome(
         false,
         "MATERIALS_MISSING",
@@ -1135,29 +2088,37 @@ export class World {
     if (previous) return previous;
     if (this.save.hasReceipt(action.id))
       return reply(false, "DUPLICATE", "这次行动已处理。");
-    if (action.target === cenyanId && action.verb === "stop-follow")
-      return this.cancelFollow(action, now);
+    const npc = npcSchema.safeParse(action.target).data;
+    if (npc && (action.verb === "stop-follow" || action.verb === "stop-wait"))
+      return this.cancelAction(action, now, npc);
     if (
-      action.target === cenyanId &&
+      npc &&
       action.verb === "gift-response" &&
       action.offerId &&
       action.choice
     )
-      return this.resolveGift(
-        action.id,
-        action.offerId,
-        "player",
-        action.choice,
-        now,
-      );
+      return this.state.gift?.from !== npc
+        ? this.giftResult(
+            action.id,
+            false,
+            "GIFT_UNKNOWN",
+            "没有可由你处理的赠送提议。",
+            npc,
+          )
+        : this.resolveGift(
+            action.id,
+            action.offerId,
+            "player",
+            action.choice,
+            now,
+          );
     const other = residents.get(action.target);
     const resource = resources.get(action.target);
-    const target =
-      action.target === cenyanId
-        ? { ...resident, ...this.state.cenyan }
-        : (other ??
-          resource ??
-          [bridge, valley.ruin].find((entry) => entry.id === action.target));
+    const target = npc
+      ? { ...other!, ...this.state.actors[npc] }
+      : (other ??
+        resource ??
+        [bridge, valley.ruin].find((entry) => entry.id === action.target));
     if (!target) return reply(false, "UNKNOWN_TARGET", "找不到这个交互对象。");
     if (distance(this.state.player, target) > target.range)
       return reply(false, "TOO_FAR", "再走近一些就能交互。");
@@ -1191,12 +2152,30 @@ export class World {
           actor: "player" as const,
         };
         if (result.ok) {
-          this.commit(
+          const records = npcIds
+            .filter((id) => distance(this.position(id), bridge) <= 120)
+            .map((id) =>
+              this.memory(
+                action.id,
+                bridge.id,
+                result.text,
+                now,
+                "fact",
+                "rules",
+                id,
+              ),
+            );
+          this.fulfillAction(
             next,
-            action.id,
-            [this.memory(action.id, bridge.id, result.text, now)],
-            outcome,
+            "player",
+            "DELIVERED",
+            bridge.id,
+            result.materials,
+            now,
+            records,
           );
+          this.publicEvent(next, action.id, "project", result.text, now);
+          this.commit(next, action.id, records, outcome);
           this.trigger("bridge-materials", bridge.id);
         }
         return outcome;
@@ -1252,7 +2231,11 @@ export class World {
     const next = freshState();
     this.save.write(next, action.id, [], true);
     this.state = next;
-    this.recentMemory = [];
+    for (const id of npcIds) {
+      this.runtime[id].recentMemory = [];
+      this.runtime[id].lastChatterAt = undefined;
+    }
+    this.bubbles = [];
     this.dirty = false;
     this.halt();
     this.trigger("first-active");
@@ -1278,14 +2261,17 @@ export class World {
 
   halt() {
     this.haltPlayer();
-    this.haltCenyan();
+    this.conversations.clear();
+    this.bubbles = [];
+    for (const id of npcIds) this.haltActor(id);
   }
 
-  private haltCenyan() {
-    this.actorWorking = false;
-    this.actorActivity = "idle";
-    this.displayUntil = 0;
-    this.clearRoute();
+  private haltActor(id: NpcId) {
+    const runtime = this.runtime[id];
+    runtime.working = false;
+    runtime.activity = "idle";
+    runtime.displayUntil = 0;
+    this.clearRoute(id);
   }
 
   flush() {
@@ -1297,14 +2283,20 @@ export class World {
     receipt?: string,
     memories: Memory[] = [],
     result?: Result,
+    secondaryReceipt?: string,
   ) {
-    this.save.write(next, receipt, memories, false, result);
+    next.cenyan = next.actors.cenyan;
+    this.save.write(next, receipt, memories, false, result, secondaryReceipt);
     this.state = next;
     this.dirty = false;
-    if (memories.length)
-      this.recentMemory = [
-        ...memories.slice().reverse(),
-        ...this.recentMemory,
-      ].slice(0, 6);
+    for (const id of npcIds) {
+      const own = memories.filter((m) => m.actor === id);
+      const runtime = this.runtime[id];
+      if (own.length)
+        runtime.recentMemory = [
+          ...own.reverse(),
+          ...runtime.recentMemory,
+        ].slice(0, 6);
+    }
   }
 }

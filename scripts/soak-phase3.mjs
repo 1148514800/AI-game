@@ -36,7 +36,7 @@ if (!Number.isSafeInteger(duration) || duration < (smoke ? 10 : 1800))
     "Acceptance requires --duration >=1800. Use --smoke --duration >=10 for a short run.",
   );
 
-const evidenceRoot = resolve(process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1");
+const evidenceRoot = resolve(process.env.MISTSEA_EVIDENCE ?? "evidence/phase4");
 mkdirSync(evidenceRoot, { recursive: true });
 const evidence = mkdtempSync(
   join(evidenceRoot, smoke ? "soak-smoke-" : "soak-"),

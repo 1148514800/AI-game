@@ -11,7 +11,7 @@ import { World } from "../src/server/world.js";
 import type { DialogueEvent } from "../src/shared/protocol.js";
 import { distance, isPassable, speed, tickMs } from "../src/shared/world.js";
 
-const output = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1";
+const output = process.env.MISTSEA_EVIDENCE ?? "evidence/phase4";
 mkdirSync(output, { recursive: true });
 const directory = mkdtempSync(join(tmpdir(), "mistsea-phase31-tick-"));
 const path = join(directory, "world.sqlite");

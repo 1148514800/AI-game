@@ -136,17 +136,23 @@ try {
   console.log(
     await app.listen({ port: Number(PORT ?? 3003), host: "127.0.0.1" }),
   );
-  for (const signal of ["SIGINT", "SIGTERM"] as const)
-    process.once(
-      signal,
-      () =>
-        void app.close().catch((error) => {
+  for (const signal of ["SIGINT", "SIGTERM"] as const) {
+    process.once(signal, () => {
+      const force = setTimeout(() => process.exit(1), 5_000);
+      void app
+        .close()
+        .catch((error) => {
           console.error(error);
           process.exitCode = 1;
-        }),
-    );
+        })
+        .finally(() => {
+          clearTimeout(force);
+          process.exit(process.exitCode ?? 0);
+        });
+    });
+  }
 } catch (error) {
   console.error(error);
   await app.close();
-  process.exitCode = 1;
+  process.exit(1);
 }

@@ -1,13 +1,13 @@
 import { test as base, expect, type Page } from "@playwright/test";
 import { spawn } from "node:child_process";
-import { once } from "node:events";
+import { freeBackendPort, stopBackend } from "./backend-process.js";
 import { route } from "./paths.js";
 import { distance, speed, valley } from "../src/shared/world.js";
 import { closeSync, mkdirSync, mkdtempSync, openSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase4";
 const url = "http://127.0.0.1:5174";
 const test = base.extend<{
   mockEnv: Record<string, string>;
@@ -22,6 +22,7 @@ const test = base.extend<{
         join(evidence, `dialogue-server-${info.line}.log`),
         "w",
       );
+      await freeBackendPort();
       const child = spawn(
         process.execPath,
         ["--import", "tsx", "src/server/index.ts"],
@@ -53,11 +54,7 @@ const test = base.extend<{
           .toBe(200);
         await use();
       } finally {
-        if (child.exitCode === null && child.signalCode === null) {
-          const done = once(child, "close");
-          child.kill("SIGTERM");
-          await done;
-        }
+        await stopBackend(child);
         closeSync(log);
         rmSync(dir, { recursive: true, force: true });
       }
@@ -65,7 +62,6 @@ const test = base.extend<{
     { auto: true },
   ],
 });
-
 
 const panel = (page: Page) => page.getByRole("dialog", { name: "岑砚" });
 const input = (page: Page) => page.getByRole("textbox", { name: "对岑砚说" });
@@ -267,8 +263,10 @@ test.describe("Phase 3 autonomous Mock journey", () => {
     mockEnv: {
       LLM_MOCK_AUTONOMY_ENABLED: "true",
       LLM_MOCK_DELAY_MS: "180",
-      LLM_AUTONOMY_REQUESTS_PER_MINUTE: "20",
-      LLM_MAX_REQUESTS_PER_MINUTE: "24",
+      LLM_AUTONOMY_REQUESTS_PER_MINUTE: "60",
+      LLM_MAX_REQUESTS_PER_MINUTE: "90",
+      LLM_AUTONOMY_REQUESTS_PER_SESSION: "90",
+      LLM_MAX_REQUESTS_PER_SESSION: "120",
     },
   });
 

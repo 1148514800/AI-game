@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium, expect } from "@playwright/test";
 
-const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase3_1";
+const evidence = process.env.MISTSEA_EVIDENCE ?? "evidence/phase4";
 mkdirSync(evidence, { recursive: true });
 const directory = mkdtempSync(join(tmpdir(), "mistsea-production-"));
 const output = openSync(join(evidence, "production-server.log"), "w");
@@ -40,8 +40,8 @@ try {
     )
     .toMatchObject({
       status: "ok",
-      phase: 3,
-      schemaVersion: 3,
+      phase: 4,
+      schemaVersion: 4,
       contentVersion: 1,
     });
   browser = await chromium.launch({
@@ -72,6 +72,9 @@ try {
   await expect(stage).toHaveAttribute("data-ready", "true");
   await expect(page.locator("canvas")).toBeVisible();
   await expect(page.locator("#objective")).toHaveText("修复雾灯旧桥");
+  for (const [actor, name] of [["cenyan", "岑砚"], ["ahe", "阿禾"], ["luozhou", "洛舟"]])
+    await expect(page.locator(`#${actor}-status`)).toContainText(name);
+  await expect(page.locator("#residents img")).toHaveCount(3);
   const initial = Number(await stage.getAttribute("data-x"));
   await page.keyboard.down("d");
   try {

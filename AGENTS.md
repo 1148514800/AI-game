@@ -1,3 +1,11 @@
+# AG-6 / Phase4 当前唯一授权（覆盖以下旧阶段限制）
+用户2026-11-26明确授权仅Phase4《建立小型 AI 社会》，审核基线 8e4cb58e3f5d137d1b77934ad576ae8082d5c3c1（GitHub `Add Phase 3.1 collaboration and fix model action requests`，已包含 LLM_JSON_MODE / speechReplySchema / D026 与 LLM_ENABLE_THINKING 三态）。完整范围和验收见 docs/PHASE4_TASK.md，必须先完整阅读。本机 Codex CLI 与本地 commit 已授权；禁 push/PR/部署/Live/私密配置/触碰 Mac，禁进入 Phase5。所有新增证据只写 evidence/phase4，不覆盖历史证据。必须保留 Phase0–3.1 有效回归（基线 64 单元 / 5 集成 / 13 浏览器），不得无理由删除断言。无明确 Live 额度授权则不调用，不得把未验证的真实模型完整协作标为通过，不虚构 Live 分数。
+
+工程目录 /workspace/mistsea-phase4。不得覆盖或重置 /workspace/mistsea-phase3_1（HEAD 11b7b8d）与 /workspace/mistsea-phase3_1-mac-sync-20261126。不以旧 Phase3.1 本地提交替代新基线。
+
+本轮编码交付保留工作区改动，由协调者在原生完整验收后执行本地提交。协调者在正常 box 环境执行完整安装、类型检查、测试、构建、生产冒烟、不少于 30 分钟三 NPC Mock 长测、真实截图视觉检查、本地提交与打包。验收以本轮命令实际退出码为准。Mock 与用户既有 Phase3 采集验证分别记录。
+
+## 以下保留 Phase3.1 历史指令（被本轮覆盖的限制不再适用）
 # AG-5 / Phase3.1 当前唯一授权（覆盖以下旧阶段限制）
 用户2026-11-25明确授权仅Phase3.1，在审核基线842342a1021751d0e33ac7b2a3db27f0e0bca9f1续作。完整范围和验收见 docs/PHASE3_1_TASK.md，必须先完整阅读。允许本机Codex CLI和本地commit；禁push/PR/部署/Live/私密配置/触碰Mac。所有新增证据只写evidence/phase3_1，不覆盖历史证据。新30min soak不强制但调用风暴/性能需本轮回归。只岑砚，完成停Phase3.1。
 

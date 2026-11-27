@@ -8,10 +8,20 @@ import {
   materialAmount,
   materialSchema,
   quantitySchema,
-  type CenyanStatus,
+  type ActorStatus,
 } from "./cenyan.js";
 
-export const schemaVersion = 3;
+import {
+  dealSchema,
+  pledgeSchema,
+  publicEventSchema,
+  socialCommand,
+  actorIdSchema,
+  type NpcId,
+  type SpeechBubble,
+} from "./social.js";
+
+export const schemaVersion = 4;
 const directions = z.enum(["down", "up", "left", "right"]);
 const axis = z.union([z.literal(-1), z.literal(0), z.literal(1)]);
 const id = z.string().regex(/^[a-z0-9-]{1,64}$/);
@@ -27,6 +37,7 @@ export type DialogueEvent =
       requestId: string;
       dialogId: string;
       mode: DialogueMode;
+      npc?: NpcId;
     }
   | { type: "dialogue"; event: "pending"; requestId: string; dialogId: string }
   | {
@@ -37,6 +48,7 @@ export type DialogueEvent =
       text: string;
       action?: "accepted" | "deferred" | "rejected" | "continued";
       gift?: Result;
+      agreement?: Result;
     }
   | {
       type: "dialogue";
@@ -65,7 +77,18 @@ export const clientMessage = z
       dialogId: actionId,
       gift: materialAmount,
     }),
+    z.strictObject({
+      type: z.literal("dialogue-agreement"),
+      id: actionId,
+      dialogId: actionId,
+      offerId: actionId,
+    }),
     z.strictObject({ type: z.literal("dialogue-close"), dialogId: actionId }),
+    z.strictObject({
+      type: z.literal("social"),
+      id: actionId,
+      command: socialCommand,
+    }),
     z.strictObject({
       type: z.literal("action"),
       id: actionId,
@@ -77,6 +100,7 @@ export const clientMessage = z
         "work",
         "stop",
         "stop-follow",
+        "stop-wait",
         "gift-response",
       ]),
       item: materialSchema.optional(),
@@ -140,8 +164,8 @@ export const v2SaveSchema = legacySaveSchema.extend({
   schemaVersion: z.literal(2),
   cenyan: actorSchema,
 });
-export const saveSchema = legacySaveSchema.extend({
-  schemaVersion: z.literal(schemaVersion),
+export const v3SaveSchema = legacySaveSchema.extend({
+  schemaVersion: z.literal(3),
   cenyan: actorSchema,
   gift: giftOffer.nullable(),
   contributions: z.strictObject({
@@ -154,7 +178,28 @@ export const saveSchema = legacySaveSchema.extend({
     .min(0)
     .max(valley.bridge.workMs / 2),
 });
-export type SaveState = z.infer<typeof saveSchema>;
+export const saveSchema = v3SaveSchema.omit({ cenyan: true }).extend({
+  schemaVersion: z.literal(schemaVersion),
+  actors: z.strictObject({
+    cenyan: actorSchema,
+    ahe: actorSchema,
+    luozhou: actorSchema,
+  }),
+  contributions: v3SaveSchema.shape.contributions.extend({
+    ahe: contribution,
+    luozhou: contribution,
+  }),
+  workPairs: z.array(z.string()).max(6),
+  talkCooldowns: z.record(z.string(), z.int()),
+  deals: z.array(dealSchema).max(48),
+  pledges: z.array(pledgeSchema).max(48),
+  events: z.array(publicEventSchema).max(12),
+});
+export type StoredState = z.infer<typeof saveSchema>;
+// Transitional projection used by existing clients and Phase 0–3.1 regression fixtures.
+export type SaveState = StoredState & {
+  cenyan: StoredState["actors"]["cenyan"];
+};
 
 export type Snapshot = {
   type: "snapshot";
@@ -162,7 +207,9 @@ export type Snapshot = {
   state: SaveState;
   moving: boolean;
   working: boolean;
-  cenyan: CenyanStatus;
+  cenyan: ActorStatus;
+  actors: Record<NpcId, ActorStatus>;
+  bubbles: SpeechBubble[];
 };
 export type Result = {
   type: "result";
@@ -172,7 +219,7 @@ export type Result = {
   text: string;
   target?: string;
   materials?: { wood: number; stone: number };
-  actor?: "player" | "cenyan";
+  actor?: z.infer<typeof actorIdSchema>;
   offerId?: string;
 };
 export type ServerMessage =

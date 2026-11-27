@@ -11,14 +11,21 @@ try {
   console.log(`雾灯谷 · ${address}`);
   for (const signal of ["SIGTERM", "SIGINT"] as const) {
     process.once(signal, () => {
-      void app.close().catch((error) => {
-        console.error(error);
-        process.exitCode = 1;
-      });
+      const force = setTimeout(() => process.exit(1), 5_000);
+      void app
+        .close()
+        .catch((error) => {
+          console.error(error);
+          process.exitCode = 1;
+        })
+        .finally(() => {
+          clearTimeout(force);
+          process.exit(process.exitCode ?? 0);
+        });
     });
   }
 } catch (error) {
   console.error(error);
   await app.close();
-  process.exitCode = 1;
+  process.exit(1);
 }

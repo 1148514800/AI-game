@@ -1,4 +1,4 @@
-"""Run Phase 3.1 checks without model credentials and save separate evidence."""
+"""Run Phase 4 checks without model credentials and save separate evidence."""
 import datetime
 import json
 import os
@@ -9,7 +9,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 TIMEZONE = datetime.timezone(datetime.timedelta(hours=8))
 stamp = datetime.datetime.now(TIMEZONE).strftime("%Y%m%d-%H%M%S-%f")
-evidence = ROOT / "evidence" / "phase3_1" / f"verification-{stamp}"
+evidence = ROOT / "evidence" / "phase4" / f"verification-{stamp}"
 evidence.mkdir(parents=True)
 environment = {name: os.environ[name] for name in (
     "PATH", "HOME", "USERPROFILE", "SYSTEMROOT", "TMPDIR", "TMP", "TEMP",
@@ -62,4 +62,7 @@ skip_build = "No fresh production build." if build else None
 run(["node", "scripts/assert-client-no-secret.mjs"], "client-key-sentinel.log", skip=skip_build)
 run(["node", "scripts/production-smoke.mjs"], "production-smoke.log", skip=skip_build)
 run(["node", "--check", "scripts/soak-phase3.mjs"], "soak-syntax.log")
+run(["node", "--check", "scripts/soak-phase4.mjs"], "phase4-soak-syntax.log")
+if "--with-soak" in sys.argv[1:]:
+    run(["npm", "run", "soak:phase4"], "phase4-soak.log", skip=skip_build)
 sys.exit(any(result["exitCode"] != 0 for result in results))

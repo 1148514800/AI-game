@@ -4,6 +4,7 @@ import {
   type DialogueEvent,
 } from "../shared/protocol.js";
 import { materialAmount, type MaterialAmount } from "../shared/cenyan.js";
+import { actorName, type NpcId } from "../shared/social.js";
 import { items, residents } from "../shared/world.js";
 import { element } from "./ui.js";
 
@@ -21,9 +22,12 @@ export function bindDialogue(callbacks: {
   const transcript = element("dialogue-transcript");
   const pending = element("dialogue-pending");
   const error = element("dialogue-error");
+  let npc: NpcId = "cenyan";
   let opening: string | undefined;
   let dialogId: string | undefined;
-  let request: { id: string; text: string; gift?: MaterialAmount } | undefined;
+  let request:
+    | { id: string; text: string; gift?: MaterialAmount; agreement?: string }
+    | undefined;
   let failedText: string | undefined;
   let composing = false;
   let composedAt = -Infinity;
@@ -68,18 +72,24 @@ export function bindDialogue(callbacks: {
     callbacks.changed();
   }
 
-  function open() {
+  function open(target: NpcId = "cenyan") {
     if (active()) return;
     const id = crypto.randomUUID();
-    if (!callbacks.send({ type: "dialogue-open", id, npc: "cenyan" })) {
+    if (!callbacks.send({ type: "dialogue-open", id, npc: target })) {
       callbacks.feedback("暂时无法开启对话，连接恢复后再试。");
       return;
     }
+    npc = target;
     opening = id;
     callbacks.changed();
   }
 
-  function submit(text: string, repeat = false, gift?: MaterialAmount) {
+  function submit(
+    text: string,
+    repeat = false,
+    gift?: MaterialAmount,
+    agreement?: string,
+  ) {
     if (!dialogId || request || composing) return;
     text = text.trim();
     if (!text || text.length > dialogueInputLimit) {
@@ -87,9 +97,16 @@ export function bindDialogue(callbacks: {
       return;
     }
     const id = crypto.randomUUID();
-    const message = gift
-      ? { type: "dialogue-gift" as const, id, dialogId, gift }
-      : { type: "dialogue-send" as const, id, dialogId, text };
+    const message = agreement
+      ? {
+          type: "dialogue-agreement" as const,
+          id,
+          dialogId,
+          offerId: agreement,
+        }
+      : gift
+        ? { type: "dialogue-gift" as const, id, dialogId, gift }
+        : { type: "dialogue-send" as const, id, dialogId, text };
     if (!callbacks.send(message)) {
       showError("连接暂不可用。可以再试一次。", repeat);
       return;
@@ -98,7 +115,7 @@ export function bindDialogue(callbacks: {
       append("旅人", text);
       if (!gift) input.value = "";
     }
-    request = { id, text, gift };
+    request = { id, text, gift, agreement };
     failedText = undefined;
     showError("");
     progress(true);
@@ -113,6 +130,24 @@ export function bindDialogue(callbacks: {
       }
       opening = undefined;
       dialogId = message.dialogId;
+      npc = message.npc ?? npc;
+      const resident = residents.get(npc)!;
+      element("dialogue-title").textContent = resident.name;
+      element("dialogue-pending").textContent = resident.name + "正在斟酌……";
+      panel.querySelector(".dialogue-input-label")!.textContent =
+        "对" + resident.name + "说";
+      input.placeholder = "想和" + resident.name + "聊什么？";
+      const requestBridge = panel.querySelector<HTMLButtonElement>(
+        '[data-suggestion="请你帮忙修桥，可以吗？"]',
+      );
+      if (requestBridge)
+        requestBridge.textContent = "请" + resident.name + "修桥";
+      panel.querySelector(".dialogue-header p")!.textContent = resident.role;
+      const portrait = panel.querySelector<HTMLImageElement>(
+        ".dialogue-header img",
+      );
+      if (portrait) portrait.src = `/assets/${resident.asset}-face.png`;
+      element("social-feedback").textContent = "";
       mode.dataset.mode = message.mode;
       mode.textContent =
         message.mode === "mock" ? "模拟对话 · Mock" : "已配置模型 · Live";
@@ -124,7 +159,7 @@ export function bindDialogue(callbacks: {
       progress(false);
       panel.show();
       input.focus();
-      callbacks.feedback(residents.get("cenyan")!.intro);
+      callbacks.feedback(resident.intro);
       callbacks.changed();
       return;
     }
@@ -145,11 +180,11 @@ export function bindDialogue(callbacks: {
       message.event === "pending"
     )
       return;
-    const { text, gift } = request;
+    const { text, gift, agreement } = request;
     request = undefined;
     progress(false);
     if (message.event === "reply") {
-      append("岑砚", message.text);
+      append(actorName(npc), message.text);
       if (message.action)
         append(
           "行动回执",
@@ -161,9 +196,10 @@ export function bindDialogue(callbacks: {
           }[message.action],
         );
       if (message.gift) append("赠送回执", message.gift.text);
+      if (message.agreement) append("约定回执", message.agreement.text);
     } else {
-      failedText = gift ? undefined : text;
-      showError(message.text, !gift);
+      failedText = gift || agreement ? undefined : text;
+      showError(message.text, !gift && !agreement);
     }
   }
 
@@ -222,5 +258,15 @@ export function bindDialogue(callbacks: {
       input.focus();
     });
   }
-  return { active, open, close, receive };
+  return {
+    active,
+    open,
+    close,
+    receive,
+    askAgreement: (id: string) =>
+      submit("请回应这项约定。", false, undefined, id),
+    get npc() {
+      return dialogId ? npc : undefined;
+    },
+  };
 }
