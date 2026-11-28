@@ -1,0 +1,450 @@
+{
+  "passed": true,
+  "seconds": 538.723,
+  "source": "saves/live-phase5-test.sqlite",
+  "initial": {
+    "bridge": {
+      "discovered": false,
+      "wood": 0,
+      "stone": 0,
+      "progressMs": 0,
+      "repaired": false
+    },
+    "contributions": {
+      "player": {
+        "wood": 0,
+        "stone": 0,
+        "workMs": 0
+      },
+      "cenyan": {
+        "wood": 0,
+        "stone": 0,
+        "workMs": 0
+      },
+      "legacy": {
+        "wood": 0,
+        "stone": 0,
+        "workMs": 0
+      },
+      "ahe": {
+        "wood": 0,
+        "stone": 0,
+        "workMs": 0
+      },
+      "luozhou": {
+        "wood": 0,
+        "stone": 0,
+        "workMs": 0
+      }
+    },
+    "roof": {
+      "wood": 2,
+      "food": 0,
+      "progressMs": 0,
+      "complete": false,
+      "contributions": {
+        "cenyan": {
+          "wood": 2,
+          "food": 0,
+          "workMs": 0
+        }
+      }
+    },
+    "camp": {
+      "wood": 0,
+      "food": 0,
+      "progressMs": 0,
+      "complete": false,
+      "contributions": {}
+    },
+    "discoveries": {},
+    "actors": {
+      "cenyan": {
+        "goal": "取倒木补足屋顶，备料后动工。",
+        "bag": {
+          "wood": 5,
+          "stone": 0
+        },
+        "last": "PROJECT_NO_DELIVERY"
+      },
+      "ahe": {
+        "goal": "北坡取木补桥，再找岑砚确认石材并招募同修。",
+        "bag": {
+          "wood": 3,
+          "stone": 0
+        },
+        "last": "ARRIVED"
+      },
+      "luozhou": {
+        "goal": "再次尝试邀请阿禾同行，准备去北坡采木头修桥",
+        "bag": {
+          "wood": 1,
+          "stone": 0
+        },
+        "last": "TALK_INTERRUPTED"
+      }
+    }
+  },
+  "final": {
+    "bridge": {
+      "discovered": true,
+      "wood": 6,
+      "stone": 2,
+      "progressMs": 14000,
+      "repaired": true
+    },
+    "contributions": {
+      "player": {
+        "wood": 0,
+        "stone": 0,
+        "workMs": 0
+      },
+      "cenyan": {
+        "wood": 6,
+        "stone": 0,
+        "workMs": 14000
+      },
+      "legacy": {
+        "wood": 0,
+        "stone": 0,
+        "workMs": 0
+      },
+      "ahe": {
+        "wood": 0,
+        "stone": 0,
+        "workMs": 0
+      },
+      "luozhou": {
+        "wood": 0,
+        "stone": 2,
+        "workMs": 0
+      }
+    },
+    "roof": {
+      "wood": 2,
+      "food": 0,
+      "progressMs": 6000,
+      "complete": true,
+      "contributions": {
+        "cenyan": {
+          "wood": 2,
+          "food": 0,
+          "workMs": 6000
+        }
+      }
+    },
+    "camp": {
+      "wood": 0,
+      "food": 2,
+      "progressMs": 0,
+      "complete": true,
+      "contributions": {
+        "ahe": {
+          "wood": 0,
+          "food": 2,
+          "workMs": 0
+        }
+      }
+    },
+    "discoveries": {
+      "luozhou": [
+        "beacon-ruin",
+        "beacon-inscription"
+      ]
+    },
+    "actors": {
+      "cenyan": {
+        "goal": "屋顶修好，桥也通了，去谷地营地收些野果备用。",
+        "bag": {
+          "wood": 3,
+          "stone": 0
+        },
+        "last": "TOO_FAR"
+      },
+      "ahe": {
+        "goal": "采集野莓补足营地食物缺口，并交付木材。",
+        "bag": {
+          "wood": 7,
+          "stone": 0,
+          "food": 0
+        },
+        "last": "DELIVERED"
+      },
+      "luozhou": {
+        "goal": "先告知旅人线索，再独自前往东岸查看。",
+        "bag": {
+          "wood": 3,
+          "stone": 0
+        },
+        "last": "CLUE_SHARED"
+      }
+    }
+  },
+  "shares": [
+    "clue-share:luozhou:ahe:beacon-inscription"
+  ],
+  "recipientMemories": [
+    {
+      "actor": "ahe",
+      "topic": "beacon-inscription",
+      "source": "luozhou",
+      "kind": "fact",
+      "content": "洛舟分享星纹石碑的发现。石碑上刻着三盏航灯。中间的灯指向北方，另外两盏标出退潮后可走的浅滩。"
+    }
+  ],
+  "models": [
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "bridge-materials",
+      "status": "ok",
+      "calls": 2,
+      "tokens": 4595,
+      "usd": 0.0004595
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "bridge-repaired",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2218,
+      "usd": 0.0002218
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "first-active",
+      "status": "cancelled",
+      "calls": 1,
+      "tokens": 8226,
+      "usd": 0.0008226
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "invalid",
+      "calls": 2,
+      "tokens": 16191,
+      "usd": 0.0016191
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "ok",
+      "calls": 3,
+      "tokens": 6921,
+      "usd": 0.0006921
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "cancelled",
+      "calls": 1,
+      "tokens": 8244,
+      "usd": 0.0008244
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 3,
+      "tokens": 6931,
+      "usd": 0.0006931
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "social-reply",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2180,
+      "usd": 0.000218
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 8075,
+      "usd": 0.0008075
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "ok",
+      "calls": 2,
+      "tokens": 4541,
+      "usd": 0.0004541
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "bridge-materials",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2240,
+      "usd": 0.000224
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 8220,
+      "usd": 0.000822
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "ok",
+      "calls": 3,
+      "tokens": 6902,
+      "usd": 0.0006902
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 4,
+      "tokens": 8951,
+      "usd": 0.0008951
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "social-invitation",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2436,
+      "usd": 0.0002436
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "social-reply",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2049,
+      "usd": 0.0002049
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 8130,
+      "usd": 0.000813
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "ok",
+      "calls": 3,
+      "tokens": 7054,
+      "usd": 0.0007054
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "invalid",
+      "calls": 2,
+      "tokens": 15543,
+      "usd": 0.0015543
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "ok",
+      "calls": 5,
+      "tokens": 11044,
+      "usd": 0.0011044
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "invalid",
+      "calls": 2,
+      "tokens": 15336,
+      "usd": 0.0015336
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 3,
+      "tokens": 6598,
+      "usd": 0.0006598
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "project-completed",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 7996,
+      "usd": 0.0007996
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "project-completed",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2324,
+      "usd": 0.0002324
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "social-invite",
+      "status": "ok",
+      "calls": 2,
+      "tokens": 2646,
+      "usd": 0.0002646
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "social-reply",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2137,
+      "usd": 0.0002137
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 7156,
+      "usd": 0.0007156
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "ok",
+      "calls": 4,
+      "tokens": 8458,
+      "usd": 0.0008458
+    }
+  ],
+  "playerActionsSent": 0
+}

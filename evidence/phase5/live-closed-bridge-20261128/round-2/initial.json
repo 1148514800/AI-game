@@ -1,0 +1,83 @@
+{
+  "bridge": {
+    "discovered": false,
+    "wood": 0,
+    "stone": 0,
+    "progressMs": 0,
+    "repaired": false
+  },
+  "contributions": {
+    "player": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "cenyan": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "legacy": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "ahe": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    },
+    "luozhou": {
+      "wood": 0,
+      "stone": 0,
+      "workMs": 0
+    }
+  },
+  "roof": {
+    "wood": 2,
+    "food": 0,
+    "progressMs": 0,
+    "complete": false,
+    "contributions": {
+      "cenyan": {
+        "wood": 2,
+        "food": 0,
+        "workMs": 0
+      }
+    }
+  },
+  "camp": {
+    "wood": 0,
+    "food": 0,
+    "progressMs": 0,
+    "complete": false,
+    "contributions": {}
+  },
+  "discoveries": {},
+  "actors": {
+    "cenyan": {
+      "goal": "取倒木补足屋顶，备料后动工。",
+      "bag": {
+        "wood": 5,
+        "stone": 0
+      },
+      "last": "PROJECT_NO_DELIVERY"
+    },
+    "ahe": {
+      "goal": "北坡取木补桥，再找岑砚确认石材并招募同修。",
+      "bag": {
+        "wood": 3,
+        "stone": 0
+      },
+      "last": "ARRIVED"
+    },
+    "luozhou": {
+      "goal": "再次尝试邀请阿禾同行，准备去北坡采木头修桥",
+      "bag": {
+        "wood": 1,
+        "stone": 0
+      },
+      "last": "TALK_INTERRUPTED"
+    }
+  }
+}
