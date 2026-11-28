@@ -1,0 +1,42 @@
+[
+  {
+    "scenario": "free-1",
+    "followFixture": false,
+    "discoverySeconds": 12.366,
+    "shareSeconds": 22.198,
+    "followTimeouts": 0,
+    "discoveries": [
+      "beacon-ruin"
+    ],
+    "recipient": "ahe",
+    "requests": 10,
+    "ledgerUsd": 0.0019594
+  },
+  {
+    "scenario": "free-2",
+    "followFixture": false,
+    "discoverySeconds": 7.355,
+    "shareSeconds": 22.596,
+    "followTimeouts": 0,
+    "discoveries": [
+      "beacon-ruin",
+      "beacon-inscription"
+    ],
+    "recipient": "ahe",
+    "requests": 11,
+    "ledgerUsd": 0.0041915
+  },
+  {
+    "scenario": "follow",
+    "followFixture": true,
+    "discoverySeconds": 3.235,
+    "shareSeconds": 17.695,
+    "followTimeouts": 0,
+    "discoveries": [
+      "beacon-ruin"
+    ],
+    "recipient": "ahe",
+    "requests": 8,
+    "ledgerUsd": 0.0021425
+  }
+]

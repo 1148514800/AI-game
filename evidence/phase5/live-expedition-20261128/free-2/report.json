@@ -1,0 +1,152 @@
+{
+  "passed": true,
+  "seconds": 23.052,
+  "scenario": "bridge prebuilt for this test",
+  "followFixture": false,
+  "shareReceipts": [
+    {
+      "id": "clue-share:luozhou:ahe:beacon-ruin"
+    }
+  ],
+  "recipientMemories": [
+    {
+      "actor": "ahe",
+      "topic": "beacon-ruin",
+      "source": "luozhou",
+      "kind": "fact",
+      "content": "洛舟分享航标遗迹的发现。风化的石面留下一行浅刻：雾潮平息时，沿三盏航灯向北。你把星纹拓进了行囊。"
+    }
+  ],
+  "bridge": {
+    "discovered": true,
+    "wood": 6,
+    "stone": 2,
+    "progressMs": 14000,
+    "repaired": true
+  },
+  "projects": {
+    "carpenter-roof": {
+      "wood": 0,
+      "food": 0,
+      "progressMs": 0,
+      "complete": false,
+      "contributions": {}
+    },
+    "valley-camp": {
+      "wood": 0,
+      "food": 0,
+      "progressMs": 0,
+      "complete": false,
+      "contributions": {}
+    }
+  },
+  "discoveries": {
+    "luozhou": [
+      "beacon-ruin",
+      "beacon-inscription"
+    ]
+  },
+  "shares": [
+    {
+      "seconds": 22.596,
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "CLUE_SHARED",
+      "ok": true,
+      "materials": {}
+    }
+  ],
+  "conversations": [],
+  "models": [
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "first-active",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 1934,
+      "usd": 0.0001934
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2196,
+      "usd": 0.0002196
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2048,
+      "usd": 0.0002048
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "first-active",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2074,
+      "usd": 0.0002074
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 7843,
+      "usd": 0.0007843
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 2,
+      "tokens": 4555,
+      "usd": 0.0004555
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "first-active",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 1746,
+      "usd": 0.0001746
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "cancelled",
+      "calls": 1,
+      "tokens": 9350,
+      "usd": 0.000935
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 7983,
+      "usd": 0.0007983
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2186,
+      "usd": 0.0002186
+    }
+  ]
+}

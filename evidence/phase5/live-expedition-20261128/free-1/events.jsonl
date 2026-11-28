@@ -1,0 +1,17 @@
+{"seconds":3.047,"kind":"action","actor":"cenyan","code":"TOO_FAR","ok":false,"materials":{}}
+{"seconds":10.009,"kind":"speech","actor":"ahe","session":"6e41802f-796e-4b2c-80f0-5d84ffced9e0"}
+{"seconds":11.853,"kind":"speech","actor":"luozhou","session":"6e41802f-796e-4b2c-80f0-5d84ffced9e0"}
+{"seconds":11.853,"kind":"conversation","session":"6e41802f-796e-4b2c-80f0-5d84ffced9e0","ok":true}
+{"seconds":11.854,"kind":"action","actor":"ahe","code":"TALK_ENDED","ok":true,"materials":{}}
+{"seconds":12.366,"kind":"action","actor":"luozhou","code":"DISCOVERED","ok":true,"materials":{}}
+{"seconds":12.569,"kind":"action","actor":"cenyan","code":"ARRIVED","ok":true,"materials":{}}
+{"seconds":12.619,"kind":"action","actor":"cenyan","code":"COLLECTED","ok":true,"materials":{"wood":1,"stone":0}}
+{"seconds":13.536,"kind":"action","actor":"cenyan","code":"ARRIVED","ok":true,"materials":{}}
+{"seconds":17.055,"kind":"action","actor":"ahe","code":"ARRIVED","ok":true,"materials":{}}
+{"seconds":17.107,"kind":"action","actor":"ahe","code":"COLLECTED","ok":true,"materials":{"wood":0,"stone":0,"food":1}}
+{"seconds":17.363,"kind":"action","actor":"cenyan","code":"ARRIVED","ok":true,"materials":{}}
+{"seconds":17.417,"kind":"action","actor":"cenyan","code":"COLLECTED","ok":true,"materials":{"wood":1,"stone":0}}
+{"seconds":17.87,"kind":"action","actor":"cenyan","code":"ARRIVED","ok":true,"materials":{}}
+{"seconds":21.332,"kind":"action","actor":"ahe","code":"ARRIVED","ok":true,"materials":{}}
+{"seconds":21.382,"kind":"action","actor":"ahe","code":"COLLECTED","ok":true,"materials":{"wood":0,"stone":0,"food":1}}
+{"seconds":22.198,"kind":"action","actor":"luozhou","code":"CLUE_SHARED","ok":true,"materials":{}}

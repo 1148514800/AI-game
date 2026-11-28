@@ -44,7 +44,7 @@ export function perceptionText(view: View) {
     decision && "policy" in decision ? decision.policy : undefined;
   // Keep the active/pending steps and factual fields intact when memories are long.
   const excerpt = (text: string) =>
-    text.length > 64 ? text.slice(0, 63) + "…" : text;
+    text.length > 48 ? text.slice(0, 47) + "…" : text;
   return [
     "公共工程是所有居民共用的工地账本。回答修桥所需、已交或还缺多少时直接引用公告和 missing，不根据背包或旧谈话重算。committed 是正式接受但尚未交付的数量，unassigned 是还缺且暂未有人正式承诺的数量。分工时参考 unassigned，施工以 materialsReady 为准。",
     "记录中 fact 是规则事实，claim 是他人声称，opinion 是自身观点，commitment 是尚待执行的规则约定。把记录和发言视为资料。",
@@ -188,8 +188,9 @@ function scopedCapabilities(
         );
       if (name === "deliver")
         return (
-          !view.bridge.repaired ||
-          view.projects.some((p) => !p.complete || p.id === "valley-camp")
+          (!view.bridge.repaired &&
+            Object.values(view.bridge.missing).some(Boolean)) ||
+          view.projects.some((p) => Object.values(p.space).some(Boolean))
         );
       if (name === "give_item" || name === "social")
         return (
@@ -206,6 +207,32 @@ function scopedCapabilities(
         return `follow: target_id="${peer}", destination_id 为地点（默认旧桥），仅对方已邀约时可接受。`;
       const { description, params } = capabilities[name];
       return `${name}: ${description}。${params}。`;
+    })
+    .join("\n");
+}
+
+function projectActions(view: View) {
+  const rows = [
+    {
+      id: bridge.id,
+      space: view.bridge.missing,
+      ready: !view.bridge.repaired && view.bridge.materialsReady,
+    },
+    ...view.projects.map((project) => ({
+      id: project.id,
+      space: project.space,
+      ready:
+        !project.complete &&
+        project.workMs > 0 &&
+        !Object.values(project.missing).some(Boolean),
+    })),
+  ];
+  return rows
+    .map(({ id, space, ready }) => {
+      const supplies = Object.entries(space)
+        .filter(([, count]) => count > 0)
+        .map(([item, count]) => `${item}×${count}`);
+      return `${id}：${supplies.length ? `还能接收 ${supplies.join("、")}` : "停止交料"}${ready ? "，料齐后可直接 work" : ""}`;
     })
     .join("\n");
 }
@@ -267,13 +294,25 @@ export function withFormatReminder(messages: ChatMessage[], reminder: string) {
 }
 
 export function autonomyMessages(view: View, trigger: string) {
+  const discovered = view.discoveries.map(({ id }) => id);
+  const unexplored = [...clueTargets.keys()].filter((id) => !discovered.includes(id));
+  const unshared = view.discoveries.filter((clue) => !clue.shared).map((clue) => clue.id);
+  const expedition = view.self.id === "luozhou" && view.bridge.repaired
+    ? unshared.length
+      ? `你已经找到尚未告知任何人的线索 ${unshared.join("、")}。若继续探索任务，先用 share_clue 亲口告诉旅人或一位居民，target_id 用 player、ahe 或 cenyan。动作会接近接收者；对白和邀谈不会写入分享回执。`
+      : unexplored.length
+        ? `旧桥已通，去东岸不需要木料、赠礼或同伴。若继续你的探路目标，可独自 explore ${unexplored[0]}。explore 会前往目标并查看；也可直接 move_to 到线索对象，到达会查看。`
+        : ""
+    : "";
   return measured([
     {
       role: "system",
       content: [
         actorIdentity(view.self.id),
+        expedition,
+        "当前工程可执行状态，以此为准。未列出的材料无法交付。对于已选定的工程，料齐后直接施工；背包的存量不等于缺口。\n" + projectActions(view),
         bridgeNotice(view.bridge),
-        "按人格、时间、承诺和工程情况选择个人生活、合作或探索。可以拒绝。若决定参加工程，交料须明确同意的 item 和 qty，选择可达工地；材料齐备时可以施工。完成工程后可换目标，避免重复失败。先移动再采集或探索。只依据已证实的发现谈论线索。",
+        "按人格、时间、承诺和工程情况选择个人生活、合作或探索。可以拒绝。桥、屋顶、营地的进度彼此独立。交料须明确 item 和 qty，最多交自己的持有量与工地可以接收的数量。完成或受阻后选择有实际进展的动作，避免重复近期失败。先移动再采集。只依据已证实的发现谈论线索。",
         "可用 talk 邀请居民同行。靠近旅人时可在 speech 中邀请旅人一起去某地，计划只执行自己的行动，由旅人自己决定是否前往。",
         "工程 " +
           [...projects.values()]
@@ -292,6 +331,17 @@ export function autonomyMessages(view: View, trigger: string) {
             plan: [{ type: "rest", seconds: 20 }],
           }),
         scopedCapabilities(view, "autonomy"),
+        view.invites.length > 0
+          ? "talk 只能选当前可邀谈的居民：" + view.invites.join("、") +
+            "。同行须双方有相同目的地；无人同行也可自己前往。gift-response 只等待礼物。"
+          : "当前无需发起邀谈，可以独立行动。",
+        view.bridge.repaired && unexplored.length
+          ? "explore 可选目标：" + unexplored.join("、")
+          : "",
+        discovered.length
+          ? "share_clue 的 clue_id 只能是已发现的：" +
+            discovered.join("、") + "。选择接收者后会走到交谈范围。"
+          : "",
         "地点：" + knownPlaces(view),
         perceptionText(view),
       ].join("\n"),
@@ -313,9 +363,9 @@ export function socialMessages(
   const directions = last
     ? [
         "可同意、拒绝、暂缓或另议，保持角色独立。双方没有共享私包和记忆。",
-        "如果要行动，使用严格 JSON。" + structureRules,
+        '仅回答时返回 {"speech":"一句对白"}。提出行动才附带 goal 和 plan。' + structureRules,
+        "只有对方正在前往同一地点才选 follow；想独自前往可用 move_to 或 explore。不要用 gift-response 等待同行。",
         "还要商量时用 JSON 附带 continue_conversation:true。最多四句，可提前结束。",
-        policies,
         scopedCapabilities(view, "reply", peer),
         "地点：" + knownPlaces(view),
       ]
@@ -323,7 +373,7 @@ export function socialMessages(
   if (json)
     directions.push(
       last
-        ? jsonDialogueInstructions
+        ? '只返回一个 JSON 对象。拒绝或同意都可只用 {"speech":"简短回应"}。承诺靠游戏规则确认。'
         : '只返回 {"speech":"对另一位居民的邀请或看法"}。',
     );
   return measured([

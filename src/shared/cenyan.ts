@@ -385,6 +385,7 @@ export const actorSchema = z.strictObject({
       index: z.int().min(0).max(2),
       remainingMs: z.number().min(0).max(60_000).optional(),
       followed: z.boolean().optional(),
+      solo: z.literal(true).optional(),
       authorization: z.uuid().optional(),
       autonomous: z.literal(true).optional(),
       traveled: z.boolean().optional(),

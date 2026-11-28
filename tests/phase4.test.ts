@@ -841,6 +841,24 @@ test("Phase 5 roof supports partial delivery and shared construction with a carr
   }
 });
 
+test("Phase 5 continues chosen construction when project materials are already full", (t) => {
+  const roof = projects.get("carpenter-roof")!;
+  const { world, tick } = worldFixture(t, (state) => {
+    Object.assign(state.actors.cenyan, { x: roof.x + 12, y: roof.y });
+    state.actors.cenyan.bag.wood = 2;
+  });
+  task(world, "cenyan", {
+    type: "deliver", target_id: roof.id, item: "wood", qty: 2,
+  });
+  tick(15);
+  task(world, "cenyan",
+    { type: "deliver", target_id: roof.id, item: "wood", qty: 1 },
+    { type: "work", target_id: roof.id },
+  );
+  tick(150);
+  assert.equal(world.snapshot().state.projects[roof.id].complete, true);
+});
+
 test("Phase 5 food is collected once per cooldown and camp contributions are capped by real stock", (t) => {
   const food = resources.get("berry-west")!;
   const camp = projects.get("valley-camp")!;
@@ -922,6 +940,33 @@ test("Phase 5 facts distinguish exploring an object from sharing its verified cl
     .memories(clue.id, 6, "ahe")
     .find((m) => m.source === "luozhou");
   assert.ok(learned?.content.includes(clue.text));
+});
+
+test("Phase 5 a resident can finish their chosen expedition alone and share the discovery once", (t) => {
+  const clue = clues[1];
+  const observed: WorldObservation[] = [];
+  const { world, tick, save } = worldFixture(t, (state) => {
+    closePositions(state);
+    state.bridge = {
+      discovered: true, repaired: true, ...bridge.required, progressMs: bridge.workMs,
+    };
+    state.contributions.player = { ...bridge.required, workMs: bridge.workMs };
+  }, (event) => observed.push(event));
+  const share = { type: "share_clue", target_id: "ahe", clue_id: clue.id } as const;
+  const plan = (...steps: Step[]) => {
+    assert.equal(world.recordActionReply(randomUUID(), undefined, {
+      goal: "考察东岸并分享线索", speech: "", plan: steps,
+    }, Date.now(), "luozhou", "ahe", "model"), "accepted");
+  };
+  plan({ type: "follow", target_id: "ahe", destination_id: clue.id }, share, share);
+  tick(450);
+  const state = world.snapshot().state;
+  assert.deepEqual(state.discoveries.luozhou, [clue.id]);
+  assert.equal(state.actors.luozhou.last?.code, "CLUE_ALREADY_SHARED");
+  assert.deepEqual(observed.filter((event) => event.kind === "action").map((event) => event.code),
+    ["DISCOVERED", "CLUE_SHARED", "CLUE_ALREADY_SHARED"]);
+  assert.equal(save.memories(clue.id, 6, "ahe").filter((m) => m.source === "luozhou").length, 1);
+  assert.equal(world.perceive(undefined, Date.now(), "luozhou").discoveries[0].shared, true);
 });
 
 test("Phase 5 v4 migration preserves the old bridge and makes a backup before adding time and projects", (t) => {
@@ -1192,6 +1237,7 @@ test("Phase 5 a local provider can repair one NPC exchange and return four alter
               "好，各自安排。",
             ][count],
             ...(count > 2 && { continue_conversation: count < 5 }),
+            ...(count === 3 && { plan: [{ type: "unsupported" }] }),
           };
     response.setHeader("content-type", "application/json");
     response.end(

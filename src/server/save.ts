@@ -381,7 +381,10 @@ export class SaveFile {
           this.db
             .prepare("INSERT INTO receipts (id, result) VALUES (?, ?)")
             .run(id, result ? JSON.stringify(result) : null);
-      if (reset) this.db.exec("DELETE FROM cenyan_memory");
+      if (reset) {
+        this.db.exec("DELETE FROM cenyan_memory");
+        this.db.exec("DELETE FROM receipts WHERE id LIKE 'clue-share:%'");
+      }
       if (memories.length) {
         const insert = this.db.prepare(
           "INSERT INTO cenyan_memory VALUES (?, ?, ?, ?, ?, ?, ?, ?)",

@@ -1,0 +1,301 @@
+{
+  "passed": false,
+  "seconds": 309.489,
+  "scenario": "bridge prebuilt for this test",
+  "inviteFixture": true,
+  "bridge": {
+    "discovered": true,
+    "wood": 6,
+    "stone": 2,
+    "progressMs": 14000,
+    "repaired": true
+  },
+  "projects": {
+    "carpenter-roof": {
+      "wood": 2,
+      "food": 0,
+      "progressMs": 6000,
+      "complete": true,
+      "contributions": {
+        "cenyan": {
+          "wood": 2,
+          "food": 0,
+          "workMs": 6000
+        }
+      }
+    },
+    "valley-camp": {
+      "wood": 0,
+      "food": 4,
+      "progressMs": 0,
+      "complete": true,
+      "contributions": {
+        "ahe": {
+          "wood": 0,
+          "food": 3,
+          "workMs": 0
+        },
+        "cenyan": {
+          "wood": 0,
+          "food": 1,
+          "workMs": 0
+        }
+      }
+    }
+  },
+  "discoveries": {},
+  "shares": [],
+  "conversations": [
+    {
+      "seconds": 9.047,
+      "kind": "conversation",
+      "session": "a5834a45-ecd1-41e7-8b18-2020815726fb",
+      "ok": true
+    },
+    {
+      "seconds": 102.809,
+      "kind": "conversation",
+      "session": "5a2b8070-d49a-4248-ae47-157e51dadc54",
+      "ok": true
+    },
+    {
+      "seconds": 147.918,
+      "kind": "conversation",
+      "session": "f50e5101-b9ee-47b3-8b92-8b491a2bb927",
+      "ok": true
+    },
+    {
+      "seconds": 217.562,
+      "kind": "conversation",
+      "session": "41134e06-5ffb-4d6d-a637-c31034a5e0df",
+      "ok": true
+    }
+  ],
+  "models": [
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "first-active",
+      "status": "cancelled",
+      "calls": 1,
+      "tokens": 7049,
+      "usd": 0.0007049
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 8083,
+      "usd": 0.0008083
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2286,
+      "usd": 0.0002286
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "invalid",
+      "calls": 3,
+      "tokens": 24087,
+      "usd": 0.0024087
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 6,
+      "tokens": 13001,
+      "usd": 0.0013001
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "project-completed",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2149,
+      "usd": 0.0002149
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "social-invite",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 1262,
+      "usd": 0.0001262
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "social-reply",
+      "status": "ok",
+      "calls": 3,
+      "tokens": 5590,
+      "usd": 0.000559
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "ok",
+      "calls": 3,
+      "tokens": 6317,
+      "usd": 0.0006317
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "first-active",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2053,
+      "usd": 0.0002053
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "ok",
+      "calls": 2,
+      "tokens": 4819,
+      "usd": 0.0004819
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "invalid",
+      "calls": 2,
+      "tokens": 16397,
+      "usd": 0.0016397
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 6,
+      "tokens": 13888,
+      "usd": 0.0013888
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "social-reply",
+      "status": "cancelled",
+      "calls": 1,
+      "tokens": 7421,
+      "usd": 0.0007421
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "social-reply",
+      "status": "ok",
+      "calls": 2,
+      "tokens": 3973,
+      "usd": 0.0003973
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "cancelled",
+      "calls": 1,
+      "tokens": 8467,
+      "usd": 0.0008467
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 7849,
+      "usd": 0.0007849
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "ok",
+      "calls": 4,
+      "tokens": 9372,
+      "usd": 0.0009372
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "ok",
+      "calls": 2,
+      "tokens": 4343,
+      "usd": 0.0004343
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "invalid",
+      "calls": 3,
+      "tokens": 23239,
+      "usd": 0.0023239
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 5,
+      "tokens": 10509,
+      "usd": 0.0010509
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "project-completed",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 8223,
+      "usd": 0.0008223
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "social-invite",
+      "status": "ok",
+      "calls": 4,
+      "tokens": 4708,
+      "usd": 0.0004708
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "social-reply",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 1882,
+      "usd": 0.0001882
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "ok",
+      "calls": 4,
+      "tokens": 8849,
+      "usd": 0.0008849
+    }
+  ]
+}

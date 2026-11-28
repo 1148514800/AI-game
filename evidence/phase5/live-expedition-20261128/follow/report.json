@@ -1,0 +1,140 @@
+{
+  "passed": true,
+  "seconds": 18.052,
+  "scenario": "bridge prebuilt for this test",
+  "followFixture": true,
+  "shareReceipts": [
+    {
+      "id": "clue-share:luozhou:ahe:beacon-ruin"
+    }
+  ],
+  "recipientMemories": [
+    {
+      "actor": "ahe",
+      "topic": "beacon-ruin",
+      "source": "luozhou",
+      "kind": "fact",
+      "content": "洛舟分享航标遗迹的发现。风化的石面留下一行浅刻：雾潮平息时，沿三盏航灯向北。你把星纹拓进了行囊。"
+    }
+  ],
+  "bridge": {
+    "discovered": true,
+    "wood": 6,
+    "stone": 2,
+    "progressMs": 14000,
+    "repaired": true
+  },
+  "projects": {
+    "carpenter-roof": {
+      "wood": 0,
+      "food": 0,
+      "progressMs": 0,
+      "complete": false,
+      "contributions": {}
+    },
+    "valley-camp": {
+      "wood": 0,
+      "food": 0,
+      "progressMs": 0,
+      "complete": false,
+      "contributions": {}
+    }
+  },
+  "discoveries": {
+    "luozhou": [
+      "beacon-ruin"
+    ]
+  },
+  "shares": [
+    {
+      "seconds": 17.695,
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "CLUE_SHARED",
+      "ok": true,
+      "materials": {}
+    }
+  ],
+  "conversations": [
+    {
+      "seconds": 10.583,
+      "kind": "conversation",
+      "session": "eb7ca046-51cb-42ea-b1d1-ae182112caa6",
+      "ok": true
+    }
+  ],
+  "models": [
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "first-active",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 1974,
+      "usd": 0.0001974
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "cancelled",
+      "calls": 1,
+      "tokens": 8347,
+      "usd": 0.0008347
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "social-invite",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 936,
+      "usd": 0.0000936
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "first-active",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2040,
+      "usd": 0.000204
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2042,
+      "usd": 0.0002042
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2181,
+      "usd": 0.0002181
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2050,
+      "usd": 0.000205
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "social-reply",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 1855,
+      "usd": 0.0001855
+    }
+  ]
+}

@@ -602,7 +602,12 @@ export class DialogueSession {
     const world = options.world;
     const config = this.config!;
     const turn = world.socialTurn(conversation);
-    if (!turn || this.dlg?.npc === turn.actor || !this.hasSlot(turn.actor))
+    if (
+      !turn ||
+      (turn.retryAt ?? 0) > Date.now() ||
+      this.dlg?.npc === turn.actor ||
+      !this.hasSlot(turn.actor)
+    )
       return false;
     const npc = turn.actor;
     const peer = npc === turn.from ? turn.to : turn.from;
@@ -637,7 +642,7 @@ export class DialogueSession {
         ? () =>
             withFormatReminder(
               input.messages,
-              "只返回合法 JSON。对白使用 speech；承接行动时使用合法计划。",
+              '只返回合法 JSON。对白使用 speech，保持简短。省略 goal 和 plan。想继续商量时可加 continue_conversation:true。',
             )
         : undefined,
       format: turn.lines ? "optional-plan" : "speech",
@@ -653,13 +658,17 @@ export class DialogueSession {
           world.endConversation(conversation, false);
       },
       done: (status, speech, proposal, keepTalking) => {
+        if (status === "budget" && config.live) {
+          world.delaySocialTurn(conversation, Date.now() + 5000);
+          return;
+        }
         if (
           status !== "ok" ||
           !speech ||
           proposal?.gift_response ||
           proposal?.social_response
         ) {
-          world.endConversation(conversation, false);
+          world.endConversation(conversation, turn.lines >= 2);
           return;
         }
         if (
@@ -1008,9 +1017,22 @@ export class DialogueSession {
           const parsed = (
             job.format === "plan" ? decisionSchema : actionReplySchema
           ).safeParse(raw);
-          if (!parsed.success) throw new ReplyFormatFailure(usage);
-          plan = parsed.data;
+          if (parsed.success) {
+            plan = parsed.data;
+          } else if (
+            job.trigger.startsWith("social-") &&
+            raw &&
+            typeof raw === "object" &&
+            "speech" in raw
+          ) {
+            const reply = speechReplySchema.safeParse({ speech: raw.speech });
+            if (!reply.success) throw new ReplyFormatFailure(usage);
+            speech = reply.data.speech;
+          } else {
+            throw new ReplyFormatFailure(usage);
+          }
           if (
+            plan &&
             job.purpose === "dialogue" &&
             job.retryInput &&
             (plan.gift_response ||
@@ -1019,11 +1041,11 @@ export class DialogueSession {
               (plan.plan_policy === "continue" && !job.hasPlan))
           )
             throw new ReplyFormatFailure(usage);
-          speech = plan.speech;
+          speech ??= plan?.speech;
         }
         // JSON escapes can hide content from the transport-level text checks.
         if (
-          [plan?.goal ?? "", speech].some(
+          [plan?.goal ?? "", speech ?? ""].some(
             (value) =>
               containsPrivateThought(value) ||
               (config.live && value.includes(config.live.key)),
@@ -1101,8 +1123,10 @@ export class DialogueSession {
         status = "ledger";
       }
       if (
-        status !== "invalid" ||
-        !formatFailed ||
+        !(
+          (status === "invalid" && formatFailed) ||
+          (status === "truncated" && job.purpose === "autonomy")
+        ) ||
         attemptId !== job.id ||
         !job.retryInput
       )

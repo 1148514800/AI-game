@@ -1,0 +1,193 @@
+{
+  "passed": true,
+  "seconds": 104.142,
+  "scenario": "bridge prebuilt for this test",
+  "bridge": {
+    "discovered": true,
+    "wood": 6,
+    "stone": 2,
+    "progressMs": 14000,
+    "repaired": true
+  },
+  "projects": {
+    "carpenter-roof": {
+      "wood": 2,
+      "food": 0,
+      "progressMs": 6000,
+      "complete": true,
+      "contributions": {
+        "cenyan": {
+          "wood": 2,
+          "food": 0,
+          "workMs": 6000
+        }
+      }
+    },
+    "valley-camp": {
+      "wood": 0,
+      "food": 2,
+      "progressMs": 0,
+      "complete": true,
+      "contributions": {
+        "ahe": {
+          "wood": 0,
+          "food": 2,
+          "workMs": 0
+        }
+      }
+    }
+  },
+  "discoveries": {
+    "luozhou": [
+      "beacon-ruin"
+    ]
+  },
+  "shares": [
+    {
+      "seconds": 29.848,
+      "kind": "action",
+      "actor": "luozhou",
+      "code": "CLUE_SHARED",
+      "ok": true,
+      "materials": {}
+    }
+  ],
+  "conversations": [],
+  "models": [
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "first-active",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 1933,
+      "usd": 0.0001933
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 8408,
+      "usd": 0.0008408
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "ok",
+      "calls": 2,
+      "tokens": 4653,
+      "usd": 0.0004653
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "invalid",
+      "calls": 2,
+      "tokens": 16395,
+      "usd": 0.0016395
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2341,
+      "usd": 0.0002341
+    },
+    {
+      "npc": "ahe",
+      "mode": "live",
+      "intent": "step-retry",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 8416,
+      "usd": 0.0008416
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "first-active",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 1996,
+      "usd": 0.0001996
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "periodic",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2374,
+      "usd": 0.0002374
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 3,
+      "tokens": 6648,
+      "usd": 0.0006648
+    },
+    {
+      "npc": "cenyan",
+      "mode": "live",
+      "intent": "project-completed",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2401,
+      "usd": 0.0002401
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "first-active",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 1751,
+      "usd": 0.0001751
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 7373,
+      "usd": 0.0007373
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "plan-complete",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2058,
+      "usd": 0.0002058
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "invalid",
+      "calls": 1,
+      "tokens": 8651,
+      "usd": 0.0008651
+    },
+    {
+      "npc": "luozhou",
+      "mode": "live",
+      "intent": "step-failed",
+      "status": "ok",
+      "calls": 1,
+      "tokens": 2426,
+      "usd": 0.0002426
+    }
+  ]
+}

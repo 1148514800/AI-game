@@ -94,6 +94,8 @@ const bridge = valley.bridge;
 const talkMs = 35_000;
 const pairCooldown = 180_000;
 const pairKey = (a: ActorId, b: ActorId) => [a, b].sort().join(":");
+const clueShareReceipt = (from: NpcId, to: ActorId, clue: string) =>
+  `clue-share:${from}:${to}:${clue}`;
 const giftTarget = (gift: NonNullable<SaveState["gift"]>): ActorId =>
   gift.to ?? (gift.from === "player" ? cenyanId : "player");
 export type WorldObservation =
@@ -108,6 +110,7 @@ export type WorldObservation =
   | { kind: "conversation"; session: string; ok: boolean };
 
 type RunningConversation = Conversation & {
+  retryAt?: number;
   expires: number;
   lines: number;
   last?: string;
@@ -346,6 +349,8 @@ export class World {
           id: project.id,
           name: project.name,
           complete: row.complete,
+          received: { wood: row.wood, food: row.food },
+          required: project.required,
           missing: projectMissing(project, row),
           space: projectMissing(project, row, project.capacity),
           progressMs: row.progressMs,
@@ -355,6 +360,11 @@ export class World {
       discoveries: (this.state.discoveries[id] ?? []).map((key) => ({
         id: key,
         text: clueTargets.get(key)!.text,
+        shared: (["player", ...npcIds] as const).some(
+          (recipient) =>
+            recipient !== id &&
+            this.save.hasReceipt(clueShareReceipt(id, recipient, key)),
+        ),
       })),
       gift:
         this.state.gift &&
@@ -1169,6 +1179,11 @@ export class World {
     return { ...turn, actor: turn.lines % 2 === 0 ? turn.from : turn.to };
   }
 
+  delaySocialTurn(id: string, until: number) {
+    const turn = this.conversations.get(id);
+    if (turn) turn.retryAt = until;
+  }
+
   speak(
     id: string,
     actor: NpcId,
@@ -1486,8 +1501,49 @@ export class World {
       return;
     }
     if (step.type === "share_clue") {
-      const next = structuredClone(this.state);
       const known = this.state.discoveries[npc]?.includes(step.clue_id);
+      const receipt = clueShareReceipt(npc, step.target_id, step.clue_id);
+      if (known && this.save.hasReceipt(receipt)) {
+        this.finishStep(
+          structuredClone(this.state),
+          true,
+          "CLUE_ALREADY_SHARED",
+          `已经向${actorName(step.target_id)}分享过这条线索。`,
+          step.clue_id,
+          now,
+          undefined,
+          npc,
+        );
+        return;
+      }
+      if (
+        plan.autonomous &&
+        known &&
+        step.target_id !== npc &&
+        !this.near(npc, step.target_id) &&
+        (plan.remainingMs ?? talkMs) > elapsed
+      ) {
+        plan.remainingMs = (plan.remainingMs ?? talkMs) - elapsed;
+        const range = Math.min(
+          residents.get(npc)!.range,
+          residents.get(step.target_id)?.range ?? Infinity,
+        );
+        this.walk(
+          npc,
+          {
+            ...this.position(step.target_id),
+            id: step.target_id,
+            name: actorName(step.target_id),
+            range: range - 2,
+          },
+          clock,
+          elapsed,
+          now,
+          true,
+        );
+        return;
+      }
+      const next = structuredClone(this.state);
       const shared =
         this.near(npc, step.target_id) && step.target_id !== npc && known;
       const clue = clueTargets.get(step.clue_id)!;
@@ -1518,7 +1574,7 @@ export class World {
         text,
         clue.id,
         now,
-        { memories: records },
+        { memories: records, ...(shared && { receipt }) },
         npc,
       );
       return;
@@ -1623,18 +1679,7 @@ export class World {
       return;
     }
     if (step.type === "explore") {
-      const next = structuredClone(this.state);
-      const found = this.discover(next, npc, target.id);
-      this.finishStep(
-        next,
-        found.ok,
-        found.code,
-        found.text,
-        target.id,
-        now,
-        undefined,
-        npc,
-      );
+      this.finishExploration(npc, target.id, now);
       return;
     }
     const project = projects.get(target.id);
@@ -1658,10 +1703,23 @@ export class World {
       return;
     }
     const next = structuredClone(this.state);
-    const result =
+    let result =
       step.type === "collect"
         ? this.collect(next, next.actors[npc].bag, step.target_id, now)
         : this.deliver(next, npc, step.item, step.qty, project);
+    const following = plan.steps[plan.index + 1];
+    if (
+      step.type === "deliver" &&
+      !result.ok &&
+      following?.type === "work" &&
+      following.target_id === step.target_id &&
+      !this.checkWork(next, project)
+    )
+      result = {
+        ok: true,
+        code: "MATERIALS_READY",
+        text: "工程材料已经齐备，继续已选择的施工。",
+      };
     if (result.ok) {
       runtime.activity = step.type === "collect" ? "collecting" : "delivering";
       runtime.displayUntil = clock + 450;
@@ -1705,6 +1763,10 @@ export class World {
     const peer = step.target_id;
     const leader = this.position(peer);
     const destination = known.get(step.destination_id ?? bridge.id)!;
+    if (plan.solo) {
+      this.walkTo(npc, destination, clock, elapsed, now);
+      return;
+    }
     const finish = (ok: boolean, code: string, text: string) =>
       this.finishStep(
         structuredClone(this.state),
@@ -1734,6 +1796,26 @@ export class World {
           destination.id === valley.bridge.id ? "旧桥" : destination.name
         }边。`,
       );
+      return;
+    }
+    // A resident can pursue their chosen destination when the other resident
+    // has no matching journey. Only paired arrivals count as cooperation.
+    const leaderPlan = peer === "player" ? null : this.state.actors[peer].plan;
+    const leaderWillGo = leaderPlan?.steps.slice(leaderPlan.index).some(
+      (action) =>
+        (action.type === "move_to" || action.type === "explore") &&
+        action.target_id === destination.id,
+    );
+    if (
+      plan.autonomous &&
+      peer !== "player" &&
+      step.destination_id &&
+      !leaderThere &&
+      !leaderWillGo
+    ) {
+      plan.solo = true;
+      this.dirty = true;
+      this.walkTo(npc, destination, clock, elapsed, now);
       return;
     }
     const remainingMs = (plan.remainingMs ?? followMs) - elapsed;
@@ -1773,6 +1855,18 @@ export class World {
     now: number,
   ) {
     if (distance(this.state.actors[npc], target) <= target.range) {
+      const plan = this.state.actors[npc].plan!;
+      const nextStep = plan.steps[plan.index + 1];
+      if (
+        plan.autonomous &&
+        this.state.bridge.repaired &&
+        clueTargets.has(target.id) &&
+        !this.state.discoveries[npc]?.includes(target.id) &&
+        !(nextStep?.type === "explore" && nextStep.target_id === target.id)
+      ) {
+        this.finishExploration(npc, target.id, now);
+        return;
+      }
       this.finishStep(
         structuredClone(this.state),
         true,
@@ -2229,6 +2323,14 @@ export class World {
     return this.outcome(true, "DISCOVERED", clue.text);
   }
 
+  private finishExploration(npc: NpcId, target: string, now: number) {
+    const next = structuredClone(this.state);
+    const found = this.discover(next, npc, target);
+    this.finishStep(
+      next, found.ok, found.code, found.text, target, now, undefined, npc,
+    );
+  }
+
   private deliverLocal(
     next: SaveState,
     who: ActorId,
@@ -2244,7 +2346,9 @@ export class World {
       return this.outcome(
         false,
         "PROJECT_NO_DELIVERY",
-        "当前没有可交付的物资。",
+        this.checkWork(next, project)
+          ? "工程无法接收本次交料，请核对工程剩余容量和背包。"
+          : `${project.name}材料已交齐，已经可以施工。`,
       );
     const wasComplete = row.complete;
     transferToProject(bag, amounts);
